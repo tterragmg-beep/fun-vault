@@ -34,6 +34,7 @@
     --c3: #39c98a;
     --c4: #4db6ff;
     --c5: #f472b6;
+    --c6: #ff5d73;
     --op: #ff9f43;
     --op-hi: #ffb15f;
     --font-display: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -46,7 +47,7 @@
       --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
       --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
       --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c;
+      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52;
       --op: #f2890f; --op-hi: #ffa02e;
       color-scheme: light;
     }
@@ -55,7 +56,7 @@
     --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
     --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
     --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c;
+    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52;
     --op: #f2890f; --op-hi: #ffa02e;
     color-scheme: light;
   }
@@ -223,6 +224,79 @@
   .t-stats b { color: var(--fg); font-family: var(--font-display); font-weight: 700; }
   .t-done { margin-top: 16px; text-align: center; font-family: var(--font-display); font-weight: 600; color: var(--accent-2); min-height: 1.3em; text-wrap: balance; }
 
+  /* ---- Don't Get Caught ---- */
+  #cheat [hidden] { display: none !important; }
+  .ch-bank { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .ch-points { font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .ch-sub { color: var(--muted); font-size: 0.88rem; line-height: 1.45; }
+  .btn.ghost { background: var(--panel-2); color: var(--fg); border: 1px solid var(--line); }
+  .btn.slim { width: auto; margin-top: 0; padding: 10px 16px; font-size: 0.92rem; }
+  .ch-head { font-family: var(--font-display); font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 16px 0 8px; }
+  .ch-modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .ch-mode { text-align: left; background: var(--panel-2); border: 2px solid var(--line); border-radius: 14px; padding: 12px; color: var(--fg); font: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .ch-mode:hover { border-color: var(--muted); }
+  .ch-mode:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .ch-mode[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--panel-2)); }
+  .ch-mode b { font-family: var(--font-display); font-size: 1rem; }
+  .ch-mode span { color: var(--muted); font-size: 0.8rem; line-height: 1.35; }
+  @media (max-width: 520px) { .ch-mode:last-child { grid-column: 1 / -1; } }
+  .ch-row { display: flex; gap: 10px; margin-top: 16px; }
+  .ch-row .btn { flex: 1; width: auto; margin-top: 0; }
+  .ch-room { background: var(--panel-2); border: 2px solid var(--line); border-radius: 16px; padding: 12px; margin-bottom: 14px; transition: border-color .15s ease, box-shadow .15s ease; }
+  .ch-room[data-state="back"] { border-color: color-mix(in srgb, var(--accent-2) 55%, var(--line)); }
+  .ch-room[data-state="pre"] { border-color: var(--c2); }
+  .ch-room[data-state="turn"] { border-color: var(--accent); }
+  .ch-room[data-state="watch"] { border-color: var(--bad); box-shadow: 0 0 0 3px color-mix(in srgb, var(--bad) 22%, transparent); }
+  .ch-board { display: flex; align-items: center; gap: 12px; }
+  .ch-board > div { min-width: 0; }
+  .ch-teacher { width: 72px; height: 72px; flex: none; }
+  .ch-teacher .tv { display: none; }
+  .ch-room[data-state="back"] .tv-back, .ch-room[data-state="pre"] .tv-back,
+  .ch-room[data-state="turn"] .tv-turn, .ch-room[data-state="watch"] .tv-watch { display: inline; }
+  .tv-eye { fill: var(--bad); animation: glare 0.9s ease-in-out infinite alternate; }
+  @keyframes glare { from { opacity: 0.55; } to { opacity: 1; } }
+  .ch-state { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
+  .ch-state.safe { color: var(--accent-2); }
+  .ch-state.warn { color: var(--accent); }
+  .ch-state.danger { color: var(--bad); }
+  .ch-hint { color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+  .ch-meter { margin-top: 10px; }
+  .ch-meter-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+  .ch-meter-track { height: 10px; background: var(--line); border-radius: 999px; overflow: hidden; }
+  .ch-meter-track > span { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--bad)); border-radius: 999px; transition: width .2s linear; }
+  .ch-top { display: flex; justify-content: space-between; gap: 10px; font-family: var(--font-display); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+  .ch-q { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; line-height: 1.3; margin-bottom: 14px; text-wrap: balance; }
+  .ch-opts { display: grid; gap: 8px; }
+  .ch-opt { text-align: left; font: inherit; font-weight: 600; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: border-color .12s ease, background .12s ease; }
+  .ch-opt:hover:not(:disabled) { border-color: var(--accent); }
+  .ch-opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .ch-opt:disabled { cursor: default; }
+  .ch-opt.out { opacity: 0.35; text-decoration: line-through; }
+  .ch-opt.tip { border-color: var(--c2); box-shadow: inset 0 0 0 1px var(--c2); }
+  .ch-opt.right { border-color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 18%, var(--panel-2)); opacity: 1; }
+  .ch-opt.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 18%, var(--panel-2)); }
+  .ch-intel { min-height: 1.4em; margin-top: 12px; font-size: 0.92rem; font-weight: 600; color: var(--c2); }
+  .ch-gadgets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .ch-gadget { font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+  .ch-gadget:hover:not(:disabled) { border-color: var(--accent); }
+  .ch-gadget:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .ch-gadget:disabled { opacity: 0.45; cursor: default; }
+  .ch-item { display: flex; align-items: center; gap: 12px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-bottom: 8px; }
+  .ch-emoji { font-size: 1.6rem; width: 2rem; text-align: center; flex: none; }
+  .ch-item-body { flex: 1; min-width: 0; }
+  .ch-item-body b { font-family: var(--font-display); }
+  .ch-item-body p { margin: 2px 0 0; color: var(--muted); font-size: 0.82rem; line-height: 1.35; }
+  .ch-buy { flex: none; font-family: var(--font-display); font-weight: 700; font-size: 0.85rem; color: #10151c; background: var(--accent); border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; white-space: nowrap; }
+  .ch-buy:disabled { background: var(--line); color: var(--muted); cursor: default; }
+  .ch-buy:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
+  .ch-res-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 7vw, 2.4rem); text-align: center; margin: 4px 0 8px; text-wrap: balance; }
+  .ch-res-line { text-align: center; font-family: var(--font-display); font-style: italic; color: var(--bad); margin: 0 0 10px; text-wrap: balance; }
+  .ch-res-sub { text-align: center; color: var(--fg); margin: 0 auto 6px; max-width: 38ch; line-height: 1.5; text-wrap: balance; }
+  @media (prefers-reduced-motion: reduce) {
+    .tv-eye { animation: none; }
+    .ch-room, .ch-meter-track > span, .ch-opt { transition: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .screen.active, .q-feedback.show, .f-reveal.show { animation: none; }
     .spinner { animation-duration: 2.4s; }
@@ -273,6 +347,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="7" y1="10" x2="7" y2="10"/><line x1="11" y1="10" x2="11" y2="10"/><line x1="15" y1="10" x2="15" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg></span>
         <h2>Speed Typer</h2>
         <p>Test your typing speed. Type the passage as fast as you can and see your WPM.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c6);" data-goto="cheat">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <h2>Don't Get Caught</h2>
+        <p>Cheat your way through an impossible test. Buy gadgets, try five modes, and dodge a teacher who sees everything.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -381,6 +462,90 @@
         <button data-action="decimal">.</button>
         <button class="equals" data-action="equals">=</button>
       </div>
+    </div>
+  </section>
+
+  <!-- ================= DON'T GET CAUGHT ================= -->
+  <section id="cheat" class="screen">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Don't Get Caught</span></div>
+
+    <div class="panel" id="ch-lobby">
+      <div class="ch-bank">
+        <div><div class="ch-sub">Your points</div><div class="ch-points" id="ch-points">0</div></div>
+        <button class="btn ghost slim" id="ch-openShop" type="button">🛒 Shop</button>
+      </div>
+      <p class="ch-sub" style="margin:0;">Cheat while Ms. Eagleton's back is turned. Get caught and you're off to the principal, keeping only a quarter of the test's points. Every trick also makes her more suspicious.</p>
+      <div class="ch-head">Pick a mode</div>
+      <div class="ch-modes" id="ch-modes"></div>
+      <div class="ch-sub" id="ch-best" style="margin-top:10px;"></div>
+      <button class="btn" id="ch-start" type="button">Start the test →</button>
+    </div>
+
+    <div class="panel" id="ch-shop" hidden>
+      <div class="ch-bank">
+        <div><div class="ch-sub">Your points</div><div class="ch-points" id="ch-shopPoints">0</div></div>
+        <button class="btn ghost slim" id="ch-closeShop" type="button">← Back</button>
+      </div>
+      <div id="ch-shopList"></div>
+    </div>
+
+    <div class="panel" id="ch-exam" hidden>
+      <div class="ch-room" id="ch-room" data-state="back">
+        <div class="ch-board">
+          <svg class="ch-teacher" viewBox="0 0 80 80" aria-hidden="true">
+            <path d="M14 80 C14 60 26 54 40 54 C54 54 66 60 66 80 Z" fill="var(--c2)"/>
+            <g class="tv tv-back">
+              <circle cx="40" cy="34" r="18" fill="#3a2e22"/>
+              <circle cx="40" cy="14" r="7" fill="#3a2e22"/>
+              <path d="M58 60 L70 32" stroke="var(--c2)" stroke-width="7" stroke-linecap="round"/>
+              <rect x="67" y="22" width="4" height="9" rx="1.5" fill="#f4f1ea"/>
+            </g>
+            <g class="tv tv-turn">
+              <circle cx="40" cy="34" r="18" fill="#e8b48a"/>
+              <path d="M40 16 A18 18 0 0 0 40 52 Z" fill="#3a2e22"/>
+              <circle cx="40" cy="14" r="7" fill="#3a2e22"/>
+              <circle cx="49" cy="32" r="2.2" fill="#1d2430"/>
+              <path d="M45 44 q4 -2 8 0" stroke="#1d2430" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+            <g class="tv tv-watch">
+              <circle cx="40" cy="34" r="18" fill="#e8b48a"/>
+              <path d="M22 31 A18 18 0 0 1 58 31 C50 24 30 24 22 31 Z" fill="#3a2e22"/>
+              <circle cx="40" cy="14" r="7" fill="#3a2e22"/>
+              <rect x="27" y="29" width="11" height="8" rx="2" fill="none" stroke="#1d2430" stroke-width="2"/>
+              <rect x="42" y="29" width="11" height="8" rx="2" fill="none" stroke="#1d2430" stroke-width="2"/>
+              <line x1="38" y1="33" x2="42" y2="33" stroke="#1d2430" stroke-width="2"/>
+              <circle class="tv-eye" cx="32.5" cy="33" r="2.2"/>
+              <circle class="tv-eye" cx="47.5" cy="33" r="2.2"/>
+              <path d="M33 46 q7 -5 14 0" stroke="#1d2430" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+          <div>
+            <div class="ch-sub" id="ch-teacherName">Ms. Eagleton</div>
+            <div class="ch-state safe" id="ch-state" aria-live="polite">✍️ Writing on the board</div>
+            <div class="ch-hint" id="ch-hint">Safe… for now.</div>
+          </div>
+        </div>
+        <div class="ch-meter">
+          <div class="ch-meter-label"><span>Suspicion</span><span id="ch-susNum">0%</span></div>
+          <div class="ch-meter-track"><span id="ch-susBar"></span></div>
+        </div>
+      </div>
+      <div class="ch-top"><span id="ch-progress">Question 1 of 10</span><span id="ch-timer"></span><span id="ch-earned">+0 pts</span></div>
+      <div class="ch-q" id="ch-q"></div>
+      <div class="ch-opts" id="ch-opts"></div>
+      <div class="ch-intel" id="ch-intel" aria-live="polite"></div>
+      <div class="ch-gadgets" id="ch-gadgets"></div>
+    </div>
+
+    <div class="panel" id="ch-result" hidden>
+      <div class="ch-res-title" id="ch-resTitle"></div>
+      <p class="ch-res-line" id="ch-resLine"></p>
+      <p class="ch-res-sub" id="ch-resSub"></p>
+      <div class="ch-row">
+        <button class="btn" id="ch-again" type="button">Play again</button>
+        <button class="btn ghost" id="ch-resShop" type="button">🛒 Shop</button>
+      </div>
+      <button class="btn ghost" id="ch-resLobby" type="button">Change mode</button>
     </div>
   </section>
 
@@ -3506,7 +3671,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -3749,6 +3914,447 @@
     document.getElementById('t-reset').addEventListener('click', function () { newGame(); box.focus(); });
     window.registerHook('wpm', function () { newGame(); setTimeout(function () { box.focus(); }, 60); }, function () { if (tick) { clearInterval(tick); tick = null; } });
     newGame();
+  })();
+
+  // ============ Don't Get Caught ============
+  (function () {
+    var KEY = 'funvault-cheat-v1';
+
+    // Very hard real questions: [question, correct answer, wrong, wrong, wrong]
+    var QB = [
+      ["What is the capital of Burkina Faso?", "Ouagadougou", "Bamako", "Niamey", "Dakar"],
+      ["What is the capital of Bhutan?", "Thimphu", "Kathmandu", "Dhaka", "Paro"],
+      ["What is the capital of Mongolia?", "Ulaanbaatar", "Astana", "Bishkek", "Tashkent"],
+      ["What is the capital of Kazakhstan?", "Astana", "Almaty", "Tashkent", "Bishkek"],
+      ["What is the capital of Nigeria?", "Abuja", "Lagos", "Accra", "Kano"],
+      ["What is the capital of Turkey?", "Ankara", "Istanbul", "Izmir", "Bursa"],
+      ["What is the capital of New Zealand?", "Wellington", "Auckland", "Christchurch", "Hamilton"],
+      ["What is the capital of Myanmar?", "Naypyidaw", "Yangon", "Mandalay", "Bago"],
+      ["What is the official capital of Côte d'Ivoire?", "Yamoussoukro", "Abidjan", "Bouaké", "Accra"],
+      ["What is the legislative capital of Sri Lanka?", "Sri Jayawardenepura Kotte", "Colombo", "Kandy", "Galle"],
+      ["Which country has the most islands?", "Sweden", "Norway", "Indonesia", "Philippines"],
+      ["What is the longest river in Europe?", "Volga", "Danube", "Rhine", "Dnieper"],
+      ["Which mountain range runs north to south and forms much of the border between Europe and Asia?", "Ural Mountains", "Pyrenees", "Carpathians", "Altai Mountains"],
+      ["What is the smallest country in Africa by area?", "Seychelles", "The Gambia", "Eswatini", "Djibouti"],
+      ["Counting overseas territories, which country spans the most time zones?", "France", "Russia", "United States", "United Kingdom"],
+      ["The deepest known point in the ocean lies in which trench?", "Mariana Trench", "Tonga Trench", "Puerto Rico Trench", "Java Trench"],
+      ["Lake Titicaca sits on the border of which two countries?", "Peru and Bolivia", "Chile and Peru", "Bolivia and Brazil", "Ecuador and Peru"],
+      ["Which river flows through Baghdad?", "Tigris", "Euphrates", "Jordan", "Nile"],
+      ["The Atacama Desert lies mostly in which country?", "Chile", "Peru", "Argentina", "Bolivia"],
+      ["Which African country has the largest population?", "Nigeria", "Ethiopia", "Egypt", "DR Congo"],
+      ["What is the chemical symbol for tungsten?", "W", "Tu", "Tg", "Tn"],
+      ["What is the chemical symbol for tin?", "Sn", "Ti", "Tn", "St"],
+      ["What is the chemical symbol for antimony?", "Sb", "An", "At", "Am"],
+      ["What is the chemical symbol for potassium?", "K", "P", "Po", "Pt"],
+      ["Besides mercury, which element is a liquid at room temperature?", "Bromine", "Gallium", "Cesium", "Iodine"],
+      ["Which metal conducts electricity best?", "Silver", "Copper", "Gold", "Aluminum"],
+      ["What is the atomic number of carbon?", "6", "12", "8", "14"],
+      ["Roughly how long is the half-life of carbon-14?", "5,730 years", "1,600 years", "24,000 years", "50,000 years"],
+      ["Avogadro's number is closest to which value?", "6.022 × 10²³", "3.14 × 10²³", "6.674 × 10⁻¹¹", "9.81 × 10²³"],
+      ["What is the SI unit of electrical resistance?", "Ohm", "Volt", "Ampere", "Farad"],
+      ["What is the SI unit of capacitance?", "Farad", "Henry", "Tesla", "Weber"],
+      ["What is the freezing point of water in kelvin?", "273.15 K", "0 K", "373.15 K", "32 K"],
+      ["About how fast does light travel in a vacuum?", "300,000 km per second", "30,000 km per second", "3,000,000 km per second", "150,000 km per second"],
+      ["About how fast does sound travel through air at 20 °C?", "343 m/s", "120 m/s", "1,500 m/s", "3,000 m/s"],
+      ["Which element is the most abundant in Earth's crust by mass?", "Oxygen", "Silicon", "Iron", "Aluminum"],
+      ["What is the largest moon in the solar system?", "Ganymede", "Titan", "Callisto", "Io"],
+      ["Which planet's day is longer than its year?", "Venus", "Mercury", "Mars", "Neptune"],
+      ["Which particle has no electric charge?", "Neutron", "Proton", "Electron", "Positron"],
+      ["What was the first artificial satellite?", "Sputnik 1", "Explorer 1", "Vanguard 1", "Telstar 1"],
+      ["Who discovered penicillin?", "Alexander Fleming", "Louis Pasteur", "Joseph Lister", "Robert Koch"],
+      ["What does DNA stand for?", "Deoxyribonucleic acid", "Dinucleic acid", "Deoxyribose nitrogen acid", "Dual nucleotide acid"],
+      ["Which organ makes insulin?", "Pancreas", "Liver", "Kidney", "Spleen"],
+      ["Which blood type is the universal donor for red blood cells?", "O negative", "AB positive", "A negative", "O positive"],
+      ["Counting the wrist, how many bones are in one adult human hand?", "27", "19", "32", "22"],
+      ["How many chambers does a cow's stomach have?", "4", "2", "3", "6"],
+      ["Who worked out the three laws of planetary motion?", "Johannes Kepler", "Galileo Galilei", "Nicolaus Copernicus", "Tycho Brahe"],
+      ["Who proposed a Sun-centered model of the solar system in 1543?", "Nicolaus Copernicus", "Ptolemy", "Johannes Kepler", "Galileo Galilei"],
+      ["Which blood vessel carries blood from the heart to the lungs?", "Pulmonary artery", "Pulmonary vein", "Aorta", "Vena cava"],
+      ["Which mineral is the softest on the Mohs scale?", "Talc", "Gypsum", "Calcite", "Quartz"],
+      ["Which mineral scores 9 on the Mohs hardness scale?", "Corundum", "Topaz", "Quartz", "Diamond"],
+      ["Which planet has the most known moons?", "Saturn", "Jupiter", "Uranus", "Neptune"],
+      ["What is the square root of 1,764?", "42", "38", "44", "46"],
+      ["What is 17 × 23?", "391", "381", "401", "371"],
+      ["What do the interior angles of a hexagon add up to?", "720°", "540°", "1,080°", "900°"],
+      ["How many sides does a dodecagon have?", "12", "10", "20", "14"],
+      ["What is the smallest prime number greater than 100?", "101", "103", "107", "109"],
+      ["What is 2 to the 12th power?", "4,096", "2,048", "8,192", "1,024"],
+      ["What is the derivative of sin(x)?", "cos(x)", "−cos(x)", "−sin(x)", "tan(x)"],
+      ["Euler's number e is closest to which value?", "2.718", "3.142", "1.618", "2.303"],
+      ["What is pi to five decimal places?", "3.14159", "3.14156", "3.14169", "3.14195"],
+      ["How many zeros are in one billion?", "9", "6", "12", "8"],
+      ["What is 15% of 260?", "39", "26", "42", "36"],
+      ["What is the next prime number after 89?", "97", "91", "93", "95"],
+      ["What year is MCMXCIV in Roman numerals?", "1994", "1996", "1904", "1494"],
+      ["The golden ratio is closest to which value?", "1.618", "1.414", "1.732", "2.718"],
+      ["What is the volume of a cube whose sides are 7 units long?", "343", "294", "49", "2,401"],
+      ["In what year did Constantinople fall, ending the Byzantine Empire?", "1453", "1492", "1204", "1517"],
+      ["In what year was the Peace of Westphalia signed?", "1648", "1618", "1713", "1815"],
+      ["Who was the first Roman emperor?", "Augustus", "Julius Caesar", "Nero", "Tiberius"],
+      ["Mansa Musa ruled which empire?", "Mali Empire", "Songhai Empire", "Ghana Empire", "Ottoman Empire"],
+      ["Who led the first expedition to reach the South Pole?", "Roald Amundsen", "Robert Falcon Scott", "Ernest Shackleton", "Richard Byrd"],
+      ["Which treaty formally ended World War I between the Allies and Germany?", "Treaty of Versailles", "Treaty of Paris", "Treaty of Ghent", "Treaty of Trianon"],
+      ["In what year did the Titanic sink?", "1912", "1910", "1915", "1905"],
+      ["Who wrote the first draft of the US Declaration of Independence?", "Thomas Jefferson", "John Adams", "Benjamin Franklin", "James Madison"],
+      ["Which of the Seven Wonders of the Ancient World stood at Alexandria?", "The Lighthouse", "The Colossus", "The Hanging Gardens", "The Mausoleum"],
+      ["Who is the longest-reigning British monarch?", "Elizabeth II", "Victoria", "George III", "Henry VIII"],
+      ["The Treaty of Paris of 1783 ended which war?", "American Revolutionary War", "Seven Years' War", "War of 1812", "Crimean War"],
+      ["In which country was the Rosetta Stone found?", "Egypt", "Greece", "Italy", "Turkey"],
+      ["Who was the first woman to win a Nobel Prize?", "Marie Curie", "Dorothy Hodgkin", "Rosalind Franklin", "Lise Meitner"],
+      ["In what year did the Chernobyl nuclear disaster happen?", "1986", "1979", "1991", "1984"],
+      ["Who painted The Garden of Earthly Delights?", "Hieronymus Bosch", "Pieter Bruegel the Elder", "Jan van Eyck", "Albrecht Dürer"],
+      ["Who composed The Four Seasons?", "Antonio Vivaldi", "Johann Sebastian Bach", "George Frideric Handel", "Joseph Haydn"],
+      ["Who wrote One Hundred Years of Solitude?", "Gabriel García Márquez", "Jorge Luis Borges", "Pablo Neruda", "Isabel Allende"],
+      ["Which language has the most native speakers?", "Mandarin Chinese", "Spanish", "English", "Hindi"],
+      ["What is the main language of Brazil?", "Portuguese", "Spanish", "French", "Italian"],
+      ["What is the currency of Switzerland?", "Swiss franc", "Euro", "Swiss krone", "Swiss mark"],
+      ["Which letter does not appear in the name of any US state?", "Q", "J", "Z", "X"],
+      ["How many lines are on a standard music staff?", "5", "4", "6", "7"],
+      ["Who sculpted the marble statue of David completed in 1504?", "Michelangelo", "Donatello", "Gian Lorenzo Bernini", "Auguste Rodin"],
+      ["Which mineral sits at the top of the Mohs hardness scale?", "Diamond", "Corundum", "Topaz", "Quartz"]
+    ];
+
+    var MODES = {
+      sub:    { name: 'Substitute Day', blurb: 'Easy · 10 questions · a sleepy sub', teacher: 'Mr. Doze, the substitute', n: 10, pts: 5, bonus: 20, write: [5000, 8000], watch: [1500, 2500], turn: 1300, snap: 0, decay: 6, qTime: 0 },
+      pop:    { name: 'Pop Quiz', blurb: 'Normal · 10 questions', teacher: 'Ms. Eagleton', n: 10, pts: 10, bonus: 40, write: [3000, 5500], watch: [2000, 3500], turn: 800, snap: 0.12, decay: 4, qTime: 0 },
+      final:  { name: 'Final Exam', blurb: 'Hard · 15 questions · 25 seconds each', teacher: 'Ms. Eagleton', n: 15, pts: 20, bonus: 100, write: [2000, 4000], watch: [2500, 4500], turn: 550, snap: 0.25, decay: 3, qTime: 25 },
+      sudden: { name: 'Sudden Death', blurb: 'One wrong answer ends it · 15 seconds each', teacher: 'Ms. Eagleton', n: Infinity, pts: 10, bonus: 0, sudden: true, write: [2000, 4500], watch: [2000, 4000], turn: 600, snap: 0.2, decay: 3, qTime: 15 },
+      honest: { name: 'Honest Student', blurb: 'No gadgets · 25 points a question', teacher: 'Ms. Eagleton', n: 10, pts: 25, bonus: 50, noGadgets: true, write: [3000, 5000], watch: [2000, 3500], turn: 800, snap: 0.1, decay: 5, qTime: 0 }
+    };
+    var MODE_ORDER = ['sub', 'pop', 'final', 'sudden', 'honest'];
+
+    var GADGETS = {
+      neighbor: { label: '👀 Copy neighbor', uses: 3, sus: 15 },
+      notes:    { label: '📝 Sleeve notes', uses: 3, sus: 10 },
+      phone:    { label: '📱 Phone', uses: 2, sus: 20 },
+      ai:       { label: '🤖 AI earpiece', uses: 2, sus: 25 },
+      watch:    { label: '⌚ Smartwatch', uses: 1, sus: 15 }
+    };
+    var SHOP = [
+      { group: 'Gadgets', id: 'neighbor', kind: 'gadget', emoji: '👀', name: 'Copy Your Neighbor', price: 0, desc: 'Peek at your neighbor’s answer. They’re right about 60% of the time. 3 uses per test.' },
+      { group: 'Gadgets', id: 'notes', kind: 'gadget', emoji: '📝', name: 'Sleeve Notes', price: 60, desc: 'Crosses out 1 wrong answer. 3 uses per test. Low suspicion.' },
+      { group: 'Gadgets', id: 'phone', kind: 'gadget', emoji: '📱', name: 'Phone Under the Desk', price: 150, desc: 'Crosses out 2 wrong answers. 2 uses per test.' },
+      { group: 'Gadgets', id: 'ai', kind: 'gadget', emoji: '🤖', name: 'AI Earpiece', price: 400, desc: 'Whispers the answer. Right about 85% of the time, because AI makes mistakes too. 2 uses per test.' },
+      { group: 'Gadgets', id: 'watch', kind: 'gadget', emoji: '⌚', name: 'Smartwatch', price: 700, desc: 'Shows the right answer every time. 1 use per test.' },
+      { group: 'Upgrades', id: 'mirror', kind: 'upgrade', emoji: '🪞', name: 'Mirror Glasses', price: 250, desc: 'Warns you a moment before she turns around. Doesn’t help with snap turns.' },
+      { group: 'Upgrades', id: 'silent', kind: 'upgrade', emoji: '🔕', name: 'Silent Mode', price: 200, desc: 'Gadgets raise her suspicion 40% less.' },
+      { group: 'Upgrades', id: 'hoodie', kind: 'upgrade', emoji: '🧥', name: 'Baggy Hoodie', price: 300, desc: 'Get through a desk search half the time.' },
+      { group: 'Upgrades', id: 'backpack', kind: 'upgrade', emoji: '🎒', name: 'Bigger Backpack', price: 350, desc: '+1 use for every gadget, every test.' },
+      { group: 'Supplies', id: 'apple', kind: 'supply', emoji: '🍎', name: 'Apple for the Teacher', price: 80, desc: 'Drops her suspicion a lot. Safe to use any time.' },
+      { group: 'Supplies', id: 'face', kind: 'supply', emoji: '😇', name: 'Innocent Face', price: 250, desc: 'Talk your way out of getting caught, once. Used automatically.' },
+      { group: 'Supplies', id: 'pass', kind: 'supply', emoji: '🚽', name: 'Bathroom Pass', price: 120, desc: 'Skip one question with no penalty.' }
+    ];
+    var CATCH = {
+      neighbor: '“Eyes on your OWN paper.”',
+      notes: '“Interesting notes. On your SLEEVE?”',
+      phone: '“Is that a PHONE under your desk?!”',
+      ai: '“I can hear the robot whispering, you know.”',
+      watch: '“That is a very smart watch.”',
+      search: '“Empty your pockets. …Just as I thought.”'
+    };
+    var STATES = {
+      back:  ['✍️ Writing on the board', 'Safe… for now.', 'safe'],
+      pre:   ['🪞 She’s about to turn!', 'Your mirror glasses spotted it.', 'warn'],
+      turn:  ['😬 Turning around…', 'Risky. She might see you.', 'warn'],
+      watch: ['👁️ Watching the class', 'Don’t touch anything.', 'danger'],
+      snap:  ['⚡ Snap turn!', 'She didn’t even warn you.', 'danger']
+    };
+
+    // ---- saved progress (this device only) ----
+    function fresh() { return { points: 0, owned: { neighbor: true }, counts: { apple: 0, face: 0, pass: 0 }, best: {}, mode: 'pop' }; }
+    function load() {
+      var d = fresh(), s = null;
+      try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+      if (s && typeof s === 'object') {
+        if (typeof s.points === 'number' && s.points >= 0) d.points = Math.floor(s.points);
+        if (s.owned && typeof s.owned === 'object') SHOP.forEach(function (it) { if (it.kind !== 'supply' && s.owned[it.id]) d.owned[it.id] = true; });
+        if (s.counts && typeof s.counts === 'object') Object.keys(d.counts).forEach(function (c) { if (typeof s.counts[c] === 'number' && s.counts[c] > 0) d.counts[c] = Math.floor(s.counts[c]); });
+        if (s.best && typeof s.best === 'object') Object.keys(MODES).forEach(function (m) { if (typeof s.best[m] === 'number') d.best[m] = s.best[m]; });
+        if (MODES[s.mode]) d.mode = s.mode;
+      }
+      return d;
+    }
+    var save = load();
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+    // ---- helpers ----
+    function $(id) { return document.getElementById('ch-' + id); }
+    function show(view) { ['lobby', 'shop', 'exam', 'result'].forEach(function (v) { $(v).hidden = (v !== view); }); window.scrollTo(0, 0); }
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function intel(t) { $('intel').textContent = t; }
+
+    // ---- lobby & shop ----
+    function renderLobby() {
+      $('points').textContent = save.points;
+      var box = $('modes');
+      box.innerHTML = '';
+      MODE_ORDER.forEach(function (id) {
+        var m = MODES[id], b = document.createElement('button');
+        b.type = 'button'; b.className = 'ch-mode'; b.setAttribute('aria-pressed', String(save.mode === id));
+        var t = document.createElement('b'); t.textContent = m.name;
+        var s = document.createElement('span'); s.textContent = m.blurb;
+        b.appendChild(t); b.appendChild(s);
+        b.addEventListener('click', function () { save.mode = id; persist(); renderLobby(); });
+        box.appendChild(b);
+      });
+      var best = save.best[save.mode];
+      $('best').textContent = best ? 'Your best in ' + MODES[save.mode].name + ': ' + best + ' points' : '';
+    }
+    function renderShop() {
+      $('shopPoints').textContent = save.points;
+      var list = $('shopList'), group = '';
+      list.innerHTML = '';
+      SHOP.forEach(function (it) {
+        if (it.group !== group) { group = it.group; var h = document.createElement('div'); h.className = 'ch-head'; h.textContent = group; list.appendChild(h); }
+        var row = document.createElement('div'); row.className = 'ch-item';
+        var em = document.createElement('div'); em.className = 'ch-emoji'; em.setAttribute('aria-hidden', 'true'); em.textContent = it.emoji;
+        var body = document.createElement('div'); body.className = 'ch-item-body';
+        var nm = document.createElement('b'); nm.textContent = it.name;
+        var ds = document.createElement('p'); ds.textContent = it.desc;
+        body.appendChild(nm); body.appendChild(ds);
+        var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ch-buy';
+        if (it.kind === 'supply') {
+          btn.textContent = 'Buy · ' + it.price + (save.counts[it.id] ? ' (have ' + save.counts[it.id] + ')' : '');
+          btn.disabled = save.points < it.price;
+        } else if (save.owned[it.id]) {
+          btn.textContent = it.price === 0 ? 'Free · owned' : 'Owned'; btn.disabled = true;
+        } else {
+          btn.textContent = 'Buy · ' + it.price; btn.disabled = save.points < it.price;
+        }
+        btn.setAttribute('aria-label', btn.textContent + ': ' + it.name);
+        btn.addEventListener('click', function () { buy(it); });
+        row.appendChild(em); row.appendChild(body); row.appendChild(btn);
+        list.appendChild(row);
+      });
+    }
+    function buy(it) {
+      if (save.points < it.price || (it.kind !== 'supply' && save.owned[it.id])) return;
+      save.points -= it.price;
+      if (it.kind === 'supply') save.counts[it.id] += 1; else save.owned[it.id] = true;
+      persist(); renderShop();
+    }
+    function openShop() { renderShop(); show('shop'); }
+
+    // ---- the test ----
+    var run = null;
+    function later(fn, ms) { var r = run; r.timers.push(setTimeout(function () { if (run === r && !r.over) fn(); }, ms)); }
+    function stopRun() { if (!run) return; run.timers.forEach(clearTimeout); clearInterval(run.tick); }
+
+    function startRun() {
+      var m = MODES[save.mode], extra = save.owned.backpack ? 1 : 0, charges = {};
+      Object.keys(GADGETS).forEach(function (g) { charges[g] = save.owned[g] ? GADGETS[g].uses + extra : 0; });
+      if (run) { run.over = true; stopRun(); }
+      run = { id: save.mode, m: m, deck: shuffle(QB.slice()), idx: -1, correct: 0, earned: 0, streak: 0, sus: 0,
+              charges: charges, state: 'back', timers: [], tick: 0, over: false, answered: false,
+              cheated: false, cheatedEver: false, qLeft: 0, q: null };
+      $('teacherName').textContent = m.teacher;
+      show('exam');
+      setSus(0);
+      run.tick = setInterval(tick, 100);
+      cycle();
+      nextQuestion();
+    }
+
+    function setTeacher(key) {
+      var shown = key === 'snap' ? 'watch' : key, t = STATES[key].slice();
+      run.state = shown;
+      $('room').setAttribute('data-state', shown);
+      if (run.m.noGadgets) t[1] = shown === 'watch' ? 'You’ve got nothing to hide.' : 'Honest mode: no gadgets today.';
+      var st = $('state'); st.textContent = t[0]; st.className = 'ch-state ' + t[2];
+      $('hint').textContent = t[1];
+    }
+    function cycle() {
+      var m = run.m;
+      setTeacher('back');
+      var snap = Math.random() < m.snap, pre = (!snap && save.owned.mirror) ? 1100 : 0;
+      later(function () {
+        if (snap) { setTeacher('snap'); later(cycle, rand(m.watch[0], m.watch[1])); }
+        else if (pre) { setTeacher('pre'); later(turn, pre); }
+        else turn();
+      }, Math.max(700, rand(m.write[0], m.write[1]) - pre));
+      function turn() {
+        setTeacher('turn');
+        later(function () { setTeacher('watch'); later(cycle, rand(m.watch[0], m.watch[1])); }, m.turn);
+      }
+    }
+    function tick() {
+      if (!run || run.over) return;
+      if (run.sus > 0) setSus(run.sus - run.m.decay / 10);
+      if (run.m.qTime && !run.answered) {
+        run.qLeft -= 0.1;
+        $('timer').textContent = '⏱ ' + Math.max(0, Math.ceil(run.qLeft)) + 's';
+        if (run.qLeft <= 0) answer(-1);
+      }
+    }
+
+    function setSus(v) {
+      run.sus = Math.max(0, Math.min(100, v));
+      $('susBar').style.width = run.sus + '%';
+      $('susNum').textContent = Math.round(run.sus) + '%';
+    }
+    function addSus(v) { setSus(run.sus + v); if (run.sus >= 100) deskSearch(); }
+    function deskSearch() {
+      if (save.owned.hoodie && Math.random() < 0.5) { intel('🧥 Desk search! She found nothing in your hoodie. Phew.'); setSus(50); }
+      else caught(CATCH.search);
+    }
+    function caught(line) {
+      if (run.over) return;
+      if (save.counts.face > 0) {
+        save.counts.face -= 1; persist();
+        intel('😇 “I was just stretching!” She bought it. This time.');
+        setSus(60); renderBar();
+        return;
+      }
+      endRun('caught', line);
+    }
+
+    function useGadget(g) {
+      if (!run || run.over || run.answered || run.m.noGadgets || run.charges[g] <= 0) return;
+      run.charges[g] -= 1;
+      var risk = run.state === 'watch' ? 1 : run.state === 'turn' ? 0.6 : 0;
+      if (Math.random() < risk) { caught(CATCH[g]); if (!run.over) renderBar(); return; }
+      run.cheated = true; run.cheatedEver = true;
+      applyGadget(g);
+      addSus(GADGETS[g].sus * (save.owned.silent ? 0.6 : 1));
+      if (!run.over) renderBar();
+    }
+    function tip(i) { run.q.btns.forEach(function (b) { b.classList.remove('tip'); }); run.q.btns[i].classList.add('tip'); }
+    function applyGadget(g) {
+      var q = run.q, right = q.right, wrongs = [];
+      q.opts.forEach(function (o, i) { if (i !== right && !q.btns[i].classList.contains('out')) wrongs.push(i); });
+      if (g === 'notes' || g === 'phone') {
+        var cut = shuffle(wrongs.slice()).slice(0, g === 'notes' ? 1 : 2);
+        cut.forEach(function (i) { var b = q.btns[i]; b.classList.add('out'); b.classList.remove('tip'); b.disabled = true; });
+        intel(!cut.length ? 'Nothing left to cross out.' : g === 'notes' ? '📝 Your notes rule out one answer.' : '📱 Quick search: ' + (cut.length === 1 ? 'one answer' : 'two answers') + ' crossed out.');
+      } else if (g === 'neighbor' || g === 'ai') {
+        var pick = (Math.random() < (g === 'neighbor' ? 0.6 : 0.85) || !wrongs.length) ? right : wrongs[Math.floor(Math.random() * wrongs.length)];
+        tip(pick);
+        intel((g === 'neighbor' ? '👀 Your neighbor circled: ' : '🤖 AI whispers: ') + q.opts[pick]);
+      } else if (g === 'watch') {
+        tip(right);
+        intel('⌚ Smartwatch says: ' + q.opts[right]);
+      }
+    }
+    function useSupply(id) {
+      if (!run || run.over || run.m.noGadgets || save.counts[id] <= 0) return;
+      if (id === 'apple') {
+        save.counts.apple -= 1; setSus(run.sus - 40);
+        intel('🍎 She smiles at the apple. Suspicion drops.');
+      } else if (id === 'pass') {
+        if (run.answered) return;
+        save.counts.pass -= 1; run.answered = true;
+        intel('🚽 Bathroom break! Question skipped.');
+        later(nextQuestion, 800);
+      }
+      persist(); renderBar();
+    }
+    function chip(label, off, fn) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'ch-gadget'; b.textContent = label; b.disabled = !!off;
+      if (fn) b.addEventListener('click', fn);
+      return b;
+    }
+    function renderBar() {
+      var bar = $('gadgets');
+      bar.innerHTML = '';
+      if (run.m.noGadgets) {
+        var p = document.createElement('div'); p.className = 'ch-sub';
+        p.textContent = 'Honest mode: your gadgets stay in your bag. Every right answer is worth 25 points.';
+        bar.appendChild(p); return;
+      }
+      Object.keys(GADGETS).forEach(function (g) {
+        if (!save.owned[g]) return;
+        bar.appendChild(chip(GADGETS[g].label + ' ×' + run.charges[g], run.charges[g] <= 0 || run.answered || run.over, function () { useGadget(g); }));
+      });
+      if (save.counts.apple) bar.appendChild(chip('🍎 Apple ×' + save.counts.apple, run.over, function () { useSupply('apple'); }));
+      if (save.counts.pass) bar.appendChild(chip('🚽 Bathroom pass ×' + save.counts.pass, run.answered || run.over, function () { useSupply('pass'); }));
+      if (save.counts.face) bar.appendChild(chip('😇 Innocent face ×' + save.counts.face + ' (automatic)', true));
+    }
+
+    function nextQuestion() {
+      if (!run || run.over) return;
+      run.idx += 1;
+      if (!run.m.sudden && run.idx >= run.m.n) { endRun('passed'); return; }
+      if (run.idx > 0 && run.idx % run.deck.length === 0) run.deck = shuffle(QB.slice());
+      var raw = run.deck[run.idx % run.deck.length], order = shuffle([1, 2, 3, 4]);
+      run.q = { opts: order.map(function (k) { return raw[k]; }), right: order.indexOf(1), btns: [] };
+      run.answered = false; run.cheated = false;
+      $('progress').textContent = run.m.sudden ? 'Streak: ' + run.streak : 'Question ' + (run.idx + 1) + ' of ' + run.m.n;
+      $('earned').textContent = '+' + run.earned + ' pts';
+      $('q').textContent = raw[0];
+      var box = $('opts');
+      box.innerHTML = '';
+      run.q.opts.forEach(function (t, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'ch-opt'; b.textContent = 'ABCD'.charAt(i) + '.  ' + t;
+        b.addEventListener('click', function () { answer(i); });
+        run.q.btns.push(b); box.appendChild(b);
+      });
+      intel('');
+      if (run.m.qTime) { run.qLeft = run.m.qTime; $('timer').textContent = '⏱ ' + run.m.qTime + 's'; } else $('timer').textContent = '';
+      renderBar();
+    }
+    function answer(i) {
+      if (!run || run.over || run.answered) return;
+      run.answered = true;
+      var q = run.q, ok = i === q.right;
+      q.btns.forEach(function (b) { b.disabled = true; });
+      q.btns[q.right].classList.add('right');
+      if (i >= 0 && !ok) q.btns[i].classList.add('wrong');
+      if (ok) {
+        run.correct += 1; run.streak += 1;
+        var pts = run.m.sudden ? run.m.pts * run.streak : run.m.pts;
+        run.earned += pts;
+        $('earned').textContent = '+' + run.earned + ' pts';
+        intel('✅ Correct! +' + pts + ' points');
+        if (run.cheated) addSus(6);   // suspiciously good
+      } else {
+        run.streak = 0;
+        intel((i < 0 ? '⏰ Time’s up! ' : '❌ Wrong. ') + 'The answer was ' + q.opts[q.right] + '.');
+        if (run.m.sudden) { renderBar(); later(function () { endRun('out'); }, 1500); return; }
+      }
+      if (run.over) return;
+      renderBar();
+      later(nextQuestion, ok ? 1100 : 1800);
+    }
+    function endRun(reason, line) {
+      if (!run || run.over) return;
+      run.over = true; stopRun();
+      var m = run.m;
+      var kept = reason === 'caught' ? Math.floor(run.earned * 0.25) : run.earned;
+      var bonus = reason === 'passed' ? m.bonus : 0, total = kept + bonus;
+      save.points += total;
+      var isBest = total > 0 && (!save.best[run.id] || total > save.best[run.id]);
+      if (isBest) save.best[run.id] = total;
+      persist();
+      var title, sub, quote = '';
+      if (reason === 'caught') {
+        title = '🚨 CAUGHT!'; quote = line || '';
+        sub = 'Off to the principal’s office. You keep a quarter of this test’s points: +' + total + '.';
+      } else if (reason === 'out') {
+        title = '💀 Game over';
+        sub = 'Your streak: ' + run.correct + '. You earned +' + total + ' points.';
+      } else {
+        title = m.noGadgets ? '🎓 Honest and proud' : run.cheatedEver ? '😎 You got away with it!' : '🎓 Test complete';
+        sub = run.correct + ' of ' + m.n + ' right. +' + kept + ' points, plus a ' + bonus + '-point bonus for finishing.';
+      }
+      sub += ' You now have ' + save.points + ' points.' + (isBest ? ' New best!' : '');
+      $('resTitle').textContent = title;
+      $('resLine').textContent = quote; $('resLine').hidden = !quote;
+      $('resSub').textContent = sub;
+      show('result');
+    }
+
+    $('openShop').addEventListener('click', openShop);
+    $('closeShop').addEventListener('click', function () { renderLobby(); show('lobby'); });
+    $('start').addEventListener('click', startRun);
+    $('again').addEventListener('click', startRun);
+    $('resShop').addEventListener('click', openShop);
+    $('resLobby').addEventListener('click', function () { renderLobby(); show('lobby'); });
+    window.registerHook('cheat',
+      function () { save = load(); renderLobby(); show('lobby'); },
+      function () { if (run && !run.over) { run.over = true; stopRun(); } });
   })();
 
 </script>
