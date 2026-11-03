@@ -35,6 +35,7 @@
     --c4: #4db6ff;
     --c5: #f472b6;
     --c6: #ff5d73;
+    --c7: #e4a64a;
     --op: #ff9f43;
     --op-hi: #ffb15f;
     --font-display: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -47,7 +48,7 @@
       --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
       --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
       --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52;
+      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c;
       --op: #f2890f; --op-hi: #ffa02e;
       color-scheme: light;
     }
@@ -56,7 +57,7 @@
     --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
     --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
     --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52;
+    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c;
     --op: #f2890f; --op-hi: #ffa02e;
     color-scheme: light;
   }
@@ -292,7 +293,45 @@
   .ch-res-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 7vw, 2.4rem); text-align: center; margin: 4px 0 8px; text-wrap: balance; }
   .ch-res-line { text-align: center; font-family: var(--font-display); font-style: italic; color: var(--bad); margin: 0 0 10px; text-wrap: balance; }
   .ch-res-sub { text-align: center; color: var(--fg); margin: 0 auto 6px; max-width: 38ch; line-height: 1.5; text-wrap: balance; }
+  /* ---- Pink Slip ---- */
+  #boss [hidden] { display: none !important; }
+  .grid > .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .bs-kicker { font-family: var(--font-display); font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .bs-name { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 7vw, 2.3rem); line-height: 1.1; margin: 4px 0 10px; text-wrap: balance; }
+  .bs-why { font-size: 1.02rem; line-height: 1.5; margin: 0 0 12px; text-wrap: balance; }
+  .bs-why b { color: var(--c7); }
+  .bs-stats { color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-variant-numeric: tabular-nums; }
+  .bs-hud { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-display); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+  .bs-hud b { color: var(--fg); letter-spacing: 3px; font-size: 1rem; }
+  .bs-time { height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; margin: 10px 0 14px; }
+  .bs-time > span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--bad), var(--accent)); border-radius: 999px; }
+  .bs-desk { background: var(--panel-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+  .bs-monitor { background: var(--bg); border: 2px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .bs-monitor-bar { display: flex; gap: 5px; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .bs-monitor-bar span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .bs-screen { font-family: var(--font-mono); font-size: 0.98rem; line-height: 1.4; padding: 16px 12px; min-height: 4.6em; display: flex; align-items: center; justify-content: center; text-align: center; text-wrap: balance; overflow-wrap: anywhere; }
+  .bs-person { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  .bs-person > div { min-width: 0; }
+  .bs-person svg { width: 56px; height: 56px; flex: none; }
+  .bs-plate { font-family: var(--font-display); font-weight: 700; }
+  .bs-doing { color: var(--fg); font-size: 0.95rem; line-height: 1.35; }
+  .bs-catch { margin-top: 14px; width: 100%; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: #fff; background: var(--bad); border: none; border-radius: 999px; padding: 15px; cursor: pointer; transition: transform .08s ease, filter .12s ease; }
+  .bs-catch:hover { filter: brightness(1.06); }
+  .bs-catch:active { transform: scale(0.97); }
+  .bs-catch:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .bs-catch:disabled { opacity: 0.5; cursor: default; transform: none; }
+  .bs-log { min-height: 2.9em; margin-top: 12px; font-size: 0.95rem; line-height: 1.4; text-align: center; text-wrap: balance; }
+  .bs-log .good { color: var(--accent-2); font-weight: 700; }
+  .bs-log .bad { color: var(--bad); font-weight: 700; }
+  .bs-letter { background: color-mix(in srgb, var(--c5) 9%, var(--panel-2)); border: 1px dashed color-mix(in srgb, var(--c5) 60%, var(--line)); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .bs-letter-head { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--c5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .bs-letter-rows { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; margin: 0; }
+  .bs-letter-rows dt { color: var(--muted); font-size: 0.82rem; padding-top: 2px; }
+  .bs-letter-rows dd { margin: 0; font-weight: 600; min-width: 0; line-height: 1.4; }
+  .bs-sign { margin-top: 14px; font-family: var(--font-display); font-style: italic; color: var(--muted); text-align: right; }
+
   @media (prefers-reduced-motion: reduce) {
+    .bs-catch { transition: none; }
     .tv-eye { animation: none; }
     .ch-room, .ch-meter-track > span, .ch-opt { transition: none; }
   }
@@ -354,6 +393,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
         <h2>Don't Get Caught</h2>
         <p>Cheat your way through an impossible test. Buy gadgets, try five modes, and dodge a teacher who sees everything.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c7);" data-goto="boss">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="3" y1="13" x2="21" y2="13"/></svg></span>
+        <h2>Pink Slip</h2>
+        <p>You're the boss, and there's one employee you can't stand. Catch them slacking and hand them the pink slip.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -546,6 +592,71 @@
         <button class="btn ghost" id="ch-resShop" type="button">🛒 Shop</button>
       </div>
       <button class="btn ghost" id="ch-resLobby" type="button">Change mode</button>
+    </div>
+  </section>
+
+  <!-- ================= PINK SLIP ================= -->
+  <section id="boss" class="screen">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Pink Slip</span></div>
+
+    <div class="panel" id="bs-intro">
+      <div class="bs-kicker">Your target</div>
+      <div class="bs-name" id="bs-introName"></div>
+      <p class="bs-why" id="bs-introWhy"></p>
+      <p class="ch-sub" id="bs-introGoal" style="margin:0;"></p>
+      <div class="bs-stats" id="bs-introStats"></div>
+      <button class="btn" id="bs-go" type="button">Start watching →</button>
+    </div>
+
+    <div class="panel" id="bs-play" hidden>
+      <div class="bs-hud">
+        <span>Evidence <b id="bs-evidence"></b></span>
+        <span>HR complaints <b id="bs-hr"></b></span>
+      </div>
+      <div class="bs-time"><span id="bs-timeBar"></span></div>
+      <div class="bs-desk">
+        <div class="bs-monitor">
+          <div class="bs-monitor-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="bs-screen" id="bs-screen"></div>
+        </div>
+        <div class="bs-person">
+          <svg viewBox="0 0 60 60" aria-hidden="true">
+            <path id="bs-shirt" d="M8 60 C8 46 18 41 30 41 C42 41 52 46 52 60 Z"/>
+            <circle id="bs-head" cx="30" cy="25" r="13"/>
+            <path id="bs-hair" d="M17 24 A13 13 0 0 1 43 24 C38 16 22 16 17 24 Z"/>
+            <circle cx="25.5" cy="26" r="1.6" fill="#1d2430"/>
+            <circle cx="34.5" cy="26" r="1.6" fill="#1d2430"/>
+            <path d="M26 31.5 q4 2.5 8 0" stroke="#1d2430" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="bs-plate" id="bs-plate"></div>
+            <div class="bs-doing" id="bs-doing"></div>
+          </div>
+        </div>
+      </div>
+      <button class="bs-catch" id="bs-catch" type="button">🫵 Caught you!</button>
+      <div class="bs-log" id="bs-log" aria-live="polite"></div>
+    </div>
+
+    <div class="panel" id="bs-fired" hidden>
+      <div class="bs-letter">
+        <div class="bs-letter-head">Notice of termination</div>
+        <dl class="bs-letter-rows">
+          <dt>Employee</dt><dd id="bs-fName"></dd>
+          <dt>Caught</dt><dd id="bs-fCaught"></dd>
+          <dt>Official reason</dt><dd id="bs-fReason"></dd>
+          <dt>Real reason</dt><dd id="bs-fReal"></dd>
+        </dl>
+        <div class="bs-sign">Signed, The Boss</div>
+      </div>
+      <p class="ch-sub" id="bs-firedStats" style="text-align:center;margin:0;"></p>
+      <button class="btn" id="bs-next" type="button">Next target →</button>
+    </div>
+
+    <div class="panel" id="bs-over" hidden>
+      <div class="ch-res-title" id="bs-overTitle"></div>
+      <p class="ch-res-sub" id="bs-overSub"></p>
+      <button class="btn" id="bs-restart" type="button">Try again</button>
     </div>
   </section>
 
@@ -3671,7 +3782,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -4355,6 +4466,279 @@
     window.registerHook('cheat',
       function () { save = load(); renderLobby(); show('lobby'); },
       function () { if (run && !run.over) { run.over = true; stopRun(); } });
+  })();
+
+  // ============ Pink Slip ============
+  (function () {
+    var KEY = 'funvault-boss-v1';
+    var FIRST = ['Gary', 'Brenda', 'Doug', 'Tiffany', 'Marcus', 'Linda', 'Chad', 'Marcy', 'Todd', 'Denise', 'Steve', 'Priya', 'Hank', 'Jolene', 'Rajesh', 'Wendy', 'Clive', 'Bethany', 'Lars', 'Gloria', 'Ned', 'Sasha', 'Phil', 'Rosalind', 'Barry', 'Yolanda', 'Mitch', 'Fiona', 'Duncan', 'Kendra', 'Otis', 'Harriet', 'Vince', 'Paloma', 'Nigel', 'Tanya', 'Rufus', 'Agnes', 'Dex', 'Imani'];
+    var LAST = ['Pickles', 'Wobbleton', 'McFluff', 'Crumbsworth', 'Snodgrass', 'Puddlefoot', 'Grumbleby', 'Fizzwick', 'Noodleman', 'Higginbottom', 'Waffleton', 'Bumblesby', 'Crankshaw', 'Dimpleton', 'Featherstone', 'Goosebury', 'Jellicoe', 'Lumpkin', 'Muddleworth', 'Nibbles', 'Oddsworth', 'Pumpernickel', 'Quibble', 'Rumbleton', 'Sprocket', 'Tumbleweed', 'Vexley', 'Wigglesworth', 'Yawnsby', 'Buttersworth', 'Clatterbuck', 'Flapjack', 'Gobbleby', 'Honkington', 'Kettlewell', 'Marmalade', 'Nutley', 'Pebbleton', 'Spatula', 'Wafflebury'];
+    var DISLIKE = [
+      'microwave fish in the break room', 'reply-all to every single email', 'start every message with “per my last email”',
+      'got a better parking spot than you', 'laugh at their own jokes before the punchline', 'brought a kazoo to the budget meeting',
+      'clip their nails at their desk', 'always “forget” their wallet at team lunch', 'named their stapler and talk to it',
+      'hum the same song all day long', 'used Comic Sans in a client presentation', 'hoard all the good pens',
+      'take the last donut and leave one bite', 'schedule meetings that could have been emails', 'wear sunglasses indoors',
+      'chew ice loudly through every meeting', 'bring their pet iguana to work', 'say “let’s circle back” about everything',
+      'take calls on speakerphone in an open office', 'put dirty mugs back in the cupboard', 'beat you at office trivia night',
+      'out-sang you at the holiday karaoke', 'keep “borrowing” your phone charger', 'whistle through their teeth',
+      'tap their pen in perfect rhythm all day', 'call you “buddy” and “chief”', 'eat tuna at their desk every single day',
+      'park across two spaces', 'got the corner office you wanted', 'correct your grammar in meetings',
+      'hung a motivational poster of themselves', 'never refill the coffee pot', 'say “synergy” without a hint of irony',
+      'laugh like a startled goose', 'gave your chili two stars at the cook-off', 'set their ringtone to a rooster crowing',
+      'forward you chain emails every morning', 'sneeze like a foghorn', 'reorganized the supply closet by color without asking',
+      'clap when the plane lands on work trips'
+    ];
+    // [what's on screen, what they're doing]
+    var SLACK = [
+      ['Cat videos (52 tabs open)', 'giggling at a cat video'],
+      ['Match-3 Puzzle · Level 312', 'playing a puzzle game'],
+      ['Cart: 1 giant inflatable flamingo', 'shopping for pool floats'],
+      ['Fantasy Football Draft Room', 'drafting a fantasy football team'],
+      ['Photos: Beach Trip 2019', 'scrolling through old vacation photos'],
+      ['Daily Crossword · 14 Across', 'doing the crossword'],
+      ['Screensaver: bouncing logo', 'fast asleep and snoring'],
+      ['Cooking Show: Lasagna Masterclass', 'watching a cooking show'],
+      ['Solitaire · 3 moves left', 'playing solitaire'],
+      ['Quiz: Which Potato Are You?', 'taking an online personality quiz'],
+      ['Hot Tubs Under $5,000', 'shopping for a hot tub'],
+      ['Jobs Where the Boss Is Nice', 'job hunting'],
+      ['Movie Night: 3-Hour Epic (1:12:40)', 'watching a movie with headphones on'],
+      ['Social feed: “Day 3 of pretending to work”', 'posting about pretending to work'],
+      ['Recipe: Ultimate Nachos', 'planning weekend snacks'],
+      ['Online Chess · Your move', 'playing online chess'],
+      ['Concert Tickets · Checkout', 'buying concert tickets'],
+      ['Video: Dogs Who Can Skateboard', 'watching skateboarding dogs'],
+      ['Real Estate: Castles for Sale', 'browsing castles for sale'],
+      ['Wiki: List of Unusual Cheeses', 'reading about cheese for an hour'],
+      ['Paint app: Self-Portrait as a Knight', 'drawing themselves as a knight'],
+      ['Game lobby (4 friends waiting)', 'about to start an online game'],
+      ['Flights: One-Way to Fiji', 'pricing one-way flights to Fiji'],
+      ['Email draft: “Dear Grandma, work is SO boring”', 'writing to Grandma about how boring work is']
+    ];
+    // looks like work on screen; what they're doing gives it away
+    var SNEAKY = [
+      ['Q3_Budget.xlsx · tab: MY FANTASY TEAM', 'setting a fantasy league lineup'],
+      ['Annual_Report.pdf', 'reading a comic book hidden inside the report'],
+      ['Video call: “Team Sync”', 'playing guitar with their camera off'],
+      ['Meeting_Notes.docx', 'writing chapter 9 of their dragon novel'],
+      ['Phone call', 'booking a manicure on the phone'],
+      ['Inventory.xlsx', 'secretly texting under the desk'],
+      ['Inbox (0 unread)', 'painting their nails under the desk'],
+      ['Project_Timeline.pptx', 'eating YOUR labeled lunch'],
+      ['Code editor: main.js', 'building a paper clip tower'],
+      ['Training Video: Workplace Safety (muted)', 'knitting a scarf'],
+      ['Calendar: “Busy” all day', 'napping behind their monitor'],
+      ['Customer support chat', 'chatting with their best friend, not a customer'],
+      ['Sales_Forecast_FINAL.xlsx', 'juggling staplers'],
+      ['Quarterly_Review.docx', 'planning a surprise party for themselves']
+    ];
+    var WORK = [
+      ['Q3_Budget_FINAL_v7.xlsx', 'typing numbers into the budget'],
+      ['Inbox (12 unread)', 'answering emails'],
+      ['Client_Pitch.pptx · slide 14 of 30', 'fixing a chart on a slide'],
+      ['Video call: Client Meeting', 'nodding seriously at a client'],
+      ['Code editor: 312 lines', 'fixing a bug'],
+      ['Invoice #4471', 'double-checking invoice totals'],
+      ['Project_Timeline.pptx', 'moving deadlines around'],
+      ['Training Video: Workplace Safety', 'taking notes on fire exits'],
+      ['Calendar', 'scheduling the team meeting'],
+      ['Customer support chat (3 waiting)', 'helping a customer'],
+      ['Inventory.xlsx', 'counting boxes'],
+      ['Annual_Report.pdf', 'highlighting key points'],
+      ['Phone call: Supplier', 'on a call with a supplier'],
+      ['Expense_Report.xlsx', 'filing expense reports'],
+      ['Design_Mockup_v3.png', 'nudging a button two pixels left'],
+      ['Email to you: “Weekly Update”', 'writing you a polite weekly update'],
+      ['Company Handbook, page 47', 'reading the company handbook'],
+      ['Printer queue: 3 jobs', 'clearing a paper jam'],
+      ['Whiteboard: Q4 Plan', 'drawing a diagram of the Q4 plan'],
+      ['Sales_Forecast_FINAL.xlsx', 'updating the sales forecast'],
+      ['Contract_Draft.docx', 'proofreading a contract'],
+      ['Meeting_Notes.docx', 'typing up meeting notes']
+    ];
+    var FIRE = [
+      'Excessive enjoyment of company time', 'Unauthorized fun during business hours', 'Running a personal life on company equipment',
+      'Gross misuse of the “Busy” status', 'Violating the No-Joy Policy (section 4b)', 'Making everyone else look busy by comparison',
+      'Napping with intent', 'Conduct unbecoming of a spreadsheet', 'Failure to look stressed enough',
+      'Confusing “work from desk” with “vacation”', 'Unlicensed relaxation', 'Treating deadlines as suggestions',
+      'Smiling during Q3', 'Theft of company time (approximately four years)', 'Having too much fun on a Tuesday',
+      'Possession of a positive attitude without a permit', 'Skipping mandatory fun for actual fun', 'Insubordination by snack',
+      'An excessive break-to-work ratio', 'Pretending to type', 'Reckless scrolling',
+      'Wasting company Wi-Fi on happiness', 'Clocking in, then mentally clocking out', 'Unprofessional levels of chill',
+      'Being caught being caught', 'Vibes', 'Leaving the office mentally at 9:05 a.m.',
+      'Operating a side quest during the main quest', 'Disrespecting the sacred spreadsheet', 'Laughing at a screen, not a meeting'
+    ];
+    var EXCUSE = [
+      'It’s… research!', 'I’m on my break. My break is all day.', 'This is for team building!', 'My cat did this.',
+      'I can explain. Actually, no I can’t.', 'Is it Friday? It feels like Friday.', 'I was just about to close that.',
+      'This is a work thing. Very… work-related.', 'I’m multitasking!', 'Wow, you walk really quietly.',
+      'Okay, but have you SEEN this?', 'In my defense, I was bored.', 'This screen came with the computer.',
+      'I’m testing the Wi-Fi.', 'It opened by itself!', 'I thought you were on vacation.',
+      'You weren’t supposed to see that.', 'Five more minutes?', 'This counts as networking.', 'I’ll stay late. Probably.'
+    ];
+    var GOTCHA = ['GOTCHA.', 'Caught you.', 'Busted!', 'Aha!', 'Not so fast.', 'Interesting work you’re doing there.',
+      'Is that what we pay you for?', 'Evidence: logged.', 'Smile for the report.', 'Oh, I’m writing this down.',
+      'Hmm. Hmm hmm hmm.', 'Bold choice.', 'Noted. In ink.', 'That’s going in the file.'];
+    var HRLINE = ['I was literally doing the spreadsheet.', 'This is a hostile work environment.', 'I’m telling HR.', 'Wow. Okay.',
+      'Check the timestamps!', 'I have it in writing that I was working.', 'You need a hobby.', 'Did you even look at my screen?',
+      'I’m forwarding this to legal.', 'That’s… my actual job.', 'You okay, boss?', 'I’ll be documenting this.',
+      'Please stop hovering.', 'HR is two doors down. I’m going.'];
+    var SKIN = ['#f2c9a0', '#e8b48a', '#c68c5f', '#8d5a3b', '#5c3b28'];
+    var HAIR = ['#3a2e22', '#7a4b2a', '#d9b26f', '#1d1d1d', '#a33b2c', '#8e8e8e'];
+    var SHIRT = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c7)'];
+
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    // draws everything once in random order before repeating anything
+    function bag(arr) { var b = []; return function () { if (!b.length) b = shuffle(arr.slice()); return b.pop(); }; }
+    var nextFirst = bag(FIRST), nextLast = bag(LAST), nextDislike = bag(DISLIKE), nextFire = bag(FIRE),
+        nextExcuse = bag(EXCUSE), nextGotcha = bag(GOTCHA), nextHR = bag(HRLINE),
+        nextSlack = bag(SLACK), nextSneaky = bag(SNEAKY), nextWork = bag(WORK);
+    function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    function $(id) { return document.getElementById('bs-' + id); }
+    function show(view) { ['intro', 'play', 'fired', 'over'].forEach(function (v) { $(v).hidden = v !== view; }); window.scrollTo(0, 0); }
+
+    var best = 0;
+    try { best = Number(JSON.parse(localStorage.getItem(KEY) || '{}').best) || 0; } catch (e) {}
+    function saveBest() { try { localStorage.setItem(KEY, JSON.stringify({ best: best })); } catch (e) {} }
+
+    var game = null, emp = null;
+    function stopEmp() { if (!emp) return; emp.timers.forEach(clearTimeout); clearInterval(emp.tick); }
+    function later(fn, ms) { var e = emp; e.timers.push(setTimeout(function () { if (emp === e && !e.over) fn(); }, ms)); }
+
+    function newGame() { if (emp) { emp.over = true; stopEmp(); } game = { fired: 0, hr: 0 }; meetEmployee(); }
+    function meetEmployee() {
+      var k = game.fired + 1, first = nextFirst(), need = Math.min(3 + Math.floor((k - 1) / 2), 6);
+      var slack = [], sneaky = [], work = [], i;
+      for (i = 0; i < 5; i++) slack.push(nextSlack());
+      for (i = 0; i < 3; i++) sneaky.push(nextSneaky());
+      for (i = 0; i < 7; i++) work.push(nextWork());
+      emp = {
+        first: first, name: first + ' ' + nextLast(), dislike: nextDislike(), need: need, evidence: 0,
+        timeTotal: 30 + (need - 3) * 4, timeLeft: 0, slackDur: Math.max(800, 2000 - (k - 1) * 150),
+        sneakyChance: Math.min(0.55, 0.15 + (k - 1) * 0.07), slack: slack, sneaky: sneaky, work: work,
+        kind: 'work', act: null, lastCaught: '', timers: [], tick: 0, over: false, cool: false
+      };
+      emp.timeLeft = emp.timeTotal;
+      $('introName').textContent = emp.name;
+      $('introWhy').textContent = '';
+      $('introWhy').append('You can’t stand them. Why? ');
+      var why = document.createElement('b'); why.textContent = 'They ' + emp.dislike + '.';
+      $('introWhy').appendChild(why);
+      $('introGoal').textContent = 'Catch ' + first + ' slacking ' + need + ' times in ' + emp.timeTotal + ' seconds. Read their screen and what they’re doing. Accuse them while they’re actually working and HR gets a complaint. Three complaints and you’re the one who’s out.';
+      $('introStats').textContent = 'Fired so far: ' + game.fired + ' · HR complaints: ' + game.hr + ' of 3 · Best: ' + best;
+      $('head').setAttribute('fill', pick(SKIN));
+      $('hair').setAttribute('fill', pick(HAIR));
+      $('shirt').setAttribute('fill', pick(SHIRT));
+      show('intro');
+    }
+    function startWatching() {
+      $('plate').textContent = emp.name;
+      $('timeBar').style.width = '100%';
+      $('log').textContent = '';
+      $('catch').disabled = false;
+      renderHud();
+      show('play');
+      emp.tick = setInterval(tick, 100);
+      activity('work');
+      later(loop, rand(1200, 2400));
+      $('catch').focus();
+    }
+    function activity(kind) {
+      var pool = kind === 'work' ? emp.work : (Math.random() < emp.sneakyChance ? emp.sneaky : emp.slack), a, tries = 0;
+      do { a = pick(pool); tries++; } while ((a === emp.act || (kind !== 'work' && a === emp.lastSlack)) && tries < 8);
+      emp.kind = kind; emp.act = a;
+      if (kind !== 'work') emp.lastSlack = a;
+      $('screen').textContent = a[0];
+      $('doing').textContent = emp.first + ' is ' + a[1] + '.';
+    }
+    function loop() {
+      var k = emp.kind === 'slack' ? 'work' : (Math.random() < 0.55 ? 'slack' : 'work');
+      activity(k);
+      later(loop, k === 'slack' ? emp.slackDur * rand(0.85, 1.15) : rand(1200, 3000));
+    }
+    function tick() {
+      if (!emp || emp.over) return;
+      emp.timeLeft -= 0.1;
+      $('timeBar').style.width = Math.max(0, emp.timeLeft / emp.timeTotal * 100) + '%';
+      if (emp.timeLeft <= 0) gameOver('promoted');
+    }
+    function renderHud() {
+      var e = '', h = '', i;
+      for (i = 0; i < emp.need; i++) e += i < emp.evidence ? '●' : '○';
+      for (i = 0; i < 3; i++) h += i < game.hr ? '■' : '□';
+      $('evidence').textContent = e;
+      $('hr').textContent = h;
+    }
+    function say(cls, lead, quote) {
+      var log = $('log');
+      log.textContent = '';
+      var b = document.createElement('span'); b.className = cls; b.textContent = lead;
+      log.appendChild(b);
+      log.append(' ' + quote);
+    }
+    // stop the clock and the desk so nothing can change before the next screen
+    function freeze() {
+      emp.done = true;
+      emp.timers.forEach(clearTimeout); emp.timers = [];
+      clearInterval(emp.tick);
+      $('catch').disabled = true;
+    }
+    function onCatch() {
+      if (!emp || emp.over || emp.done || emp.cool || $('play').hidden) return;
+      emp.cool = true;
+      setTimeout(function () { if (emp) emp.cool = false; }, 350);
+      if (emp.kind === 'slack') {
+        emp.evidence += 1; emp.lastCaught = emp.act[1];
+        say('good', nextGotcha(), emp.first + ': “' + nextExcuse() + '”');
+        renderHud();
+        if (emp.evidence >= emp.need) { freeze(); later(fire, 1000); return; }
+        emp.timers.forEach(clearTimeout); emp.timers = [];
+        activity('work');
+        later(loop, rand(1500, 2600));
+      } else {
+        game.hr += 1;
+        renderHud();
+        say('bad', 'HR complaint ' + game.hr + ' of 3.', emp.first + ': “' + nextHR() + '”');
+        if (game.hr >= 3) { freeze(); later(function () { gameOver('hr'); }, 1000); }
+      }
+    }
+    function fire() {
+      emp.over = true; stopEmp();
+      game.fired += 1;
+      if (game.fired > best) { best = game.fired; saveBest(); }
+      var caughtLine = emp.lastCaught.charAt(0).toUpperCase() + emp.lastCaught.slice(1);
+      $('fName').textContent = emp.name;
+      $('fCaught').textContent = caughtLine + '.';
+      $('fReason').textContent = nextFire() + '.';
+      $('fReal').textContent = 'They ' + emp.dislike + '.';
+      $('firedStats').textContent = 'Fired so far: ' + game.fired + ' · HR complaints: ' + game.hr + ' of 3 · Best: ' + best;
+      show('fired');
+    }
+    function gameOver(why) {
+      if (!emp || emp.over) return;
+      emp.over = true; stopEmp();
+      if (game.fired > best) { best = game.fired; saveBest(); }
+      var title, sub;
+      if (why === 'hr') {
+        title = '📋 HR fired YOU';
+        sub = 'Three complaints about a boss who keeps accusing people who are working. ' + emp.name + ' waves goodbye as security walks you out.';
+      } else {
+        title = '📈 ' + emp.first + ' got promoted';
+        sub = 'You ran out of time, and ' + emp.name + ' is your boss now. Their first move: a 7 a.m. meeting about your attitude.';
+      }
+      sub += ' You fired ' + game.fired + ' ' + (game.fired === 1 ? 'person' : 'people') + ' first. Best: ' + best + '.';
+      $('overTitle').textContent = title;
+      $('overSub').textContent = sub;
+      show('over');
+    }
+
+    $('go').addEventListener('click', startWatching);
+    $('catch').addEventListener('click', onCatch);
+    $('next').addEventListener('click', meetEmployee);
+    $('restart').addEventListener('click', newGame);
+    window.registerHook('boss', newGame, function () { if (emp && !emp.over) { emp.over = true; stopEmp(); } });
   })();
 
 </script>
