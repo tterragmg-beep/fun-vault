@@ -33,6 +33,7 @@
     --c2: #7c6cff;
     --c3: #39c98a;
     --c4: #4db6ff;
+    --c5: #f472b6;
     --op: #ff9f43;
     --op-hi: #ffb15f;
     --font-display: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -45,7 +46,7 @@
       --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
       --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
       --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6;
+      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c;
       --op: #f2890f; --op-hi: #ffa02e;
       color-scheme: light;
     }
@@ -54,7 +55,7 @@
     --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
     --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
     --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6;
+    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c;
     --op: #f2890f; --op-hi: #ffa02e;
     color-scheme: light;
   }
@@ -247,6 +248,13 @@
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
 
+      <button class="card" style="--hue: var(--c5);" data-goto="honest">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></span>
+        <h2>Big Brain Quiz</h2>
+        <p>1,000 true-or-false questions on everything from space to sports. Put your knowledge to the test.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
       <button class="card" style="--hue: var(--c2);" data-goto="fact">
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
         <h2>The Amazing Fact</h2>
@@ -294,6 +302,34 @@
         <div class="q-score" id="q-scoreNum">0%</div>
         <p class="q-score-sub" id="q-scoreMsg"></p>
         <button class="btn" id="q-again" type="button">Play again 🔁</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BIG BRAIN QUIZ ================= -->
+  <section id="honest" class="screen">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Big Brain Quiz</span></div>
+    <div class="panel">
+      <div id="h-start">
+        <p class="q-lead">Fifty true-or-false questions on everything from space to sports. Put your knowledge to the test. 🧠</p>
+        <button class="btn" id="h-startBtn" type="button">Start quiz →</button>
+      </div>
+      <div id="h-play" style="display:none;">
+        <div class="q-progress" id="h-progress">Question 1 of 50</div>
+        <div class="q-track"><span id="h-fill"></span></div>
+        <div class="q-statement" id="h-statement"></div>
+        <div class="q-choices">
+          <button class="q-choice" id="h-true" type="button">True</button>
+          <button class="q-choice" id="h-false" type="button">False</button>
+        </div>
+        <div class="q-feedback" id="h-feedback"><div class="q-verdict" id="h-verdict"></div><div class="q-explain" id="h-explain"></div></div>
+        <button class="btn" id="h-next" type="button" style="display:none;">Next →</button>
+      </div>
+      <div id="h-result" style="display:none;">
+        <div class="q-progress" style="text-align:center;">Your result</div>
+        <div class="q-score" id="h-scoreNum">0%</div>
+        <p class="q-score-sub" id="h-scoreMsg"></p>
+        <button class="btn" id="h-again" type="button">Play again 🔁</button>
       </div>
     </div>
   </section>
@@ -3470,7 +3506,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','fact','calc','wpm'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -3493,16 +3529,17 @@
     });
   })();
 
-  // ============ Quiz ============
-  (function () {
-    var PER_GAME = 50, RIG_CHANCE = 0.3;
+  // ============ Quizzes (two screens share one quiz engine) ============
+  function makeQuiz(p, screen, RIG_CHANCE) {
+    var PER_GAME = 50;
     var qs = [], idx = 0, score = 0;
+    function get(id) { return document.getElementById(p + '-' + id); }
     var el = {
-      start: document.getElementById('q-start'), play: document.getElementById('q-play'), result: document.getElementById('q-result'),
-      statement: document.getElementById('q-statement'), progress: document.getElementById('q-progress'), fill: document.getElementById('q-fill'),
-      t: document.getElementById('q-true'), f: document.getElementById('q-false'),
-      feedback: document.getElementById('q-feedback'), verdict: document.getElementById('q-verdict'), explain: document.getElementById('q-explain'),
-      next: document.getElementById('q-next'), scoreNum: document.getElementById('q-scoreNum'), scoreMsg: document.getElementById('q-scoreMsg')
+      start: get('start'), play: get('play'), result: get('result'),
+      statement: get('statement'), progress: get('progress'), fill: get('fill'),
+      t: get('true'), f: get('false'),
+      feedback: get('feedback'), verdict: get('verdict'), explain: get('explain'),
+      next: get('next'), scoreNum: get('scoreNum'), scoreMsg: get('scoreMsg')
     };
     function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
     function newGame() {
@@ -3546,16 +3583,18 @@
       var tail = pct < 40 ? ' Yikes — maybe study up before trying again. 🤓' : pct < 60 ? ' Not bad, but room to improve.' : pct < 80 ? ' Pretty solid!' : pct < 100 ? ' Impressive — almost perfect!' : ' A perfect 100%?! Suspiciously good. 🤔';
       el.scoreMsg.textContent = 'You got ' + score + ' out of ' + qs.length + ' right.' + tail;
     }
-    document.getElementById('q-startBtn').addEventListener('click', newGame);
-    document.getElementById('q-again').addEventListener('click', newGame);
+    get('startBtn').addEventListener('click', newGame);
+    get('again').addEventListener('click', newGame);
     el.next.addEventListener('click', next);
     el.t.addEventListener('click', function () { answer(true); });
     el.f.addEventListener('click', function () { answer(false); });
     // reset to the start panel whenever we enter the screen
-    window.registerHook('quiz', function () {
+    window.registerHook(screen, function () {
       el.play.style.display = 'none'; el.result.style.display = 'none'; el.start.style.display = 'block';
     });
-  })();
+  }
+  makeQuiz('q', 'quiz', 0.3);   // Ultimate Fun Facts Quiz
+  makeQuiz('h', 'honest', 0);   // Big Brain Quiz
 
   // ============ Amazing Fact ============
   (function () {
