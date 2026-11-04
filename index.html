@@ -496,6 +496,28 @@
   .wg-bar b.now { background: #3a9d5d; }
   @media (prefers-reduced-motion: reduce) { .wg-tile { transition: none; } .wg-row.shake { animation: none; } }
 
+  /* ---- Emoji Sayings ---- */
+  .es [hidden] { display: none !important; }
+  .es .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
+  .es-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .es-hearts { font-size: 1.05rem; letter-spacing: 2px; white-space: nowrap; }
+  .es-emoji { font-size: clamp(2.1rem, 11vw, 2.9rem); line-height: 1.35; text-align: center; margin: 14px 0 16px; word-spacing: 0.15em; overflow-wrap: anywhere; }
+  .es-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; margin: 0 0 16px; }
+  .es-word { display: inline-flex; gap: 2px; align-items: flex-end; }
+  .es-cell { width: 1.1em; height: 1.5em; display: inline-grid; place-items: center; border-bottom: 2px solid var(--muted); font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-transform: uppercase; line-height: 1; }
+  .es-cell.got { border-color: #3a9d5d; color: #3a9d5d; }
+  .es-cell.missed { color: var(--bad); border-color: var(--bad); }
+  .es-cell.hint { color: var(--muted); }
+  .es-punct { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; line-height: 1.5; }
+  .es-form { display: flex; gap: 8px; }
+  .es-form input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+  .es-form input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .es-form .btn { margin: 0; width: auto; padding: 10px 18px; }
+  .es-msg { min-height: 1.4em; text-align: center; font-weight: 600; margin: 10px 0 6px; }
+  .es-hints { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .es-hints .btn { margin: 0; font-size: 0.85rem; padding: 10px 6px; }
+  .es-answer { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.3; margin: 8px 0; text-wrap: balance; }
+
   @media (prefers-reduced-motion: reduce) {
     .tk-track > span, .tk-opt { transition: none; }
     .bs-catch { transition: none; }
@@ -618,6 +640,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20"/><path d="M9 8h7M9 12h5"/></svg></span>
         <h2>Define It</h2>
         <p>We give you a definition. You figure out the 5-letter word in 6 tries, with color hints after every guess.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c2);" data-goto="emoji">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.3 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></span>
+        <h2>Emoji Sayings</h2>
+        <p>Each row of emoji stands for a famous saying. Guess the words one at a time, or the whole sentence, to crack the code.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -1117,6 +1146,30 @@
         <button class="btn ghost" id="df-share" type="button">Copy my result</button>
       </div>
       <div class="wg-kb" id="df-kb"></div>
+    </div>
+  </section>
+
+  <!-- ================= EMOJI SAYINGS ================= -->
+  <section id="emoji" class="screen es">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Emoji Sayings</span></div>
+    <div class="panel">
+      <div class="es-top"><span class="bs-kicker" id="es-cat"></span><span class="es-hearts" id="es-hearts"></span></div>
+      <div class="es-emoji" id="es-emoji" role="img"></div>
+      <div class="es-words" id="es-words" aria-label="The saying. Blanks are letters you haven’t found yet."></div>
+      <div id="es-play">
+        <form class="es-form" id="es-form" autocomplete="off"><input id="es-input" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="Type a word or the saying" aria-label="Your guess"><button class="btn" type="submit">Guess</button></form>
+        <div class="es-msg" id="es-msg" role="status" aria-live="polite"></div>
+        <div class="es-hints"><button class="btn ghost" id="es-first" type="button">First letters (−1 ❤️)</button><button class="btn ghost" id="es-reveal" type="button">Show a word (−1 ❤️)</button></div>
+        <button class="btn ghost" id="es-quit" type="button">Give up</button>
+        <p class="ch-sub" style="text-align:center;margin:12px 0 0;">Every word you guess right fills in everywhere it appears. Wrong guesses cost a heart. Apostrophes don’t matter.</p>
+      </div>
+      <div id="es-end" hidden>
+        <div class="ch-res-title" id="es-endTitle"></div>
+        <p class="es-answer" id="es-answer"></p>
+        <p class="ch-res-sub" id="es-meaning"></p>
+        <p class="bs-stats" id="es-stats" style="text-align:center;"></p>
+        <button class="btn" id="es-next" type="button">Next saying →</button>
+      </div>
     </div>
   </section>
 
@@ -4242,7 +4295,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -7136,6 +7189,131 @@
     var nextAnswer = bag(ANSWERS), nextDef = bag(DF_WORDS);
     makeWordGame({ p: 'wg', screen: 'words', key: 'funvault-words-v1', title: 'Fun Vault · Five Letters', pick: function () { return [nextAnswer()]; } });
     makeWordGame({ p: 'df', screen: 'define', key: 'funvault-define-v1', title: 'Fun Vault · Define It', showClue: true, pick: function () { return nextDef(); } });
+  })();
+
+  // ============ Emoji Sayings ============
+  (function () {
+    var KEY = 'funvault-emoji-v1', LIVES = 5;
+    var ES_PUZZLES = [["Weather", "🌧️🐱🐶", "It's raining cats and dogs.", "It’s raining really, really hard."], ["Money", "⏰ = 💰", "Time is money.", "Wasting time is like wasting money."], ["Health", "🍎📅 ➡️ 👩‍⚕️👋", "An apple a day keeps the doctor away.", "Eating healthy food helps keep you from getting sick."], ["Advice", "🚫😭🥛", "Don't cry over spilled milk.", "Don’t get upset about small things that already happened."], ["Easy", "🧩🍰", "It's a piece of cake.", "Something is super easy."], ["Friends", "🔨🧊", "Break the ice.", "Do something to make people feel less shy around each other."], ["Secrets", "🐱👜➡️", "Let the cat out of the bag.", "Give away a secret by accident."], ["Advice", "🐢🏁🏆", "Slow and steady wins the race.", "Working carefully beats rushing."], ["Relax", "🛑👃🌹", "Stop and smell the roses.", "Slow down and enjoy life."], ["Clues", "💨 ➡️ 🔥", "Where there's smoke, there's fire.", "If you see signs of trouble, there’s probably real trouble."], ["Hope", "☁️🥈🧵", "Every cloud has a silver lining.", "Something good can come out of something bad."], ["Home", "🏠📍❤️", "Home is where the heart is.", "Home is wherever the people you love are."], ["Advice", "🚫🔢🐔🐔 ⏮️ 🐣", "Don't count your chickens before they hatch.", "Don’t count on something good until it actually happens."], ["Advice", "🚫⚖️📕 👀📔", "Don't judge a book by its cover.", "Don’t decide what someone is like just from how they look."], ["Animals", "🚫👨‍🏫👴🐶 🆕🎩✨", "You can't teach an old dog new tricks.", "It’s hard to change old habits."], ["Nerves", "🥶🦶🦶", "Get cold feet.", "Feel too nervous to do something you planned."], ["Friends", "🧠🧠 💭💭", "Great minds think alike.", "Smart people often come up with the same idea."], ["Time", "⏰🐌 👍 > 🚫", "Better late than never.", "Doing something late beats not doing it at all."], ["Mornings", "🌅🐦🐛", "The early bird catches the worm.", "People who start early get the best chances."], ["Sports", "🚫😣 🚫📈", "No pain, no gain.", "You have to work hard to get better."], ["School", "🔁🔁🔁 ➡️ 💯", "Practice makes perfect.", "Doing something over and over makes you great at it."], ["Attitude", "🍋 ➡️ 🍋🥤", "When life gives you lemons, make lemonade.", "Turn a bad situation into something good."], ["Art", "🖼️ = 1️⃣0️⃣0️⃣0️⃣ 💬", "A picture is worth a thousand words.", "A picture can explain more than a long description."], ["Family", "🍎⬇️🌳 📏", "The apple doesn't fall far from the tree.", "Kids often turn out a lot like their parents."], ["Friends", "🐦🐦🐦 🤝", "Birds of a feather flock together.", "People who are alike tend to hang out together."], ["Advice", "😴🐕🛏️", "Let sleeping dogs lie.", "Don’t stir up an old problem that has calmed down."], ["Drama", "⛈️🍵", "A storm in a teacup.", "A big fuss about something tiny."], ["Worry", "🚶🌉 ⏳", "Cross that bridge when you come to it.", "Don’t worry about a problem until it actually shows up."], ["Luck", "⚡🚫✌️", "Lightning never strikes twice.", "The same rare thing probably won’t happen to you again."], ["Patience", "🏛️🚫🏗️ 1️⃣📅", "Rome wasn't built in a day.", "Big things take time to build."], ["Riddle", "🐔❓🥚", "Which came first, the chicken or the egg?", "A puzzle where it’s hard to tell which thing caused the other."], ["Dreams", "🙋⬆️⭐", "Reach for the stars.", "Aim really, really high."], ["Teamwork", "👤👤 > 👤", "Two heads are better than one.", "Two people working together beat one working alone."], ["Animals", "🐱✈️ 🐭🐭🎉", "When the cat's away, the mice will play.", "People goof off when nobody is watching them."], ["School", "📚 = 💪", "Knowledge is power.", "The more you know, the more you can do."], ["Hurry", "✂️ ➡️ 🏃💨", "Cut to the chase.", "Skip ahead to the important part."], ["Taste", "🚫🙋☕", "Not my cup of tea.", "Something you just don’t like very much."], ["News", "➡️🐴👄", "Straight from the horse's mouth.", "Heard directly from the person who really knows."], ["Magic", "🎩 ➡️ 🐇", "Pull a rabbit out of a hat.", "Do something surprising that saves the day."], ["Timing", "🌾☀️", "Make hay while the sun shines.", "Use a good chance while you still have it."], ["Hope", "🚪🔒 ➡️ 🚪🔓", "When one door closes, another one opens.", "When you miss one chance, another one comes along."], ["Classic", "🙈🙉🙊", "See no evil, hear no evil, speak no evil.", "Stay away from bad stuff, and don’t pass it on."], ["Listening", "👂 ➡️ 👂", "In one ear and out the other.", "Heard, but forgotten right away."], ["Chances", "🌍 = 🦪", "The world is your oyster.", "You can go anywhere and do anything."], ["Memory", "🐘🧠♾️", "An elephant never forgets.", "Said about someone with an amazing memory."], ["Trouble", "🍳 ➡️ 🔥", "Out of the frying pan, into the fire.", "Going from a bad problem straight into a worse one."], ["Advice", "🥚🥚🥚 🚫 1️⃣🧺", "Don't put all your eggs in one basket.", "Don’t risk everything on just one thing."], ["Order", "🚫 🛒⬅️🐴", "Don't put the cart before the horse.", "Do things in the right order."], ["Home", "🚫📍 = 🏠", "There's no place like home.", "Home is the best place there is."], ["Proof", "👀 = 🙌", "Seeing is believing.", "You’ll believe it once you see it yourself."], ["Manners", "🚫👀 🎁🐴 👄", "Don't look a gift horse in the mouth.", "Don’t complain about a gift or a lucky break."], ["Mornings", "🛌⬆️ ☀️✨", "Rise and shine!", "Time to wake up and get going!"], ["Strategy", "🥊🔥🔥", "Fight fire with fire.", "Fight back using the same kind of tricks."], ["Photos", "🗣️🧀", "Say cheese!", "Smile for the picture!"], ["Luck", "🍪💥", "That's the way the cookie crumbles.", "Sometimes things just happen, and you can’t change them."], ["Advice", "⚡🏃 = 🗑️", "Haste makes waste.", "Rushing leads to mistakes."], ["Fun", "⏰🦅 🎉", "Time flies when you're having fun.", "Fun times go by super fast."], ["Theater", "💥🦵", "Break a leg!", "Good luck! (Actors say it before a show.)"], ["Patience", "✋🐎🐎", "Hold your horses!", "Wait a minute and be patient."], ["Relax", "🏄 🌊 ➡️", "Go with the flow.", "Relax and go along with how things are going."], ["Good news", "🎵 ➡️ 👂👂", "Music to my ears.", "Something that is great to hear."], ["Choices", "🚫🎂✋ + 😋", "You can't have your cake and eat it too.", "You can’t have it both ways."], ["Wow", "🔝 🍞🔪", "The best thing since sliced bread.", "Something amazing and new."], ["Money", "💰🚫🌳", "Money doesn't grow on trees.", "Money is hard to get, so don’t waste it."], ["Luck", "🙏🍀⭐", "Thank your lucky stars.", "Be grateful for your good luck."], ["Animals", "🐶📅", "Every dog has its day.", "Everyone gets their moment to shine eventually."]];
+    function $(id) { return document.getElementById('es-' + id); }
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function bag(arr) { var b = []; return function () { if (!b.length) b = shuffle(arr.slice()); return b.pop(); }; }
+    var nextPuzzle = bag(ES_PUZZLES);
+    function norm(s) { return s.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+    var CONTR = { its: 'it is', dont: 'do not', cant: 'can not', cannot: 'can not', wont: 'will not', thats: 'that is', theres: 'there is',
+                  doesnt: 'does not', wasnt: 'was not', isnt: 'is not', youre: 'you are', im: 'i am', ive: 'i have' };
+    function expand(s) { return norm(s).split(' ').map(function (w) { return CONTR[w] || w; }).join(' '); }
+
+    var stats = { played: 0, solved: 0, stars: 0, streak: 0, best: 0 };
+    try { var st = JSON.parse(localStorage.getItem(KEY) || '{}'); Object.keys(stats).forEach(function (k) { stats[k] = Number(st[k]) || 0; }); } catch (e) {}
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(stats)); } catch (e) {} }
+
+    var g = null;
+    function newPuzzle() {
+      var p = nextPuzzle();
+      var tokens = p[2].split(' ').map(function (raw) {
+        var key = norm(raw), keys = [key];
+        if (!CONTR[key] && /['’]s\W*$/i.test(raw) && key.length > 2) keys.push(key.slice(0, -1));   // "cat's" also matches "cat"
+        return { raw: raw, key: key, keys: keys, shown: false };
+      });
+      g = { p: p, tokens: tokens, lives: LIVES, first: false, over: false, guessed: {} };
+      $('cat').textContent = 'Topic: ' + p[0];
+      $('emoji').textContent = p[1];
+      $('emoji').setAttribute('aria-label', 'Emoji clue: ' + p[1]);
+      $('input').value = '';
+      $('msg').textContent = '';
+      $('end').hidden = true; $('play').hidden = false;
+      render();
+    }
+    function render() {
+      var box = $('words'); box.innerHTML = '';
+      g.tokens.forEach(function (t) {
+        var w = document.createElement('span'); w.className = 'es-word';
+        var letterIdx = 0;
+        t.raw.split('').forEach(function (ch) {
+          if (/[A-Za-z0-9]/.test(ch)) {
+            var c = document.createElement('span'); c.className = 'es-cell';
+            if (t.shown || g.over) { c.textContent = ch; c.classList.add(t.shown ? 'got' : 'missed'); }
+            else if (g.first && letterIdx === 0) { c.textContent = ch; c.classList.add('hint'); }
+            w.appendChild(c); letterIdx++;
+          } else {
+            var s = document.createElement('span'); s.className = 'es-punct'; s.textContent = ch; w.appendChild(s);
+          }
+        });
+        box.appendChild(w);
+      });
+      var hearts = '';
+      for (var i = 0; i < LIVES; i++) hearts += i < g.lives ? '❤️' : '🤍';
+      $('hearts').textContent = hearts;
+      $('hearts').setAttribute('aria-label', g.lives + ' lives left');
+      $('first').disabled = g.over || g.first || g.lives <= 1;
+      $('reveal').disabled = g.over || g.lives <= 1;
+    }
+    function allShown() { return g.tokens.every(function (t) { return t.shown; }); }
+    function say(text) { $('msg').textContent = text; }
+    function lose1() { g.lives -= 1; if (g.lives <= 0) { render(); finish(false); return true; } return false; }
+    function guess() {
+      if (!g || g.over) return;
+      var raw = $('input').value.trim();
+      if (!norm(raw)) { say('Type a word first.'); return; }
+      $('input').value = '';
+      if (expand(raw) === expand(g.p[2])) { g.tokens.forEach(function (t) { t.shown = true; }); render(); finish(true); return; }
+      var words = norm(raw).split(' '), found = 0, again = 0, padded = ' ' + expand(raw) + ' ';
+      g.tokens.forEach(function (t) {                       // "do not" finds "don't", "it is" finds "it's"
+        if (CONTR[t.key] && padded.indexOf(' ' + CONTR[t.key] + ' ') >= 0) { if (t.shown) again++; else { t.shown = true; found++; } }
+      });
+      words.forEach(function (w) {
+        g.tokens.forEach(function (t) {
+          if (t.keys.indexOf(w) >= 0) { if (t.shown) again++; else { t.shown = true; found++; } }
+        });
+      });
+      if (found) {
+        say(found === 1 ? 'Yes! Found a word.' : 'Yes! Found ' + found + ' words.');
+        render();
+        if (allShown()) finish(true);
+      } else if (again) {
+        say('You already found that one.');
+      } else {
+        if (g.guessed[norm(raw)]) { say('You already tried that.'); return; }
+        g.guessed[norm(raw)] = true;
+        say('Nope, “' + raw + '” isn’t in this one.');
+        if (!lose1()) render();
+      }
+    }
+    function finish(won, gaveUp) {
+      g.over = true;
+      var stars = won ? (g.lives >= 5 ? 3 : g.lives >= 3 ? 2 : 1) : 0;
+      stats.played += 1;
+      if (won) { stats.solved += 1; stats.stars += stars; stats.streak += 1; stats.best = Math.max(stats.best, stats.streak); }
+      else stats.streak = 0;
+      persist();
+      render();
+      $('endTitle').textContent = won ? (stars === 3 ? '⭐⭐⭐ Perfect!' : stars === 2 ? '⭐⭐ Solved it!' : '⭐ Just made it!') : gaveUp ? '🏳️ You gave up' : '😵 Out of lives!';
+      $('answer').textContent = g.p[2];
+      $('meaning').textContent = 'What it means: ' + g.p[3];
+      $('stats').textContent = 'Solved ' + stats.solved + ' of ' + stats.played + ' · Stars: ' + stats.stars + ' · Streak: ' + stats.streak + ' · Best streak: ' + stats.best;
+      $('play').hidden = true; $('end').hidden = false;
+      say('');
+    }
+    $('form').addEventListener('submit', function (e) { e.preventDefault(); guess(); });
+    $('first').addEventListener('click', function () {
+      if (!g || g.over || g.first || g.lives <= 1) return;
+      g.first = true; g.lives -= 1; say('First letters are showing.'); render();
+    });
+    $('reveal').addEventListener('click', function () {
+      if (!g || g.over || g.lives <= 1) return;
+      var hidden = g.tokens.filter(function (t) { return !t.shown; });
+      if (!hidden.length) return;
+      hidden.sort(function (a, b) { return b.key.length - a.key.length; });
+      var key = hidden[0].key;
+      g.tokens.forEach(function (t) { if (t.key === key) t.shown = true; });
+      g.lives -= 1; say('Revealed “' + hidden[0].raw.replace(/[^A-Za-z0-9'’]/g, '') + '”.');
+      render();
+      if (allShown()) finish(true);
+    });
+    $('quit').addEventListener('click', function () { if (g && !g.over) finish(false, true); });
+    $('next').addEventListener('click', newPuzzle);
+    window.registerHook('emoji', function () { if (!g || g.over) newPuzzle(); });
   })();
 
 </script>
