@@ -424,6 +424,44 @@
   #wr-canvas { display: block; width: 100%; height: min(72vh, 700px); min-height: 360px; border-radius: 16px; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; background: #3d6b39; box-shadow: 0 18px 44px rgba(0,0,0,0.3); cursor: crosshair; }
   .wr-tip { text-align: center; color: var(--muted); font-size: 0.82rem; line-height: 1.4; margin: 8px 0 0; text-wrap: balance; }
 
+  /* ---- 20 Questions (states + history) ---- */
+  .tq [hidden] { display: none !important; }
+  .tq .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
+  .tq-left { font-family: var(--font-display); font-weight: 600; color: var(--muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: .5px; }
+  .tq-left b { font-size: 2.2rem; color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 6px; letter-spacing: 0; }
+  .tq-dots { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; margin: 8px 0 14px; }
+  .tq-dots span { height: 8px; border-radius: 4px; background: var(--accent); }
+  .tq-dots span.used { background: var(--line); }
+  .tq-log { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; max-height: 210px; overflow-y: auto; }
+  .tq-log li { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; font-size: 0.88rem; line-height: 1.35; }
+  .tq-log b, .tq-q b { font-family: var(--font-display); flex: none; }
+  .yes { color: var(--accent-2); }
+  .tq .no { color: var(--bad); }
+  .tq-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+  .tq-tab { font: inherit; font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--muted); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .tq-tab[aria-selected="true"] { color: #10151c; background: var(--accent); border-color: var(--accent); }
+  .tq-tab:focus-visible, .tq-q:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .tq-qs { display: grid; gap: 6px; }
+  .tq-q { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; text-align: left; font: inherit; font-size: 0.92rem; line-height: 1.35; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; cursor: pointer; }
+  .tq-q:hover:not(:disabled) { border-color: var(--accent); }
+  .tq-q:disabled { cursor: default; opacity: 0.75; }
+  .tq-extra { display: grid; gap: 8px; margin-top: 12px; }
+  .tq-extra .btn { margin: 0; }
+  .tq-guess { display: flex; gap: 8px; margin-top: 14px; }
+  .tq-guess select { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+  .tq-guess .btn { margin: 0; width: auto; padding: 10px 20px; }
+  .tq-msg { min-height: 1.3em; margin-top: 8px; text-align: center; font-weight: 600; color: var(--bad); }
+  .tq-hint { margin: 0 0 12px; }
+  .tq-hintbox + .tq-hintbox { margin-top: 8px; }
+  .tq-outline { display: block; width: 100%; max-width: 300px; height: 190px; margin: 0 auto; }
+  .tq-outline path { fill: color-mix(in srgb, var(--accent) 30%, var(--panel-2)); stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .tq-map { display: block; width: 100%; height: auto; margin-top: 14px; }
+  .tq-map path { fill: var(--line); stroke: var(--panel); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .tq-map path.on { fill: var(--accent); }
+  .tq-clue { margin: 0; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; line-height: 1.45; }
+  .tq-clue + .tq-clue { margin-top: 8px; }
+  .tq-reveal { margin: 12px 0 4px; }
+
   @media (prefers-reduced-motion: reduce) {
     .tk-track > span, .tk-opt { transition: none; }
     .bs-catch { transition: none; }
@@ -517,6 +555,20 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4.5L18 13H5"/><path d="M9 4v9M13 4v9"/></svg></span>
         <h2>Wingman Racer</h2>
         <p>Your buddy HAS to win the race. Slam the other racers out of the way before they can pass them.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c3);" data-goto="states">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+        <h2>20 Questions: USA</h2>
+        <p>I’m thinking of a US state. Ask up to 20 yes-or-no questions (or trade some to see its outline) and guess which one.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c7);" data-goto="whois">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v8M9.7 10v8M14.3 10v8M19 10v8"/><path d="M3 21h18"/></svg></span>
+        <h2>Who Am I? History</h2>
+        <p>A mystery person from history. Unmask them with 20 yes-or-no questions. Warning: these are seriously hard.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -906,6 +958,74 @@
       <p class="ch-res-sub" id="wr-rSub"></p>
       <p class="bs-stats" id="wr-rStats" style="text-align:center;"></p>
       <button class="btn" id="wr-again" type="button">Next race →</button>
+    </div>
+  </section>
+
+  <!-- ================= 20 QUESTIONS: USA ================= -->
+  <section id="states" class="screen tq">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">20 Questions: USA</span></div>
+
+    <div class="panel" id="sq-intro">
+      <div class="bs-kicker">20 Questions</div>
+      <div class="dd-big">Guess the mystery state</div>
+      <p class="ch-sub" style="margin:0;">I’m thinking of one of the 50 US states. Ask up to 20 yes-or-no questions, then guess which one it is. Want a big hint? Trade 3 questions to see its outline. Every wrong guess costs a question. (Regions follow the US Census Bureau’s map.)</p>
+      <div class="bs-stats" id="sq-stats"></div>
+      <button class="btn" id="sq-start" type="button">Start →</button>
+    </div>
+
+    <div class="panel" id="sq-play" hidden>
+      <div class="tq-left"><b id="sq-left">20</b>questions left</div>
+      <div class="tq-dots" id="sq-dots" aria-hidden="true"></div>
+      <div class="tq-hint" id="sq-hint" hidden></div>
+      <ol class="tq-log" id="sq-log" aria-live="polite"></ol>
+      <div class="tq-tabs" id="sq-tabs" role="tablist" aria-label="Question topics"></div>
+      <div class="tq-qs" id="sq-qs"></div>
+      <div class="tq-extra" id="sq-extra"></div>
+      <div class="tq-guess"><select id="sq-pick" aria-label="Your guess"></select><button class="btn" id="sq-guess" type="button">Guess</button></div>
+      <div class="tq-msg" id="sq-msg" aria-live="polite"></div>
+      <button class="btn ghost" id="sq-quit" type="button">Give up</button>
+    </div>
+
+    <div class="panel" id="sq-result" hidden>
+      <div class="ch-res-title" id="sq-rTitle"></div>
+      <p class="ch-res-sub" id="sq-rSub"></p>
+      <div class="tq-reveal" id="sq-reveal"></div>
+      <p class="bs-stats" id="sq-rStats" style="text-align:center;"></p>
+      <button class="btn" id="sq-again" type="button">Play again</button>
+    </div>
+  </section>
+
+  <!-- ================= WHO AM I? HISTORY ================= -->
+  <section id="whois" class="screen tq">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Who Am I? History</span></div>
+
+    <div class="panel" id="hq-intro">
+      <div class="bs-kicker">Super hard</div>
+      <div class="dd-big">Unmask the mystery person</div>
+      <p class="ch-sub" style="margin:0;">I’m thinking of someone from history: a ruler, a rebel, a genius, a pirate… Ask up to 20 yes-or-no questions, then pick them from the list. Stuck? Trade questions for when they lived or a clue. Every wrong guess costs a question. Good luck. You’ll need it.</p>
+      <div class="bs-stats" id="hq-stats"></div>
+      <button class="btn" id="hq-start" type="button">Start →</button>
+    </div>
+
+    <div class="panel" id="hq-play" hidden>
+      <div class="tq-left"><b id="hq-left">20</b>questions left</div>
+      <div class="tq-dots" id="hq-dots" aria-hidden="true"></div>
+      <div class="tq-hint" id="hq-hint" hidden></div>
+      <ol class="tq-log" id="hq-log" aria-live="polite"></ol>
+      <div class="tq-tabs" id="hq-tabs" role="tablist" aria-label="Question topics"></div>
+      <div class="tq-qs" id="hq-qs"></div>
+      <div class="tq-extra" id="hq-extra"></div>
+      <div class="tq-guess"><select id="hq-pick" aria-label="Your guess"></select><button class="btn" id="hq-guess" type="button">Guess</button></div>
+      <div class="tq-msg" id="hq-msg" aria-live="polite"></div>
+      <button class="btn ghost" id="hq-quit" type="button">Give up</button>
+    </div>
+
+    <div class="panel" id="hq-result" hidden>
+      <div class="ch-res-title" id="hq-rTitle"></div>
+      <p class="ch-res-sub" id="hq-rSub"></p>
+      <div class="tq-reveal" id="hq-reveal"></div>
+      <p class="bs-stats" id="hq-rStats" style="text-align:center;"></p>
+      <button class="btn" id="hq-again" type="button">Play again</button>
     </div>
   </section>
 
@@ -4031,7 +4151,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -6251,6 +6371,372 @@
     $('start').addEventListener('click', start);
     $('again').addEventListener('click', function () { if (lastWin) intro(); else start(); });
     window.registerHook('race', intro, stop);
+  })();
+
+  // ============ 20 Questions engine (used by the states and history games) ============
+  function makeTwenty(cfg) {
+    var P = cfg.p, MAX = 20;
+    function $(id) { return document.getElementById(P + '-' + id); }
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function bag(arr) { var b = []; return function () { if (!b.length) b = shuffle(arr.slice()); return b.pop(); }; }
+    var nextItem = bag(cfg.items.map(function (it, i) { return i; }));
+    var order = cfg.items.map(function (it, i) { return i; }).sort(function (a, b) { return cfg.items[a].n.localeCompare(cfg.items[b].n); });
+
+    var stats = { played: 0, wins: 0, best: null, streak: 0 };
+    try {
+      var st = JSON.parse(localStorage.getItem(cfg.key) || '{}');
+      stats.played = Number(st.played) || 0; stats.wins = Number(st.wins) || 0; stats.streak = Number(st.streak) || 0;
+      stats.best = (st.best === null || st.best === undefined || isNaN(Number(st.best))) ? null : Number(st.best);
+    } catch (e) {}
+    function persist() { try { localStorage.setItem(cfg.key, JSON.stringify(stats)); } catch (e) {} }
+    function statsLine() {
+      return 'Solved ' + stats.wins + ' of ' + stats.played + (stats.best !== null ? ' · Best: ' + stats.best + (stats.best === 1 ? ' question' : ' questions') : '') + ' · Streak: ' + stats.streak;
+    }
+    function show(v) { ['intro', 'play', 'result'].forEach(function (k) { $(k).hidden = k !== v; }); window.scrollTo(0, 0); }
+
+    var g = null, tab = 0;
+    function intro() { $('stats').textContent = statsLine(); show('intro'); }
+    function start() {
+      g = { i: nextItem(), left: MAX, asked: {}, hints: {}, over: false };
+      tab = 0;
+      var sel = $('pick'); sel.innerHTML = '';
+      var ph = document.createElement('option'); ph.value = ''; ph.textContent = cfg.pickLabel; sel.appendChild(ph);
+      order.forEach(function (i) { var o = document.createElement('option'); o.value = String(i); o.textContent = cfg.items[i].n; sel.appendChild(o); });
+      $('hint').innerHTML = ''; $('hint').hidden = true;
+      $('log').innerHTML = ''; $('msg').textContent = '';
+      tabs(); questions(); extras(); counter();
+      show('play');
+    }
+    function counter() {
+      $('left').textContent = g.left;
+      var box = $('dots'); box.innerHTML = '';
+      for (var i = 0; i < MAX; i++) { var d = document.createElement('span'); if (i >= g.left) d.className = 'used'; box.appendChild(d); }
+    }
+    function tabs() {
+      var box = $('tabs'); box.innerHTML = '';
+      cfg.groups.forEach(function (gr, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'tq-tab'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(i === tab));
+        b.textContent = gr.t;
+        b.addEventListener('click', function () { tab = i; tabs(); questions(); });
+        box.appendChild(b);
+      });
+    }
+    function questions() {
+      var box = $('qs'); box.innerHTML = '';
+      cfg.groups[tab].qs.forEach(function (q) {
+        var b = document.createElement('button'), asked = g.asked[q.k];
+        b.type = 'button'; b.className = 'tq-q'; b.disabled = !!asked || g.over;
+        var s = document.createElement('span'); s.textContent = q.q; b.appendChild(s);
+        if (asked) { var tag = document.createElement('b'); tag.className = asked; tag.textContent = asked === 'yes' ? 'Yes' : 'No'; b.appendChild(tag); }
+        b.addEventListener('click', function () { ask(q); });
+        box.appendChild(b);
+      });
+    }
+    function extras() {
+      var box = $('extra'); box.innerHTML = '';
+      cfg.hints.forEach(function (h, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'btn ghost';
+        b.textContent = h.label + ' (costs ' + h.cost + ')';
+        b.disabled = g.over || !!g.hints[i] || g.left <= h.cost;
+        b.addEventListener('click', function () { useHint(i); });
+        box.appendChild(b);
+      });
+    }
+    function log(text, yes) {
+      var li = document.createElement('li');
+      var s = document.createElement('span'); s.textContent = text;
+      var b = document.createElement('b'); b.className = yes ? 'yes' : 'no'; b.textContent = yes ? 'Yes' : 'No';
+      li.appendChild(s); li.appendChild(b);
+      $('log').insertBefore(li, $('log').firstChild);
+    }
+    function spend(n) {
+      g.left = Math.max(0, g.left - n);
+      counter();
+      if (g.left <= 0) { end(false); return false; }
+      extras();
+      return true;
+    }
+    function ask(q) {
+      if (!g || g.over || g.asked[q.k]) return;
+      var yes = cfg.yes(cfg.items[g.i], q.k);
+      g.asked[q.k] = yes ? 'yes' : 'no';
+      log(q.q, yes);
+      $('msg').textContent = '';
+      questions();
+      spend(1);
+    }
+    function useHint(i) {
+      var h = cfg.hints[i];
+      if (!g || g.over || g.hints[i] || g.left <= h.cost) return;
+      g.hints[i] = true;
+      var box = $('hint'), wrap = document.createElement('div');
+      wrap.className = 'tq-hintbox';
+      h.render(cfg.items[g.i], wrap);
+      box.appendChild(wrap); box.hidden = false;
+      spend(h.cost);
+    }
+    function guess() {
+      if (!g || g.over) return;
+      var v = $('pick').value;
+      if (v === '') { $('msg').textContent = cfg.pickFirst; return; }
+      var i = Number(v);
+      if (i === g.i) { end(true); return; }
+      var opt = $('pick').querySelector('option[value="' + i + '"]');
+      if (opt) { opt.disabled = true; opt.textContent = cfg.items[i].n + ' ✗'; }
+      $('pick').value = '';
+      log(cfg.guessQ(cfg.items[i]), false);
+      if (spend(1)) $('msg').textContent = 'Nope, not ' + cfg.items[i].n + '. That cost a question.';
+    }
+    function end(won) {
+      if (!g || g.over) return;
+      g.over = true;
+      var it = cfg.items[g.i], used = MAX - g.left;
+      stats.played += 1;
+      if (won) { stats.wins += 1; stats.streak += 1; if (stats.best === null || used < stats.best) stats.best = used; }
+      else stats.streak = 0;
+      persist();
+      $('rTitle').textContent = won ? (used === 0 ? '🤯 Zero questions. Are you psychic?' : '🎉 Got it in ' + used + (used === 1 ? ' question!' : ' questions!')) : (g.left <= 0 ? '😵 Out of questions!' : '🏳️ You gave up');
+      $('rSub').textContent = cfg.answerLine(it, won);
+      var rv = $('reveal'); rv.innerHTML = '';
+      cfg.reveal(it, rv);
+      $('rStats').textContent = statsLine();
+      show('result');
+    }
+    $('start').addEventListener('click', start);
+    $('guess').addEventListener('click', guess);
+    $('quit').addEventListener('click', function () { end(false); });
+    $('again').addEventListener('click', start);
+    window.registerHook(cfg.screen, function () { if (!g || g.over) intro(); });
+  }
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  // ============ 20 Questions: USA ============
+  (function () {
+    var SQ_STATES = [
+      { a: 'AL', n: 'Alabama', b: [606.8, 311.5, 56.9, 91.6], d: 'M619.5 313.8l26.5 -2.3l4.5 15.8l6.4 23.2l2.4 5l2.1 2.7l-0.5 2l1.9 0.9l-2.4 2.6l0.4 2.4l-1 3.3l2.2 5.4l-0.6 5l2.3 4.9l-7.8 1l-33.4 3.4l-0.3 2.5l3.9 3.2l-0.3 3.1l1.4 1.5l-2.2 2.9l-2.1 0.8l-4.3 -2.7l-0.8 -4.5l-1.3 -0.4l-1.2 3.6l-0.2 3.4l-4.2 -0.6l-3.5 -28.5l0.7 -35.8l0.4 -20.8l-1.7 -1.8l12.7 -1.2z' },
+      { a: 'AK', n: 'Alaska', b: [26.1, 381.4, 219.7, 114.7], d: 'M240.4 473.3l-0.2 -1l1 0.3l0.2 1.1l-0.9 0.2l-0.1 -0.6zM239 471.7l0.9 0.5l0 1.3l-0.4 -0.3l-0.5 -1.5zM232.9 466.8l0.8 -0.4l0.4 0.1l0.2 0.9l-0.7 0.5l-0.8 -0.4l0.1 -0.7zM230.9 468l1.6 -0.3l0.8 1.1l1.9 0.8l0.8 0.7l0.3 0.7l0.4 0l0.3 0.8l0.9 0.7l0.4 0.8l0.3 -0.4l0.4 0.5l0.9 2.4l-0.1 0.6l-1 0.3l-0.7 -1.2l-0.3 0.3l-1 -0.7l-0.2 0.4l-0.7 -0.1l0.4 0.8l0.5 -0.4l0.5 0.2l0.3 1.4l-0.8 0l-1.5 -1.2l-0.6 -0.7l-0.2 -0.9l-0.8 0.3l-0.2 -0.6l0.6 -0.3l0.4 -0.8l-0.6 -0.9l-0.8 0l-0.6 -1.6l-0.6 -0.7l-0.3 0.7l-0.4 -0.8l0.3 -0.6l-0.7 -1l0.1 -0.3zM232 473.1l0.8 0.2l0.3 -0.6l0.6 0.1l-0.2 1l-0.9 0l-0.6 -0.7zM228.7 464.7l-0.6 -0.4l0.4 -0.6l2 0l0.8 -0.3l1 0.9l1.3 0.6l0.2 0.8l-0.5 0.6l-0.8 0l-0.4 0.7l-0.8 -0.1l-0.8 0.6l-0.6 -1.4l-0.2 -1l-0.7 0.1l-0.3 -0.5zM228.9 467.8l-0.6 -0.4l-0.8 -0.9l-0.3 -0.7l0.3 -0.5l0.5 0.2l-0.1 -0.7l1.7 0.7l0.5 1.1l-0.5 0.3l0.1 1.3l0.5 0.2l0 1.6l-0.6 -0.1l0.2 0.9l-0.5 -0.4l-0.8 -1.6l0.4 -1zM227.5 469.5l0.1 0.8l-0.6 -0.3l-2.1 -2.4l-1.1 -0.6l0.1 -0.7l-0.8 -1.5l-1.2 -1l0.5 -1.5l0.6 0.4l0.9 0.1l0.7 -0.1l0.4 1l1.6 3.1l0.9 2.7zM223.6 457.4l1.2 0.2l0.7 -0.3l0.1 0.5l1.4 1.4l-0.7 0l0 0.6l1 0.7l0.7 1.5l-0.6 0.6l0 0.6l-0.9 1.5l-0.3 0.1l-0.5 -1.2l0 -0.8l-0.4 -1l-0.8 -1.2l-0.2 -0.7l-0.7 -1.6l-0.7 -0.6l-0.5 -1.2l1.2 0.9zM221.4 464.2l0.5 -0.2l0.8 1l0 0.9l-0.7 0.4l-0.3 -1.3l-0.3 -0.8zM218.4 459l1 -0.2l0.5 -0.7l1.2 0.4l-0.3 1l0.3 0.3l0.2 -1.1l1.2 0l0.9 0.5l0 1.3l0.3 0.1l0.9 1.5l-0.9 0.5l-2 -0.9l0.5 1.4l-0.4 0.7l-0.7 -0.1l-0.6 -0.7l-0.8 -0.4l-0.9 -1.1l-0.8 -0.4l-0.3 -1l0.4 -0.5l-0.1 -0.9l0.4 0.3zM180.7 452.9l-1.2 1.7l-0.1 0.7l-1 0.5l0.1 -1l1.1 -1.2l0.6 -1.2l0.5 0.5zM178.9 450.5l-0.1 1.4l-0.3 1.5l-0.7 -0.5l0.4 -1.6l0.7 -0.8zM172.3 387.9l0.2 0.2l1.2 0.2l0.6 -0.2l0.9 -0.1l0.9 0.1l0.5 -0.2l0.6 0.5l1.1 0.4l1.3 0l0.3 -0.4l0.8 -0.3l0.3 -0.6l1 -0.2l0 0.3l0.5 -0.2l1.2 0.3l0.9 0.6l0.8 0.3l0.3 0.3l0.6 0l0.8 0.4l0.2 0.4l0.3 -0.4l0.5 0.1l11.9 59.8l1.6 0.3l0 -0.6l1.7 0.5l0.7 -1.3l1.9 -0.5l0.1 1.8l0.6 0.5l1.2 0.3l0.5 0.8l4.1 2.6l1 2l0.5 -0.7l1.1 -1.4l0.8 -0.3l0.2 -0.8l-0.4 -1.2l0.6 -0.1l-0.2 -1.1l1 -0.5l1.2 -1.3l1.9 1.1l0.1 0.9l0.6 0.8l0.9 0l1.4 1l0.1 0.4l0.7 0.6l1.5 0.4l3.4 2.9l0.6 0.9l1 0.7l1.7 1.8l1.6 1.4l-0.1 0.9l1.2 -0.1l0.1 1.2l1 0.1l0.5 1.3l0.9 -0.4l2.1 0.7l1.1 -0.2l0.8 0.4l0.6 0l0.4 0.6l1.1 -0.3l0.6 0.6l0.1 1.6l0.5 1.1l1.2 1.7l-0.2 0.6l-0.3 2l-0.7 1.7l-0.6 -0.5l-0.4 0.4l-0.8 -1.2l-0.1 -0.5l-0.6 -0.5l0.5 -1l-0.3 -0.2l-0.5 1.2l-0.6 -0.4l-0.4 0.5l-1.9 -0.9l0 -1.6l-0.8 0.8l0.2 0.8l-0.9 -0.4l-0.4 -0.6l0.2 -1l-0.4 -0.7l-0.4 0.9l-1.2 -1.2l-0.3 0.4l-0.7 -1l0.4 -1l0.7 -0.2l-0.5 -0.9l-0.1 -1.3l-0.5 0.2l-1.4 -0.6l-1.2 -1l-2 -0.3l-0.8 -2.5l-0.7 -0.2l-0.2 -1l-0.6 -0.1l-1.3 -1.1l-0.5 -0.7l-1.5 0.2l-2.1 -1.4l-2 -4.1l0 1.1l0.4 0.8l1.1 1.6l0 0.3l0.8 1.3l0.2 0.9l-0.7 0l-0.8 -0.9l-0.7 0l-0.9 0.6l-0.4 -1.5l-0.9 -1.1l-0.4 0.5l-2.4 -0.7l-0.1 0.4l1.2 0.1l1.2 0.8l0.3 0l0.4 0.8l0.7 0.8l-1 0.9l-0.7 -0.2l0.2 0.9l-1.1 -0.5l-0.4 -0.4l-0.5 0.2l-1.9 -0.9l-1.3 -0.8l-0.3 -0.7l-0.9 -0.8l-1.8 -0.3l-1.1 -0.5l-1.8 -0.5l-1.2 -0.6l-0.1 -0.9l0.3 0.3l0.2 -0.7l-0.6 -1.2l0.3 -0.8l-0.3 -0.2l-0.5 1.5l-1.4 1.2l-2.1 0.1l-1.8 -0.5l-0.2 -0.6l-0.7 0.3l-0.9 -0.3l-2 -0.1l-1 0.1l-2.4 0.8l-0.8 0.3l-1.2 -0.7l-1.4 -0.2l-0.5 -0.6l-0.3 -0.9l-0.9 0.2l-0.2 0.9l-1.8 -0.9l-0.4 -0.5l-1.5 1.1l-0.7 1.2l-0.5 -1l0.3 -0.6l0.5 0.1l1.5 -0.9l-0.3 -0.6l-0.7 0.4l-0.4 -0.7l-0.7 0l-0.9 -1.9l-0.2 0.5l-0.9 0.4l-0.4 -0.2l-0.2 0.6l-1.3 -0.1l0.1 0.7l-0.8 0.3l-0.4 -0.3l0.1 -1.2l-0.3 0.1l-0.5 1.3l0.8 0.4l0.2 0.9l0.6 0.9l-0.2 1.1l-0.7 -0.3l-0.1 0.6l0.6 0.2l0.5 1.4l-0.9 0.3l-0.5 -0.2l-0.7 0.4l-0.4 -0.3l-1 0.2l0 -0.6l-0.5 0.4l-0.2 0.7l-0.5 -0.6l-0.5 0.9l0.3 0.4l-0.7 0.6l-0.7 0.1l-0.2 0.7l-0.7 0.6l-0.5 -0.2l-0.6 0.8l-0.4 0l-0.9 1.5l-1 0.1l-0.4 -0.4l-0.5 0.8l-1.3 -0.6l0.2 -1.1l0.8 -0.4l0.6 0l0.1 -0.4l1 -0.9l0 -0.7l-1.3 1l-1.1 -0.5l-0.1 -0.4l0.5 -1.7l0.9 -1.2l0.1 -1l0.2 -0.2l0.1 -1l-0.5 -1.2l1.1 -0.4l1.9 -1.8l0.6 0.6l0.6 0.2l0.9 -0.8l-1.1 -0.8l-0.4 -0.7l-0.8 0.2l-0.6 -0.3l-0.2 0.3l-0.9 0.5l-0.5 0.9l-0.9 0.2l-1 1.1l-0.1 0.7l-0.8 0.4l-0.1 0.8l-0.6 0.4l-0.2 1.4l-1.1 0.9l0.6 0.6l-0.5 1l-1 0.2l-0.1 1.3l-0.9 0.5l-0.3 -0.5l-0.5 1l-0.6 0l0.1 0.7l-1.3 0.5l-0.2 2l1.5 0.1l1.1 0.5l0.4 0.6l-0.5 1.1l-0.8 0.6l-0.7 0.1l-0.1 0.5l-0.5 0.3l0.2 0.7l-0.5 1.1l-1.1 1l-0.6 0l-0.6 0.3l-0.6 -0.1l-0.5 0.4l0.2 0.6l-0.9 0.2l-0.2 0.8l-0.6 -0.5l-0.6 1.5l-1.1 -0.1l0 0.8l-0.6 -0.2l-0.5 0.3l0 1.1l-0.8 1.7l-1.2 0.2l-1 0.7l-0.2 0.5l-0.6 -0.7l-1.2 1.6l-0.2 -0.5l-0.6 0.1l-0.2 1l-0.7 0.3l-0.7 -0.2l-0.6 0.9l1 0.3l-1.2 2l-3.3 0.5l-1 1.7l-0.2 -0.4l0.2 -1.1l-0.6 -0.2l-0.8 0.3l-0.1 0.5l-1.3 0.6l-0.6 0.8l-0.1 -0.6l-0.4 0.7l-0.7 -0.6l-1.5 1l-1 -0.2l0.2 -0.8l-0.3 -0.9l-0.5 0.7l0 0.7l-1.6 2l-0.4 -0.6l-0.3 0.8l-0.9 -0.3l0 -1.3l-0.5 -0.3l-0.3 0.4l0.5 0.6l-0.4 0.9l-0.8 0.4l-0.5 -1.1l-0.6 -0.2l-0.2 0.4l0.6 0.7l-1.4 0.7l0.8 0.4l0 0.4l-0.7 -0.4l-1.1 0.7l-1.8 -0.3l-1 0.4l-0.2 0.4l-1.1 0.3l-0.8 -0.3l-0.1 -1.2l0.9 -0.3l0.8 -1.3l0.8 0.1l1.8 -0.7l1.3 0.1l0.4 1l0.5 -0.6l0 -0.8l0.9 -0.2l0.8 0.1l1.3 -1.6l1.4 -1.4l1.8 -1.1l1.9 -0.4l0.8 0.4l0.8 -0.3l0.1 0.5l-0.5 0.6l0.4 0.6l0.3 -0.8l0.9 0l0.2 0.6l0.6 0.2l0.1 -0.6l-0.9 -0.6l-0.1 -0.4l0.8 -1.6l0.9 -0.9l1.3 -0.8l1.8 -0.7l1.4 -1.1l0.6 0.5l0.6 -0.1l-0.2 -0.8l0.2 -0.7l1.1 -1.4l1.4 -0.9l1.1 -1.3l0 -0.7l1.1 -5l1.4 -1.3l-0.1 -1.1l-3.2 1.4l-0.9 -0.3l-0.2 -0.6l-0.6 -0.4l-0.1 -0.7l-0.5 0.3l-0.4 1.1l0.4 1.4l-0.7 0.6l-0.5 -0.3l-1 -2.3l-0.6 -1.1l-0.4 -0.1l-0.4 0.8l-0.3 0.1l-0.4 -0.7l-0.6 -0.2l-0.2 -1.1l-1.9 1.1l-1.7 0.7l-0.2 0.5l-1.4 0.6l-0.5 -0.8l0.6 -0.7l0.1 -1.9l-0.2 -2l0.9 -0.7l-0.5 -1.7l-0.5 -1l-0.3 -1.4l-0.6 -0.7l-0.3 1.2l-0.9 0.1l-1.4 0.6l-1.6 0.1l-0.9 -0.2l-0.7 -0.5l0.1 -1.1l-0.6 -0.4l-0.8 -1.6l-0.7 -0.4l-0.8 -1.7l0.8 -0.6l0.4 -1.3l-0.6 0.2l0.1 -0.8l0.4 -0.7l-0.6 -0.7l-0.1 0.7l-0.8 -0.4l0.1 -1.1l-0.5 -0.3l-0.2 -0.8l0.2 -0.9l-0.7 0.3l0.1 -0.9l0.7 -0.1l-0.4 -1.1l1.1 0.2l0.2 -1.2l0.4 -0.8l2.3 -2.3l0.5 -0.7l0.3 0.2l0 -1.1l1 -1.8l0.7 -0.6l1.2 -0.2l0.8 0.5l1.1 1.3l0.8 0l1.3 -1l1.3 -1.5l0.6 -0.1l0.1 0.4l1.3 0.2l1.3 -0.3l1.2 -1.6l0.1 -0.4l-0.4 -1.7l0.1 -1l-0.7 -1.1l-0.3 -0.9l0.8 0.3l0.9 -0.7l0.1 -0.7l-0.8 -1.4l-0.9 1l-0.7 -0.3l-0.7 0.5l-0.7 0l-0.3 0.4l-0.9 0.5l-0.4 0.9l-0.5 0.3l0 -1.1l-0.5 -0.3l-0.5 0.8l-0.1 -0.5l-0.9 -0.7l-2 -0.3l-1.5 0.5l-0.5 0l-1.1 -0.6l-2.1 -0.9l-0.5 -0.5l-0.1 -0.7l0.4 -0.8l-0.6 -0.9l0.3 -0.8l0.5 -0.3l0.1 -1.1l-0.8 -0.1l-0.6 -0.4l-1.1 -0.5l-0.5 -0.6l-0.9 -0.7l0.1 -0.7l1.7 -0.6l2.1 -1.1l1.5 -0.6l0.6 0.6l0.8 0.3l0.3 -0.7l-0.5 -0.2l0.1 -0.6l2 -0.7l2.1 -0.4l1.1 0.1l0.6 0.4l-0.5 1l0 0.7l-0.3 0.5l0.2 0.9l0.8 0l0.9 0.3l1.1 -0.1l0.2 0.4l0.7 0.1l0.6 -0.2l0.8 0.5l0.9 -1.4l0.6 0l0.3 0.3l0.3 -0.8l-1 -0.5l-1 0.2l0.2 -1l-0.7 -1.2l-0.8 -0.5l-0.1 -1.1l0.7 -0.1l0.7 1.1l-0.2 0.8l0.3 0.7l0.8 0.8l0.3 -0.7l-0.9 -1.2l0.7 -1.7l-0.3 -0.4l-1.1 0.3l-1 -0.3l-0.1 -0.3l-0.6 0.2l-2 -1l0.1 -0.9l-0.3 -1.8l-0.4 -0.8l-0.8 -0.7l-1.3 -1.8l-0.6 -0.7l-0.7 -0.3l-0.9 -1.2l-1 -0.8l0 -0.2l0.9 -0.2l0.5 -0.9l0.4 -2l2 0.6l2.6 -0.1l0.7 -0.2l1.2 -0.9l1.2 -1.3l0.4 -1.5l0.6 -1.2l1 -1l0.5 -0.8l1.1 -1.1l0.2 0.3l0.8 0.2l1.3 -0.5l0.9 -0.6l2 -2l0.7 -0.1l0.1 0.4l0.7 -0.2l0.7 0.1l1.4 -0.2l1.4 -0.9l1.4 -1.9l0.5 -0.3l0.1 0.3l2 0.9l0.1 0.5l-0.7 0.7l-0.3 0.1l0 1l1 -0.3l0.1 -0.6l0.5 -0.4l0.1 0.2l0.4 -1.1l1 1.1l-0.2 0.7l0.6 0.2l0.4 0.5l0.6 -0.7l0.9 -0.1l0.6 -0.2l1.4 0.2l0.7 0.3l-0.3 1.5l1.4 0.3l0.1 0.4l1.3 0.6l0 -0.3l0.9 -0.5l0.9 0l0.1 0.4l0.5 0l0.5 -0.5l0.9 -0.2l0.6 0.2l1 0.5l0.3 -0.2l0.7 0.7l0.3 -0.3l0.5 0.2l0.5 0.4zM162 468.2l0 0.3l-1.2 -0.4l0.8 -1.7l0.8 -0.1l0.4 -1.6l0.7 1.4l0.4 -0.5l1 0.7l0 1.1l-1.4 0.1l-0.5 0.5l-1 0.2zM158.5 471.5l1 -0.9l-0.9 -0.2l-0.1 -0.7l0.8 -0.5l0.5 0.3l0.1 0.8l0.3 -0.5l0 -1.1l0.6 0.5l0.2 -0.8l0.5 0.5l0.7 0l0.5 -0.4l0.9 0.6l0.1 1.9l1.1 -0.2l-0.7 1.3l-1.4 -0.5l0.5 0.9l-0.3 0.7l-0.7 -0.4l0 1.3l-1.1 0.4l-0.3 0.6l-0.7 -0.5l-0.7 1.3l-0.5 0.2l-0.6 0.6l-0.2 -1.5l-0.9 0.8l0 -0.5l-0.7 -0.4l-0.1 -1.4l-0.7 -0.5l0.4 -1.6l1.4 -0.9l0.9 0.1l0.1 0.7zM156.4 477.6l-0.8 1.3l-0.2 -0.2l1 -1.1zM152.3 482l0.6 0.1l-0.2 1.3l-1 -0.2l-0.1 -0.4l0.7 -0.8zM136.4 485.3l-0.3 1.3l-1.3 1.1l0.7 -1.7l0.4 0.2l0.5 -0.9zM134.1 484.6l0.7 0l-0.1 0.7l-0.7 0.8l-0.6 -0.6l-0.4 0.4l-0.1 -1.2l0.2 -0.4l1 0.3zM127.4 486.3l0 0.6l-0.4 0.3l-0.3 -0.7l0.7 -0.2zM134 430l-0.5 0.5l-0.1 -0.5l0.6 0zM125 489.2l0.7 0.4l-0.1 0.5l-0.7 -0.1l0.1 -0.8zM114.4 488.9l0.2 0.8l-0.7 0.2l0 -0.8l0.5 -0.2zM113.6 489.7l-1.3 0.4l-0.2 -0.5l0.6 -0.5l0.9 0.6zM118.7 449.3l0.8 -0.1l0.1 0.5l0.6 0l0.6 0.5l-0.2 1.9l-0.5 0.5l-0.8 0.2l-0.3 0.6l-1.1 -0.9l-0.6 -0.1l-1 -1.1l-0.4 -0.1l-0.6 -0.7l-0.1 -0.9l0.4 -0.1l1.1 0.4l0.7 -0.5l0.6 0l0.4 -0.4l0.3 0.3zM111 490.1l0.5 0.6l-1.5 1l0 0.2l1.8 -0.6l-0.1 0.5l-0.7 0.5l-1.2 0.2l-0.2 0.6l-1.2 0.4l-1 -0.2l-0.8 0.5l-1.3 0.3l-0.6 -0.7l1.5 -0.4l0.3 0.1l1.1 -0.3l-0.1 -0.7l0.7 -0.6l0.7 0.5l0.2 -0.4l-0.9 -0.3l-0.3 -0.5l0.5 -0.7l1.6 -0.2l0.1 0.9l0.9 -0.7zM100.7 493.7l1.7 -0.9l0.2 -0.5l0.7 -0.5l0.9 -0.1l0.4 0.4l0 0.9l-1.8 0.6l-1.2 1.1l-0.8 0.3l-0.1 -1.3zM96.6 494.5l0 0.6l-1 -0.2l0 -0.4l1 0zM101.9 466.7l-0.6 0.4l0 -0.6l0.6 0.2zM92.7 494.8l0.1 0.7l-0.8 0.2l0.1 -0.6l0.6 -0.3zM107.7 424.2l1.9 1.5l1.5 -0.5l0.6 0.2l0.4 0.6l0 0.8l1 0.7l0.3 0.5l1.4 0.5l0.8 0.5l-0.7 0.8l-0.6 -0.4l-0.9 0l-0.4 0.4l-0.6 0.8l-0.4 -1l-0.5 -0.7l-0.5 -0.3l-0.2 -0.7l-1.2 -1.2l-0.6 -0.2l-1.3 0.5l-0.6 -0.6l-0.1 -0.9l0.7 -1.3zM85.4 494.9l-0.1 0.8l-0.8 -0.1l0.3 -0.6l0.6 -0.1zM80.4 495.1l0.4 0.4l1.5 0.4l0 0.2l-1.8 -0.2l-0.1 -0.8zM78 493.4l0.1 -0.6l0.7 0l0.5 0.8l-0.4 0.5l-0.5 -0.2l0 0.7l-0.8 -0.2l-1.8 0.2l-0.8 -0.5l0.4 -0.4l0.9 0.4l1.7 -0.7zM68.9 493.3l0.7 0.2l-0.3 0.7l-0.8 -0.4l-1.4 0.6l0 -1.4l0.4 0.1l0.4 -0.9l0.6 0.2l-0.2 0.7l0.6 0.2zM66.5 491.8l0.3 0.5l-0.7 0.9l-0.7 0.1l0.2 -0.6l0.9 -0.9zM62.7 490.6l0.6 0.3l0.4 1l-1 0.6l0 -1.9zM33 469.3l-0.8 0l-0.4 0.6l-5.7 -2.8l1.4 -0.4l0.3 -0.4l5.2 3z' },
+      { a: 'AZ', n: 'Arizona', b: [195.9, 256.8, 100.7, 117.7], d: 'M296.6 268.9l-14.7 105.6l-31.8 -4.7l-17.2 -10l-37 -21.9l2.2 -3.9l3.2 -0.1l1.1 -1.4l-0.1 -3.6l-2.1 -0.6l0.4 -7l3.6 -2l0.9 -2.7l0.3 -4.4l2.4 -2.9l2.7 -0.8l2.3 -2l-2.5 -3.3l-1.1 -5.2l-1.8 -3.5l0.4 -2.4l1.4 -2.3l0.4 -3.5l-0.5 -3.8l1.2 -11l5.6 0.3l1.3 2.6l1.5 0.2l2.1 -2.9l2.9 -14.9l51.6 8.9l21.3 3.2z' },
+      { a: 'AR', n: 'Arkansas', b: [509.2, 288.9, 73.2, 67.8], d: 'M511.4 291.3l64.2 -2.4l1.5 3.5l-2.2 2.4l-2.1 3.7l9.6 -0.6l-0.2 3.5l-2.2 1.2l-0.3 2.9l-2.6 3.3l0.5 4.5l-1.2 3.4l-1.5 0.6l1 1.6l-2.3 1.6l-0.9 3.2l-1.5 0.9l0.4 3.7l-2.7 1.2l0.2 1.2l-3 3.3l1 2l-2.6 3.1l-2.2 5.9l2.9 2.4l-1.3 1.6l1 3.8l-1 2.7l-38 1.1l-6.8 0.1l-0.2 -9.9l-2.2 -0.8l-3 1l-1.6 -1.8l0.2 -33.1l-3.1 -20.8l2.2 0z' },
+      { a: 'CA', n: 'California', b: [94.0, 130.6, 118.8, 203.4], d: 'M118.5 134.4l11.4 3.1l17.7 5.3l13.8 3.6l-8.1 31.6l-6 23l13.9 21l13.5 20.3l10.9 16.3l7.9 12l14.3 21.5l-0.4 2.4l1.8 3.5l1.1 5.2l2.5 3.3l-2.3 2l-2.7 0.8l-2.4 2.9l-0.3 4.4l-0.9 2.7l-3.6 2l-0.4 7l2.1 0.6l0.1 3.6l-1.1 1.4l-3.2 0.1l-20.6 -2.5l-16.9 -2l-1.3 -2.8l0.8 -3.8l-0.1 -4.8l-1.4 -3.7l-3.7 -5.5l-5.1 -5.6l-1.4 0.9l-2.1 -1.3l0.8 -1.7l-1.8 -4.3l-3.7 -0.1l-5.5 -4.2l-0.4 -2.5l-3.4 -3.7l-4.8 -1.1l-3.5 -2.2l-5.1 -0.8l-2 -3.1l2 -4.9l-0.7 -1l1.5 -3.5l-3.1 -3.7l0.8 -3.7l-1.4 -0.6l-1.5 -3.8l-1.5 -1.2l-0.2 -2.2l-3.4 -9l-2 -2.9l1.1 -6l0.9 0.8l2 -3.2l-1.1 -3.7l-2.6 -0.3l-2.5 -3.9l-0.5 -2.6l0.9 -2.1l-0.8 -3.3l1.3 -4.8l2.6 0.7l0.9 -6.9l-1.4 0.4l-1.2 3.2l-2.9 -0.1l-2.6 -3.5l0.7 -4.4l-1.1 -4l-2.2 -2.9l-0.9 -2.8l-2.7 -5.9l1.1 -1.2l0 -6.6l1.8 -3.1l0.3 -5.4l-2 -6l-2.5 -3.8l0.3 -3.4l5.8 -6.9l1.5 -2.5l0 -2.2l2.9 -5.1l0.4 -5.2l-1.1 -1.7l1.8 -3.7l12.9 3.8z' },
+      { a: 'CO', n: 'Colorado', b: [296.6, 194.2, 107.5, 85.1], d: 'M322.5 196.2l30.4 3.6l23.3 2l27.9 2.1l-1.2 18.9l-3.4 56.5l-14.2 -1l-19.7 -1.5l-37.1 -3.8l-8.1 -1l-23.8 -3.1l3 -21.8l0.1 -2.1l2.2 -15.8l4.9 -35l15.7 2z' },
+      { a: 'CT', n: 'Connecticut', b: [795.8, 145.2, 25.5, 25.2], d: 'M801.6 149.2l16.8 -4l0.1 0.3l2.8 10.8l-0.3 1.9l-1.3 0l-5.6 2.9l-7.1 1.4l-2.4 3.2l-3.1 1.6l-3.3 3.1l-1.5 -1.9l2.9 -2.8l-1.4 -1.3l-2.4 -14l5.8 -1.2z' },
+      { a: 'DE', n: 'Delaware', b: [774.2, 197.6, 15.5, 25.6], d: 'M779 197.6l-0.8 2.5l-1.2 1.6l1 2.8l2.6 2.3l1.6 4.4l4 4.1l1.4 -0.1l2.1 6.2l-9.2 1.8l-6.3 -22.9l1.9 -2.6l2.9 -0.1z' },
+      { a: 'FL', n: 'Florida', b: [622.2, 381.6, 134.6, 102.7], d: 'M655.9 385.7l7.8 -1l2.8 5.2l22 -1.5l20.5 -1.4l1.4 3.8l1.9 -0.4l0.1 -3.8l-1.1 -3.4l1.3 -1.6l3.8 1l4.5 0l2.2 7.9l3.4 8.7l6.5 11l9.2 11.5l-0.9 1.1l1.3 5.7l4.1 6.1l7 12.3l1.7 4l0.6 4.2l0.8 15.4l-1.6 0.5l-0.8 5l0.8 1.4l-2.7 3.9l-1.4 -0.5l-2.9 1.9l-5.3 1.6l-1.8 -1.6l0.3 -2.9l-5.1 -7.6l-3.2 -1l-2.4 1.5l-2.7 -4.2l-1.1 -3.6l-4 -3.6l-1.3 -2.6l0 -4l-2 -0.4l0.8 2.2l-1.7 0.9l-6.7 -9.2l-2.4 -2.3l3.9 -8l-3.2 0.8l-1.8 2.7l-2.7 -3.4l1.5 -10.5l-0.7 -8.4l-2.2 -1.8l-1 -2.6l-3.2 -0.2l-4.2 -4l-3.2 -1.4l-0.5 -2.7l-2.2 -0.8l-2 -2.8l-6.7 -3.3l-5.3 1.6l0.7 2.8l-1.9 -0.3l-6.2 4.3l-7.1 1.6l0 -2l-2 -2.3l-8.9 -4.6l-6.2 -1.7l-5.4 -0.1l-4.5 0.9l-9.6 2.6l2.2 -2.9l-1.4 -1.5l0.3 -3.1l-3.9 -3.2l0.3 -2.5l33.4 -3.4z' },
+      { a: 'GA', n: 'Georgia', b: [646.0, 306.5, 79.8, 84.3], d: 'M683.6 306.5l-2.7 4.4l0 2l5.6 3.3l1.5 -0.5l2.9 3.8l0.8 2l3 3.6l3.8 1.8l2.6 3.2l4.5 2.5l0.2 2.2l3.2 3.1l4.5 2.2l1.5 2.9l0.8 3.9l2.3 1l3.3 4.6l0.6 3.1l3.8 1.1l-2.9 6.9l-0.1 3.3l-1.2 3.1l0.3 3l-1.5 1.6l0.5 8l-4.5 0l-3.8 -1l-1.3 1.6l1.1 3.4l-0.1 3.8l-1.9 0.4l-1.4 -3.8l-20.5 1.4l-22 1.5l-2.8 -5.2l-2.3 -4.9l0.6 -5l-2.2 -5.4l1 -3.3l-0.4 -2.4l2.4 -2.6l-1.9 -0.9l0.5 -2l-2.1 -2.7l-2.4 -5l-6.4 -23.2l-4.5 -15.8l19.4 -2.4l10.6 -1.3l7.6 -1.3z' },
+      { a: 'HI', n: 'Hawaii', b: [265.2, 433.7, 87.0, 61.1], d: 'M337.7 494.8l-4.4 -1.6l-0.7 -1.6l0.6 -4.2l-3.1 -7.1l2.4 -2.4l1.7 -3.3l-1.3 -2.1l0.4 -2.2l4.9 2.6l5.5 1.9l3.4 2.8l0.1 2.5l5 3.9l-3.1 3.3l-5.5 1.6l-3.8 2.4l-2.1 3.5zM320.7 456.2l2.1 2.5l2.6 -1.1l5.6 2.9l-0.8 2.6l-5.8 1.4l-1.1 -0.5l-0.3 -3.3l-3 -0.7l-1.2 -1.8l1.9 -2zM313.8 452.8l-1.7 1.9l-4 0l1.2 -2.1l4.5 0.2zM296.9 443.7l1.9 4.4l-1 2.5l-3.7 0.4l-2.5 -5.2l2.2 0l3.1 -2.1zM270.4 433.7l2 0.2l1 2l-0.6 2.7l-2.1 1.7l-5.5 -2.2l0.7 -3l4.5 -1.4z' },
+      { a: 'ID', n: 'Idaho', b: [201.3, 28.5, 88.2, 143.0], d: 'M241.8 31.1l-4 18.5l3 5.9l-1 5l1.9 2.7l2.4 1.3l0 1.4l3.6 5.8l0.2 2.1l2.9 2.6l-0.1 1.2l3.7 0.6l-3.1 6.5l-1.2 4.2l0.7 3.1l-2.7 1.5l0.6 2.1l-1.1 1.9l2.4 2.5l3.7 -1.9l1.6 -1.8l2 2.2l-0.6 1.5l0.6 3.7l1.4 4.2l1.3 1.6l-0.7 3.5l1.2 1.8l2.7 0.7l0.6 6.2l1.3 1.3l1.7 -1.5l4.1 0.9l3.2 -1.1l1.7 1.2l3.2 -0.3l0.5 1.1l2.8 -0.2l3.6 -3.4l1.5 3.6l2.1 2.3l-7.3 45.9l-15.2 -2.4l-25.5 -4.7l-40.2 -8.5l7.5 -33.5l3.1 -5.6l-0.8 -1.8l-2.4 -0.8l-0.4 -2.7l4.1 -5.9l1.5 -0.3l2 -2.4l0.1 -1.8l2 -1.9l1.5 -3l3.8 -4.8l-0.5 -2.7l-2.7 -2l-1 -3.5l0.6 -3.2l-0.9 -3.5l0.5 -1.5l5.4 -24.2l5.2 -22.3l11.9 2.6z' },
+      { a: 'IL', n: 'Illinois', b: [552.1, 173.7, 59.0, 105.0], d: 'M561.9 176.2l25.3 -1.4l13.5 -1.1l-0.2 3.7l2.5 4l2.8 6.7l3.9 44.3l-1.3 3.5l2.2 3.9l0.5 3.2l-1.6 2.9l-0.2 2.5l-2.3 4.2l-1.6 0.5l0.6 2.3l-1.1 1l-0.5 4.5l0.6 1.2l-1.7 2.9l1.7 3.1l-5.9 2.3l-0.4 2l1.6 2.3l-1.8 1.7l-5.6 -2.4l-1.7 0.3l-2 3.5l0.8 0.9l-2.3 0l-3.7 -5.1l1.1 -1.4l-1.4 -3.5l-0.2 -2.9l-5 -3.7l-1.6 0.5l-1.7 -2.3l-4.6 -3.6l-0.1 -3l2.2 -5l-0.5 -1.7l1.3 -2.4l-2.2 -1.2l-3.2 -0.6l-1.5 1.8l-1.2 -1l-1.3 -6.2l-4.9 -3.7l-4.7 -4.7l-2 -5.6l-0.4 -3.9l1.1 -2.7l0.1 -3.4l3.8 -2.3l0.3 -2.9l1.7 -1.9l0.1 -3.3l-2.5 -2.6l0.8 -3.3l5.3 -1.2l4.2 -2.7l0.3 -2.9l1.7 -1.3l0.3 -3.6l-0.5 -2.4l-3.2 -1.6l-0.5 -2l-3.2 -3.2z' },
+      { a: 'IN', n: 'Indiana', b: [604.4, 183.3, 45.2, 78.8], d: 'M626.8 185.1l16.3 -1.8l0.1 1.2l2.7 22.3l2.9 26.2l-1 0.9l1.8 5l-2.5 0.4l-2.5 2.1l-3.8 -0.4l0.6 3.7l-2.3 1.8l-0.7 2.4l-2.4 1.2l-0.8 4.9l-1.6 1.4l-3.4 -1.4l-0.8 -2.1l-2.9 2.7l0.4 2l-3.2 1.1l-1.1 -1.8l-3.5 2.2l-1 2.1l-3.9 -2.5l-1.9 0.8l-1.3 -1.2l-1.1 1.4l-3.7 0.6l-1.2 1.8l-0.6 -1.2l0.5 -4.5l1.1 -1l-0.6 -2.3l1.6 -0.5l2.3 -4.2l0.2 -2.5l1.6 -2.9l-0.5 -3.2l-2.2 -3.9l1.3 -3.5l-3.9 -44.3l1.5 1.1l4.2 -0.4l3.9 -2.5l11.4 -1.2z' },
+      { a: 'IA', n: 'Iowa', b: [480.0, 158.0, 89.3, 58.8], d: 'M551.1 158.1l2 -0.1l0.3 2.8l2.1 1.7l-1.5 2.4l0.7 4.2l1.2 2.9l4.9 1.9l1.1 2.3l3.2 3.2l0.5 2l3.2 1.6l0.5 2.4l-0.3 3.6l-1.7 1.3l-0.3 2.9l-4.2 2.7l-5.3 1.2l-0.8 3.3l2.5 2.6l-0.1 3.3l-1.7 1.9l-0.3 2.9l-3.8 2.3l-0.1 3.4l-1.5 -0.5l-3 -3.7l-1.5 0.2l-20 1.2l-19.3 0.6l-16 -0.2l-1.6 -2.4l0.8 -4.9l-1.4 -4.2l0.1 -4.7l-2.5 -1.7l-0.3 -2.6l0.8 -2.2l-0.9 -3.3l-1.9 -1.3l-2.4 -8.4l-2.6 -4.2l1.3 -2.7l0.4 -3.7l1.1 -1.4l-1.7 -1.8l0.4 -3.3l-0.7 -1.6l1.8 -0.4l68.5 -1.5z' },
+      { a: 'KS', n: 'Kansas', b: [399.5, 222.8, 109.6, 59.1], d: 'M405 222.9l93.5 2.6l1.4 1.7l4.6 1.4l-3.1 5.5l1.8 1.8l2.3 4.5l3.1 0.8l0.5 40.7l-80.8 -1.1l-28.8 -1.5l3.4 -56.5l2.1 0.1z' },
+      { a: 'KY', n: 'Kentucky', b: [586.5, 232.3, 107.2, 55.9], d: 'M662.6 237.6l3.6 2.2l2.1 -1.6l5.6 0.7l1.3 -2.1l1.9 -0.9l1.1 3.1l1.7 0.3l2.3 2.3l0.5 5.6l2.2 3.4l2.7 2.4l1 2l3.1 1.8l2 0l-4.9 5.8l-4.9 3.5l0.2 1.5l-2 1.5l0 1.7l-2.7 1.1l-0.7 2.2l-7.5 3.7l-0.2 0.3l-12.6 1.4l-11.1 0.7l-2.9 0.5l-16.4 1l-18.5 2.1l-3.4 -0.5l0.6 3.3l-18.5 1.3l-1.7 0.3l0.6 -2.4l2.3 0.6l0.6 -7.7l-0.8 -0.9l2 -3.5l1.7 -0.3l5.6 2.4l1.8 -1.7l-1.6 -2.3l0.4 -2l5.9 -2.3l-1.7 -3.1l1.7 -2.9l1.2 -1.8l3.7 -0.6l1.1 -1.4l1.3 1.2l1.9 -0.8l3.9 2.5l1 -2.1l3.5 -2.2l1.1 1.8l3.2 -1.1l-0.4 -2l2.9 -2.7l0.8 2.1l3.4 1.4l1.6 -1.4l0.8 -4.9l2.4 -1.2l0.7 -2.4l2.3 -1.8l-0.6 -3.7l3.8 0.4l2.5 -2.1l2.5 -0.4l-1.8 -5l1 -0.9l5.5 -0.7l3.3 3.6l0.5 1.6l4.5 0.1z' },
+      { a: 'LA', n: 'Louisiana', b: [519.1, 355.5, 83.6, 72.9], d: 'M525.9 356.6l38 -1.1l1.5 2l-1 0.9l0 3.8l2.4 2.3l0.7 5.5l-1.7 4.4l-3.6 2.9l-0.7 4.2l-1.6 -0.3l0 6.9l-1.9 0.3l1.3 3.6l-1 1.4l30.1 -1.7l-1.2 6.2l2.9 4l0.8 3l2.1 1.8l-4.6 2.9l-0.2 1.8l3.9 1l1.5 -3.1l3.6 2.8l-0.1 2.3l-1.9 1.2l-3.7 -0.7l0.6 1.7l-1.1 2.8l3.3 2.1l5 0.4l2 2.6l1.4 0.3l-2.3 3.3l-2.9 -0.4l-2.7 -3.1l-6 -1.3l-0.2 -3.2l-2.9 1.2l0.3 2.7l-1.2 2.5l-2.1 0.6l-1.7 -2.7l-3.8 0.1l-1.2 2.9l-2.4 1l-2.8 -1.6l-2.1 -0.1l-2.3 -4.5l-3.8 -1.8l-1.4 0.3l-1.6 -3.8l-4.2 0.7l-0.2 -2.3l-4.1 2.4l0.6 1.7l-3.1 1.8l-5 -0.7l-5.9 -2.3l-4.1 -1l-8.8 1.1l-1.1 0.8l-1.5 -1.8l3.7 -6.8l-1.3 -3.5l1.1 -2l-0.6 -2.6l1.5 -1.9l1.6 -4.9l-0.4 -4l-4.5 -7.5l-0.2 -4.1l-3.6 -4l-0.4 -19.3l6.8 -0.1z' },
+      { a: 'ME', n: 'Maine', b: [812.1, 36.4, 54.5, 86.2], d: 'M827.9 122.6l-1.9 -0.9l-0.3 -1.8l-2.6 -1.6l-7.3 -23.5l-3.7 -11.5l4.8 -4l-1.3 -1l1.3 -3.3l1.8 -1.9l-0.7 -1l1.5 -2.2l-1.5 -3l0 -5l1.4 -2.2l-0.6 -5.2l5.6 -16.4l2.3 0l1.1 3.2l2 0.7l3.4 -3.1l2.4 -0.7l1.4 -1.8l4.3 1.8l2.7 1.7l6.2 20l1.2 4.8l4.7 0l0 2.2l1.7 1.6l-0.3 2.1l2.6 2.2l2.2 -1.4l4.3 5.7l-1.8 3.6l-1.8 -0.6l-0.7 2.4l-1.9 0.1l0.3 1.7l-2.5 0.5l-2.6 5l-1.7 -2.4l-1.3 0.2l1.4 2.7l-2.5 2.2l-1.4 -2l-1 1.6l-3.3 1l-0.8 -2.7l-1.8 1.2l0.9 1.7l-0.7 4.5l0.7 1l-1.8 2.9l-2.6 -0.1l-0.8 2.6l-1.9 0.9l-1.1 2.3l-2.1 0.2l-1.1 -1.8l-2 4l1.3 1.7l-1.9 1.3l0.3 1.7l-1.9 2.8l-0.6 5.3z' },
+      { a: 'MD', n: 'Maryland', b: [722.6, 200.3, 67.1, 33.7], d: 'M778.2 233.5l-0.3 0.1l-0.4 0.1l0.7 -0.2zM722.6 210.4l51.6 -10.1l6.3 22.9l9.2 -1.8l-1.1 8.4l-2.1 0.8l-3.7 1.9l-2.8 1.5l-0.6 -3.1l-1.4 -0.9l1.3 -1.7l-2.8 -2.5l-0.4 1.4l-3 0.3l-1.8 -3.1l1 -0.2l-0.9 -4.3l0.6 -1.9l-2.5 -5.6l0.8 -3.8l2.3 -1.1l-0.4 -3.6l-1.7 0.7l0.4 1.9l-3.2 3.1l-0.7 2.3l0.9 5.4l-0.8 2.8l1.5 4.2l2.4 2.5l0.3 2.3l1.6 2l-0.3 1.6l-3.9 -2.2l-5 -0.5l-1.9 -2.5l-2.4 2.1l-1.4 -2l1.5 -3.3l0.7 -3.2l1.4 -2.3l-2.1 -1.4l-0.9 1.3l-2.2 -1.3l-3.2 -0.4l-0.5 -2.7l-1.8 -1.2l-2.3 0.1l-2.6 -4.8l-2.3 0.4l-2.7 -1.3l-1.1 1.7l-2.3 0.3l-0.2 2.2l-4.4 -0.6l-2.2 3.3l-2 -0.3l-2.2 3.6l-2.5 2.3l-1.5 -9.6z' },
+      { a: 'MA', n: 'Massachusetts', b: [795.3, 126.4, 49.0, 26.0], d: 'M825.9 126.4l1.4 0l1.4 3l0.1 2.7l-1.4 3l0.6 2.8l3 -0.4l2.6 2.4l0.3 2.4l1.6 0.2l0.7 2l4.3 0.8l3.8 -2.9l-0.3 2.7l-5.7 4l-2.3 0.7l-1.9 -1.3l-2 1.1l0.2 1.3l-2.2 1.5l-2 -3l-0.5 -0.5l-1.7 -0.9l-1.9 -4.1l-2 0.5l-3.5 1.1l-0.1 -0.3l-16.8 4l-5.8 1.2l-0.5 -0.7l0.3 -12.7l10.8 -2.4l15.5 -3.4l1 -2.1l3 -2.7z' },
+      { a: 'MI', n: 'Michigan', b: [560.5, 68.9, 112.1, 117.4], d: 'M661.7 181.5l-18.5 3l-0.1 -1.2l-16.3 1.8l-11.4 1.2l2.5 -2.8l1.5 -4.4l1.4 -2.7l0.9 -3.7l0.3 -5.2l-0.9 -5.5l-5.1 -10.4l0.8 -4.3l-1.3 -4.8l2.5 -5.3l0.2 -4.2l-0.6 -2.2l2 -1.2l0 -3.1l3.3 -1.1l2.2 -3.7l0.5 6.8l1.4 0.1l1.4 -3.5l-0.6 -5.7l0.9 -1.6l3.5 -1.3l-1.6 -3.8l2 -3.7l2.8 -0.5l3.6 1.7l3.2 -0.1l1.9 2.5l2.4 -0.1l4.4 1.9l1.4 -0.3l2.8 3.7l-1.5 2.3l2 2.5l1.1 3.1l0.1 7l-2.4 2.1l-0.2 3.7l-3 1.6l-1.2 4.5l0.8 1.5l3.5 1.2l2.1 -2.7l2.3 -5.2l4.3 -2.4l2.5 1.1l1.7 2.4l2.5 7.5l0.8 3.9l2.1 4.5l-0.4 6.9l-2.1 1.3l-0.4 -2.4l-1.4 0.9l-0.9 5.8l-2.5 2.6l-0.2 4.4l-3 4l0 1.6zM625.2 110.4l0.5 2.2l-1.7 0.6l0.4 -3.2l0.8 0.4zM599.3 124.9l-2.2 -1.8l1 -2.7l-3.1 -0.2l1 -2.6l-0.2 -3.3l-2.9 -2l-1.7 -2.2l-5.6 -1.4l-1.7 0.8l-5.7 -2.4l-13.6 -2.9l-1.6 -3l-2.5 -1l4.9 -2.2l2.1 -2.4l5.6 -1.3l3.4 -3l1.7 -0.2l1.2 -2.1l3.8 -3l1.8 -2.5l2.9 -1.8l3 1.1l-4.6 6.1l-1 2l0.3 3.5l2.3 -2.9l4.4 0.1l3.6 1.5l3.5 4.8l1.8 0.8l3.2 -1.1l0.8 1l3.3 0.3l6.5 -5l3.5 -0.7l4.8 -0.4l3.1 -1.7l2.4 -0.4l1.1 5.1l2.6 0.4l2.4 -1.1l1.2 1.1l1.5 -1.7l3.7 -1l0.8 6.5l2.1 2.5l2.6 0.4l0.1 -1.9l2.4 -0.3l1.6 1.7l-0.9 1.6l-7.2 -0.3l-3.3 1.2l-4 -1.8l-0.8 2.2l0.7 1.7l-1.7 -0.3l-2.7 -2.2l-4.3 -1.1l-2.1 0.2l-1.8 2.6l-3.4 1l-3.7 -0.1l-1.4 1.2l-0.1 2l-3.9 2.2l0 -2.5l-1.9 -0.3l-0.4 2.6l-3 0.4l-1.2 1.2l-1.6 4.6l-3.3 5.9l0.4 0.5zM579.3 72.7l-3 2.6l-1.7 0.4l0 -1.9l7.6 -4.9l-1.3 3.1l-1.6 0.7z' },
+      { a: 'MN', n: 'Minnesota', b: [473.4, 50.1, 95.6, 109.5], d: 'M539.9 98.7l-1 -0.8l-2.6 1.7l0.4 11l-0.7 1.1l-3.6 1.7l-2.9 4.1l-0.1 2.6l1.5 0.2l1.7 2.3l-1.4 2.9l0.4 3.2l-0.7 6.8l3.6 3.3l2.8 0.2l1.4 2l4.2 1.9l0.8 2.4l3.9 3l2.2 0.6l2.7 4l-0.2 3l0.8 2.1l-2 0.1l-68.5 1.5l0.1 -33.6l-3 -2.2l-2.2 -3.6l3.6 -3.9l0.3 -2.2l-0.5 -7.4l-1.5 -2l-1 -4.1l0.2 -4.9l-0.5 -0.9l-0.3 -11.9l-2.4 -6.3l-0.9 -3.6l-0.4 -7.5l0.9 -2.5l-1.6 -5.9l25.8 0.1l-0.1 -7.1l2.4 0.2l1.7 1.4l1.7 9.6l1.3 1.1l4.1 0.2l0.5 0.9l4.8 0.3l0.6 2l4.1 -0.6l0 -0.8l3.2 -1.1l2.8 0.3l3.3 1.4l0.9 1.9l1.9 -0.2l1.8 4l0.8 -1.7l3.1 -0.9l0.6 1.7l3.8 1l0.1 1.6l1.9 1.3l3.7 -0.9l2.2 -2l3 -1.3l1.3 2.7l2.1 -0.7l2.6 0.5l2.9 -0.6l3.5 2.1l3.2 -0.6l-0.2 1l-4 2.6l-5.8 2.2l-3.7 2.1l-5.2 5.1l-2.2 3.1l-3.5 3.5l-5.6 4.7l1.1 1.5z' },
+      { a: 'MS', n: 'Mississippi', b: [558.0, 315.0, 52.9, 91.7], d: 'M602.7 315.3l4.1 -0.3l1.7 1.8l-0.4 20.8l-0.7 35.8l3.5 28.5l-1.7 0.9l-3.9 -0.1l-1.7 -1.1l-3.8 1.1l-5.2 2.6l-1.6 1.4l-2.1 -1.8l-0.8 -3l-2.9 -4l1.2 -6.2l-30.1 1.7l1 -1.4l-1.3 -3.6l1.9 -0.3l0 -6.9l1.6 0.3l0.7 -4.2l3.6 -2.9l1.7 -4.4l-0.7 -5.5l-2.4 -2.3l0 -3.8l1 -0.9l-1.5 -2l1 -2.7l-1 -3.8l1.3 -1.6l-2.9 -2.4l2.2 -5.9l2.6 -3.1l-1 -2l3 -3.3l-0.2 -1.2l2.7 -1.2l-0.4 -3.7l1.5 -0.9l0.9 -3.2l2.3 -1.6l-1 -1.6l27.8 -2z' },
+      { a: 'MO', n: 'Missouri', b: [491.9, 212.6, 98.1, 85.9], d: 'M547.2 212.8l1.5 -0.2l3 3.7l1.5 0.5l-1.1 2.7l0.4 3.9l2 5.6l4.7 4.7l4.9 3.7l1.3 6.2l1.2 1l1.5 -1.8l3.2 0.6l2.2 1.2l-1.3 2.4l0.5 1.7l-2.2 5l0.1 3l4.6 3.6l1.7 2.3l1.6 -0.5l5 3.7l0.2 2.9l1.4 3.5l-1.1 1.4l3.7 5.1l2.3 0l-0.6 7.7l-2.3 -0.6l-0.6 2.4l-1 0.1l-0.8 0l0.4 4.6l-2.7 5l-9.6 0.6l2.1 -3.7l2.2 -2.4l-1.5 -3.5l-64.2 2.4l-2.2 0l-0.1 -9.4l-0.5 -40.7l-3.1 -0.8l-2.3 -4.5l-1.8 -1.8l3.1 -5.5l-4.6 -1.4l-1.4 -1.7l-3.5 -5l-3.1 -6.1l16 0.2l19.3 -0.6l20 -1.2z' },
+      { a: 'MT', n: 'Montana', b: [237.8, 31.1, 151.1, 96.1], d: 'M388.9 53l-1.7 21l-3.1 35.5l-1.4 17.7l-0.2 -0.1l-24.4 -2.4l-41.4 -5l-25.7 -3.8l-1.5 9.7l-2.1 -2.3l-1.5 -3.6l-3.6 3.4l-2.8 0.2l-0.5 -1.1l-3.2 0.3l-1.7 -1.2l-3.2 1.1l-4.1 -0.9l-1.7 1.5l-1.3 -1.3l-0.6 -6.2l-2.7 -0.7l-1.2 -1.8l0.7 -3.5l-1.3 -1.6l-1.4 -4.2l-0.6 -3.7l0.6 -1.5l-2 -2.2l-1.6 1.8l-3.7 1.9l-2.4 -2.5l1.1 -1.9l-0.6 -2.1l2.7 -1.5l-0.7 -3.1l1.2 -4.2l3.1 -6.5l-3.7 -0.6l0.1 -1.2l-2.9 -2.6l-0.2 -2.1l-3.6 -5.8l0 -1.4l-2.4 -1.3l-1.9 -2.7l1 -5l-3 -5.9l4 -18.5l55.4 10.6l25.1 3.8l66.6 7.5z' },
+      { a: 'NE', n: 'Nebraska', b: [376.2, 164.4, 122.3, 61.1], d: 'M389.3 165.2l23 1.7l42.4 1.8l0.4 0.9l7 3.6l1.6 -1.9l2 0.5l6.4 0.1l7.1 3.6l0.9 2.6l2.5 0.6l2.4 8.4l1.9 1.3l0.9 3.3l-0.8 2.2l0.3 2.6l2.5 1.7l-0.1 4.7l1.4 4.2l-0.8 4.9l1.6 2.4l3.1 6.1l3.5 5l-93.5 -2.6l-2.1 -0.1l1.2 -18.9l-27.9 -2.1l3.2 -37.4l9.9 0.8z' },
+      { a: 'NV', n: 'Nevada', b: [147.3, 146.4, 94.2, 145.7], d: 'M201.3 155.9l40.2 8.5l-17.8 92.4l-2.9 14.9l-2.1 2.9l-1.5 -0.2l-1.3 -2.6l-5.6 -0.3l-1.2 11l0.5 3.8l-0.4 3.5l-1.4 2.3l-14.3 -21.5l-7.9 -12l-10.9 -16.3l-13.5 -20.3l-13.9 -21l6 -23l8.1 -31.6l17.4 4.5l22.5 5z' },
+      { a: 'NH', n: 'New Hampshire', b: [803.5, 83.3, 24.4, 51.3], d: 'M812.1 83.3l3.7 11.5l7.3 23.5l2.6 1.6l0.3 1.8l1.9 0.9l-0.6 3.8l-1.4 0l-3 2.7l-1 2.1l-15.5 3.4l-1.5 -1.1l-0.5 -2.7l0.9 -1.3l-0.8 -2.6l-1 -7.9l1.4 -4.2l0.1 -4.3l0.8 -1.8l-1.3 -4.5l3.9 -2.8l1.3 -3.6l-2 -2.7l1 -3.4l-0.6 -1.8l0.6 -5.1l3 -0.3l0.4 -1.2z' },
+      { a: 'NJ', n: 'New Jersey', b: [777.7, 166.8, 19.7, 43.8], d: 'M789.6 169.4l5.2 1.6l-0.4 5.7l-2 1.7l-0.5 3.1l4.1 0.5l0.8 2.1l0.6 10.2l-2.6 8.4l-2.4 2.7l-1.4 5.2l-2 -2.7l-4.4 -0.6l-5.9 -2.9l-0.9 -2.7l-0.1 -0.4l0.5 -1.2l0.8 -2.5l3.4 -2.3l-0.1 -1.5l3.6 -3.9l0.3 -1.8l-4.8 -2.8l-0.7 -2.3l-1.8 -0.2l-0.6 -2.1l1.3 -3.7l-1.5 -1.7l2.6 -4.6l0.3 -2.1l1.4 -1.8l7.2 2.6z' },
+      { a: 'NM', n: 'New Mexico', b: [281.9, 268.9, 103.4, 107.4], d: 'M320.4 272l8.1 1l37.1 3.8l19.7 1.5l-0.7 9.3l-0.5 0l-3.6 46.7l-1.7 19l-1.4 18.8l-55.7 -5.2l-0.7 1.7l1.6 2.4l-26.4 -3.2l-1.1 8.5l-13.2 -1.8l14.7 -105.6l23.8 3.1z' },
+      { a: 'NY', n: 'New York', b: [710.5, 95.9, 108.7, 83.5], d: 'M784.6 95.9l1 3.8l0.1 3.5l2 3l0.5 3.6l-0.6 4l2.4 4.7l-0.4 1.7l2.8 2.5l2.7 12.7l0.5 1.6l-0.3 12.7l0.5 0.7l2.4 14l1.4 1.3l-2.9 2.8l1.5 1.9l6.1 0.1l1 -1.4l4.9 -1.3l2.4 -1.2l3.4 -3.9l0.9 2l2.3 0.3l-4.2 4l-9.6 6.6l-4.2 1.9l-2.9 0.5l-2 1.4l-1.9 -2.7l0.4 -5.7l-5.2 -1.6l-7.2 -2.6l-0.8 -1.1l-2.1 0.3l-3.2 -2.5l-0.3 -2.8l-2.1 -1.8l-1 0.4l-2 -2.2l-59.6 11.7l-0.8 -4.7l0 -0.3l7.3 -6.7l0.9 -2.8l2.3 -2.2l-1.6 -2.9l-1.2 -0.4l-1.7 -5l7.4 -3.5l6.9 -1.2l2.9 -0.1l3.4 1.5l1.7 -1.2l5.7 -1l3.3 -2.1l3 -4.1l2.3 -0.6l-1 -5l0.6 -3.2l-3.3 -1.4l0.1 -2.4l4.6 -4.2l1.3 -3.1l4.9 -7.5l5.2 -4.4l8.8 -1.5l10.3 -2.9z' },
+      { a: 'NC', n: 'North Carolina', b: [665.3, 259.0, 125.9, 57.8], d: 'M710.9 272.7l10.1 -1.3l11.5 -1.9l53.1 -10.5l3.3 7l-4.3 0.2l-0.3 1l-4.8 2.1l-0.5 1.2l-3.2 1l0.4 1.3l3.8 -1.8l0.8 0.7l4.2 -1.8l1.8 1.4l2.5 -1.3l1.9 4.2l-0.4 2.4l-1.7 0.5l-2.8 5.4l-4.9 1.2l-0.1 3.3l2.7 2.7l1.9 0.2l-2.1 5.9l-2.9 -0.1l-4.6 1.5l-3 1.8l-4.5 4.5l-3.2 5.5l-1 6.3l-3.4 -0.7l-5.3 2.2l-20.2 -14.6l-16.9 2.5l-0.1 -2.2l-2.8 -2.7l-1.4 1.3l-0.4 -1.9l-18.5 1.9l-4 1.3l-3 2.2l-5 1.9l-7.6 1.3l-10.6 1.3l-0.1 -4.5l2.9 -0.7l0.7 -3.3l3.4 -3.2l4 -0.6l3.3 -3.4l3.7 -1.5l2.7 -4.7l1.9 -1.5l0.6 1.8l5.3 -4.4l2.8 0.3l1.4 -3.7l2.6 -1.4l0 -4.5l10.3 -1.1z' },
+      { a: 'ND', n: 'North Dakota', b: [384.1, 53.0, 97.3, 61.1], d: 'M473.4 57.1l1.6 5.9l-0.9 2.5l0.4 7.5l0.9 3.6l2.4 6.3l0.3 11.9l0.5 0.9l-0.2 4.9l1 4.1l1.5 2l0.5 7.4l-97.3 -4.6l3.1 -35.5l1.7 -21l84.5 4.1z' },
+      { a: 'OH', n: 'Ohio', b: [643.2, 170.9, 62.0, 70.7], d: 'M701.1 170.9l4.1 24.9l-1.9 1.4l1.3 1.9l0.4 2.8l-1.1 4.8l-0.2 7.1l-4.6 6.9l-1.6 1l-1.8 -0.9l-1.2 2.9l-1.6 0.1l-1.3 3.9l0.7 2l-1.2 2l-2.5 -2.5l-2 4.8l1.1 2.8l-1.5 1.3l-0.2 2.5l-3.8 1l-2.3 -2.3l-1.7 -0.3l-1.1 -3.1l-1.9 0.9l-1.3 2.1l-5.6 -0.7l-2.1 1.6l-3.6 -2.2l-4.5 -0.1l-0.5 -1.6l-3.3 -3.6l-5.5 0.7l-2.9 -26.2l-2.7 -22.3l18.5 -3l5.7 1.8l2 1.3l1.2 -1.6l3.4 2.5l2 0.6l6 -3.3l3.9 -0.1l3.5 -4.1l5.4 -4.3l6.3 -3.4z' },
+      { a: 'OK', n: 'Oklahoma', b: [384.6, 278.3, 127.7, 66.9], d: 'M428.3 280.8l80.8 1.1l0.1 9.4l3.1 20.8l-0.2 33.1l-6 -1.9l-1.5 -2.2l-4 -1.8l-1 1.7l-4 -0.1l-0.8 -1l-3.6 1.8l-1.6 -1l-3.2 0.9l-3.1 2.9l-1.2 -1.7l-3.2 -1.3l-3.3 0l-1.1 -2.2l-3.9 4.2l-1.3 -2.4l-1.8 0.7l-1.3 -1.6l-3.6 -1.5l-2.7 2.4l-1.1 -2.6l-2.2 -0.3l-1.2 -2.1l-3 -0.9l-1.9 1.7l-1.3 -1.6l-3 0.1l-3.3 -1.7l-3.1 0.1l-1 -3.7l-4.8 -0.3l-1.9 0.5l-3.3 -3.7l-1.1 0.1l1.5 -36.5l-26.9 -1.4l-17.7 -1.2l0.7 -9.3l14.2 1l28.8 1.5z' },
+      { a: 'OR', n: 'Oregon', b: [104.3, 56.7, 119.0, 99.2], d: 'M140.9 59.5l1.2 0.2l2.1 2.6l0.5 2.5l-0.9 5.6l5.9 3.8l6.3 -1.3l3.5 0.7l3.8 2l0.1 1.3l7.6 -0.7l1.4 1.3l3.8 0.5l3.6 -0.9l5.9 -0.2l5.2 0.8l2 -0.7l26.2 6.2l1 3.5l2.7 2l0.5 2.7l-3.8 4.8l-1.5 3l-2 1.9l-0.1 1.8l-2 2.4l-1.5 0.3l-4.1 5.9l0.4 2.7l2.4 0.8l0.8 1.8l-3.1 5.6l-7.5 33.5l-22.5 -5l-17.4 -4.5l-13.8 -3.6l-17.7 -5.3l-11.4 -3.1l-12.9 -3.8l-1.3 -2.7l0.8 -6.1l1.5 -4l-0.8 -3.7l2.1 -2.5l2.5 -4.5l3.4 -4.6l2.3 -4.2l6 -14.8l0.4 -2.1l3.3 -6.3l3.2 -9.1l0.9 -5.3l1.5 -2.8l5.8 -1.2l1.6 2.7l2.1 0.1z' },
+      { a: 'PA', n: 'Pennsylvania', b: [701.1, 157.1, 85.1, 55.7], d: 'M710.5 164.1l0.8 4.7l59.6 -11.7l2 2.2l1 -0.4l2.1 1.8l0.3 2.8l3.2 2.5l2.1 -0.3l0.8 1.1l-1.4 1.8l-0.3 2.1l-2.6 4.6l1.5 1.7l-1.3 3.7l0.6 2.1l1.8 0.2l0.7 2.3l4.8 2.8l-0.3 1.8l-3.6 3.9l0.1 1.5l-3.4 2.3l-2.9 0.1l-1.9 2.6l-51.6 10.1l-14.6 2.4l-2.8 -17l-4.1 -24.9l2.4 -1.4l7 -5.7l0 0.3z' },
+      { a: 'RI', n: 'Rhode Island', b: [818.5, 143.9, 11.6, 14.3], d: 'M828.1 149.4l2 3l-2.6 1.1l0.6 -4.1zM822 144.4l2 -0.5l1.9 4.1l1.7 0.9l-1.7 0.1l-0.7 3.1l0.6 3.9l-4.8 2.2l0.3 -1.9l-2.8 -10.8l3.5 -1.1z' },
+      { a: 'SC', n: 'South Carolina', b: [680.9, 299.2, 75.0, 57.5], d: 'M688.6 304.6l3 -2.2l4 -1.3l18.5 -1.9l0.4 1.9l1.4 -1.3l2.8 2.7l0.1 2.2l16.9 -2.5l20.2 14.6l-2.5 1.4l-2.7 3.6l-2.4 5.4l0.1 3.9l-2.1 3.6l-3.4 0.6l-0.4 2.3l-3.2 3.1l-1.5 3l-3.1 1.6l-3 3.4l-0.1 1.4l-3 2.1l-2.8 4.5l-3.8 -1.1l-0.6 -3.1l-3.3 -4.6l-2.3 -1l-0.8 -3.9l-1.5 -2.9l-4.5 -2.2l-3.2 -3.1l-0.2 -2.2l-4.5 -2.5l-2.6 -3.2l-3.8 -1.8l-3 -3.6l-0.8 -2l-2.9 -3.8l-1.5 0.5l-5.6 -3.3l0 -2l2.7 -4.4l5 -1.9z' },
+      { a: 'SD', n: 'South Dakota', b: [379.4, 109.5, 103.4, 69.2], d: 'M384.1 109.5l97.3 4.6l-0.3 2.2l-3.6 3.9l2.2 3.6l3 2.2l-0.1 33.6l-1.8 0.4l0.7 1.6l-0.4 3.3l1.7 1.8l-1.1 1.4l-0.4 3.7l-1.3 2.7l2.6 4.2l-2.5 -0.6l-0.9 -2.6l-7.1 -3.6l-6.4 -0.1l-2 -0.5l-1.6 1.9l-7 -3.6l-0.4 -0.9l-42.4 -1.8l-23 -1.7l-9.9 -0.8l3.1 -37.3l0.2 0.1l1.4 -17.7z' },
+      { a: 'TN', n: 'Tennessee', b: [574.9, 273.8, 125.7, 43.5], d: 'M606.7 286.6l-0.6 -3.3l3.4 0.5l18.5 -2.1l16.4 -1l2.9 -0.5l11.1 -0.7l12.6 -1.4l0.2 -0.3l29.4 -4l0 4.5l-2.6 1.4l-1.4 3.7l-2.8 -0.3l-5.3 4.4l-0.6 -1.8l-1.9 1.5l-2.7 4.7l-3.7 1.5l-3.3 3.4l-4 0.6l-3.4 3.2l-0.7 3.3l-2.9 0.7l0.1 4.5l-19.4 2.4l-26.5 2.3l-12.7 1.2l-4.1 0.3l-27.8 2l1.5 -0.6l1.2 -3.4l-0.5 -4.5l2.6 -3.3l0.3 -2.9l2.2 -1.2l0.2 -3.5l2.7 -5l-0.4 -4.6l0.8 0l1 -0.1l1.7 -0.3l18.5 -1.3z' },
+      { a: 'TX', n: 'Texas', b: [321.0, 287.6, 207.2, 202.3], d: 'M402.3 288.8l26.9 1.4l-1.5 36.5l1.1 -0.1l3.3 3.7l1.9 -0.5l4.8 0.3l1 3.7l3.1 -0.1l3.3 1.7l3 -0.1l1.3 1.6l1.9 -1.7l3 0.9l1.2 2.1l2.2 0.3l1.1 2.6l2.7 -2.4l3.6 1.5l1.3 1.6l1.8 -0.7l1.3 2.4l3.9 -4.2l1.1 2.2l3.3 0l3.2 1.3l1.2 1.7l3.1 -2.9l3.2 -0.9l1.6 1l3.6 -1.8l0.8 1l4 0.1l1 -1.7l4 1.8l1.5 2.2l6 1.9l1.6 1.8l3 -1l2.2 0.8l0.2 9.9l0.4 19.3l3.6 4l0.2 4.1l4.5 7.5l0.4 4l-1.6 4.9l-1.5 1.9l0.6 2.6l-1.1 2l1.3 3.5l-3.7 6.8l1.5 1.8l-2.7 0.1l-8.3 2.7l-3.1 -1.3l-0.6 -3.1l-2.1 2.2l-1.5 -0.5l-0.8 2.6l1.7 1.2l0.4 3.4l-3 3.7l-4.9 4.7l-9.9 4.9l-1 -0.8l-3 1.2l0 -1.1l-4.1 0.8l-1.9 -2.4l-1.1 0.5l4.2 4.9l-3.1 1.5l-3 -1l-0.5 3.4l-3.7 3.4l-3.9 6.4l-2.6 6.7l-1.8 -0.6l-0.5 2.5l2 -0.6l-1 4.9l-1.3 0.1l-0.2 2.8l1.6 1.5l0.4 5.6l1.8 2l0.4 3.5l1.4 3.2l-5.2 1.8l-2.1 -2.4l-4 -1l-5.2 0.1l-4.5 -3.2l-3.4 -0.4l-2.5 -2.5l-3.5 -0.9l-2.3 -2.4l-1.4 -5.6l-2.9 -3.5l0.4 -2.8l-1.2 -3.1l0.5 -2.7l-1.9 -3l-1.8 -0.4l-2.7 -2.7l-0.7 -3.4l-2.4 -3.2l-3.4 -2.7l-1.4 -5.7l-1.6 -1.6l-1.9 -4.6l-0.5 -3.7l-2 -2.7l-3.3 -2.5l-0.7 -1.7l-3.2 -1.6l-2.2 -4.3l-7 -1.3l-4.3 -0.1l-3.5 -1.6l-1 1.9l-3.9 0.3l-3.2 3.7l-2.2 6.1l-1 0l-2.5 3.5l-2.7 -0.1l-3.8 -3.2l-9.7 -5.4l-1.7 -2.6l-3.7 -2.7l-2.3 -5.5l0.3 -4.8l-2.4 -4.2l-0.3 -3.4l-1.5 -2.3l-5.9 -3.8l-2.9 -4.6l-2.5 -1.8l-2.5 -4l-3.8 -2.3l-2.2 -5.2l-2.2 -1.3l-1.6 -2.4l0.7 -1.7l55.7 5.2l1.4 -18.8l1.7 -19l3.6 -46.7l0.5 0l17.7 1.2z' },
+      { a: 'UT', n: 'Utah', b: [223.7, 164.4, 83.1, 104.5], d: 'M267 169.1l15.2 2.4l-3 18.6l27.6 4.1l-4.9 35l-2.2 15.8l-0.1 2.1l-3 21.8l-21.3 -3.2l-51.6 -8.9l17.8 -92.4l25.5 4.7z' },
+      { a: 'VT', n: 'Vermont', b: [784.6, 89.9, 25.1, 47.1], d: 'M808.1 89.9l0.6 1.8l-1 3.4l2 2.7l-1.3 3.6l-3.9 2.8l1.3 4.5l-0.8 1.8l-0.1 4.3l-1.4 4.2l1 7.9l0.8 2.6l-0.9 1.3l0.5 2.7l1.5 1.1l-10.8 2.4l-0.5 -1.6l-2.7 -12.7l-2.8 -2.5l0.4 -1.7l-2.4 -4.7l0.6 -4l-0.5 -3.6l-2 -3l-0.1 -3.5l-1 -3.8l13.3 -3.1l10.2 -2.9z' },
+      { a: 'VA', n: 'Virginia', b: [671.2, 212.3, 117.4, 65.5], d: 'M786.5 230.6l2.1 -0.8l-1.2 3.5l-1.7 1.6l-0.2 4.5l-1.5 7.5l-2.2 1.9l-1.3 -2.4l0.1 -5.9l2.2 -8l3.7 -1.9zM777.9 233.6l0.3 -0.1l-0.7 0.2l0.4 -0.1zM739.3 212.3l8.5 4.8l0.8 -3.9l2.3 -0.1l1.8 1.2l0.5 2.7l3.2 0.4l2.2 1.3l1.6 2.4l-0.7 3.2l-1.5 1.2l-0.6 2.8l1 1.8l3.7 -1.3l1.3 2.7l5.2 0.2l1.9 2.1l4.6 1.7l-0.8 5.5l2.5 3.7l-1.5 2.3l0.2 2.4l2.1 1l-1.5 2.7l-3.6 -2.3l-0.5 1.1l3.1 1.6l7.2 -1l3.3 6.5l-53.1 10.5l-11.5 1.9l-10.1 1.3l-10.3 1.1l-29.4 4l7.5 -3.7l0.7 -2.2l2.7 -1.1l0 -1.7l2 -1.5l-0.2 -1.5l4.9 -3.5l4.9 -5.8l0 1.6l2.4 2.8l2.7 1.2l1.8 -0.4l2.4 -2.9l2.3 1.7l3.6 -1.6l6 -4.7l0.8 1l2.2 -2l-0.4 -3.4l1 -3.2l2.3 -3.2l0.5 -3.5l2.2 -4l0.4 -4.5l2.8 2.2l2.5 0.4l1.2 -1.8l1.9 -7.2l2.1 1.3l5.2 -8.7l-0.3 -5.6z' },
+      { a: 'WA', n: 'Washington', b: [131.1, 10.8, 98.8, 72.4], d: 'M229.9 28.5l-5.2 22.3l-5.4 24.2l-0.5 1.5l0.9 3.5l-0.6 3.2l-26.2 -6.2l-2 0.7l-5.2 -0.8l-5.9 0.2l-3.6 0.9l-3.8 -0.5l-1.4 -1.3l-7.6 0.7l-0.1 -1.3l-3.8 -2l-3.5 -0.7l-6.3 1.3l-5.9 -3.8l0.9 -5.6l-0.5 -2.5l-2.1 -2.6l-1.2 -0.2l-2.1 -0.1l-1.6 -2.7l-2 -1.3l-2.2 0.5l-1.9 -2.3l1.2 -2.3l2 -0.7l-1.3 -4.5l1.2 -10.2l-0.6 -1.5l0.8 -7.2l-1.6 -3.4l0.6 -5.5l2.4 -3.1l2 2.4l4.2 3.7l3.4 0.9l3.1 1.9l3.4 0.1l1.1 2l2.9 0.7l0.8 4.5l1.6 0.1l-1.3 5.4l-0.5 5l1.4 -0.1l-0.1 -4.5l1.5 -3.9l3.2 -3.5l-1.1 -2.1l0.7 -3l-0.3 -3.6l1.2 -2.1l0 -3l-1.7 -0.9l-1.2 -2.6l1 -1.8l68.8 17.7zM158 23.2l1.8 -0.3l-1.3 3.5l-1.5 -1.9l1 -1.3zM155.7 17.3l2 -2l1 3.4l-1.2 2.2l-2.6 -1.4l0.8 -2.2z' },
+      { a: 'WV', n: 'West Virginia', b: [682.2, 195.8, 66.4, 66.6], d: 'M705.2 195.8l2.8 17l14.6 -2.4l1.5 9.6l2.5 -2.3l2.2 -3.6l2 0.3l2.2 -3.3l4.4 0.6l0.2 -2.2l2.3 -0.3l1.1 -1.7l2.7 1.3l2.3 -0.4l2.6 4.8l-0.8 3.9l-8.5 -4.8l0.3 5.6l-5.2 8.7l-2.1 -1.3l-1.9 7.2l-1.2 1.8l-2.5 -0.4l-2.8 -2.2l-0.4 4.5l-2.2 4l-0.5 3.5l-2.3 3.2l-1 3.2l0.4 3.4l-2.2 2l-0.8 -1l-6 4.7l-3.6 1.6l-2.3 -1.7l-2.4 2.9l-1.8 0.4l-2.7 -1.2l-2.4 -2.8l0 -1.6l-2 0l-3.1 -1.8l-1 -2l-2.7 -2.4l-2.2 -3.4l-0.5 -5.6l3.8 -1l0.2 -2.5l1.5 -1.3l-1.1 -2.8l2 -4.8l2.5 2.5l1.2 -2l-0.7 -2l1.3 -3.9l1.6 -0.1l1.2 -2.9l1.8 0.9l1.6 -1l4.6 -6.9l0.2 -7.1l1.1 -4.8l-0.4 -2.8l-1.3 -1.9l1.9 -1.4z' },
+      { a: 'WI', n: 'Wisconsin', b: [529.4, 93.3, 77.0, 82.9], d: 'M560.5 100.2l2.5 1l1.6 3l13.6 2.9l5.7 2.4l1.7 -0.8l5.6 1.4l1.7 2.2l2.9 2l0.2 3.3l-1 2.6l3.1 0.2l-1 2.7l2.2 1.8l-0.3 2.3l-2.5 0.6l-1.8 4.5l-0.6 3l1.6 0.4l1.9 -2.1l1.8 -3.9l2.6 -1.6l1.8 -4.9l2.6 -1.3l0 2.5l-1.7 2.4l-2.9 8.1l-0.7 4.3l0.4 3.1l-1.3 1.2l-0.9 4.3l0.8 3.5l-1 2.5l-1.1 5.9l0.7 4.6l2 4l0 5.4l-13.5 1.1l-25.3 1.4l-1.1 -2.3l-4.9 -1.9l-1.2 -2.9l-0.7 -4.2l1.5 -2.4l-2.1 -1.7l-0.3 -2.8l-0.8 -2.1l0.2 -3l-2.7 -4l-2.2 -0.6l-3.9 -3l-0.8 -2.4l-4.2 -1.9l-1.4 -2l-2.8 -0.2l-3.6 -3.3l0.7 -6.8l-0.4 -3.2l1.4 -2.9l-1.7 -2.3l-1.5 -0.2l0.1 -2.6l2.9 -4.1l3.6 -1.7l0.7 -1.1l-0.4 -11l2.6 -1.7l1 0.8l2.9 0.1l8.7 -3.6l3.2 -1.9l1.2 1.2l-1.6 2.6l4.4 2.9l1.8 0.2z' },
+      { a: 'WY', n: 'Wyoming', b: [279.2, 115.9, 103.3, 85.9], d: 'M316.7 119.7l41.4 5l24.4 2.4l-3.1 37.3l-3.2 37.4l-23.3 -2l-30.4 -3.6l-15.7 -2l-27.6 -4.1l3 -18.6l7.3 -45.9l1.5 -9.7l25.7 3.8z' }
+    ];
+    var SQ_YES = {"west":"AK AZ CA CO HI ID MT NM NV OR UT WA WY","midwest":"IA IL IN KS MI MN MO ND NE OH SD WI","south":"AL AR DE FL GA KY LA MD MS NC OK SC TN TX VA WV","northeast":"CT MA ME NH NJ NY PA RI VT","newengland":"CT MA ME NH RI VT","westmiss":"AK AR AZ CA CO HI IA ID KS LA MN MO MT ND NE NM NV OK OR SD TX UT WA WY","apart":"AK HI","pacific":"AK CA HI OR WA","atlantic":"CT DE FL GA MA MD ME NC NH NJ NY RI SC VA","gulf":"AL FL LA MS TX","lakes":"IL IN MI MN NY OH PA WI","missriver":"AR IA IL KY LA MN MO MS TN WI","canada":"AK ID ME MI MN MT ND NH NY OH PA VT WA","mexico":"AZ CA NM TX","pop10":"CA FL GA IL MI NC NY OH PA TX","pop5":"AL AZ CA CO FL GA IL IN MA MD MI MN MO NC NJ NY OH PA SC TN TX VA WA WI","popsmall":"AK DE ND SD VT WY","big10":"AK AZ CA CO MT NM NV OR TX WY","small10":"CT DE HI MA MD NH NJ RI VT WV","orig13":"CT DE GA MA MD NC NH NJ NY PA RI SC VA","before1800":"CT DE GA KY MA MD NC NH NJ NY PA RI SC TN VA VT","after1900":"AK AZ HI NM OK","landlocked":"AR AZ CO IA ID IL IN KS KY MI MN MO MT ND NE NM NV OH OK PA SD TN UT VT WI WV WY"};
+    var YES = {};
+    Object.keys(SQ_YES).forEach(function (k) { YES[k] = ' ' + SQ_YES[k] + ' '; });
+    function nameYes(st, k) {
+      var n = st.n, letters = n.replace(/ /g, '');
+      switch (k) {
+        case 'twowords': return n.indexOf(' ') > 0;
+        case 'am': return n.charAt(0) <= 'M';
+        case 'vowel': return 'AEIOU'.indexOf(n.charAt(0)) >= 0;
+        case 'enda': return n.charAt(n.length - 1) === 'a';
+        case 'long': return letters.length >= 9;
+        case 'direction': return /^(New|North|South|West) /.test(n);
+      }
+      return false;
+    }
+    var MAPBOX = (function () {
+      var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      SQ_STATES.forEach(function (s) { x0 = Math.min(x0, s.b[0]); y0 = Math.min(y0, s.b[1]); x1 = Math.max(x1, s.b[0] + s.b[2]); y1 = Math.max(y1, s.b[1] + s.b[3]); });
+      return [x0 - 6, y0 - 6, x1 - x0 + 12, y1 - y0 + 12].map(function (v) { return Math.round(v); }).join(' ');
+    })();
+    function outline(st) {
+      var b = st.b, pad = Math.max(b[2], b[3]) * 0.08;
+      var svg = svgEl('svg', { viewBox: [b[0] - pad, b[1] - pad, b[2] + pad * 2, b[3] + pad * 2].join(' '), 'class': 'tq-outline', role: 'img', 'aria-label': 'Outline of the mystery state' });
+      svg.appendChild(svgEl('path', { d: st.d }));
+      return svg;
+    }
+    function map(st) {
+      var svg = svgEl('svg', { viewBox: MAPBOX, 'class': 'tq-map', role: 'img', 'aria-label': 'Map of the United States with ' + st.n + ' highlighted' });
+      SQ_STATES.forEach(function (s) { if (s !== st) svg.appendChild(svgEl('path', { d: s.d })); });
+      svg.appendChild(svgEl('path', { d: st.d, 'class': 'on' }));
+      return svg;
+    }
+    makeTwenty({
+      p: 'sq', screen: 'states', key: 'funvault-states-v1', items: SQ_STATES,
+      pickLabel: 'Pick a state…', pickFirst: 'Pick a state from the list first.',
+      guessQ: function (st) { return 'Is it ' + st.n + '?'; },
+      yes: function (st, k) { return YES[k] ? YES[k].indexOf(' ' + st.a + ' ') >= 0 : nameYes(st, k); },
+      groups: [
+        { t: 'Where', qs: [
+          { k: 'west', q: 'Is it in the West region?' }, { k: 'midwest', q: 'Is it in the Midwest?' }, { k: 'south', q: 'Is it in the South region?' },
+          { k: 'northeast', q: 'Is it in the Northeast?' }, { k: 'newengland', q: 'Is it in New England?' },
+          { k: 'westmiss', q: 'Is most of it west of the Mississippi River?' }, { k: 'apart', q: 'Is it separated from the other 48 states?' }] },
+        { t: 'Water & borders', qs: [
+          { k: 'pacific', q: 'Does it touch the Pacific Ocean?' }, { k: 'atlantic', q: 'Does it touch the Atlantic Ocean?' }, { k: 'gulf', q: 'Is it on the Gulf Coast?' },
+          { k: 'lakes', q: 'Does it touch one of the Great Lakes?' }, { k: 'landlocked', q: 'Is it landlocked (no ocean or Gulf coast)?' },
+          { k: 'missriver', q: 'Does the Mississippi River touch it?' }, { k: 'canada', q: 'Does it border Canada (by land or across water)?' }, { k: 'mexico', q: 'Does it border Mexico?' }] },
+        { t: 'Size & people', qs: [
+          { k: 'pop10', q: 'Did more than 10 million people live there in 2020?' }, { k: 'pop5', q: 'Did more than 5 million people live there in 2020?' },
+          { k: 'popsmall', q: 'Did fewer than 1 million people live there in 2020?' }, { k: 'big10', q: 'Is it one of the 10 biggest states by land area?' },
+          { k: 'small10', q: 'Is it one of the 10 smallest states by land area?' }] },
+        { t: 'History', qs: [
+          { k: 'orig13', q: 'Was it one of the 13 original colonies?' }, { k: 'before1800', q: 'Did it become a state before 1800?' }, { k: 'after1900', q: 'Did it become a state after 1900?' }] },
+        { t: 'Its name', qs: [
+          { k: 'twowords', q: 'Is its name two words?' }, { k: 'am', q: 'Does its name start with a letter from A to M?' }, { k: 'vowel', q: 'Does its name start with a vowel?' },
+          { k: 'enda', q: 'Does its name end with the letter A?' }, { k: 'long', q: 'Does its name have 9 or more letters (not counting spaces)?' },
+          { k: 'direction', q: 'Does its name include New, North, South, or West?' }] }
+      ],
+      hints: [{ label: '🗺️ Show its outline', cost: 3, render: function (st, box) { box.appendChild(outline(st)); } }],
+      answerLine: function (st, won) { return (won ? 'It was ' : 'The mystery state was ') + st.n + '.'; },
+      reveal: function (st, box) { box.appendChild(outline(st)); box.appendChild(map(st)); }
+    });
+  })();
+
+  // ============ Who Am I? (history 20 questions) ============
+  (function () {
+    var HQ_EAST = ["Ching Shih", "Murasaki Shikibu", "Qin Shi Huang", "Sejong the Great", "Subutai", "Tokugawa Ieyasu", "Wang Zhenyi", "Wu Zetian", "Zheng He"];
+    var HQ_PEOPLE = [
+      { n: "Hatshepsut", y: "c. 1507–1458 BCE", c: "AF", b: -1507, t: "W R", h: "Ruled ancient Egypt as pharaoh and sent a famous trading trip to the faraway Land of Punt." },
+      { n: "Ashoka", y: "c. 304–232 BCE", c: "AS", b: -304, t: "R", h: "An emperor in ancient India who turned to Buddhism after a terribly bloody war, then carved his rules onto stone pillars." },
+      { n: "Hannibal", y: "247–c. 183 BCE", c: "AF", b: -247, t: "M", h: "Marched an army, war elephants and all, over the Alps to attack Rome." },
+      { n: "Archimedes", y: "c. 287–212 BCE", c: "EU", b: -287, t: "S K", h: "A Greek genius who supposedly shouted “Eureka!” in the bath and built war machines to defend his city." },
+      { n: "Qin Shi Huang", y: "259–210 BCE", c: "AS", b: -259, t: "R F", h: "The first emperor of a united China, buried with an army of thousands of clay soldiers." },
+      { n: "Vercingetorix", y: "c. 82–46 BCE", c: "EU", b: -82, t: "R M V Y K", h: "A chieftain from Gaul who united the tribes against Julius Caesar, then lost the siege of Alesia." },
+      { n: "Ptolemy", y: "c. 100–170", c: "AF", b: 100, t: "S", h: "A scientist in Alexandria whose Earth-in-the-middle model of the universe was used for over 1,000 years." },
+      { n: "Hypatia", y: "c. 360–415", c: "AF", b: 360, t: "W S L K", h: "A brilliant mathematician and philosopher who taught in ancient Alexandria." },
+      { n: "Justinian I", y: "482–565", c: "EU", b: 482, t: "R", h: "A Byzantine emperor who built the giant Hagia Sophia and rewrote Roman law." },
+      { n: "Wu Zetian", y: "624–705", c: "AS", b: 624, t: "W R F", h: "The only woman ever to rule China as emperor in her own name." },
+      { n: "Al-Khwarizmi", y: "c. 780–850", c: "AS", b: 780, t: "S", h: "A mathematician at Baghdad’s House of Wisdom. The word “algorithm” comes from his name." },
+      { n: "Avicenna (Ibn Sina)", y: "c. 980–1037", c: "AS", b: 980, t: "S L", h: "A Persian doctor whose huge medical encyclopedia was taught in universities for centuries." },
+      { n: "Leif Erikson", y: "c. 970–1020", c: "EU", b: 970, t: "E SEA", h: "A Norse sailor who reached North America about 500 years before Columbus." },
+      { n: "Murasaki Shikibu", y: "c. 973–c. 1014", c: "AS", b: 973, t: "W L", h: "A lady of the Japanese royal court who wrote what many call the world’s first novel." },
+      { n: "Omar Khayyam", y: "1048–1131", c: "AS", b: 1048, t: "S L", h: "A Persian astronomer who helped make a super-accurate calendar. He is also famous for his four-line poems." },
+      { n: "Saladin", y: "1137–1193", c: "AS", b: 1137, t: "R M F", h: "A sultan who retook Jerusalem during the Crusades and was respected even by his enemies." },
+      { n: "Fibonacci", y: "c. 1170–c. 1250", c: "EU", b: 1170, t: "S", h: "An Italian mathematician who helped spread the digits 0–9 in Europe. A famous number pattern carries his name." },
+      { n: "Subutai", y: "1175–1248", c: "AS", b: 1175, t: "M", h: "A Mongol general who won campaign after campaign, from China all the way into Europe." },
+      { n: "Mansa Musa", y: "c. 1280–c. 1337", c: "AF", b: 1280, t: "R", h: "A West African king so rich that his trip to Mecca changed the price of gold in Egypt." },
+      { n: "Ibn Battuta", y: "1304–c. 1369", c: "AF", b: 1304, t: "E", h: "Traveled about 75,000 miles across Africa, Asia, and Europe in the 1300s and told the story in a famous book." },
+      { n: "Ibn Khaldun", y: "1332–1406", c: "AF", b: 1332, t: "L", h: "A North African historian often called one of the founders of sociology and economics." },
+      { n: "Tamerlane (Timur)", y: "1336–1405", c: "AS", b: 1336, t: "R M F", h: "A conqueror from Central Asia who built an empire and a dazzling capital at Samarkand." },
+      { n: "Christine de Pizan", y: "1364–c. 1430", c: "EU", b: 1364, t: "W L", h: "One of the first women in Europe to earn a living as a writer. She wrote books defending women." },
+      { n: "Zheng He", y: "1371–1433", c: "AS", b: 1371, t: "E SEA", h: "An admiral who led enormous treasure ships on seven voyages across the Indian Ocean." },
+      { n: "Sejong the Great", y: "1397–1450", c: "AS", b: 1397, t: "R", h: "A king who created a brand-new alphabet so ordinary people could learn to read." },
+      { n: "Pachacuti", y: "c. 1418–1471", c: "AM", b: 1418, t: "R M F", h: "Turned a small kingdom in the Andes into a mighty empire. Machu Picchu is thought to have been built for him." },
+      { n: "Moctezuma II", y: "c. 1466–1520", c: "AM", b: 1466, t: "R K", h: "The ruler of the Aztec Empire when Spanish soldiers arrived in 1519." },
+      { n: "Guru Nanak", y: "1469–1539", c: "AS", b: 1469, t: "G", h: "The founder of the Sikh religion." },
+      { n: "Babur", y: "1483–1530", c: "AS", b: 1483, t: "R M F", h: "A descendant of Genghis Khan who founded the Mughal Empire in India." },
+      { n: "Tokugawa Ieyasu", y: "1543–1616", c: "AS", b: 1543, t: "R M F", h: "Won the Battle of Sekigahara and started a family of shoguns that ruled Japan for over 250 years." },
+      { n: "Benjamin Banneker", y: "1731–1806", c: "AM", b: 1731, t: "S", h: "A self-taught astronomer who published almanacs and helped survey the land for Washington, D.C." },
+      { n: "Toussaint Louverture", y: "1743–1803", c: "AM", b: 1743, t: "M V BS", h: "A formerly enslaved man who led the revolution that ended slavery in the French colony of Saint-Domingue." },
+      { n: "Jean-Jacques Dessalines", y: "1758–1806", c: "AM", b: 1758, t: "R M V K F BS", h: "Declared Haiti independent in 1804 and became its first ruler." },
+      { n: "Wang Zhenyi", y: "1768–1797", c: "AS", b: 1768, t: "W S Y", h: "A self-taught astronomer in China who explained eclipses using a lamp, a table, and a round mirror." },
+      { n: "Alexander von Humboldt", y: "1769–1859", c: "EU", b: 1769, t: "E S", h: "A naturalist who explored South America. A cold ocean current and a penguin are named after him." },
+      { n: "Ching Shih", y: "1775–1844", c: "AS", b: 1775, t: "W SEA", h: "One of history’s most powerful pirates, commanding hundreds of ships off the coast of China." },
+      { n: "Simón Bolívar", y: "1783–1830", c: "AM", b: 1783, t: "M V", h: "Led the fight for independence across much of South America. A whole country is named after him." },
+      { n: "Shaka", y: "c. 1787–1828", c: "AF", b: 1787, t: "R M K F", h: "Built a powerful kingdom in southern Africa and changed how his warriors fought, using short spears and big shields." },
+      { n: "Sacagawea", y: "c. 1788–1812", c: "AM", b: 1788, t: "W E Y", h: "A Lemhi Shoshone woman who helped guide the Lewis and Clark expedition while carrying her baby." },
+      { n: "Mary Anning", y: "1799–1847", c: "EU", b: 1799, t: "W S", h: "Dug up amazing sea-reptile fossils on England’s south coast, starting when she was still a kid." },
+      { n: "Mary Seacole", y: "1805–1881", c: "AM", b: 1805, t: "W S", h: "A Jamaican nurse who cared for wounded soldiers near the battlefields of the Crimean War." },
+      { n: "Ada Lovelace", y: "1815–1852", c: "EU", b: 1815, t: "W S Y", h: "Wrote what is often called the first computer program, for a machine that was never finished." },
+      { n: "Matthew Henson", y: "1866–1955", c: "AM", b: 1866, t: "E X", h: "An explorer on the 1909 expedition that claimed to be the first to reach the North Pole." },
+      { n: "Ernest Shackleton", y: "1874–1922", c: "EU", b: 1874, t: "E X", h: "When his ship Endurance was crushed by Antarctic ice, he still got every one of his crew home alive." },
+      { n: "Mustafa Kemal Atatürk", y: "1881–1938", c: "EU", b: 1881, t: "M V X", h: "A general who founded the Republic of Turkey and became its first president." }
+    ];
+    var CONT = { EU: 'Europe', AS: 'Asia', AF: 'Africa', AM: 'the Americas' };
+    function has(p, t) { return (' ' + p.t + ' ').indexOf(' ' + t + ' ') >= 0; }
+    function yes(p, k) {
+      switch (k) {
+        case 'bce': return p.b < 0;
+        case 'b1000': return p.b < 1000;
+        case 'b1200': return p.b < 1200;
+        case 'b1400': return p.b < 1400;
+        case 'b1600': return p.b < 1600;
+        case 'b1800': return p.b < 1800;
+        case 'eu': case 'as': case 'af': case 'am': return p.c === k.toUpperCase();
+        case 'east': return HQ_EAST.indexOf(p.n) >= 0;
+      }
+      return has(p, k);
+    }
+    function hintBox(label, text) {
+      var d = document.createElement('p'); d.className = 'tq-clue';
+      var b = document.createElement('b'); b.textContent = label + ' ';
+      d.appendChild(b); d.append(text);
+      return d;
+    }
+    makeTwenty({
+      p: 'hq', screen: 'whois', key: 'funvault-whois-v1', items: HQ_PEOPLE,
+      pickLabel: 'Pick a person…', pickFirst: 'Pick someone from the list first.',
+      guessQ: function (p) { return 'Is it ' + p.n + '?'; },
+      yes: yes,
+      groups: [
+        { t: 'Who', qs: [
+          { k: 'W', q: 'Is this person a woman?' }, { k: 'R', q: 'Were they a ruler (king, queen, emperor, pharaoh, sultan, or shogun)?' },
+          { k: 'M', q: 'Are they famous for leading armies?' }, { k: 'E', q: 'Were they an explorer or a long-distance traveler?' },
+          { k: 'S', q: 'Were they a scientist, mathematician, inventor, or healer?' }, { k: 'L', q: 'Were they a writer, poet, or philosopher?' },
+          { k: 'G', q: 'Did they found a religion?' }, { k: 'V', q: 'Did they lead a rebellion, a revolution, or a fight for independence?' },
+          { k: 'SEA', q: 'Were they famous as a sailor, an admiral, or a pirate?' }] },
+        { t: 'When', qs: [
+          { k: 'bce', q: 'Were they born before the year 1 (BCE)?' }, { k: 'b1000', q: 'Were they born before the year 1000?' },
+          { k: 'b1200', q: 'Were they born before 1200?' }, { k: 'b1400', q: 'Were they born before 1400?' }, { k: 'b1600', q: 'Were they born before 1600?' },
+          { k: 'b1800', q: 'Were they born before 1800?' }, { k: 'X', q: 'Were they still alive in the 1900s?' }] },
+        { t: 'Where', qs: [
+          { k: 'eu', q: 'Were they born in Europe?' }, { k: 'as', q: 'Were they born in Asia (including the Middle East)?' },
+          { k: 'east', q: 'Were they born in East Asia (China, Japan, Korea, or Mongolia)?' }, { k: 'af', q: 'Were they born in Africa?' }, { k: 'am', q: 'Were they born in the Americas?' }] },
+        { t: 'Life', qs: [
+          { k: 'Y', q: 'Did they die before age 40?' }, { k: 'K', q: 'Were they killed by someone else (in battle, murdered, or executed)?' },
+          { k: 'F', q: 'Did they found an empire, a kingdom, or a dynasty?' }, { k: 'BS', q: 'Were they born enslaved?' }] }
+      ],
+      hints: [
+        { label: '🕰️ When did they live?', cost: 2, render: function (p, box) { box.appendChild(hintBox('Lived:', p.y)); } },
+        { label: '🔎 Show a clue', cost: 3, render: function (p, box) { box.appendChild(hintBox('Clue:', p.h)); } }
+      ],
+      answerLine: function (p, won) { return (won ? 'It was ' : 'The mystery person was ') + p.n + ' (' + p.y + ').'; },
+      reveal: function (p, box) {
+        box.appendChild(hintBox('Who:', p.h));
+        box.appendChild(hintBox('Born in:', CONT[p.c] + '.'));
+      }
+    });
   })();
 
 </script>
