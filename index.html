@@ -37,6 +37,7 @@
     --c6: #ff5d73;
     --c7: #e4a64a;
     --c8: #3cc7c0;
+    --c9: #a3e635;
     --op: #ff9f43;
     --op-hi: #ffb15f;
     --font-display: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -49,7 +50,7 @@
       --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
       --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
       --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c; --c8: #1a8f89;
+      --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c; --c8: #1a8f89; --c9: #5d8a12;
       --op: #f2890f; --op-hi: #ffa02e;
       color-scheme: light;
     }
@@ -58,7 +59,7 @@
     --bg: #fbf7ef; --bg-2: #f3ece0; --panel: #ffffff; --panel-2: #f1ece1;
     --fg: #1b2230; --muted: #5d6676; --line: #e6ddce;
     --accent: #e0940a; --accent-2: #1f9e6e; --bad: #c53030;
-    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c; --c8: #1a8f89;
+    --c1: #e85d3a; --c2: #6250e0; --c3: #1f9e6e; --c4: #2a8fd6; --c5: #d63f8c; --c6: #d93a52; --c7: #b5761c; --c8: #1a8f89; --c9: #5d8a12;
     --op: #f2890f; --op-hi: #ffa02e;
     color-scheme: light;
   }
@@ -365,6 +366,47 @@
   .tk-line { font-weight: 600; line-height: 1.35; }
   .tk-reveal { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-top: 10px; font-size: 0.92rem; line-height: 1.5; }
 
+  /* ---- Dumb Deals ---- */
+  #deals [hidden] { display: none !important; }
+  #deals .btn:disabled { opacity: 0.5; cursor: default; filter: none; transform: none; }
+  .dd-big { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 7vw, 2.2rem); line-height: 1.1; margin: 4px 0 12px; text-wrap: balance; }
+  .dd-hud { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; font-family: var(--font-display); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .dd-hud b { color: var(--c9); font-size: 1rem; }
+  .dd-heat { margin: 8px 0 14px; }
+  .dd-product { display: flex; gap: 12px; align-items: center; background: color-mix(in srgb, var(--c9) 9%, var(--panel-2)); border: 1px dashed color-mix(in srgb, var(--c9) 55%, var(--line)); border-radius: 14px; padding: 12px 14px; }
+  .dd-product > div { min-width: 0; }
+  .dd-emoji { font-size: 2rem; flex: none; line-height: 1; }
+  .dd-product b { font-family: var(--font-display); font-size: 1.05rem; display: block; }
+  .dd-product span { color: var(--muted); font-size: 0.86rem; }
+  .dd-customer { display: flex; gap: 12px; align-items: center; margin: 14px 0 4px; }
+  .dd-customer svg { width: 56px; height: 56px; flex: none; }
+  .dd-customer > div { min-width: 0; }
+  .dd-cname { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+  .dd-clue { font-size: 0.93rem; line-height: 1.35; }
+  .dd-wallet { color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+  .dd-step { font-family: var(--font-display); font-weight: 700; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 14px 0 6px; }
+  .dd-pitches { display: grid; gap: 8px; }
+  .dd-pitch { text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
+  .dd-pitch:hover:not(:disabled), .dd-price:hover:not(:disabled) { border-color: var(--muted); }
+  .dd-pitch[aria-pressed="true"], .dd-price[aria-pressed="true"] { border-color: var(--c9); background: color-mix(in srgb, var(--c9) 12%, var(--panel-2)); }
+  .dd-pitch:focus-visible, .dd-price:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .dd-pitch:disabled, .dd-price:disabled { opacity: 0.5; cursor: default; }
+  .dd-pitch[aria-pressed="true"]:disabled, .dd-price[aria-pressed="true"]:disabled { opacity: 1; }
+  .dd-ptag { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .6px; color: var(--c9); display: flex; justify-content: space-between; gap: 8px; }
+  .dd-ptag em { font-style: normal; color: var(--muted); font-weight: 600; text-transform: none; letter-spacing: 0; white-space: nowrap; }
+  .dd-prices { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .dd-price { font: inherit; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 12px; padding: 8px 2px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+  .dd-price b { font-family: var(--font-display); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+  .dd-price span { font-size: 0.68rem; color: var(--muted); }
+  .dd-out { min-height: 1.4em; margin-top: 12px; font-size: 0.95rem; line-height: 1.45; text-align: center; text-wrap: balance; }
+  .dd-out .good { color: var(--accent-2); font-weight: 700; }
+  .dd-out .bad { color: var(--bad); font-weight: 700; }
+  .dd-out em { color: var(--muted); }
+  .dd-meta { display: block; margin-top: 6px; color: var(--muted); font-size: 0.82rem; }
+  .dd-ledger { display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; margin: 14px 0 0; font-variant-numeric: tabular-nums; }
+  .dd-ledger dt { color: var(--muted); }
+  .dd-ledger dd { margin: 0; font-weight: 700; text-align: right; }
+
   @media (prefers-reduced-motion: reduce) {
     .tk-track > span, .tk-opt { transition: none; }
     .bs-catch { transition: none; }
@@ -443,6 +485,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span>
         <h2>Smooth Talker</h2>
         <p>Talk someone into doing what you want. Read their personality, pick the right trick, and don't get busted.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c9);" data-goto="deals">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span>
+        <h2>Dumb Deals</h2>
+        <p>Run a sketchy stand selling ridiculous junk. Pick a pitch, set a price, pay the rent, and keep the Consumer Watchdog off your back.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -742,6 +791,64 @@
       <p class="ch-res-sub" id="tk-resSub"></p>
       <div class="tk-reveal" id="tk-reveal"></div>
       <button class="btn" id="tk-next" type="button">Next target →</button>
+    </div>
+  </section>
+
+  <!-- ================= DUMB DEALS ================= -->
+  <section id="deals" class="screen">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Dumb Deals</span></div>
+
+    <div class="panel" id="dd-day">
+      <div class="bs-kicker" id="dd-dayLabel">Day 1</div>
+      <div class="dd-big">Today's junk</div>
+      <div class="dd-product"><div class="dd-emoji" id="dd-pEmoji" aria-hidden="true"></div><div><b id="dd-pName"></b><span id="dd-pDesc"></span></div></div>
+      <dl class="dd-ledger">
+        <dt>What it's actually worth</dt><dd id="dd-pWorth"></dd>
+        <dt>Cash on hand</dt><dd id="dd-dCash"></dd>
+        <dt>Rent due tonight</dt><dd id="dd-dRent"></dd>
+        <dt>Watchdog heat</dt><dd id="dd-dHeat"></dd>
+      </dl>
+      <p class="ch-sub" id="dd-dHelp" style="margin:14px 0 0;"></p>
+      <div class="bs-stats" id="dd-dStats"></div>
+      <button class="btn" id="dd-open" type="button">Open the stand →</button>
+    </div>
+
+    <div class="panel" id="dd-sell" hidden>
+      <div class="dd-hud"><span id="dd-hudDay"></span><span>Cash <b id="dd-hudCash"></b></span></div>
+      <div class="dd-heat tk-sus"><div class="tk-meter-label"><span>Watchdog heat</span><span id="dd-heatNum">0%</span></div><div class="tk-track"><span id="dd-heatBar"></span></div></div>
+      <div class="dd-product"><div class="dd-emoji" id="dd-sEmoji" aria-hidden="true"></div><div><b id="dd-sName"></b><span id="dd-sWorth"></span></div></div>
+      <div class="dd-customer">
+        <svg viewBox="0 0 60 60" aria-hidden="true">
+          <path id="dd-shirt" d="M8 60 C8 46 18 41 30 41 C42 41 52 46 52 60 Z"/>
+          <circle id="dd-head" cx="30" cy="25" r="13"/>
+          <path id="dd-hair" d="M17 24 A13 13 0 0 1 43 24 C38 16 22 16 17 24 Z"/>
+          <circle cx="25.5" cy="26" r="1.6" fill="#1d2430"/>
+          <circle cx="34.5" cy="26" r="1.6" fill="#1d2430"/>
+          <path d="M26 31.5 q4 2.5 8 0" stroke="#1d2430" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div><div class="dd-cname" id="dd-cName"></div><div class="dd-clue" id="dd-cClue"></div><div class="dd-wallet" id="dd-cWallet"></div></div>
+      </div>
+      <div class="dd-step">1. Pick your pitch</div>
+      <div class="dd-pitches" id="dd-pitches"></div>
+      <div class="dd-step">2. Set your price</div>
+      <div class="dd-prices" id="dd-prices"></div>
+      <button class="btn" id="dd-go" type="button" disabled>Pitch it →</button>
+      <div class="dd-out" id="dd-out" aria-live="polite"></div>
+      <button class="btn ghost" id="dd-nextC" type="button" hidden>Next customer →</button>
+    </div>
+
+    <div class="panel" id="dd-night" hidden>
+      <div class="bs-kicker" id="dd-nLabel"></div>
+      <div class="dd-big" id="dd-nTitle"></div>
+      <dl class="dd-ledger" id="dd-nLedger"></dl>
+      <button class="btn" id="dd-nextDay" type="button">Start the next day →</button>
+    </div>
+
+    <div class="panel" id="dd-over" hidden>
+      <div class="ch-res-title" id="dd-oTitle"></div>
+      <p class="ch-res-sub" id="dd-oSub"></p>
+      <p class="bs-stats" id="dd-oStats" style="text-align:center;"></p>
+      <button class="btn" id="dd-again" type="button">Open a new stand</button>
     </div>
   </section>
 
@@ -3867,7 +3974,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -5071,6 +5178,450 @@
     $('go').addEventListener('click', start);
     $('next').addEventListener('click', meet);
     window.registerHook('trick', meet, function () { if (tgt) tgt.over = true; busy = true; });
+  })();
+
+  // ============ Dumb Deals ============
+  (function () {
+    // ---- model (no DOM below this line until the view marker) ----
+    var KEY = 'funvault-deals-v1';
+    var PER_DAY = 6, WEEK = 7, START_CASH = 30, COOL = 20;
+    function rentFor(day) { return 20 + (day - 1) * 12; }
+    function scaleFor(day) { return 1 + (day - 1) * 0.2; }
+
+    var PRODUCTS = [
+      { name: 'Pet Rock (Deluxe Edition)', emoji: '🪨', desc: 'It’s a rock. With googly eyes.', it: 'this pet rock', worth: 3 },
+      { name: 'Bottled Mountain Air', emoji: '🏔️', desc: 'Genuine air from a genuine mountain. Probably.', it: 'this bottle of mountain air', worth: 2 },
+      { name: 'Left-Handed Spoon', emoji: '🥄', desc: 'Exactly like a spoon, but for lefties.', it: 'this left-handed spoon', worth: 2 },
+      { name: 'Invisible Hat', emoji: '🎩', desc: 'Pictured: what it would look like if you could see it.', it: 'this invisible hat', worth: 4 },
+      { name: 'Waterproof Teabag', emoji: '🍵', desc: 'Keeps the tea leaves perfectly dry. Forever.', it: 'this waterproof teabag', worth: 2 },
+      { name: 'Solar-Powered Flashlight', emoji: '🔦', desc: 'Works great in direct sunlight.', it: 'this solar-powered flashlight', worth: 5 },
+      { name: 'Inflatable Dartboard', emoji: '🎯', desc: 'Pops on the first throw. Includes one throw.', it: 'this inflatable dartboard', worth: 4 },
+      { name: 'Chocolate Teapot', emoji: '🍫', desc: 'Holds hot tea for almost two whole seconds.', it: 'this chocolate teapot', worth: 5 },
+      { name: 'Glasses for Your Goldfish', emoji: '🐠', desc: 'For the fish who has everything.', it: 'this pair of goldfish glasses', worth: 3 },
+      { name: 'Wi-Fi for Plants', emoji: '🌿', desc: 'Your ferns deserve to stream, too.', it: 'this plant Wi-Fi router', worth: 4 },
+      { name: 'Signed Photo of a Potato', emoji: '🥔', desc: 'Signed by the potato. Its handwriting is terrible.', it: 'this signed potato photo', worth: 2 },
+      { name: 'Decaf Energy Drink', emoji: '🥤', desc: 'All of the taste. None of the energy.', it: 'this decaf energy drink', worth: 3 },
+      { name: 'Instruction Manual for a Spoon', emoji: '📘', desc: '400 pages. Step 1: hold the spoon.', it: 'this spoon instruction manual', worth: 3 },
+      { name: 'Screen Door for a Submarine', emoji: '🚪', desc: 'Lets the fresh air in. And the ocean.', it: 'this submarine screen door', worth: 5 },
+      { name: 'Glow-in-the-Dark Sunglasses', emoji: '🕶️', desc: 'So everyone can see you not seeing them.', it: 'this pair of glowing sunglasses', worth: 4 },
+      { name: 'One Sock (Left)', emoji: '🧦', desc: 'The right one is sold separately. Somewhere.', it: 'this lonely left sock', worth: 2 },
+      { name: 'Ice Cube Tray for Lava', emoji: '🌋', desc: 'For when your lava gets a little too warm.', it: 'this lava ice cube tray', worth: 3 },
+      { name: 'Bluetooth Pencil', emoji: '✏️', desc: 'Pairs with nothing. Writes like a pencil.', it: 'this Bluetooth pencil', worth: 3 },
+      { name: 'Canned Monday Mornings', emoji: '🥫', desc: 'Open it whenever you’re having too much fun.', it: 'this can of Monday mornings', worth: 2 },
+      { name: 'Breathable Umbrella', emoji: '☂️', desc: 'Lets the rain through so the umbrella can breathe.', it: 'this breathable umbrella', worth: 4 }
+    ];
+
+    var PITCHES = {
+      honest: { label: 'Tell the truth', heat: 0, lines: [
+        'Honestly? {p} does absolutely nothing. Want it anyway?',
+        'I won’t lie to you: {p} is pretty useless. But it could be yours.',
+        'Full honesty: it’s {p}. That’s it. That’s the whole pitch.'] },
+      hype: { label: 'Hype it up', heat: 5, lines: [
+        'Behold: {p}! The thing you never knew you needed!',
+        'Folks, {p} will change your LIFE. Probably.',
+        'Step right up! {p} is the hottest thing on this whole sidewalk!'] },
+      edu: { label: 'It’s educational', heat: 4, lines: [
+        '{p} teaches kids patience. And physics. Kind of.',
+        'It’s educational! Every classroom should have {p}.',
+        'Learning has never been more fun than with {p}. Mostly the fun part.'] },
+      scarcity: { label: 'Fake “last one!”', heat: 8, lines: [
+        'This is the LAST one! (There are 400 more in my van.)',
+        'Only three left in the whole world! Well, on this table.',
+        'Hurry! This deal ends in five minutes. It always ends in five minutes.'] },
+      celeb: { label: 'Celebrity rumor', heat: 14, lines: [
+        'A famous movie star bought three of these. Allegedly.',
+        'Every pop star owns {p}. Every. Single. One.',
+        'I heard a pro athlete sleeps with {p} under their pillow.'] },
+      invest: { label: 'It’s an investment', heat: 18, lines: [
+        '{p} will be worth a fortune in ten years. Trust me.',
+        'Buy two now, sell one later for triple. That’s just math.',
+        'Forget piggy banks. {p} is the future of money.'] },
+      science: { label: 'Fake science', heat: 20, lines: [
+        'Scientists say {p} makes you 12% smarter. Which scientists? Great question.',
+        '{p} is clinically proven! The clinic was my garage.',
+        'It’s packed with quantum crystals. You can’t see them. That’s how quantum works.'] }
+    };
+    var PITCH_KEYS = Object.keys(PITCHES);
+
+    var PRICES = [
+      { key: 'bargain', label: 'Bargain', mult: 1, adj: 0.25 },
+      { key: 'fair', label: 'Fair', mult: 2, adj: 0.1 },
+      { key: 'steep', label: 'Steep', mult: 5, adj: -0.15 },
+      { key: 'outrageous', label: 'Outrageous', mult: 12, adj: -0.4 }
+    ];
+    var WALLETS = [
+      { label: 'Wallet: nearly empty', lo: 1, hi: 2 },
+      { label: 'Wallet: a few bucks', lo: 2, hi: 5 },
+      { label: 'Wallet: decent', lo: 5, hi: 12 },
+      { label: 'Wallet: STUFFED', lo: 12, hi: 30 }
+    ];
+
+    var TYPES = {
+      impulse: { name: 'an impulse buyer', tell: 'falls for hype and “last one!” deals', tol: 0.5, weight: 14, wallet: [0, 5, 4, 1],
+        likes: { scarcity: 0.45, hype: 0.35, celeb: 0.15, honest: -0.1, edu: -0.2 },
+        clues: ['Is already carrying six shopping bags.', 'Bought a hot dog toaster yesterday. Doesn’t own hot dogs.', 'Says “ooh, shiny!” about everything.', 'Has never once read a price tag.'],
+        yes: 'Ooh! Take my money!', no: 'Hmm, nah. Sounds boring.' },
+      skeptic: { name: 'a skeptic', tell: 'only trusts the plain truth', tol: 0.1, weight: 12, wallet: [1, 5, 4, 0],
+        likes: { honest: 0.45, edu: 0.1, hype: -0.2, scarcity: -0.25, celeb: -0.35, invest: -0.4, science: -0.45 },
+        clues: ['Is squinting at your sign like it owes them money.', 'Reads every label twice. Then a third time.', 'Says “says who?” about everything.', 'Once bit a coin to check if it was real.'],
+        yes: 'Finally, an honest seller. Fine, I’ll take one.', no: 'Says who? Nice try.' },
+      trend: { name: 'a trend-chaser', tell: 'falls for celebrity rumors and hype', tol: 0.6, weight: 12, wallet: [0, 2, 5, 3],
+        likes: { celeb: 0.45, hype: 0.25, scarcity: 0.2, edu: -0.25, honest: -0.15 },
+        clues: ['Is wearing sunglasses indoors. At night.', 'Is filming everything for their followers.', 'Keeps asking what’s “in” right now.', 'Their phone case matches their shoes. And their hat.'],
+        yes: 'Everyone is going to be SO jealous.', no: 'Ew. That’s so last week.' },
+      collector: { name: 'a collector', tell: 'can’t resist anything “rare” or “valuable”', tol: 0.7, weight: 10, wallet: [0, 1, 5, 4],
+        likes: { scarcity: 0.45, invest: 0.3, honest: 0.05, hype: -0.15, edu: -0.1 },
+        clues: ['Owns 400 snow globes. Wants 401.', 'Asked if it comes with a certificate.', 'Has a display case for their display cases.', 'Still has every toy they ever owned, in the box.'],
+        yes: 'A rare piece! It’ll look great next to my snow globes.', no: 'Not rare enough for my collection.' },
+      parent: { name: 'a tired parent', tell: 'wants something educational (or just the truth)', tol: 0.25, weight: 12, wallet: [1, 5, 4, 0],
+        likes: { edu: 0.45, honest: 0.2, science: 0.15, scarcity: -0.05, celeb: -0.15, invest: -0.25 },
+        clues: ['Has crayon on their sleeve and three kids in tow.', 'Is pushing a stroller full of groceries.', 'Needs something to keep the kids busy on a road trip.', 'Has a juice box in every pocket.'],
+        yes: 'If it keeps the kids busy for five minutes, sold.', no: 'The kids would break it in a second.' },
+      rich: { name: 'a fancy rich person', tell: 'loves “investments” and thinks cheap stuff is beneath them', tol: 0.95, weight: 7, wallet: [0, 0, 1, 9],
+        likes: { invest: 0.45, scarcity: 0.25, celeb: 0.15, hype: 0.05, honest: -0.1, edu: -0.1 }, priceAdj: { bargain: -0.2, fair: -0.05 },
+        clues: ['Is wearing a gold watch on each wrist.', 'Arrived by limo. Parked it on the sidewalk.', 'Tried to pay for gum with a $100 bill.', 'Their dog is wearing a tiny diamond collar.'],
+        yes: 'Splendid. Keep the change, darling.', no: 'How dreadfully ordinary. No thank you.' },
+      joker: { name: 'a gag-gift hunter', tell: 'thinks wild claims are hilarious', tol: 0.4, weight: 10, wallet: [1, 5, 4, 0],
+        likes: { science: 0.3, honest: 0.25, celeb: 0.2, hype: 0.2, invest: 0.1, edu: -0.1 },
+        clues: ['Is looking for a gag gift for their cousin.', 'Laughed out loud at your sign.', 'Is wearing a whoopee cushion as a hat.', 'Has a joy buzzer and isn’t afraid to use it.'],
+        yes: 'HA! My cousin is going to hate this. Sold!', no: 'Not funny enough. Next!' },
+      gullible: { name: 'super gullible', tell: 'believes literally anything', tol: 0.6, weight: 12, wallet: [3, 5, 2, 0],
+        likes: { science: 0.45, invest: 0.35, celeb: 0.35, hype: 0.25, scarcity: 0.25, edu: 0.2, honest: -0.05 },
+        clues: ['Thinks the moon follows their car.', 'Asked if your stand is a famous landmark.', 'Once paid $20 for a “genuine” mermaid scale.', 'Thinks brown cows make chocolate milk.'],
+        yes: 'WOW. I can’t believe my luck!', no: 'Oh no, I think I already have one of those. Somewhere.' },
+      inspector: { name: 'an undercover Watchdog inspector', tell: 'only the truth is safe with them', tol: 0.1, weight: 0, wallet: [0, 2, 6, 2],
+        likes: { honest: 0.3 },
+        clues: ['Is holding a clipboard “for no reason.”', 'Is wearing a VERY obvious fake mustache.', 'Has a shiny badge poking out of their pocket.', 'Keeps writing down everything you say.'],
+        yes: '', no: '' }
+    };
+    var TYPE_KEYS = Object.keys(TYPES).filter(function (k) { return TYPES[k].weight > 0; });
+
+    var NAMES = ['Alex', 'Sam', 'Jordan', 'Riley', 'Casey', 'Morgan', 'Taylor', 'Jamie', 'Quinn', 'Avery', 'Rowan', 'Skyler', 'Reese', 'Charlie', 'Frankie', 'Robin', 'Drew', 'Jessie', 'Emerson', 'Finley', 'Harper', 'Kendall', 'Logan', 'Parker', 'Sage', 'Blake', 'Dakota', 'Ellis', 'Marley', 'Remy'];
+
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function bag(arr) { var b = []; return function () { if (!b.length) b = shuffle(arr.slice()); return b.pop(); }; }
+    function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+    function rand(a, b) { return a + Math.random() * (b - a); }
+    function pickWeighted(ws) { var tot = 0, i; for (i = 0; i < ws.length; i++) tot += ws[i]; var r = Math.random() * tot; for (i = 0; i < ws.length; i++) { r -= ws[i]; if (r < 0) return i; } return ws.length - 1; }
+    function like(type, pk) { return TYPES[type].likes[pk] || 0; }
+    function priceOf(g, pi) { return g.worth * PRICES[pi].mult; }
+
+    function newState() {
+      return { day: 1, cash: START_CASH, heat: 0, paid: 0, soldAll: 0, earned: 0, over: false, phase: 'day',
+               prod: 0, worth: 1, rent: 0, ci: 0, soldToday: 0, madeToday: 0, cust: null, res: null };
+    }
+    function setupDay(g, prodIdx) {
+      g.prod = prodIdx;
+      g.worth = Math.max(1, Math.round(PRODUCTS[prodIdx].worth * scaleFor(g.day)));
+      g.rent = rentFor(g.day);
+      g.ci = 0; g.soldToday = 0; g.madeToday = 0; g.cust = null; g.res = null;
+      g.phase = 'day';
+    }
+    function inspectorChance(g) { return (g.day === 1 ? 0.04 : 0.07) + g.heat / 400; }
+    function makeCustomer(g, name) {
+      var type = Math.random() < inspectorChance(g) ? 'inspector'
+        : TYPE_KEYS[pickWeighted(TYPE_KEYS.map(function (k) { return TYPES[k].weight; }))];
+      var T = TYPES[type], wb = pickWeighted(T.wallet), W = WALLETS[wb];
+      var others = shuffle(PITCH_KEYS.filter(function (k) { return k !== 'honest'; })).slice(0, 3);
+      var shown = ['honest'].concat(others);
+      if (type !== 'inspector' && Math.max.apply(null, shown.map(function (k) { return like(type, k); })) < 0.3) {
+        var good = PITCH_KEYS.filter(function (k) { return like(type, k) >= 0.3 && shown.indexOf(k) < 0; });
+        if (good.length) others[Math.floor(Math.random() * 3)] = pick(good);
+      }
+      var keys = shuffle(['honest'].concat(others)), lines = {};
+      keys.forEach(function (k) { lines[k] = pick(PITCHES[k].lines); });
+      return { type: type, name: name, clue: pick(T.clues), wallet: wb, room: rand(W.lo, W.hi), pitches: keys, lines: lines };
+    }
+    // Decide what happens. Pure: returns the result; apply() changes the state.
+    function judge(g, c, pk, pi) {
+      var P = PITCHES[pk], pr = PRICES[pi], price = priceOf(g, pi), T = TYPES[c.type];
+      var r = { pitch: pk, price: pi, amount: price, sold: false, heat: P.heat, kind: 'nope' };
+      if (c.type === 'inspector') {
+        if (pk === 'honest') { r.heat = -15; r.kind = 'review'; r.sold = pi <= 1 && pr.mult <= c.room; }
+        else if (P.heat >= 10) { r.heat = 35; r.kind = 'busted'; }
+        else r.kind = 'noted';
+      } else if (pr.mult > c.room) {
+        r.kind = 'broke';
+      } else {
+        var adj = (T.priceAdj && T.priceAdj[pr.key] != null) ? T.priceAdj[pr.key] : (pr.adj < 0 ? pr.adj * (1 - T.tol) : pr.adj);
+        var p = Math.max(0.03, Math.min(0.95, 0.25 + like(c.type, pk) + adj + rand(-0.08, 0.08)));
+        r.sold = Math.random() < p;
+        r.kind = r.sold ? 'sold' : (like(c.type, pk) < 0 ? 'hated' : pi >= 2 ? 'pricey' : 'nope');
+      }
+      if (r.sold && pr.key === 'outrageous') r.heat += 6;
+      return r;
+    }
+    function apply(g, r) {
+      g.heat = Math.max(0, Math.min(100, g.heat + r.heat));
+      if (r.sold) { g.cash += r.amount; g.madeToday += r.amount; g.earned += r.amount; g.soldToday += 1; g.soldAll += 1; }
+      g.ci += 1;
+      g.res = r;
+      if (g.heat >= 100) { g.over = 'shut'; }
+    }
+    function closeDay(g) {
+      if (g.cash < g.rent) { g.over = 'evicted'; return false; }
+      g.cash -= g.rent; g.paid += 1;
+      g.heat = Math.max(0, g.heat - COOL);
+      if (g.paid >= WEEK) g.over = 'won';
+      return true;
+    }
+    // ---- view ----
+    var REACT = {
+      sold: ['Deal!', 'Fine, I’ll take it.', 'You’ve got yourself a sale.', 'Sure, why not?', 'Wrap it up!'],
+      nope: ['Hmm… I’ll pass.', 'Nah, not today.', 'Maybe next time.', 'I’m good, thanks.', 'I’ll think about it.'],
+      pricey: ['For THAT price? No way.', 'Do I look like I’m made of money?', 'That’s a lot of money for this.', 'Too rich for me.'],
+      broke: ['I only have lint and a bus ticket.', 'My wallet just laughed at that price.', 'I can’t afford that. I can barely afford this shirt.', 'Can I pay in buttons?']
+    };
+    var INSPECT = {
+      busted: ['That claim is going in my report.', 'Consumer Watchdog! You’re getting written up.', 'Gotcha! That’s a big fat fib.'],
+      review: ['An honest seller? I’ll put in a good word.', 'Refreshingly truthful. Gold star for you.', 'Huh. You’re actually honest. Noted.']
+    };
+    var RULES = 'Survive ' + WEEK + ' days to win. Six customers come by each day. Pick a pitch and a price for each one. Lies sell better, but they heat up the Consumer Watchdog. Hit 100% heat and you’re shut down. Miss rent and you’re evicted.';
+    var TIPS = [
+      'Tip: the Watchdog cools off a little every night.',
+      'Tip: the more heat you have, the more undercover inspectors show up.',
+      'Tip: telling an inspector the truth cools things down.',
+      'Tip: check their wallet before you pick a price.',
+      'Tip: rent goes up every single night.',
+      'Tip: an Outrageous price adds extra heat when it works.',
+      'Tip: different customers fall for different pitches.'
+    ];
+    var SKIN = ['#f2c9a0', '#e8b48a', '#c68c5f', '#8d5a3b', '#5c3b28'];
+    var HAIR = ['#3a2e22', '#7a4b2a', '#d9b26f', '#1d1d1d', '#a33b2c', '#8e8e8e'];
+    var SHIRT = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c7)', 'var(--c9)'];
+
+    var nextProd = bag(PRODUCTS.map(function (p, i) { return i; })), nextName = bag(NAMES);
+    function $(id) { return document.getElementById('dd-' + id); }
+    function show(view) { ['day', 'sell', 'night', 'over'].forEach(function (v) { $(v).hidden = v !== view; }); window.scrollTo(0, 0); }
+    function money(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+    function fill(line) { var s = line.split('{p}').join(PRODUCTS[g.prod].it); return s.charAt(0).toUpperCase() + s.slice(1); }
+    function idx(n) { return Math.floor(Math.random() * n); }
+
+    var stats = { best: 0, bestCash: 0, weeks: 0, stands: 0 };
+    try { var st = JSON.parse(localStorage.getItem(KEY) || '{}'); Object.keys(stats).forEach(function (k) { stats[k] = Number(st[k]) || 0; }); } catch (e) {}
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(stats)); } catch (e) {} }
+    function save() { try { if (g && g.phase !== 'over') localStorage.setItem(KEY + '-run', JSON.stringify(g)); else localStorage.removeItem(KEY + '-run'); } catch (e) {} }
+    function restore() {
+      try {
+        var r = JSON.parse(localStorage.getItem(KEY + '-run') || 'null');
+        if (!r || typeof r.day !== 'number' || !PRODUCTS[r.prod]) return null;
+        if (r.phase === 'day') return r;
+        if (r.phase === 'night' && r.night) return r;
+        if (r.phase === 'sell' && r.cust && TYPES[r.cust.type] && r.cust.look && r.cust.pitches) return r;
+      } catch (e) {}
+      return null;
+    }
+    function statsLine() {
+      return 'Best: ' + stats.best + (stats.best === 1 ? ' day' : ' days') + ' survived' +
+        (stats.weeks ? ' · Best week: ' + money(stats.bestCash) + ' · Weeks survived: ' + stats.weeks : '');
+    }
+
+    var g = null, choice = { pitch: null, price: null }, busy = false;
+
+    function newGame() {
+      stats.stands += 1; persist();
+      g = newState(); busy = false;
+      beginDay();
+    }
+    function beginDay() { setupDay(g, nextProd()); save(); renderDay(); }
+    function renderDay() {
+      var prod = PRODUCTS[g.prod];
+      $('dayLabel').textContent = 'Day ' + g.day + ' of ' + WEEK;
+      $('pEmoji').textContent = prod.emoji;
+      $('pName').textContent = prod.name;
+      $('pDesc').textContent = prod.desc;
+      $('pWorth').textContent = money(g.worth);
+      $('dCash').textContent = money(g.cash);
+      $('dRent').textContent = money(g.rent);
+      $('dHeat').textContent = Math.round(g.heat) + '%';
+      $('dHelp').textContent = g.day === 1 ? RULES : pick(TIPS);
+      $('dStats').textContent = statsLine();
+      show('day');
+    }
+    function openStand() { if (!g || g.phase !== 'day') return; g.phase = 'sell'; nextCustomer(); }
+    function nextCustomer() {
+      if (g.over) return finishGame();
+      if (g.ci >= PER_DAY) return closeUp();
+      var c = makeCustomer(g, nextName());
+      c.look = [idx(SKIN.length), idx(HAIR.length), idx(SHIRT.length)];
+      g.cust = c; g.res = null; g.phase = 'sell';
+      save(); renderSell();
+    }
+    function hud() {
+      $('hudDay').textContent = 'Day ' + g.day + ' · Customer ' + (g.res ? g.ci : g.ci + 1) + ' of ' + PER_DAY;
+      $('hudCash').textContent = money(g.cash);
+      $('heatNum').textContent = Math.round(g.heat) + '%';
+      $('heatBar').style.width = g.heat + '%';
+    }
+    function renderSell() {
+      var c = g.cust, prod = PRODUCTS[g.prod];
+      choice = { pitch: null, price: null };
+      $('sEmoji').textContent = prod.emoji;
+      $('sName').textContent = prod.name;
+      $('sWorth').textContent = 'Actually worth ' + money(g.worth);
+      $('cName').textContent = c.name;
+      $('cClue').textContent = c.clue;
+      $('cWallet').textContent = '👛 ' + WALLETS[c.wallet].label;
+      $('head').style.fill = SKIN[c.look[0]];
+      $('hair').style.fill = HAIR[c.look[1]];
+      $('shirt').style.fill = SHIRT[c.look[2]];
+
+      var pbox = $('pitches'); pbox.innerHTML = '';
+      c.pitches.forEach(function (k) {
+        var P = PITCHES[k], b = document.createElement('button');
+        b.type = 'button'; b.className = 'dd-pitch'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('data-k', k);
+        var tag = document.createElement('span'); tag.className = 'dd-ptag'; tag.append(P.label);
+        var em = document.createElement('em'); em.textContent = P.heat ? '+' + P.heat + ' heat' : 'no heat'; tag.appendChild(em);
+        var ln = document.createElement('span'); ln.className = 'tk-line'; ln.textContent = '“' + fill(c.lines[k]) + '”';
+        b.appendChild(tag); b.appendChild(ln);
+        b.addEventListener('click', function () { choose('pitch', k); });
+        pbox.appendChild(b);
+      });
+      var qbox = $('prices'); qbox.innerHTML = '';
+      PRICES.forEach(function (pr, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'dd-price'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('data-i', String(i));
+        var amt = document.createElement('b'); amt.textContent = money(priceOf(g, i));
+        var lb = document.createElement('span'); lb.textContent = pr.label;
+        b.appendChild(amt); b.appendChild(lb);
+        b.addEventListener('click', function () { choose('price', i); });
+        qbox.appendChild(b);
+      });
+      $('go').disabled = true;
+      $('out').textContent = '';
+      $('nextC').hidden = true;
+      hud();
+      show('sell');
+      if (g.res) renderResult();
+    }
+    function press(sel, attr, val) {
+      Array.prototype.forEach.call($('sell').querySelectorAll(sel), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute(attr) === String(val))); });
+    }
+    function choose(what, v) {
+      if (busy || !g || g.res || g.phase !== 'sell') return;
+      choice[what] = v;
+      if (what === 'pitch') press('.dd-pitch', 'data-k', v); else press('.dd-price', 'data-i', v);
+      $('go').disabled = !(choice.pitch && choice.price != null);
+    }
+    function lock() { Array.prototype.forEach.call($('sell').querySelectorAll('.dd-pitch, .dd-price'), function (b) { b.disabled = true; }); }
+    function go() {
+      if (busy || !g || g.res || !choice.pitch || choice.price == null) return;
+      var pk = choice.pitch, pi = choice.price, me = g;
+      busy = true; lock(); $('go').disabled = true;
+      var out = $('out'); out.textContent = '';
+      var em = document.createElement('em'); em.textContent = g.cust.name + ' is thinking it over…'; out.appendChild(em);
+      setTimeout(function () { if (g === me) resolve(pk, pi); }, 700);
+    }
+    function say(c, r) {
+      var T = TYPES[c.type], l = like(c.type, r.pitch);
+      switch (r.kind) {
+        case 'sold': return l >= 0.3 ? T.yes : pick(REACT.sold);
+        case 'hated': return T.no;
+        case 'pricey': return pick(REACT.pricey);
+        case 'broke': return pick(REACT.broke);
+        case 'nope': return pick(REACT.nope);
+        case 'busted': return pick(INSPECT.busted);
+        case 'review': return pick(INSPECT.review);
+      }
+      return '';
+    }
+    function resolve(pk, pi) {
+      var r = judge(g, g.cust, pk, pi);
+      r.say = say(g.cust, r);
+      apply(g, r);
+      busy = false;
+      save();
+      renderResult();
+    }
+    function renderResult() {
+      var r = g.res, c = g.cust, T = TYPES[c.type];
+      lock();
+      press('.dd-pitch', 'data-k', r.pitch);
+      press('.dd-price', 'data-i', r.price);
+      $('go').disabled = true;
+      var out = $('out'); out.textContent = '';
+      var head = document.createElement('span');
+      head.className = (r.sold || r.kind === 'review') ? 'good' : 'bad';
+      head.textContent = r.kind === 'busted' ? '🕵️ Busted by an undercover inspector!'
+        : (r.kind === 'review' || r.kind === 'noted') ? '🕵️ Undercover inspector!'
+        : r.sold ? 'Sold for ' + money(r.amount) + '!' : 'No sale.';
+      out.appendChild(head);
+      if (r.say) out.append(' “' + r.say + '”');
+      if (r.kind === 'noted') out.append(' They scribble something on a clipboard and walk off.');
+      if (r.kind === 'review' && r.sold) out.append(' They even bought one for ' + money(r.amount) + '.');
+      var meta = document.createElement('small'); meta.className = 'dd-meta';
+      var heat = r.heat > 0 ? '+' + r.heat + ' heat' : r.heat < 0 ? '−' + (-r.heat) + ' heat' : 'No heat';
+      meta.textContent = heat + ' · ' + (c.type === 'inspector'
+        ? (r.kind === 'review' ? 'Honesty with inspectors pays off.' : 'Inspectors only trust the plain truth.')
+        : c.name + ' was ' + T.name + ': ' + T.tell + '.');
+      out.appendChild(meta);
+      hud();
+      var nb = $('nextC');
+      nb.textContent = g.over ? 'See what happened →' : g.ci >= PER_DAY ? 'Close up for the night →' : 'Next customer →';
+      nb.hidden = false;
+      try { nb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+    }
+    function closeUp() {
+      var made = g.madeToday, sold = g.soldToday, rent = g.rent, before = g.heat;
+      closeDay(g);
+      if (g.over) return finishGame();
+      g.night = { made: made, sold: sold, rent: rent, cooled: before - g.heat };
+      g.phase = 'night'; g.cust = null; g.res = null;
+      save(); renderNight();
+    }
+    function renderNight() {
+      var n = g.night, ledger = $('nLedger');
+      $('nLabel').textContent = 'Night ' + g.day + ' of ' + WEEK;
+      $('nTitle').textContent = n.made >= n.rent * 2 ? 'Business is booming 🤑' : n.made >= n.rent ? 'You made rent!' : n.sold ? 'Rent paid… from your savings' : 'Not one single sale…';
+      ledger.innerHTML = '';
+      [['Junk sold today', n.sold + ' of ' + PER_DAY], ['Money made today', money(n.made)], ['Rent paid', '−' + money(n.rent)], ['Cash left', money(g.cash)],
+       ['Watchdog heat', Math.round(g.heat) + '%' + (n.cooled > 0 ? ' (cooled off ' + Math.round(n.cooled) + ')' : '')], ['Tomorrow’s rent', money(rentFor(g.day + 1))]
+      ].forEach(function (row) {
+        var dt = document.createElement('dt'); dt.textContent = row[0];
+        var dd = document.createElement('dd'); dd.textContent = row[1];
+        ledger.appendChild(dt); ledger.appendChild(dd);
+      });
+      $('nextDay').textContent = 'Start day ' + (g.day + 1) + ' →';
+      show('night');
+    }
+    function nextDay() { if (!g || g.phase !== 'night') return; g.day += 1; beginDay(); }
+    function finishGame() {
+      var kind = g.over, oldBest = stats.best, oldCash = stats.bestCash, t, s;
+      stats.best = Math.max(stats.best, g.paid);
+      if (kind === 'won') { stats.weeks += 1; stats.bestCash = Math.max(stats.bestCash, Math.round(g.cash)); }
+      persist();
+      g.phase = 'over'; save();
+      if (kind === 'won') {
+        t = '🏆 You survived the week!';
+        s = 'Your stand lasted all ' + WEEK + ' days and finished with ' + money(g.cash) + ' in the cash box.' + (stats.weeks > 1 && g.cash > oldCash ? ' New best week!' : '');
+      } else if (kind === 'shut') {
+        t = '🚨 Shut down!';
+        s = (g.res && g.res.kind === 'busted' ? 'You told a whopper to an undercover inspector, and the Consumer Watchdog closed your stand on day ' : 'Too many tall tales! The Consumer Watchdog closed your stand on day ') + g.day + '.';
+      } else {
+        t = '📦 Evicted!';
+        s = 'You had ' + money(g.cash) + ', but rent was ' + money(g.rent) + '. The landlord took back your folding table on night ' + g.day + '.';
+      }
+      s += ' You sold ' + g.soldAll + ' piece' + (g.soldAll === 1 ? '' : 's') + ' of junk for ' + money(g.earned) + ' total.';
+      if (kind !== 'won' && g.paid > oldBest) s += ' New record: ' + g.paid + (g.paid === 1 ? ' day' : ' days') + ' survived!';
+      $('oTitle').textContent = t;
+      $('oSub').textContent = s;
+      $('oStats').textContent = statsLine();
+      show('over');
+    }
+    function after() { if (!g) return; if (g.over) finishGame(); else nextCustomer(); }
+
+    $('open').addEventListener('click', openStand);
+    $('go').addEventListener('click', go);
+    $('nextC').addEventListener('click', after);
+    $('nextDay').addEventListener('click', nextDay);
+    $('again').addEventListener('click', newGame);
+    // The screen keeps its state while you're away, so only rebuild it after a reload.
+    window.registerHook('deals', function () {
+      if (g) { if (g.phase === 'over') newGame(); return; }
+      g = restore();
+      if (!g) return newGame();
+      if (g.phase === 'sell') renderSell(); else if (g.phase === 'night') renderNight(); else renderDay();
+    });
   })();
 
 </script>
