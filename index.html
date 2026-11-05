@@ -521,6 +521,36 @@
   .dm-missed dd { margin: 0 0 6px; line-height: 1.4; }
   .dm-missed dd:last-child { margin-bottom: 0; }
 
+  /* ---- Perfect Parry ---- */
+  .pp [hidden] { display: none !important; }
+  .pp .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
+  .pp-diffs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0 10px; }
+  .pp-diff { font: inherit; font-family: var(--font-display); font-weight: 700; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 12px; padding: 10px 4px; cursor: pointer; }
+  .pp-diff[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .pp-diff:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .pp-hud { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 8px; }
+  .pp-label { display: flex; justify-content: space-between; gap: 6px; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+  .pp-label b { font-family: var(--font-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pp-label span { color: var(--muted); white-space: nowrap; }
+  .pp-bar { height: 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+  .pp-bar span { display: block; height: 100%; transition: width .25s ease; }
+  .pp-bar .hero { background: #3a9d5d; }
+  .pp-bar .foe { background: var(--bad); }
+  .pp-energy { margin-top: 4px; font-size: 0.85rem; letter-spacing: 1px; min-height: 1.3em; }
+  #pp-canvas { display: block; width: 100%; height: min(50vh, 420px); min-height: 250px; border-radius: 16px; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; background: #1f2a44; }
+  .pp-msg { min-height: 2.8em; text-align: center; font-weight: 600; line-height: 1.4; margin: 10px 0; text-wrap: balance; }
+  .pp-ctl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pp-ctl.three { grid-template-columns: 1fr 1fr 1fr; }
+  .pp-ctl.three .btn { margin: 0; padding: 12px 4px; font-size: 0.9rem; }
+  .pp-big { font: inherit; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: .5px; min-height: 76px; border: none; border-radius: 16px; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; color: #10151c; }
+  .pp-big.parry { background: #ffd34d; }
+  .pp-big.dodge { background: #9be7ff; }
+  .pp-big:active { transform: scale(0.97); }
+  .pp-big:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  .pp-after { display: grid; gap: 8px; }
+  .pp-after .btn { margin: 0; }
+  @media (prefers-reduced-motion: reduce) { .pp-bar span { transition: none; } .pp-big:active { transform: none; } }
+
   /* ---- Emoji Sayings ---- */
   .es [hidden] { display: none !important; }
   .es .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
@@ -672,6 +702,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.3 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></span>
         <h2>Emoji Sayings</h2>
         <p>Each row of emoji stands for a famous saying. Guess the words one at a time, or the whole sentence, to crack the code.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c6);" data-goto="parry">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h2>Perfect Parry</h2>
+        <p>Monsters attack in tricky combos. Parry each hit at the perfect moment, then strike back. Ten foes stand between you and the final boss.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -1208,6 +1245,51 @@
         <p class="bs-stats" id="es-stats" style="text-align:center;"></p>
         <button class="btn" id="es-next" type="button">Next saying →</button>
       </div>
+    </div>
+  </section>
+
+  <!-- ================= PERFECT PARRY ================= -->
+  <section id="parry" class="screen pp">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Perfect Parry</span></div>
+
+    <div class="panel" id="pp-intro">
+      <div class="bs-kicker">Timing battle</div>
+      <div class="dd-big">Perfect Parry</div>
+      <ul class="wr-how">
+        <li>Monsters attack in combos. Tap <b>PARRY</b> right as each hit lands, when the shrinking ring touches the circle.</li>
+        <li>Parry every hit in a combo to <b>counterattack</b>!</li>
+        <li><b style="color:var(--bad)">Red</b> attacks can’t be parried. <b>DODGE</b> those instead.</li>
+        <li>Sneaky attacks have no ring at all. Watch for the ✦ glint.</li>
+        <li>Each parry gives you ⚡ energy for a Special attack or a Heal.</li>
+        <li>Keyboard: Space = parry, Shift or K = dodge, 1–3 = actions.</li>
+      </ul>
+      <div class="pp-diffs" role="group" aria-label="Difficulty">
+        <button class="pp-diff" type="button" data-d="easy">Easy</button>
+        <button class="pp-diff" type="button" data-d="normal">Normal</button>
+        <button class="pp-diff" type="button" data-d="hard">Hard</button>
+      </div>
+      <button class="btn ghost" id="pp-sound" type="button">🔊 Sound on</button>
+      <div class="bs-stats" id="pp-stats"></div>
+      <button class="btn" id="pp-start" type="button">Fight! →</button>
+    </div>
+
+    <div id="pp-play" hidden>
+      <div class="pp-hud">
+        <div><div class="pp-label"><b>You</b><span id="pp-heroNum"></span></div><div class="pp-bar"><span id="pp-heroHp" class="hero"></span></div><div class="pp-energy" id="pp-energy"></div></div>
+        <div><div class="pp-label"><b id="pp-enName"></b><span id="pp-enNum"></span></div><div class="pp-bar"><span id="pp-enHp" class="foe"></span></div></div>
+      </div>
+      <canvas id="pp-canvas" role="img" aria-label="Battle scene: you on the left, the monster on the right"></canvas>
+      <p class="pp-msg" id="pp-msg" role="status" aria-live="polite"></p>
+      <div class="pp-ctl" id="pp-defend" hidden>
+        <button class="pp-big dodge" id="pp-dodgeBtn" type="button">💨 DODGE</button>
+        <button class="pp-big parry" id="pp-parryBtn" type="button">🛡️ PARRY</button>
+      </div>
+      <div class="pp-ctl three" id="pp-act" hidden>
+        <button class="btn" id="pp-attack" type="button">⚔️ Attack</button>
+        <button class="btn" id="pp-special" type="button">✨ Special (3⚡)</button>
+        <button class="btn" id="pp-heal" type="button">💚 Heal (2⚡)</button>
+      </div>
+      <div class="pp-after" id="pp-after" hidden></div>
     </div>
   </section>
 
@@ -4333,7 +4415,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -7458,6 +7540,510 @@
     $('quit').addEventListener('click', function () { if (g && !g.over) finish(false, true); });
     $('next').addEventListener('click', newPuzzle);
     window.registerHook('emoji', function () { if (!g || g.over) newPuzzle(); });
+  })();
+
+  // ============ Perfect Parry ============
+  (function () {
+    var KEY = 'funvault-parry-v1';
+    // Timing windows in ms around the moment a hit lands: [how early, how late].
+    var DIFF = {
+      easy:   { name: 'Easy',   parry: [170, 140], dodge: [260, 170], whiff: 250, hide: false, dmg: 0.7 },
+      normal: { name: 'Normal', parry: [120, 100], dodge: [210, 140], whiff: 380, hide: true,  dmg: 1 },
+      hard:   { name: 'Hard',   parry: [80, 70],   dodge: [160, 110], whiff: 450, hide: true,  dmg: 1.3 }
+    };
+    // Each move is a list of hits. w = ms from the previous hit (or from the wind-up) to this hit,
+    // f = a fake-out pause in the middle of the wind-up, r = red (can only be dodged), h = no timing ring.
+    var ENEMIES = [
+      { name: 'Training Dummy', kind: 'dummy', hp: 40, dmg: 6, col: '#c8a46b', sky: ['#1f2a44', '#3d4a6b'], moves: [
+        { n: 'Wobbly Bonk', s: [{ w: 1100 }] },
+        { n: 'Double Bonk', s: [{ w: 1000 }, { w: 1000 }] }] },
+      { name: 'Mud Goblin', kind: 'goblin', hp: 60, dmg: 8, col: '#6aa84f', sky: ['#22332a', '#45604d'], moves: [
+        { n: 'Sneaky Swipe', s: [{ w: 900 }, { w: 700 }] },
+        { n: 'Mud Flurry', s: [{ w: 1000 }, { w: 600 }, { w: 900 }] },
+        { n: 'Fake-Out Smack', s: [{ w: 1100, f: 450 }] }] },
+      { name: 'Thorn Wolf', kind: 'wolf', hp: 75, dmg: 9, col: '#8d7b6a', sky: ['#2a2238', '#55426b'], moves: [
+        { n: 'Bramble Bite', s: [{ w: 800 }, { w: 450 }, { w: 450 }] },
+        { n: 'Pounce', s: [{ w: 900 }, { w: 350 }, { w: 800 }] },
+        { n: 'Howling Rush', s: [{ w: 700 }, { w: 700 }, { w: 350 }, { w: 350 }] }] },
+      { name: 'Clockwork Knight', kind: 'knight', hp: 90, dmg: 10, col: '#b8b0a0', sky: ['#2e2a24', '#5c5345'], moves: [
+        { n: 'Tick-Tock Slash', s: [{ w: 900 }, { w: 500 }, { w: 500 }, { w: 500 }, { w: 1100 }] },
+        { n: 'Wound-Up Cleave', s: [{ w: 800 }, { w: 800, f: 500 }, { w: 400 }] }] },
+      { name: 'Ink Wraith', kind: 'wraith', hp: 100, dmg: 11, col: '#7c6cff', sky: ['#120f24', '#2c2552'], moves: [
+        { n: 'Vanishing Claw', s: [{ w: 900 }, { w: 600, h: 1 }, { w: 600 }] },
+        { n: 'Shadow Stab', s: [{ w: 1000, h: 1 }] },
+        { n: 'Blot Barrage', s: [{ w: 700 }, { w: 400 }, { w: 900, h: 1 }] }] },
+      { name: 'Ember Golem', kind: 'golem', hp: 120, dmg: 13, col: '#e0663a', sky: ['#2a1410', '#5a2a1c'], moves: [
+        { n: 'Magma Slam', s: [{ w: 1100, r: 1 }] },
+        { n: 'Cinder Combo', s: [{ w: 800 }, { w: 600 }, { w: 1000, r: 1 }] },
+        { n: 'Quake Punch', s: [{ w: 900, r: 1 }, { w: 500 }] }] },
+      { name: 'Storm Harpy', kind: 'harpy', hp: 120, dmg: 9, col: '#4db6ff', sky: ['#14243a', '#2f4f75'], moves: [
+        { n: 'Feather Flurry', s: [{ w: 800 }, { w: 250 }, { w: 250 }, { w: 250 }, { w: 250 }] },
+        { n: 'Gust Strike', s: [{ w: 700 }, { w: 300 }, { w: 700 }, { w: 300 }] },
+        { n: 'Thunder Dive', s: [{ w: 900 }, { w: 220 }, { w: 220 }, { w: 650, r: 1 }] }] },
+      { name: 'Masked Duelist', kind: 'duelist', hp: 140, dmg: 12, col: '#e5e7eb', sky: ['#1d1d24', '#3f3a4d'], moves: [
+        { n: 'Liar’s Lunge', s: [{ w: 1000, f: 600 }, { w: 400 }, { w: 1000, f: 300 }] },
+        { n: 'Stutter Step', s: [{ w: 600 }, { w: 1200 }, { w: 300 }] },
+        { n: 'Masquerade', s: [{ w: 900 }, { w: 450, h: 1 }, { w: 900, f: 500 }] }] },
+      { name: 'Crystal Serpent', kind: 'serpent', hp: 160, dmg: 13, col: '#3cc7c0', sky: ['#0f2526', '#1f4d4f'], moves: [
+        { n: 'Prism Coil', s: [{ w: 800 }, { w: 350 }, { w: 350 }, { w: 700, r: 1 }, { w: 350 }, { w: 350 }] },
+        { n: 'Glass Fang', s: [{ w: 1000, h: 1 }, { w: 500 }, { w: 500, r: 1 }] },
+        { n: 'Shatter Spin', s: [{ w: 700 }, { w: 300 }, { w: 300 }, { w: 300 }, { w: 900, f: 400 }] }] },
+      { name: 'The Eclipse King', kind: 'king', hp: 240, dmg: 15, col: '#ffd34d', boss: true, sky: ['#0b0a12', '#2a1d3d'], moves: [
+        { n: 'Corona Combo', s: [{ w: 900 }, { w: 300 }, { w: 300 }, { w: 900, f: 500 }, { w: 400, r: 1 }] },
+        { n: 'Total Darkness', s: [{ w: 1100, h: 1 }, { w: 450, h: 1 }, { w: 450 }] },
+        { n: 'Solar Flare', s: [{ w: 700 }, { w: 700 }, { w: 250 }, { w: 250 }, { w: 1000, r: 1 }, { w: 300 }] }] }
+    ];
+    var HERO_MAX = 100, EN_MAX = 6;
+
+    function $(id) { return document.getElementById('pp-' + id); }
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var stats = { best: 0, parries: 0, counters: 0, wins: 0, diff: 'normal', sound: true };
+    try {
+      var st = JSON.parse(localStorage.getItem(KEY) || '{}');
+      ['best', 'parries', 'counters', 'wins'].forEach(function (k) { stats[k] = Number(st[k]) || 0; });
+      if (DIFF[st.diff]) stats.diff = st.diff;
+      if (st.sound === false) stats.sound = false;
+    } catch (e) {}
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(stats)); } catch (e) {} }
+
+    // ---- sound (tiny synth, no files) ----
+    var actx = null;
+    function audio() {
+      if (!stats.sound) return null;
+      try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) { actx = null; }
+      return actx;
+    }
+    function tone(freq, dur, type, vol, slide) {
+      var a = audio(); if (!a) return;
+      var o = a.createOscillator(), gn = a.createGain(), t = a.currentTime;
+      o.type = type || 'square'; o.frequency.setValueAtTime(freq, t);
+      if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+      gn.gain.setValueAtTime(vol || 0.12, t); gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(gn); gn.connect(a.destination); o.start(t); o.stop(t + dur + 0.02);
+    }
+    var SFX = {
+      parry: function () { tone(1320, 0.12, 'square', 0.1); tone(1980, 0.18, 'triangle', 0.08); },
+      dodge: function () { tone(520, 0.14, 'sine', 0.08, 900); },
+      hit: function () { tone(160, 0.2, 'sawtooth', 0.14, 70); },
+      wind: function () { tone(240, 0.22, 'triangle', 0.05, 420); },
+      red: function () { tone(110, 0.3, 'sawtooth', 0.07, 220); },
+      counter: function () { tone(660, 0.1, 'square', 0.1); setTimeout(function () { tone(990, 0.22, 'square', 0.1); }, 90); },
+      swing: function () { tone(300, 0.12, 'triangle', 0.08, 120); },
+      heal: function () { tone(523, 0.12, 'sine', 0.08); setTimeout(function () { tone(784, 0.2, 'sine', 0.08); }, 110); },
+      win: function () { [523, 659, 784, 1047].forEach(function (f, i) { setTimeout(function () { tone(f, 0.18, 'triangle', 0.09); }, i * 120); }); },
+      lose: function () { [392, 330, 262].forEach(function (f, i) { setTimeout(function () { tone(f, 0.25, 'triangle', 0.09); }, i * 180); }); }
+    };
+    function sfx(n) { try { SFX[n](); } catch (e) {} }
+
+    // ---- game clock: advances only while frames run, so a hidden tab pauses the fight ----
+    var gt = 0, lastReal = 0, raf = 0;
+    function nowGT() { return gt + Math.min(50, Math.max(0, performance.now() - lastReal)); }
+
+    var B = null, cv = $('canvas'), ctx = cv.getContext('2d'), W = 0, H = 0, FONT = 'sans-serif';
+    function show(v) { ['intro', 'play'].forEach(function (k) { $(k).hidden = k !== v; }); window.scrollTo(0, 0); }
+    function controls(which) { ['defend', 'act', 'after'].forEach(function (k) { $(k).hidden = k !== which; }); }
+    function say(t) { $('msg').textContent = t; }
+
+    function intro() {
+      stop();
+      Array.prototype.forEach.call(document.querySelectorAll('#parry .pp-diff'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-d') === stats.diff)); });
+      $('sound').setAttribute('aria-pressed', String(stats.sound));
+      $('sound').textContent = stats.sound ? '🔊 Sound on' : '🔇 Sound off';
+      $('stats').textContent = 'Best: beat ' + stats.best + ' of ' + ENEMIES.length + ' foes · Parries: ' + stats.parries + ' · Counterattacks: ' + stats.counters + (stats.wins ? ' · Parry Master ×' + stats.wins : '');
+      show('intro');
+    }
+    function resize() {
+      var r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function startRun(stage, hp) {
+      B = { stage: stage || 0, hp: hp || HERO_MAX, energy: 0, diff: stats.diff, fx: [], shake: 0, pose: 'idle', poseT: 0, epose: 'idle', eposeT: 0,
+            strikes: [], lock: 0, phase: 'intro', timer: 0, special: null, enemyLunge: 0, parriesThis: 0 };
+      show('play'); resize();
+      FONT = getComputedStyle(document.body).fontFamily || 'sans-serif';
+      lastReal = performance.now();
+      if (!raf) raf = requestAnimationFrame(frame);
+      beginFight();
+    }
+    function beginFight() {
+      var en = ENEMIES[B.stage];
+      B.en = en; B.ehp = en.hp; B.strikes = []; B.special = null; B.pose = 'idle'; B.epose = 'idle';
+      hud();
+      controls('none');
+      say((en.boss ? 'Final boss: ' : 'Foe ' + (B.stage + 1) + ' of ' + ENEMIES.length + ': ') + en.name + '!' +
+        (B.stage === 0 ? ' Tap PARRY right when the ring hits the circle.' : B.stage === 4 ? ' Watch out: some attacks have no ring. Watch the glint!' : B.stage === 5 ? ' Red attacks can’t be parried. DODGE them!' : ''));
+      B.phase = 'wait'; B.timer = gt + 1600; B.after = enemyTurn;
+    }
+    function hud() {
+      $('heroHp').style.width = Math.max(0, B.hp / HERO_MAX * 100) + '%';
+      $('heroNum').textContent = Math.max(0, Math.round(B.hp)) + ' HP';
+      var pips = ''; for (var i = 0; i < EN_MAX; i++) pips += i < B.energy ? '⚡' : '·';
+      $('energy').textContent = pips;
+      $('energy').setAttribute('aria-label', B.energy + ' energy');
+      $('enName').textContent = B.en.name;
+      $('enHp').style.width = Math.max(0, B.ehp / B.en.hp * 100) + '%';
+      $('enNum').textContent = Math.max(0, Math.round(B.ehp)) + ' HP';
+      $('special').disabled = B.energy < 3; $('heal').disabled = B.energy < 2 || B.hp >= HERO_MAX;
+    }
+    function popup(text, col, who, big) { B.fx.push({ text: text, col: col, who: who, t: 0, big: !!big }); }
+
+    // ---- enemy turn ----
+    function enemyTurn() {
+      var en = B.en, mv = pick(en.moves), speed = (en.boss && B.ehp <= en.hp / 2) ? 0.85 : 1, D = DIFF[B.diff];
+      var t = gt + 700;
+      B.strikes = [];
+      mv.s.forEach(function (s, i) {
+        var gap = Math.max(i === 0 ? 650 : 200, s.w * speed), feint = (s.f || 0) * speed;
+        var start = i === 0 ? t : B.strikes[i - 1].impact;
+        B.strikes.push({ start: start, impact: start + gap + feint, feint: feint, red: !!s.r, hidden: !!s.h && D.hide, res: null, cued: false });
+      });
+      B.move = mv.n; B.phase = 'enemy'; B.lock = 0; B.parriesThis = 0;
+      say(en.name + ' uses ' + mv.n + '!');
+      controls('defend');
+    }
+    function current() { for (var i = 0; i < B.strikes.length; i++) if (!B.strikes[i].res) return B.strikes[i]; return null; }
+    function press(kind) {
+      if (!B) return;
+      if (B.phase === 'special') { if (kind === 'parry') specialHit(); return; }
+      if (B.phase !== 'enemy') return;
+      var t = nowGT(), s = current();
+      if (!s || t < B.lock || t < s.start) { if (s && t >= B.lock && t < s.start) whiff(t); return; }
+      var D = DIFF[B.diff], win = kind === 'parry' ? D.parry : D.dodge, d = t - s.impact;
+      if (d >= -win[0] && d <= win[1]) {
+        if (kind === 'parry' && s.red) { s.res = 'hit'; takeHit(s, 'Red attacks can’t be parried!'); B.lock = t + 120; return; }
+        s.res = kind; B.lock = t + 110; B.enemyLunge = 1;
+        if (kind === 'parry') {
+          B.pose = 'parry'; B.poseT = gt; B.parriesThis += 1; stats.parries += 1; B.energy = Math.min(EN_MAX, B.energy + 1);
+          popup(Math.abs(d) <= win[0] * 0.35 ? 'PERFECT!' : 'PARRY!', '#ffe082', 'hero', true); sfx('parry');
+        } else { B.pose = 'dodge'; B.poseT = gt; popup('DODGE', '#9be7ff', 'hero'); sfx('dodge'); }
+        hud();
+      } else if (d < -win[0]) whiff(t);
+    }
+    function whiff(t) {
+      B.lock = t + DIFF[B.diff].whiff; B.pose = 'whiff'; B.poseT = gt;
+      popup('Too early!', '#cbd5e1', 'hero');
+    }
+    function takeHit(s, note) {
+      var dmg = Math.round(B.en.dmg * DIFF[B.diff].dmg * (B.en.boss && B.ehp <= B.en.hp / 2 ? 1.15 : 1) * rnd(0.9, 1.1));
+      B.hp = Math.max(0, B.hp - dmg); B.pose = 'hurt'; B.poseT = gt; B.enemyLunge = 1;
+      if (!reduceMotion) B.shake = 0.25;
+      popup('−' + dmg, '#ff6b6b', 'hero', true); sfx('hit');
+      if (note) say(note);
+      hud();
+    }
+    function enemyFrame() {
+      var D = DIFF[B.diff], late = D.dodge[1];
+      B.strikes.forEach(function (s) {
+        if (!s.cued && gt >= s.start) { s.cued = true; sfx(s.red ? 'red' : 'wind'); }
+        if (!s.res && gt > s.impact + late) { s.res = 'hit'; takeHit(s); }
+      });
+      if (B.hp <= 0) { lose(); return; }
+      var last = B.strikes[B.strikes.length - 1];
+      if (last.res && gt > last.impact + late + 300) {
+        var clean = B.strikes.every(function (s) { return s.res === 'parry' || (s.red && s.res === 'dodge'); }) && B.parriesThis > 0;
+        if (clean) {
+          var dmg = 14 + 5 * B.parriesThis;
+          B.phase = 'anim'; controls('none'); say('Perfect defense! COUNTERATTACK!');
+          B.pose = 'lunge'; B.poseT = gt; stats.counters += 1; persist(); sfx('counter');
+          later(350, function () { damageEnemy(dmg, 'COUNTER −' + dmg); });
+          later(1100, playerTurn);
+        } else playerTurn();
+      }
+    }
+    function later(ms, fn) { B.queue = B.queue || []; B.queue.push({ at: gt + ms, fn: fn }); }
+    function damageEnemy(dmg, label) {
+      B.ehp = Math.max(0, B.ehp - dmg); B.epose = 'hurt'; B.eposeT = gt;
+      popup(label || '−' + dmg, '#ffd34d', 'enemy', true); hud();
+      if (B.ehp <= 0) { B.queue = []; win(); }
+    }
+    // ---- player turn ----
+    function playerTurn() {
+      if (!B || B.phase === 'won' || B.phase === 'lost') return;
+      B.phase = 'player'; B.strikes = [];
+      persist();
+      say('Your turn! Attack, or spend ⚡ energy from parries.');
+      hud(); controls('act');
+    }
+    function act(which) {
+      if (!B || B.phase !== 'player') return;
+      if (which === 'attack') {
+        controls('none'); B.phase = 'anim'; B.pose = 'lunge'; B.poseT = gt; sfx('swing'); say('You attack!');
+        later(300, function () { damageEnemy(Math.round(rnd(10, 15))); });
+        later(1000, function () { if (B.phase === 'anim') { B.phase = 'wait'; B.timer = gt; B.after = enemyTurn; } });
+      } else if (which === 'special' && B.energy >= 3) {
+        B.energy -= 3; hud(); controls('defend');
+        B.phase = 'special'; B.special = { t0: gt, speed: 0.0011 + 0.00012 * B.stage };
+        say('SPECIAL! Tap PARRY when the needle is in the gold zone!');
+      } else if (which === 'heal' && B.energy >= 2 && B.hp < HERO_MAX) {
+        B.energy -= 2; B.hp = Math.min(HERO_MAX, B.hp + 35); sfx('heal'); popup('+35', '#7ee2a8', 'hero', true); hud();
+        controls('none'); B.phase = 'anim'; say('You catch your breath.');
+        later(800, function () { if (B.phase === 'anim') { B.phase = 'wait'; B.timer = gt; B.after = enemyTurn; } });
+      }
+    }
+    function needle() { var p = ((nowGT() - B.special.t0) * B.special.speed) % 2; return p > 1 ? 2 - p : p; }
+    function specialHit() {
+      if (!B.special || B.special.done) return;
+      var x = needle(), off = Math.abs(x - 0.5), dmg, label;
+      if (off <= 0.05) { dmg = 42; label = 'CRITICAL −42'; } else if (off <= 0.15) { dmg = 26; label = 'GREAT −26'; } else { dmg = 10; label = 'Weak −10'; }
+      B.special.done = true; B.special.hitX = x;
+      controls('none'); B.phase = 'anim'; B.pose = 'lunge'; B.poseT = gt; sfx('counter');
+      later(300, function () { damageEnemy(dmg, label); });
+      later(1200, function () { B.special = null; if (B.phase === 'anim') { B.phase = 'wait'; B.timer = gt; B.after = enemyTurn; } });
+    }
+    function win() {
+      B.phase = 'won'; B.epose = 'dead'; B.eposeT = gt; sfx('win');
+      stats.best = Math.max(stats.best, B.stage + 1);
+      var last = B.stage === ENEMIES.length - 1;
+      if (last) stats.wins += 1;
+      persist();
+      say(last ? '🏆 You beat The Eclipse King! You are a PARRY MASTER!' : 'Victory! You beat ' + B.en.name + '. You recover 30 HP.');
+      var box = $('after'); box.innerHTML = '';
+      function btn(label, cls, fn) { var b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (cls ? ' ' + cls : ''); b.textContent = label; b.addEventListener('click', fn); box.appendChild(b); }
+      if (last) { btn('Play again', '', function () { startRun(0); }); btn('Back to start', 'ghost', intro); }
+      else btn('Next foe: ' + ENEMIES[B.stage + 1].name + ' →', '', function () { B.stage += 1; B.hp = Math.min(HERO_MAX, B.hp + 30); B.energy = Math.min(EN_MAX, B.energy); beginFight(); });
+      controls('after');
+    }
+    function lose() {
+      B.phase = 'lost'; B.pose = 'down'; B.poseT = gt; sfx('lose');
+      persist();
+      say('Defeated by ' + B.en.name + '… Watch its moves and try again!');
+      var box = $('after'); box.innerHTML = '';
+      var stage = B.stage;
+      [['Retry this fight (full HP)', '', function () { startRun(stage); }], ['Back to start', 'ghost', intro]].forEach(function (x) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (x[1] ? ' ' + x[1] : ''); b.textContent = x[0]; b.addEventListener('click', x[2]); box.appendChild(b);
+      });
+      controls('after');
+    }
+
+    // ---- loop + drawing ----
+    function frame(ts) {
+      raf = 0;
+      if (!B) return;
+      var real = performance.now(), dt = Math.min(50, real - lastReal);
+      lastReal = real; gt += dt;
+      if (B.phase === 'wait' && gt >= B.timer) { B.phase = 'busy'; var f = B.after; B.after = null; f(); }
+      if (B.phase === 'enemy') enemyFrame();
+      if (B.phase === 'special' && B.special && !B.special.done && gt - B.special.t0 > 6000) specialHit();
+      if (B.queue && B.queue.length) {
+        var due = B.queue.filter(function (q) { return gt >= q.at; });
+        B.queue = B.queue.filter(function (q) { return gt < q.at; });
+        due.forEach(function (q) { if (B.phase !== 'won' && B.phase !== 'lost') q.fn(); });
+      }
+      B.fx = B.fx.filter(function (f) { f.t += dt / 1000; return f.t < 1; });
+      if (B.shake > 0) B.shake -= dt / 1000;
+      B.enemyLunge = Math.max(0, B.enemyLunge - dt / 220);
+      draw();
+      raf = requestAnimationFrame(frame);
+    }
+    function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; B = null; }
+
+    function draw() {
+      var en = B.en, hx = W * 0.27, ex = W * 0.72, gy = H * 0.72, s = Math.min(W / 380, H / 300);
+      ctx.save();
+      if (B.shake > 0) ctx.translate((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10);
+      var sky = ctx.createLinearGradient(0, 0, 0, H);
+      sky.addColorStop(0, en.sky[0]); sky.addColorStop(1, en.sky[1]);
+      ctx.fillStyle = sky; ctx.fillRect(-12, -12, W + 24, H + 24);
+      ctx.fillStyle = 'rgba(255,255,255,0.05)';
+      for (var i = 0; i < 18; i++) { var px = (i * 97 + gt * 0.01 * (i % 3 + 1)) % (W + 40) - 20, py = (i * 53) % (gy - 20); ctx.fillRect(px, py, 2, 2); }
+      ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(-12, gy, W + 24, H - gy + 12);
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+
+      // enemy
+      var s0 = current(), glow = null, lean = 0, lunge = 0;
+      if (B.phase === 'enemy' && s0 && gt >= s0.start) {
+        var p = progress(s0);
+        glow = s0.red ? '#ff4d4d' : '#ffffff';
+        lean = p < 0.75 ? -p * 18 : -18 + (p - 0.75) * 4 * 18;
+        if (s0.impact - gt < 160) lunge = 1 - Math.max(0, s0.impact - gt) / 160;
+      }
+      lunge = Math.max(lunge, B.enemyLunge);
+      var exNow = ex - lunge * (ex - hx - 70 * s) + lean * s;
+      drawEnemy(en, exNow, gy, s, glow);
+      if (B.phase === 'enemy' && s0 && s0.hidden && gt >= s0.start && s0.impact - gt < 420 && s0.impact - gt > 260) drawGlint(exNow - 30 * s, gy - 70 * s, s);
+
+      // hero
+      drawHero(hx, gy, s);
+      // timing ring
+      if (B.phase === 'enemy' && s0 && gt >= s0.start && !s0.hidden) {
+        var pr = progress(s0), cy = gy - 46 * s, r1 = 30 * s, r0 = 110 * s;
+        ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx, cy, r1, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = s0.red ? '#ff4d4d' : '#ffffff'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(hx, cy, r1 + (r0 - r1) * (1 - Math.min(1, pr)), 0, Math.PI * 2); ctx.stroke();
+        if (s0.red) { ctx.fillStyle = '#ff4d4d'; ctx.font = '700 ' + Math.round(13 * s + 4) + 'px ' + FONT; ctx.textAlign = 'center'; ctx.fillText('DODGE!', hx, cy - r0 - 6); }
+      }
+      // special needle
+      if (B.special) {
+        var bx = W * 0.12, bw = W * 0.76, by = H * 0.12, bh = 18;
+        ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(bx - 4, by - 4, bw + 8, bh + 8);
+        ctx.fillStyle = '#5b6472'; ctx.fillRect(bx, by, bw, bh);
+        ctx.fillStyle = '#c9a227'; ctx.fillRect(bx + bw * 0.35, by, bw * 0.3, bh);
+        ctx.fillStyle = '#ffe082'; ctx.fillRect(bx + bw * 0.45, by, bw * 0.1, bh);
+        var nx = bx + bw * (B.special.done ? B.special.hitX : needle());
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(nx - 2, by - 8, 4, bh + 16);
+      }
+      // popups
+      B.fx.forEach(function (f) {
+        var x = f.who === 'hero' ? hx : ex, y = gy - 120 * s - f.t * 40;
+        ctx.globalAlpha = 1 - f.t;
+        ctx.font = '700 ' + Math.round((f.big ? 22 : 16) * Math.max(0.8, s)) + 'px ' + FONT; ctx.textAlign = 'center';
+        ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.strokeText(f.text, x, y);
+        ctx.fillStyle = f.col; ctx.fillText(f.text, x, y);
+        ctx.globalAlpha = 1;
+      });
+      ctx.restore();
+    }
+    function progress(s) {
+      var L = s.impact - s.start - s.feint, t = gt - s.start;
+      if (t < 0.6 * L) return t / L;
+      if (t < 0.6 * L + s.feint) return 0.6;
+      return (t - s.feint) / L;
+    }
+    function drawGlint(x, y, s) {
+      ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, r = i % 2 ? 4 * s : 14 * s; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
+      ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    function drawHero(x, gy, s) {
+      var age = gt - B.poseT, pose = B.pose;
+      if ((pose === 'parry' || pose === 'dodge' || pose === 'whiff' || pose === 'hurt') && age > 380) pose = B.pose = 'idle';
+      if (pose === 'lunge' && age > 700) pose = B.pose = 'idle';
+      var dx = 0, bob = Math.sin(gt / 300) * 2 * s, sword = -0.5;
+      if (pose === 'dodge') dx = -36 * s * Math.sin(Math.min(1, age / 380) * Math.PI);
+      if (pose === 'hurt') dx = -10 * s * Math.sin(Math.min(1, age / 380) * Math.PI);
+      if (pose === 'lunge') { dx = (W * 0.3) * Math.sin(Math.min(1, age / 700) * Math.PI); sword = 0.1; }
+      if (pose === 'parry') sword = -1.25;
+      if (pose === 'whiff') sword = -1.0;
+      if (pose === 'down') { ctx.save(); ctx.translate(x, gy); ctx.rotate(-1.3); ctx.translate(-x, -gy); }
+      var X = x + dx, Y = gy + bob;
+      ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(X, gy + 4, 22 * s, 6 * s, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = pose === 'hurt' && age < 200 ? '#ff6b6b' : '#3b82f6';
+      ctx.beginPath(); ctx.moveTo(X - 6 * s, Y - 58 * s); ctx.lineTo(X - 26 * s, Y); ctx.lineTo(X + 10 * s, Y); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#e5e7eb'; ctx.fillRect(X - 7 * s, Y - 56 * s, 14 * s, 44 * s);
+      ctx.fillStyle = '#1d2430'; ctx.fillRect(X - 7 * s, Y - 14 * s, 5 * s, 14 * s); ctx.fillRect(X + 2 * s, Y - 14 * s, 5 * s, 14 * s);
+      ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(X, Y - 66 * s, 10 * s, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#3a2e22'; ctx.beginPath(); ctx.arc(X, Y - 69 * s, 10 * s, Math.PI, 0); ctx.fill();
+      ctx.strokeStyle = '#dbe4f0'; ctx.lineWidth = 3 * s; ctx.lineCap = 'round';
+      var hxp = X + 8 * s, hyp = Y - 40 * s;
+      ctx.beginPath(); ctx.moveTo(hxp, hyp); ctx.lineTo(hxp + Math.cos(sword) * 48 * s, hyp + Math.sin(sword) * 48 * s); ctx.stroke();
+      ctx.strokeStyle = '#c9a227'; ctx.beginPath(); ctx.moveTo(hxp - 5 * s, hyp + 4 * s); ctx.lineTo(hxp + 5 * s, hyp - 4 * s); ctx.stroke();
+      if (B.pose === 'parry' && age < 220) {
+        ctx.strokeStyle = '#ffe082'; ctx.lineWidth = 2;
+        var sx = hxp + Math.cos(sword) * 36 * s, sy = hyp + Math.sin(sword) * 36 * s;
+        for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, r = (10 + age / 10) * s; ctx.beginPath(); ctx.moveTo(sx + Math.cos(a) * 4, sy + Math.sin(a) * 4); ctx.lineTo(sx + Math.cos(a) * r, sy + Math.sin(a) * r); ctx.stroke(); }
+      }
+      if (pose === 'down') ctx.restore();
+    }
+    function drawEnemy(en, x, gy, s, glow) {
+      var age = gt - B.eposeT, dead = B.epose === 'dead', hurt = B.epose === 'hurt' && age < 250;
+      if (dead) { ctx.globalAlpha = Math.max(0, 1 - age / 900); }
+      var bob = Math.sin(gt / 420) * 3 * s, y = gy + bob, c = hurt ? '#ffffff' : en.col;
+      ctx.save();
+      if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = 22; }
+      ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(x, gy + 4, 34 * s, 7 * s, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = c; ctx.strokeStyle = c;
+      var eye = function (ex, ey, r, col) { ctx.fillStyle = col || '#1d2430'; ctx.beginPath(); ctx.arc(ex, ey, r * s, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = c; };
+      switch (en.kind) {
+        case 'dummy':
+          ctx.fillStyle = '#7a5c3a'; ctx.fillRect(x - 3 * s, y - 40 * s, 6 * s, 40 * s);
+          ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x, y - 62 * s, 22 * s, 28 * s, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillRect(x - 30 * s, y - 66 * s, 60 * s, 8 * s);
+          eye(x - 7 * s, y - 70 * s, 3); eye(x + 7 * s, y - 70 * s, 3); break;
+        case 'goblin':
+          ctx.beginPath(); ctx.ellipse(x, y - 34 * s, 26 * s, 32 * s, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(x - 22 * s, y - 52 * s); ctx.lineTo(x - 40 * s, y - 70 * s); ctx.lineTo(x - 14 * s, y - 60 * s); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(x + 22 * s, y - 52 * s); ctx.lineTo(x + 40 * s, y - 70 * s); ctx.lineTo(x + 14 * s, y - 60 * s); ctx.fill();
+          eye(x - 9 * s, y - 44 * s, 4, '#ffe082'); eye(x + 9 * s, y - 44 * s, 4, '#ffe082');
+          ctx.fillStyle = '#5a3d22'; ctx.fillRect(x - 46 * s, y - 40 * s, 22 * s, 6 * s); break;
+        case 'wolf':
+          ctx.beginPath(); ctx.moveTo(x + 40 * s, y - 20 * s); ctx.lineTo(x - 30 * s, y - 34 * s); ctx.lineTo(x - 48 * s, y - 50 * s); ctx.lineTo(x - 52 * s, y - 30 * s); ctx.lineTo(x - 30 * s, y - 14 * s); ctx.lineTo(x + 34 * s, y - 6 * s); ctx.closePath(); ctx.fill();
+          ctx.fillRect(x - 24 * s, y - 16 * s, 6 * s, 16 * s); ctx.fillRect(x + 20 * s, y - 14 * s, 6 * s, 14 * s);
+          ctx.beginPath(); ctx.moveTo(x - 44 * s, y - 48 * s); ctx.lineTo(x - 40 * s, y - 62 * s); ctx.lineTo(x - 34 * s, y - 44 * s); ctx.fill();
+          eye(x - 42 * s, y - 40 * s, 3, '#ff6b6b');
+          ctx.strokeStyle = '#4b7a3a'; ctx.lineWidth = 2; for (var t = 0; t < 4; t++) { ctx.beginPath(); ctx.moveTo(x - 16 * s + t * 14 * s, y - 30 * s); ctx.lineTo(x - 12 * s + t * 14 * s, y - 40 * s); ctx.stroke(); } break;
+        case 'knight':
+          ctx.fillRect(x - 20 * s, y - 70 * s, 40 * s, 56 * s); ctx.fillRect(x - 16 * s, y - 14 * s, 12 * s, 14 * s); ctx.fillRect(x + 4 * s, y - 14 * s, 12 * s, 14 * s);
+          ctx.fillStyle = '#8a8170'; ctx.fillRect(x - 16 * s, y - 92 * s, 32 * s, 24 * s);
+          ctx.fillStyle = '#ffd34d'; ctx.fillRect(x - 12 * s, y - 84 * s, 24 * s, 4 * s);
+          ctx.strokeStyle = '#8a8170'; ctx.lineWidth = 3 * s; ctx.beginPath(); ctx.arc(x, y - 44 * s, 10 * s, 0, Math.PI * 2); ctx.stroke();
+          ctx.strokeStyle = '#dbe4f0'; ctx.lineWidth = 4 * s; ctx.beginPath(); ctx.moveTo(x - 22 * s, y - 50 * s); ctx.lineTo(x - 64 * s, y - 80 * s); ctx.stroke(); break;
+        case 'wraith':
+          ctx.globalAlpha *= 0.85;
+          ctx.beginPath(); ctx.moveTo(x - 28 * s, y - 10 * s);
+          for (var k = 0; k <= 6; k++) ctx.lineTo(x - 28 * s + k * 9.3 * s, y - (k % 2 ? 0 : 12) * s + Math.sin(gt / 150 + k) * 3 * s);
+          ctx.lineTo(x + 28 * s, y - 60 * s); ctx.arc(x, y - 60 * s, 28 * s, 0, Math.PI, true); ctx.closePath(); ctx.fill();
+          eye(x - 10 * s, y - 62 * s, 5, '#ffffff'); eye(x + 10 * s, y - 62 * s, 5, '#ffffff');
+          ctx.strokeStyle = c; ctx.lineWidth = 4 * s; ctx.beginPath(); ctx.moveTo(x - 26 * s, y - 40 * s); ctx.lineTo(x - 50 * s, y - 54 * s); ctx.stroke(); break;
+        case 'golem':
+          ctx.fillStyle = '#5b4a42'; ctx.fillRect(x - 30 * s, y - 64 * s, 60 * s, 50 * s); ctx.fillRect(x - 24 * s, y - 92 * s, 48 * s, 30 * s);
+          ctx.fillRect(x - 52 * s, y - 60 * s, 20 * s, 40 * s); ctx.fillRect(x + 32 * s, y - 60 * s, 20 * s, 40 * s);
+          ctx.fillRect(x - 26 * s, y - 14 * s, 18 * s, 14 * s); ctx.fillRect(x + 8 * s, y - 14 * s, 18 * s, 14 * s);
+          ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y - 40 * s, 10 * s, 0, Math.PI * 2); ctx.fill();
+          eye(x - 9 * s, y - 78 * s, 4, c); eye(x + 9 * s, y - 78 * s, 4, c); break;
+        case 'harpy':
+          ctx.beginPath(); ctx.ellipse(x, y - 50 * s, 16 * s, 26 * s, 0, 0, Math.PI * 2); ctx.fill();
+          var flap = Math.sin(gt / 90) * 10 * s;
+          ctx.beginPath(); ctx.moveTo(x - 10 * s, y - 60 * s); ctx.lineTo(x - 58 * s, y - 84 * s + flap); ctx.lineTo(x - 40 * s, y - 44 * s); ctx.closePath(); ctx.fill();
+          ctx.beginPath(); ctx.moveTo(x + 10 * s, y - 60 * s); ctx.lineTo(x + 58 * s, y - 84 * s + flap); ctx.lineTo(x + 40 * s, y - 44 * s); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = '#ffd34d'; ctx.beginPath(); ctx.moveTo(x - 6 * s, y - 70 * s); ctx.lineTo(x - 20 * s, y - 66 * s); ctx.lineTo(x - 6 * s, y - 62 * s); ctx.fill();
+          eye(x - 2 * s, y - 72 * s, 3, '#ffffff'); ctx.fillStyle = '#ffd34d'; ctx.fillRect(x - 10 * s, y - 26 * s, 4 * s, 26 * s); ctx.fillRect(x + 6 * s, y - 26 * s, 4 * s, 26 * s); break;
+        case 'duelist':
+          ctx.fillStyle = '#2b2b38'; ctx.beginPath(); ctx.moveTo(x, y - 74 * s); ctx.lineTo(x + 18 * s, y); ctx.lineTo(x - 18 * s, y); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x, y - 84 * s, 11 * s, 13 * s, 0, 0, Math.PI * 2); ctx.fill();
+          eye(x - 4 * s, y - 86 * s, 2); eye(x + 4 * s, y - 86 * s, 2);
+          ctx.fillStyle = '#7c2d3b'; ctx.fillRect(x - 14 * s, y - 100 * s, 28 * s, 6 * s); ctx.fillRect(x - 8 * s, y - 112 * s, 16 * s, 12 * s);
+          ctx.strokeStyle = '#dbe4f0'; ctx.lineWidth = 2.5 * s; ctx.beginPath(); ctx.moveTo(x - 10 * s, y - 48 * s); ctx.lineTo(x - 70 * s, y - 56 * s); ctx.stroke(); break;
+        case 'serpent':
+          ctx.lineWidth = 16 * s; ctx.lineCap = 'round'; ctx.strokeStyle = c;
+          ctx.beginPath(); ctx.moveTo(x + 40 * s, y - 6 * s); ctx.bezierCurveTo(x - 20 * s, y, x + 40 * s, y - 50 * s, x - 10 * s, y - 70 * s); ctx.stroke();
+          ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x - 18 * s, y - 76 * s, 16 * s, 11 * s, -0.3, 0, Math.PI * 2); ctx.fill();
+          eye(x - 24 * s, y - 80 * s, 3, '#ff4d4d');
+          ctx.fillStyle = '#e8fbff'; for (var q = 0; q < 4; q++) ctx.fillRect(x + (4 - q * 10) * s, y - (14 + q * 14) * s, 5 * s, 5 * s); break;
+        default: // king
+          ctx.fillStyle = '#1d1630'; ctx.beginPath(); ctx.arc(x, y - 96 * s, 34 * s, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = c; ctx.lineWidth = 3 * s; ctx.beginPath(); ctx.arc(x, y - 96 * s, 36 * s, 0, Math.PI * 2); ctx.stroke();
+          ctx.fillStyle = '#3d2d5c'; ctx.beginPath(); ctx.moveTo(x - 30 * s, y); ctx.lineTo(x - 18 * s, y - 80 * s); ctx.lineTo(x + 18 * s, y - 80 * s); ctx.lineTo(x + 30 * s, y); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = '#e5e7eb'; ctx.beginPath(); ctx.arc(x, y - 92 * s, 12 * s, 0, Math.PI * 2); ctx.fill();
+          eye(x - 4 * s, y - 93 * s, 2.5, '#ff4d4d'); eye(x + 4 * s, y - 93 * s, 2.5, '#ff4d4d');
+          ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x - 12 * s, y - 104 * s); ctx.lineTo(x - 12 * s, y - 116 * s); ctx.lineTo(x - 5 * s, y - 108 * s); ctx.lineTo(x, y - 118 * s); ctx.lineTo(x + 5 * s, y - 108 * s); ctx.lineTo(x + 12 * s, y - 116 * s); ctx.lineTo(x + 12 * s, y - 104 * s); ctx.closePath(); ctx.fill();
+          ctx.strokeStyle = c; ctx.lineWidth = 5 * s; ctx.beginPath(); ctx.moveTo(x - 20 * s, y - 60 * s); ctx.lineTo(x - 76 * s, y - 70 * s); ctx.stroke();
+      }
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+
+    // ---- input ----
+    function bindPress(el, kind) {
+      el.addEventListener('pointerdown', function (e) { e.preventDefault(); press(kind); });
+      el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); press(kind); } });
+    }
+    bindPress($('parryBtn'), 'parry');
+    bindPress($('dodgeBtn'), 'dodge');
+    cv.addEventListener('pointerdown', function (e) { e.preventDefault(); press('parry'); });
+    window.addEventListener('keydown', function (e) {
+      if (!B || !document.getElementById('parry').classList.contains('active') || e.repeat) return;
+      var k = e.key;
+      if (k === ' ' || k === 'j' || k === 'J' || k === 'ArrowUp') { e.preventDefault(); press('parry'); }
+      else if (k === 'Shift' || k === 'k' || k === 'K' || k === 'ArrowDown' || k === 'd' || k === 'D') { e.preventDefault(); press('dodge'); }
+      else if (B.phase === 'player' && (k === '1' || k === '2' || k === '3')) act(['attack', 'special', 'heal'][Number(k) - 1]);
+    });
+    $('attack').addEventListener('click', function () { act('attack'); });
+    $('special').addEventListener('click', function () { act('special'); });
+    $('heal').addEventListener('click', function () { act('heal'); });
+    Array.prototype.forEach.call(document.querySelectorAll('#parry .pp-diff'), function (b) {
+      b.addEventListener('click', function () { stats.diff = b.getAttribute('data-d'); persist(); intro(); });
+    });
+    $('sound').addEventListener('click', function () { stats.sound = !stats.sound; persist(); intro(); });
+    $('start').addEventListener('click', function () { audio(); startRun(0); });
+    window.addEventListener('resize', function () { if (B) resize(); });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden && B) lastReal = performance.now(); });
+    window.registerHook('parry', intro, stop);
   })();
 
 </script>
