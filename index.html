@@ -1256,10 +1256,10 @@
       <div class="bs-kicker">Timing battle</div>
       <div class="dd-big">Perfect Parry</div>
       <ul class="wr-how">
-        <li>Monsters attack in combos. Tap <b>PARRY</b> right as each hit lands, when the shrinking ring touches the circle.</li>
+        <li>Monsters attack in combos. Watch each one closely: it pulls back, flashes a ✦ glint, then swings. Tap <b>PARRY</b> right as the hit lands.</li>
         <li>Parry every hit in a combo to <b>counterattack</b>!</li>
         <li><b style="color:var(--bad)">Red</b> attacks can’t be parried. <b>DODGE</b> those instead.</li>
-        <li>Sneaky attacks have no ring at all. Watch for the ✦ glint.</li>
+        <li>Sneaky attacks don’t flash a glint, so you’ll have to read the monster’s moves. Turn the sound on: every glint goes “shing!”</li>
         <li>Each parry gives you ⚡ energy for a Special attack or a Heal.</li>
         <li>Keyboard: Space = parry, Shift or K = dodge, 1–3 = actions.</li>
       </ul>
@@ -7552,7 +7552,7 @@
       hard:   { name: 'Hard',   parry: [80, 70],   dodge: [160, 110], whiff: 450, hide: true,  dmg: 1.3 }
     };
     // Each move is a list of hits. w = ms from the previous hit (or from the wind-up) to this hit,
-    // f = a fake-out pause in the middle of the wind-up, r = red (can only be dodged), h = no timing ring.
+    // f = a fake-out pause in the middle of the wind-up, r = red (can only be dodged), h = sneaky (no glint).
     var ENEMIES = [
       { name: 'Training Dummy', kind: 'dummy', hp: 40, dmg: 6, col: '#c8a46b', sky: ['#1f2a44', '#3d4a6b'], moves: [
         { n: 'Wobbly Bonk', s: [{ w: 1100 }] },
@@ -7593,7 +7593,7 @@
         { n: 'Total Darkness', s: [{ w: 1100, h: 1 }, { w: 450, h: 1 }, { w: 450 }] },
         { n: 'Solar Flare', s: [{ w: 700 }, { w: 700 }, { w: 250 }, { w: 250 }, { w: 1000, r: 1 }, { w: 300 }] }] }
     ];
-    var HERO_MAX = 100, EN_MAX = 6;
+    var HERO_MAX = 100, EN_MAX = 6, GLINT_ON = 400, GLINT_OFF = 230;   // the ✦ shows from 400 ms to 230 ms before a hit
 
     function $(id) { return document.getElementById('pp-' + id); }
     function rnd(a, b) { return a + Math.random() * (b - a); }
@@ -7629,6 +7629,8 @@
       dodge: function () { tone(520, 0.14, 'sine', 0.08, 900); },
       hit: function () { tone(160, 0.2, 'sawtooth', 0.14, 70); },
       wind: function () { tone(240, 0.22, 'triangle', 0.05, 420); },
+      glint: function () { tone(2600, 0.07, 'triangle', 0.06); setTimeout(function () { tone(3900, 0.1, 'sine', 0.04); }, 40); },
+      redglint: function () { tone(880, 0.12, 'sawtooth', 0.05); },
       red: function () { tone(110, 0.3, 'sawtooth', 0.07, 220); },
       counter: function () { tone(660, 0.1, 'square', 0.1); setTimeout(function () { tone(990, 0.22, 'square', 0.1); }, 90); },
       swing: function () { tone(300, 0.12, 'triangle', 0.08, 120); },
@@ -7676,7 +7678,7 @@
       hud();
       controls('none');
       say((en.boss ? 'Final boss: ' : 'Foe ' + (B.stage + 1) + ' of ' + ENEMIES.length + ': ') + en.name + '!' +
-        (B.stage === 0 ? ' Tap PARRY right when the ring hits the circle.' : B.stage === 4 ? ' Watch out: some attacks have no ring. Watch the glint!' : B.stage === 5 ? ' Red attacks can’t be parried. DODGE them!' : ''));
+        (B.stage === 0 ? ' Watch the dummy: when it flashes ✦ and lunges, tap PARRY!' : B.stage === 4 ? ' Watch out: its sneaky attacks don’t glint. Watch it move!' : B.stage === 5 ? ' Red attacks can’t be parried. DODGE them!' : ''));
       B.phase = 'wait'; B.timer = gt + 1600; B.after = enemyTurn;
     }
     function hud() {
@@ -7738,8 +7740,10 @@
     }
     function enemyFrame() {
       var D = DIFF[B.diff], late = D.dodge[1];
-      B.strikes.forEach(function (s) {
-        if (!s.cued && gt >= s.start) { s.cued = true; sfx(s.red ? 'red' : 'wind'); }
+      var cur = current();
+      if (cur && !cur.glinted && !cur.hidden && gt >= cur.start && gt >= cur.impact - GLINT_ON) { cur.glinted = true; sfx(cur.red ? 'redglint' : 'glint'); }
+      B.strikes.forEach(function (s, i) {
+        if (!s.cued && gt >= s.start) { s.cued = true; if (s.red) sfx('red'); else if (i === 0) sfx('wind'); }
         if (!s.res && gt > s.impact + late) { s.res = 'hit'; takeHit(s); }
       });
       if (B.hp <= 0) { lose(); return; }
@@ -7865,18 +7869,15 @@
       lunge = Math.max(lunge, B.enemyLunge);
       var exNow = ex - lunge * (ex - hx - 70 * s) + lean * s;
       drawEnemy(en, exNow, gy, s, glow);
-      if (B.phase === 'enemy' && s0 && s0.hidden && gt >= s0.start && s0.impact - gt < 420 && s0.impact - gt > 260) drawGlint(exNow - 30 * s, gy - 70 * s, s);
+      if (B.phase === 'enemy' && s0 && !s0.hidden && gt >= s0.start && s0.impact - gt <= GLINT_ON && s0.impact - gt > GLINT_OFF)
+        drawGlint(exNow - 34 * s, gy - 76 * s, s, 1 - (s0.impact - gt - GLINT_OFF) / (GLINT_ON - GLINT_OFF), s0.red);
+      if (B.phase === 'enemy' && s0 && s0.red && gt >= s0.start) {
+        ctx.fillStyle = '#ff4d4d'; ctx.font = '700 ' + Math.round(14 * s + 6) + 'px ' + FONT; ctx.textAlign = 'center';
+        ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.strokeText('DODGE!', exNow, gy - 132 * s); ctx.fillText('DODGE!', exNow, gy - 132 * s);
+      }
 
       // hero
       drawHero(hx, gy, s);
-      // timing ring
-      if (B.phase === 'enemy' && s0 && gt >= s0.start && !s0.hidden) {
-        var pr = progress(s0), cy = gy - 46 * s, r1 = 30 * s, r0 = 110 * s;
-        ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx, cy, r1, 0, Math.PI * 2); ctx.stroke();
-        ctx.strokeStyle = s0.red ? '#ff4d4d' : '#ffffff'; ctx.lineWidth = 4;
-        ctx.beginPath(); ctx.arc(hx, cy, r1 + (r0 - r1) * (1 - Math.min(1, pr)), 0, Math.PI * 2); ctx.stroke();
-        if (s0.red) { ctx.fillStyle = '#ff4d4d'; ctx.font = '700 ' + Math.round(13 * s + 4) + 'px ' + FONT; ctx.textAlign = 'center'; ctx.fillText('DODGE!', hx, cy - r0 - 6); }
-      }
       // special needle
       if (B.special) {
         var bx = W * 0.12, bw = W * 0.76, by = H * 0.12, bh = 18;
@@ -7904,10 +7905,13 @@
       if (t < 0.6 * L + s.feint) return 0.6;
       return (t - s.feint) / L;
     }
-    function drawGlint(x, y, s) {
-      ctx.save(); ctx.translate(x, y); ctx.fillStyle = '#ffffff';
+    function drawGlint(x, y, s, t, red) {
+      var k = (0.6 + 0.7 * Math.sin(Math.min(1, t) * Math.PI)) * s;     // pops in, then fades
+      ctx.save(); ctx.translate(x, y); ctx.rotate(t * 0.8);
+      ctx.shadowColor = red ? '#ff4d4d' : '#ffffff'; ctx.shadowBlur = 16;
+      ctx.fillStyle = red ? '#ffb3b3' : '#ffffff';
       ctx.beginPath();
-      for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, r = i % 2 ? 4 * s : 14 * s; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
+      for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, r = i % 2 ? 4 * k : 18 * k; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
       ctx.closePath(); ctx.fill(); ctx.restore();
     }
     function drawHero(x, gy, s) {
