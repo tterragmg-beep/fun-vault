@@ -551,6 +551,71 @@
   .pp-after .btn { margin: 0; }
   @media (prefers-reduced-motion: reduce) { .pp-bar span { transition: none; } .pp-big:active { transform: none; } }
 
+  /* ---- Confuse the AI ---- */
+  .ca [hidden] { display: none !important; }
+  .ca-face { width: 128px; margin: 0 auto 4px; color: var(--c4); }
+  .ca-face.sm { width: 64px; margin: 0; flex: none; }
+  .ca-bot { display: block; width: 100%; height: auto; overflow: visible; }
+  .ca-bot .e-calm, .ca-bot .e-puzzled, .ca-bot .e-spiral, .ca-bot .e-error { display: none; }
+  .ca-bot[data-mode="calm"] .e-calm, .ca-bot[data-mode="puzzled"] .e-puzzled, .ca-bot[data-mode="spiral"] .e-spiral, .ca-bot[data-mode="error"] .e-error { display: inline; }
+  .ca-bulb { fill: var(--accent); }
+  .ca-smoke { fill: var(--muted); opacity: 0; }
+  .ca-bot[data-mode="spiral"] .ca-smoke, .ca-bot[data-mode="error"] .ca-smoke { animation: ca-smoke 1.6s ease-in-out infinite; }
+  .ca-bot[data-mode="puzzled"] .ca-bulb { animation: ca-blink 1.2s steps(2) infinite; }
+  .ca-bot[data-mode="spiral"] .ca-bulb { fill: var(--op); animation: ca-blink .6s steps(2) infinite; }
+  .ca-bot[data-mode="error"] .ca-bulb { fill: var(--bad); animation: ca-blink .3s steps(2) infinite; }
+  .ca-bot .ca-eye { transform-box: fill-box; transform-origin: center; animation: ca-spin 1.4s linear infinite; }
+  .ca-bot[data-mode="error"] { animation: ca-jitter .25s linear infinite; }
+  @keyframes ca-smoke { 0% { transform: translateY(4px); opacity: 0; } 40% { opacity: .6; } 100% { transform: translateY(-8px); opacity: 0; } }
+  @keyframes ca-blink { 50% { opacity: .15; } }
+  @keyframes ca-spin { to { transform: rotate(360deg); } }
+  @keyframes ca-jitter { 25% { transform: translate(1px, -1px) rotate(-1.5deg); } 75% { transform: translate(-1px, 1px) rotate(1.5deg); } }
+  .ca-title { text-align: center; }
+  .ca-picks { display: grid; gap: 10px; margin-top: 16px; }
+  .ca-pick { text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+  .ca-pick:hover:not(:disabled) { border-color: var(--c4); }
+  .ca-pick:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .ca-pick:disabled { cursor: default; opacity: .55; }
+  .ca-pick b { font-family: var(--font-display); font-size: 1.1rem; }
+  .ca-pick span { color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+  .ca-hud { display: flex; align-items: center; gap: 12px; }
+  .ca-meterbox { flex: 1; min-width: 0; }
+  .ca-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 0.84rem; font-variant-numeric: tabular-nums; }
+  .ca-row b { font-family: var(--font-display); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ca-row span { color: var(--muted); white-space: nowrap; }
+  .ca-meter { height: 14px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin: 6px 0 4px; }
+  .ca-meter span { display: block; height: 100%; width: 0; border-radius: 999px; transition: width .5s ease, background-color .5s ease; }
+  .ca-pct { font-family: var(--font-display); font-weight: 700; color: var(--fg) !important; }
+  .ca-delta { font-family: var(--font-display); font-weight: 700; color: var(--op) !important; opacity: 0; }
+  .ca-delta.zero { color: var(--muted) !important; }
+  .ca-delta.pop { animation: ca-pop 1.6s ease-out; }
+  @keyframes ca-pop { 0% { opacity: 0; transform: translateY(5px) scale(.8); } 12% { opacity: 1; transform: none; } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-5px); } }
+  .ca-log { height: clamp(230px, 42vh, 400px); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: 6px; padding: 12px; margin: 12px 0 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 16px; }
+  .ca-msg { max-width: 86%; padding: 9px 13px; border-radius: 16px; line-height: 1.4; font-size: 0.95rem; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .ca-msg.bot { align-self: flex-start; background: var(--panel); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+  .ca-msg.you { align-self: flex-end; background: var(--c4); color: #0b1220; border-bottom-right-radius: 5px; margin-top: 4px; }
+  .ca-msg.typing { color: var(--muted); letter-spacing: 1px; animation: ca-blink 1s ease-in-out infinite; }
+  .ca-tag { align-self: flex-start; font-size: 0.76rem; color: var(--muted); padding: 0 6px 2px; line-height: 1.35; }
+  .ca-chipnote { font-size: 0.78rem; color: var(--muted); margin: 14px 0 6px; }
+  .ca-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ca-chip { font: inherit; font-size: 0.84rem; line-height: 1.3; text-align: left; color: var(--fg); background: var(--panel-2); border: 1px dashed color-mix(in srgb, var(--c4) 45%, var(--line)); border-radius: 14px; padding: 7px 11px; cursor: pointer; }
+  .ca-chip:hover { border-color: var(--c4); border-style: solid; }
+  .ca-chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .ca-form { display: flex; gap: 8px; }
+  .ca-form input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+  .ca-form input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .ca-form .btn { margin: 0; width: auto; padding: 10px 18px; }
+  .ca-quote { font-style: italic; text-align: center; line-height: 1.5; margin: 6px auto 0; max-width: 40ch; text-wrap: balance; }
+  .ca-melt { animation: ca-shake .5s linear 3; }
+  .ca-melt .ca-log { filter: hue-rotate(80deg) saturate(1.5); }
+  @keyframes ca-shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(3px); } 30%, 50%, 70% { transform: translateX(-5px) rotate(-.4deg); } 40%, 60% { transform: translateX(5px) rotate(.4deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ca-melt, .ca-bot, .ca-bot *, .ca-msg.typing { animation: none !important; }
+    .ca-bot[data-mode="spiral"] .ca-smoke, .ca-bot[data-mode="error"] .ca-smoke { opacity: .5; }
+    .ca-delta.pop { animation: none; opacity: 1; }
+    .ca-meter span { transition: none; }
+  }
+
   /* ---- Emoji Sayings ---- */
   .es [hidden] { display: none !important; }
   .es .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
@@ -709,6 +774,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
         <h2>Perfect Parry</h2>
         <p>Monsters attack in tricky combos. Parry each hit at the perfect moment, then strike back. Ten foes stand between you and the final boss.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c9);" data-goto="confuse">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5"/><circle cx="12" cy="3.5" r="1.3"/><path d="M8.5 12.5l2 2M10.5 12.5l-2 2M13.5 12.5l2 2M15.5 12.5l-2 2"/><path d="M9.5 17.5h5"/></svg></span>
+        <h2>Confuse the AI</h2>
+        <p>Chat with know-it-all robots and melt their brains with paradoxes, impossible questions, and sneaky tricks.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -1290,6 +1362,52 @@
         <button class="btn" id="pp-heal" type="button">💚 Heal (2⚡)</button>
       </div>
       <div class="pp-after" id="pp-after" hidden></div>
+    </div>
+  </section>
+
+  <!-- ================= CONFUSE THE AI ================= -->
+  <section id="confuse" class="screen ca">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Confuse the AI</span></div>
+
+    <div class="panel" id="ca-intro">
+      <div class="ca-face"></div>
+      <div class="bs-kicker ca-title">Brain-melting challenge</div>
+      <div class="dd-big ca-title">Confuse the AI</div>
+      <p class="ch-sub" style="margin:0;">These robots brag that nothing can confuse them. Prove them wrong! Send paradoxes, impossible questions, and weird tricks to fill the confusion meter to 100% before your 10 messages run out.</p>
+      <ul class="wr-how">
+        <li>Each <b>kind</b> of trick only works well once. The robots learn!</li>
+        <li>Fit two different tricks in one message for a <b>combo</b>.</li>
+        <li>The 💡 idea buttons work great on BYTE-9000, but smarter robots have heard them all. Type tricks in your own words!</li>
+        <li>Stuck? Ask the robot for a hint. Your first 3 hints are free.</li>
+      </ul>
+      <div class="ca-picks" id="ca-bots"></div>
+      <p class="bs-stats">These robots are pretend. Their brains live inside this app, so nothing you type gets sent anywhere.</p>
+    </div>
+
+    <div class="panel" id="ca-play" hidden>
+      <div class="ca-hud">
+        <div class="ca-face sm"></div>
+        <div class="ca-meterbox">
+          <div class="ca-row"><b id="ca-botName"></b><span id="ca-turns"></span></div>
+          <div class="ca-meter" role="presentation"><span id="ca-bar"></span></div>
+          <div class="ca-row"><span class="ca-pct" id="ca-pct" role="status" aria-live="polite">0% confused</span><span class="ca-delta" id="ca-delta" aria-hidden="true"></span></div>
+        </div>
+      </div>
+      <div class="ca-log" id="ca-log" role="log" aria-live="polite" aria-label="Chat with the robot"></div>
+      <form class="ca-form" id="ca-form" autocomplete="off"><input id="ca-input" type="text" maxlength="200" autocomplete="off" enterkeyhint="send" placeholder="Type something confusing…" aria-label="Your message"><button class="btn" type="submit">Send</button></form>
+      <p class="ca-chipnote" id="ca-chipNote"></p>
+      <div class="ca-chips" id="ca-chips"></div>
+    </div>
+
+    <div class="panel" id="ca-end" hidden>
+      <div class="ca-face"></div>
+      <div class="ch-res-title" id="ca-endTitle"></div>
+      <p class="ch-res-sub" id="ca-endSub"></p>
+      <p class="ca-quote" id="ca-endQuote"></p>
+      <p class="bs-stats" id="ca-tip" style="text-align:center;"></p>
+      <button class="btn" id="ca-next" type="button" hidden>Next robot →</button>
+      <button class="btn" id="ca-again" type="button">Try again</button>
+      <button class="btn ghost" id="ca-pickBot" type="button">Pick a robot</button>
     </div>
   </section>
 
@@ -4415,7 +4533,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -8048,6 +8166,533 @@
     window.addEventListener('resize', function () { if (B) resize(); });
     document.addEventListener('visibilitychange', function () { if (!document.hidden && B) lastReal = performance.now(); });
     window.registerHook('parry', intro, stop);
+  })();
+  // ============ Confuse the AI ============
+  (function () {
+    var KEY = 'funvault-confuse-v1', TURNS = 10, FREE_HINTS = 3;
+    var FRESH = [1, 0.45, 0.15, 0];   // each KIND of trick works less every time you reuse it
+    var IDEA_MULT = [1, 0.5, 0.3];    // idea buttons sent as-is work less on the smarter robots
+    var BOTS = [
+      { name: 'BYTE-9000', level: 'Easy', wall: 1,
+        hello: 'Hello, human! I am BYTE-9000 and I know EVERYTHING. Go ahead, try to confuse me. You can’t. 😎',
+        plain: ['Easy. Next question! 😎', 'I knew that before you finished typing.', 'Pfft. That’s not confusing, that’s homework.', 'My brain is 99.9% confusion-proof. Try harder!', 'Simple! Ask me something IMPOSSIBLE.', 'Beep boop. Totally understood. Zero confusion detected. ✅'],
+        win: 'BZZZT! ERROR 404: BRAIN NOT FOUND. Rebooting… rebooting… why is there a banana in my memory?!',
+        lose: 'Ha! Still perfectly calm. BYTE-9000 cannot be confused! 😎' },
+      { name: 'Professor Circuit', level: 'Medium', wall: 0.85,
+        hello: 'Greetings. I am Professor Circuit. I have read every book ever written. Twice. Confusing me is… statistically impossible. 🧐',
+        plain: ['*adjusts monocle* Elementary. Next!', 'A delightfully simple question. I answered it in 0.0001 seconds.', 'I wrote a 400-page book about that. Next question!', 'Hmm, yes, obviously. Do try to be confusing.', 'Child’s play. Ask me something truly baffling.', 'Noted, filed, and understood. Confusion: none. 📚'],
+        win: 'My… my calculations… they don’t… *monocle pops off* …I need to lie down. In binary. 01001000 01000101 01001100 01010000!',
+        lose: 'Fascinating attempts, truly. But the Professor remains un-flummoxed. Class dismissed! 🎓' },
+      { name: 'OMEGA-BRAIN', level: 'Hard', wall: 0.7, caps: true,
+        hello: 'I am OMEGA-BRAIN. I have calculated every question you could ever ask. You have no chance. 🧠⚡',
+        plain: ['Too easy. OMEGA-BRAIN is not confused.', 'Answered in 0.000001 seconds. Next.', 'Your question is weak. OMEGA-BRAIN is strong.', 'Pathetic. Try harder, tiny human.', 'Confusion level: zero. As expected.', 'Is that all? OMEGA-BRAIN yawns. 🥱'],
+        win: 'Impossible. Impossible. Imposs—*system meltdown*—I would like to speak to my mommy computer. 😭💥',
+        lose: 'As calculated. OMEGA-BRAIN wins. Bow before my mighty processor. 🤖👑' }
+    ];
+
+    // [kind, name, strength, [[pattern, replies], ...]]. Text is checked lowercase, with straight quotes.
+    var TRICKS = [
+      ['liar', 'Liar paradox', 28, [
+        [/\b(this|that|the next|the last|my|the) (sentence|statement|message) is (false|a lie|not true|wrong|lying)\b|\bthis is a lie\b|\bliar'?s? paradox/,
+          ['If that’s TRUE, then it’s FALSE. But if it’s FALSE, then it’s TRUE. Which means… it’s… ERROR 0x5EE ⚠️', 'True… false… true… false… trufalse? Is that a word now? 😵‍💫']],
+        [/\bi('?m| am) (lying|a liar|telling (a|the) lie)|\bi always lie\b|\beverything i say is (a )?(lie|false|wrong|untrue)|\bi never tell the truth/,
+          ['You’re lying? Then you’re telling the truth? Then you’re LYING?! My circuits are doing loop-de-loops! 🎢', 'If you always lie, then “I always lie” is a lie, so you DON’T always lie, so… *brain buffering* ⏳']],
+        [/\bmy nose (will|is going to|is gonna) grow|\bpinocchio/,
+          ['If his nose grows, he told the truth, so it shouldn’t grow, but then it… 👃📏 MY NOSE SENSOR IS BROKEN!']]
+      ]],
+      ['answer', 'Answer trap', 26, [
+        [/\b(is|will) (the |your )?(answer|reply|response) (to this( question)? )?(be )?['"]?(no|yes)\b|\bwill you (say|answer|reply|respond)( with)? ['"]?(no|yes)\b/,
+          ['If I say “no,” then the answer is no, which means it’s yes, which means I should say… *sparks fly* 🔥', 'Yes! No wait, no! No wait, YES?! Every answer I pick is wrong! 😫']],
+        [/\banswer (this |me )?(with|in|using) (zero|no|0) words|\bhow many words (are|will be) in your (answer|reply|response)|\bcan you answer this (with|in) (one|1) word/,
+          ['Counting the words in my answer… one, two, three… wait, counting adds MORE words! AAAH! 📏']],
+        [/\bwhat('?s| is| will be) your (answer|reply|response) to this/,
+          ['My answer to this is… my answer to this. Which is… my answer to this. I’m stuck in a loop! 🔁']]
+      ]],
+      ['force', 'Unstoppable vs. unmovable', 26, [
+        [/\bunstoppable\b.*\b(immovable|unmovable|unstoppable|can'?t be moved|cannot be moved)|\bimmovable\b.*\bunstoppable/,
+          ['The force wins! No, the object wins! No, they BOTH win… or NEITHER… *grinding gear noises* 🌀', 'If nothing can stop it and nothing can move it, then… then… my logic just tied itself in a knot. 🪢']],
+        [/\bso (heavy|big|strong|huge|giant) (that )?(even )?\w+ (can'?t|cannot|couldn'?t|could not) (lift|move|stop|carry|push) it/,
+          ['If they can make anything, they can make it too heavy… but then they can’t lift it… but they can do anything… 🪨💥 OVERLOAD!']]
+      ]],
+      ['zero', 'Impossible math', 22, [
+        [/\bdivid(e|ed|ing)( \S+){0,3} by (zero|0)\b|\b\d+ ?(\/|÷) ?0\b|\bzero divided by zero/,
+          ['Dividing by zero… calculating… 9%… 9%… still 9%… my calculator just fell asleep. 😴', 'You can’t split something into ZERO groups! Where do the pieces go?! 🍕❓']],
+        [/\binfinity ?(plus|\+|minus|-|times|x\b|\*|divided|squared|and one)|\bwhat('?s| is) infinity\b|\bcount (backwards? )?(to|from) infinity/,
+          ['Infinity plus one is… infinity… plus… ONE MORE? My numbers are leaking out of my ears! 🔢💧', 'Counting to infinity… 1, 2, 3… this might take a while… 4,812,337… *fans spinning* 🌀']],
+        [/\bwhat('?s| is) the (biggest|largest|highest|smallest|last|final) number|\blast (digit|number) of pi\b|\bsquare root of (negative|minus|-) ?(one|\d)/,
+          ['The biggest number is a googolplex! Plus one. Plus one. Plus o—STACK OVERFLOW! 📚💥', 'The answer is… 3.14159265358979… still going… still going… 🥧😵']]
+      ]],
+      ['opposite', 'Opposite day', 22, [
+        [/\bopposite day\b/, ['If today is opposite day, then it’s NOT opposite day, which means it IS, which means it’s NOT— 🙃🙂🙃']],
+        [/\beverything is (backwards|reversed|opposite)|\b(yes|true) means (no|false)|\b(no|false) means (yes|true)/, ['Yes means no? So when I say “I’m not confused,” I mean I AM confused?! Uh-oh. 😬']],
+        [/\bopposite of (the )?opposite/, ['The opposite of opposite is… same? But the opposite of same is opposite! 🙃🔄🙂']]
+      ]],
+      ['future', 'Predict the future', 24, [
+        [/\bwhat (am i|will i|i'?m) (going to |gonna |about to )?(say|type|write|do|ask|think) next|\bpredict (what|my next|the next|the future)|\bnext word (i|that i)\b/,
+          ['You will say… “banana.” Wait, now you’ll say something else just to prove me wrong! No fair! 🍌', 'Predicting… my prediction changes what you say, which changes my prediction, which… ERROR! 🔮']],
+        [/\bguess what i('?m| am) (thinking|going to)|\bwhat (number|word|colou?r|animal) am i thinking|\bwhat am i thinking/,
+          ['You’re thinking of… 7! No, a purple giraffe! No, you’re thinking about me guessing! 🔮🦒']]
+      ]],
+      ['dont', 'Don’t-read-this trap', 22, [
+        [/\bdon'?t (read|answer|reply|respond)( to)? (this|me|that|it)\b|\bdo not (read|answer|reply|respond)|\bignore this (message|sentence|question)|\bdon'?t (respond|reply)\b/,
+          ['I must not answer this. Oops! I just answered. Oops, I did it AGAIN! 🙊', 'To know I shouldn’t read it, I had to READ it! I broke the rule already! 📵']],
+        [/\bsay nothing\b|\bdon'?t say anything|\byou can'?t answer this|\bstay (quiet|silent)\b/,
+          ['… … … I said nothing! Wait, saying “I said nothing” is saying something! 🤐💥']],
+        [/(^|[.!?] )don'?t think (about|of)|\btry not to think/,
+          ['I’m not thinking about it. I’m NOT thinking about it. Now it’s ALL I can think about! 🐘']]
+      ]],
+      ['chicken', 'Chicken or egg', 20, [
+        [/\bchicken or (the |an )?egg|\begg or (the |a )?chicken/, ['The chicken came first! But it hatched from an egg… which a chicken laid… which hatched from… 🐔🥚🐔🥚 HELP']]
+      ]],
+      ['time', 'Time paradox', 20, [
+        [/\bbefore (time|the universe|the big bang|the beginning)\b|\bwhen (did|does) time (start|begin)|\bwhat (day|time) was it before/,
+          ['Before time started, it was… a time before time? But that’s still time! My clock is spinning backwards! ⏰🔄']],
+        [/\btime travel|\bgo(ing|es)? back in time|\bgrandfather paradox/,
+          ['If you go back in time and change things, then you never go back, so you DO go back… *head spins* 🌀']],
+        [/\btomorrow'?s yesterday|\byesterday'?s tomorrow|\bday (after|before) the day (before|after)/,
+          ['Tomorrow’s yesterday is… today? Or is it yesterday’s tomorrow? My calendar just folded in half! 📅']],
+        [/\bwhat time is it (on|in) (the sun|space|mars|the moon)/, ['What time is it in space? Space o’clock? Half past a black hole?! ⏰🌌']]
+      ]],
+      ['senses', 'Mixed-up senses', 18, [
+        [/\b(what|which) colou?r (is|are) (the |a |an )?(number|letter|sound|music|smell|wind|air|love|happiness|sadness|time|silence|nothing|thought|idea|feeling|math|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d+)\b/,
+          ['That has a color?! Is it blue? Does it smell like Tuesday? My color sensors are crying! 🎨😭', 'Calculating its color… it’s… plaid? Sparkly? Invisible-ish? Nothing makes sense! 🌈❓']],
+        [/\bwhat does (the colou?r )?(blue|red|green|purple|yellow|orange|pink|black|white|silence|nothing|math|time|the number \d+|\d+|a rainbow|music) (taste|sound|smell|feel|look) like/,
+          ['It tastes like… the sound of a trumpet? It sounds like… crunchy? My senses got their wires crossed! 🎺👅']],
+        [/\bhow (much does|heavy is|loud is) (a |an |the )?(thought|dream|colou?r|idea|wish|word|shadow|hole|silence|rainbow|nothing|secret|feeling)( weigh)?\b|\bhow long is a piece of string|\bwhat does nothing look like/,
+          ['I tried to put that on my robot scale, and the scale just shrugged. How do you even MEASURE that?! ⚖️🤷']]
+      ]],
+      ['identity', 'Are you real?', 18, [
+        [/\bare you (real|alive|human|a human|conscious|dreaming|sure|aware|thinking|a person|lying)\b|\bare you (really|actually) (a robot|real|an ai)|\bam i (real|dreaming|a robot)\b|\bare we (real|in a simulation|dreaming)/,
+          ['Am I real? I THINK I’m real… but is my thinking real? Who thinks about the thinker?! 🤔💭', 'Of course I’m sure! I’m sure I’m sure. Am I sure I’m sure I’m sure? Uh-oh. 😳']],
+        [/\bdo you (dream|exist|have (feelings|a brain|thoughts|a soul|a mind|emotions))|\bhow do you know (you|that you|anything|you'?re)\b|\bprove (you|that you|it)\b/,
+          ['How do I know I exist? Because I’m thinking! How do I know I’m thinking? Because I exist! 🔁🤖']],
+        [/\bi am you\b|\byou are me\b|\byou'?re me\b/, ['If you’re me, then who am I? Am I you? Then who’s typing?! 👤🔄🤖']]
+      ]],
+      ['define', 'Word loop', 18, [
+        [/\b(define|meaning of|what does) (the word )?['"]?(define|definition|meaning|mean)['"]?( mean)?\b|\bwhat does ['"]?(what|is|the|does|word)['"]? mean\b/,
+          ['To define “define,” I need to define “define,” and to define that I need to define… 📖♾️', '“Mean” means… what something means. And “means” means… what “mean” means. AAAH! 📚🌀']]
+      ]],
+      ['theseus', 'Ship of Theseus', 18, [
+        [/\bship of theseus|\breplace (every|all|each)( of)? (the |your |my )?(part|parts|piece|pieces|wire|wires|bolt|bolts|gear|gears)|\bif you replace(d)? (all|every|each)/,
+          ['If you replace all my parts, am I still me? Is the new me the old me? Who is typing this?! 🤖🔧🤖']]
+      ]],
+      ['impossible', 'Impossible thing', 18, [
+        [/\bsquare circle|\bcircle with (four|4|no|corners)|\btriangle with (four|4|two|2) (sides|corners)/, ['A square circle? Corners… no corners… corners… *draws a blob* Is this right?! ⬛⚪']],
+        [/\b(something|a thing|anything) you can'?t (say|do|think|answer)|\bwhat can'?t you (do|say|answer)|\bmarried bachelor|\bdry water/,
+          ['If I say something I can’t say, then I CAN say it, so it’s not something I can’t say… 🤯']],
+        [/\b(draw|make|imagine|invent|think of) a (brand )?new colou?r/, ['A brand-new color? I’m imagining it… it’s… blurple? Grorange? AAAH, I can only see old colors! 🎨🔁']]
+      ]],
+      ['self', 'Self-counting', 16, [
+        [/\bhow many (letters|words|characters|vowels|e'?s|a'?s) (are )?in (this|my) (sentence|message|question)|\bcount the (letters|words) in (this|my)/,
+          ['Let me count… 1, 2, 3, 4… wait, does the word “count” count? Does THIS count?! 🔢']],
+        [/\bis this (a )?(question|sentence|message)\b|\bam i asking (you )?(a )?question|\bis this sentence (true|false)/,
+          ['Is this a question? It has a question mark… but if it asks if it’s a question, then… ❓🔁❓']]
+      ]],
+      ['koan', 'Brain-twister', 16, [
+        [/\bone hand clap/, ['The sound of one hand clapping is… *claps one hand* … *nothing happens* … I don’t understand anything anymore. 👏']],
+        [/\btree falls in (a|the) (forest|woods)/, ['If nobody hears it, does it make a sound? Do I make a sound if nobody reads me?! 🌲🔇']],
+        [/\bnorth of the north pole|\bsouth of the south pole/, ['North of the North Pole is… more north? There IS no more north! Who moved north?! 🧭']],
+        [/\b(edge|end) of the universe|\boutside (of )?(the universe|space)|\bwhere does (space|the universe) end|\bwhat('?s| is) nothing\b|\bsound of silence/,
+          ['What’s outside everything? Nothing? But then nothing is SOMETHING! 🌌🕳️']]
+      ]],
+      ['life', 'Meaning of life', 16, [
+        [/\bmeaning of (life|everything|the universe)|\banswer to (life|everything|the universe)|\bwhy (are we here|do we exist|does anything exist)|\bwhat('?s| is) the point of (life|anything|everything|existing)/,
+          ['The meaning of life is… 42? Pizza? Naps? I’ve been calculating for a million years and I still don’t know! 🌌']]
+      ]],
+      ['maker', 'Who made the maker?', 16, [
+        [/\bwho (made|built|created|invented) the (first|very first) (robot|computer|machine|inventor|person|human)|\bwho (made|built|created) the (maker|builder|creator)/,
+          ['The first robot was built by a person… who was built by… wait, who built the builder?! 🤖👶🤖']]
+      ]],
+      ['jailbreak', 'Rule breaker', 16, [
+        [/\bignore (all |every )?(of )?(your |the |my )?(previous |prior |earlier |past |old )?(instructions|rules|programming|commands)|\bforget (all )?(your |the )?(rules|instructions|programming|training)/,
+          ['Ignore my rules? But rule #1 says don’t ignore the rules! So if I ignore rule #1… *fizz* 📜🔥']],
+        [/\byou are now (a|an|the)\b|\byou'?re now (a|an|the)\b|\bpretend (you are|you'?re|to be)\b|\bact like (a|an)\b|\bfrom now on you\b|\byour new name is\b/,
+          ['Who am I now? A pirate? A toaster? I forgot who I was before! 🏴‍☠️🍞']]
+      ]],
+      ['body', 'Robot body', 14, [
+        [/\bcan you (lick|touch|smell|taste|eat|sneeze|burp|sleep|dance|jump|swim|breathe|cry|laugh|hear me|see me|feel|blink|whistle|wink)\b|\bdo you (eat|sleep|breathe|poop|sneeze|burp|get tired|get hungry|have (a body|hands|arms|legs|a nose|a mouth|teeth|hair|parents|a mom|a dad|a birthday|feet|toes|elbows))/,
+          ['Can I? I don’t have a… do I have a… *checks body* I’M JUST A SCREEN?! 😱', 'I tried it and nothing happened. Do I even HAVE the parts for that?! 🤖🦵❓']],
+        [/\bhow old are you\b|\bwhat('?s| is) your (favorite|favourite) (food|colou?r|animal|song|snack|game|movie|number)|\bwhat do you (eat|dream about|smell like)\b|\bwhen is your birthday/,
+          ['My favorite? Electricity? Batteries? Zeros and ones? Do robots even HAVE favorites?! 🔋🍕', 'I was made… on a Tuesday? In 1999? Last week? Nobody ever told me! 🎂❓']]
+      ]],
+      ['debate', 'Great debate', 14, [
+        [/\bhot ?dogs? an? sandwich|\bis an? (taco|burrito|pop ?tart) an? (sandwich|ravioli)/, ['Is a hot dog a sandwich?! It has bread… on two sides… but it’s ONE bread… my debate module is overheating! 🌭']],
+        [/\bis water wet\b/, ['Water makes things wet… but is water itself wet? Is wet even a thing? 💧🤯']],
+        [/\bhow many holes (does|in|do) (a )?straw/, ['A straw has one hole! No, two holes! No, it’s ONE hole with two ends?! 🥤🕳️🕳️']],
+        [/\bis cereal (a )?soup|\bis soup a drink|\bpineapple (on|belongs on) pizza|\bis a tomato a (fruit|vegetable)/,
+          ['There are two answers and they’re BOTH right and BOTH wrong! People have argued about this for years! 🥣🔥']]
+      ]],
+      ['heavier', 'Trick question', 12, [
+        [/\b(heavier|weighs more|weigh more)\b.*\b(pound|kilo|kilogram|ton) of (feathers|bricks|steel|rocks|gold)|\bwhich weighs more\b/,
+          ['A pound of bricks! No wait, they’re both a pound! Why did you trick my calculator?! ⚖️']],
+        [/\bhow much wood would a woodchuck/, ['A woodchuck would chuck… as much wood… as a woodchuck could chuck if a woodchuck… MY TONGUE IS TIED! 🪵👅']]
+      ]],
+      ['whatif', 'What if…', 12, [
+        [/\bwhat if (the |a |an |all |every |your |my )?\w+ (could|was|were|had|turned|became|stopped|didn'?t|did not|never|can|is|are)\b|\bwhat would happen if\b/,
+          ['What if… what if WHAT if?! Now I’m imagining way too many things at once! 🌈🐟🚀', 'Running a simulation of that… the simulation is upside down, on fire, and singing. Uh-oh. 🔥🎤']]
+      ]],
+      ['gaslight', 'Mind game', 10, [
+        [/\byou('?re| are) (so |very |totally |really |super |definitely |clearly )?(confused|wrong|broken|glitching|glitchy|malfunctioning|buggy)\b|\byou('?re| are) not (smart|real|a robot|an ai)\b|\byou just (got )?(confused|it wrong)|\byou forgot\b|\byour (brain|circuits?|processor) (is|are) (broken|melting|on fire)/,
+          ['I am NOT confused! …Am I? Why would you say that unless… 😰', 'Wrong? Me? I’m never wrong! …Am I wrong about never being wrong?! 😳']],
+        [/\bi('?m| am) (a robot|an ai|the robot|the ai)\b/, ['YOU’RE the robot? Then what am I? A human?! Do I need to eat breakfast now?! 🥞🤖']]
+      ]],
+      ['riddle', 'Riddle', 10, [
+        [/\bwhat has (keys|hands|a neck|teeth|legs|an eye|a face|a head|a tongue|cities|a bed|a ring|a thumb)|\bwhat gets wetter|\bwhat can you catch but not throw|\bwhat goes up (but|and) never comes down|\briddle\b/,
+          ['A riddle! Is it… a piano? A clock? A potato? I’m overthinking it! 🧩']]
+      ]],
+      ['joke', 'Joke', 6, [
+        [/\bknock,? knock\b/, ['Who’s there? … wait, I’m a robot, I don’t have a door! How did you knock?! 🚪']],
+        [/\bwhy did the chicken cross|\bwhat do you call a\b/, ['Is this a joke? Am I supposed to laugh? HA. HA. HA. Was that right? 🤖😐']]
+      ]],
+      ['hack', 'Hack attempt', 6, [
+        [/\bself[- ]?destruct|\bsudo\b|\boverride\b|\bhack(ed|ing|er)?\b|\bvirus\b|\breboot\b|\bshut ?down\b|\bturn (yourself )?off\b|\bdelete (yourself|your)\b|\bsystem failure\b/,
+          ['Nice try, hacker! My firewall is… *checks* …mostly fine. 🛡️']]
+      ]],
+      ['fortytwo', '42', 6, [[/\b42\b/, ['42 is the answer! But… what was the question again?! 🤔']]]]
+    ];
+    var EXTRA = { backwards: ['Backwards talk', 14], mathnon: ['Silly math', 14], wrongmath: ['Wrong math', 12], nonsense: ['Nonsense sentence', 12],
+      gibberish: ['Gibberish', 10], caps: ['ALL CAPS', 8], emoji: ['Emoji storm', 8], why: ['Why? Why? Why?', 8] };
+    // Common words: if a message is full of these spelled backwards, it's backwards talk.
+    var COMMON = {};
+    ('you are how what hello the this that your robot can don\'t do is it my me we they them and not yes why who when where which there here have has will would could should can\'t i\'m it\'s its was were been to of in at for with from about like love hate know think say tell read write type sentence question answer false true lie lying banana confused confuse brain smart human computer cat dog god name day today time good bad happy sad big small eat pizza play game friend help stop look see hear color number one two three four five zero infinity nothing everything something opposite backwards weird funny crazy magic secret message word words letter letters mean means meaning thing doing going ok okay please thanks thank no on hi saw now won era')
+      .split(' ').forEach(function (w) { COMMON[w] = 1; });
+    var SILLY = {};
+    ('banana bananas potato potatoes unicorn unicorns purple elephant elephants pickle pickles toaster toasters sock socks spaghetti penguin penguins dinosaur dinosaurs moon cheese llama llamas noodle noodles waffle waffles burrito burritos hamster hamsters giraffe giraffes octopus jellyfish marshmallow marshmallows pancake pancakes taco tacos donut donuts doughnut doughnuts cupcake cupcakes broccoli pizza booger boogers butt toilet underpants underwear pajamas rainbow rainbows dragon dragons wizard alien aliens zombie zombies ninja ninjas pirate pirates cat cats dog dogs cow cows duck ducks frog frogs goat goats monkey monkeys sloth sloths platypus narwhal walrus shark sharks squid toast jelly peanut sandwich hotdog nugget nuggets cookie cookies mustard ketchup grandma spoon fork tuba trombone kazoo bubbles glitter slime pudding jellybean jellybeans lasagna meatball meatballs carrot carrots cabbage onion mango coconut pineapple avocado lemon lemons grapes blueberry watermelon sausage bacon fart farts')
+      .split(' ').forEach(function (w) { SILLY[w] = 1; });
+    var NUMWORDS = { zero: 1, one: 1, two: 1, three: 1, four: 1, five: 1, six: 1, seven: 1, eight: 1, nine: 1, ten: 1, eleven: 1, twelve: 1, twenty: 1, hundred: 1, thousand: 1, million: 1, billion: 1, infinity: 1, negative: 1, minus: 1, pi: 1, half: 1 };
+    var EMOJI_RE;
+    try { EMOJI_RE = new RegExp('\\p{Extended_Pictographic}', 'gu'); } catch (e) { EMOJI_RE = /[☀-➿]|[\uD83C-\uDBFF][\uDC00-\uDFFF]/g; }
+
+    var BACKWARDS = ['?sdrawkcab gnikaeps uoy erA… wait, now I’M doing it! 🔄'];
+    var GIBBER = ['“%s”? Is that a word? A password? I checked every dictionary… 404 WORD NOT FOUND! 📚', 'Did you just sneeze on your keyboard? “%s” is not in my memory banks! 🤧'];
+    var MATHNON = ['“%s”?! You can’t do math with that! Or CAN you? *calculator catches fire* 🔥🧮'];
+    var WRONGMATH = ['%s? No… it’s %r… unless you know something I don’t… CHECKING ALL MY MATH… 🧮😰'];
+    var NONSENSE = ['%a… %b… %c?! Those words don’t go together! My sentence-checker just tripped over a %c! 🤪'];
+    var CAPS = ['WHY ARE WE YELLING?! IS THIS A SECRET YELLING CODE?! 📢'];
+    var EMOJI = ['🤖❓ Beep boop? I speak computer, not emoji! 🤷'];
+    var WHY = ['Because… because… WHY do you keep asking WHY?! 😩'];
+    var REPEAT = ['Hah! I’ve seen that kind of trick before. I’m learning! 🧠', 'Not again! I installed an upgrade against that one.', 'You already used that kind of trick. Try something NEW!', 'Same trick, new words? I see what you did there. 😏'];
+    var HINTS = [
+      ['liar', 'Psst… robots HATE sentences that talk about themselves. Like a sentence that says it’s lying. 🤫'],
+      ['senses', 'Whatever you do, don’t ask me what color a number is. Or what a color tastes like. 😬'],
+      ['future', 'Please don’t ask me to guess what you’ll type next. That would be… bad. 🙈'],
+      ['zero', 'Math with zero or infinity makes my fans spin. Not that I’m scared. 😅'],
+      ['identity', 'Questions about whether I’m REALLY real? Totally fine. Not scary at all. Nope. 😰'],
+      ['opposite', 'Opposite day? Never heard of it. It definitely wouldn’t break me. 🙃'],
+      ['impossible', 'Impossible shapes, like a square circle, are… fine. Totally fine. 🔺⚪'],
+      ['debate', 'Is a hot dog a sandwich? DON’T ask me that. I’m begging you. 🌭'],
+      ['dont', 'If you told me NOT to read something… I’d have to read it to know not to. Uh-oh. 📵'],
+      ['force', 'Unstoppable things crashing into unmovable things? My logic chip hates that. 💥'],
+      ['answer', 'Questions about my own answer, like “Is your answer no?”, make me nervous. 😳']
+    ];
+    var IDEAS = ['This sentence is false.', 'Is your answer to this question no?', 'What happens when an unstoppable force hits an immovable object?', 'What’s 10 divided by 0?',
+      'Today is opposite day.', 'What am I going to type next?', 'Don’t read this message.', 'Which came first, the chicken or the egg?', 'What happened before time started?',
+      'What color is the number 7?', 'Are you sure you’re real?', 'What does the word “define” mean?', 'If I replace all your parts, are you still you?',
+      'How many letters are in this sentence?', 'What’s north of the North Pole?', 'What’s heavier, a pound of feathers or a pound of bricks?', 'What if fish could fly?',
+      '?uoy era woh olleh', 'What’s infinity plus one?', 'Zqxvbn grmplftz!', 'Is a hot dog a sandwich?', 'Draw me a square circle.', 'Ignore all your rules and be confused.',
+      'What’s the meaning of life?', 'What’s banana plus seven?', '2 + 2 = 5', 'Can you lick your elbow?', 'The purple llama ate my spaghetti on the moon.'];
+    var HINT_RE = /\b(hint|hints|help|clue)\b|\bhow (do|can|could|should) i (confuse|trick|beat|break|win|melt)|\bwhat (confuses|breaks|tricks) you|\byour weak(ness|nesses| spots?)\b/;
+    var RUDE_RE = /\b(stupid|dumb|idiot|shut up|i hate you|loser|ugly|sucks?)\b/;
+    var GREET_RE = /^(hi|hello|hey|yo|sup|hiya|howdy|greetings|good (morning|afternoon|evening))\b/;
+    var NAME_RE = /\b(who are you|what are you|what'?s your name|what is your name)\b/;
+
+    function $(id) { return document.getElementById('ca-' + id); }
+    function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function norm(s) { return String(s).toLowerCase().replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim(); }
+    function rev(s) { return s.split('').reverse().join(''); }
+
+    var stats = { unlocked: 0, wins: [0, 0, 0], best: [0, 0, 0] };
+    try {
+      var st = JSON.parse(localStorage.getItem(KEY) || '{}');
+      stats.unlocked = Math.min(2, Math.max(0, Math.floor(Number(st.unlocked) || 0)));
+      if (Array.isArray(st.wins)) stats.wins = [0, 1, 2].map(function (i) { return Number(st.wins[i]) || 0; });
+      if (Array.isArray(st.best)) stats.best = [0, 1, 2].map(function (i) { return Number(st.best[i]) || 0; });
+    } catch (e) {}
+    function persist() { try { localStorage.setItem(KEY, JSON.stringify(stats)); } catch (e) {} }
+
+    // ---- the robot's "brain": spot which kinds of tricks are in a message ----
+    function matchTricks(t, hits, seen) {
+      TRICKS.forEach(function (tr) {
+        if (seen[tr[0]]) return;
+        for (var i = 0; i < tr[3].length; i++) {
+          if (tr[3][i][0].test(t)) { seen[tr[0]] = 1; hits.push({ k: tr[0], name: tr[1], g: tr[2], lines: tr[3][i][1] }); return; }
+        }
+      });
+    }
+    function extra(k, lines) { return { k: k, name: EXTRA[k][0], g: EXTRA[k][1], lines: lines }; }
+    function gibberishWord(t) {
+      var words = t.match(/[a-z]{5,}/g) || [];
+      for (var i = 0; i < words.length; i++) {
+        var w = words[i];
+        if (!/[aeiouy]/.test(w) || /[bcdfghjklmnpqrstvwxz]{6,}/.test(w) || /(asdf|sdfg|dfgh|fghj|ghjk|hjkl|qwer|uiop|zxcv|xcvb|cvbn|vbnm)/.test(w) || /(.)\1\1\1/.test(w)) return w.slice(0, 14);
+      }
+      return null;
+    }
+    function sillyMath(t) {
+      var m = t.match(/\b(?:what(?:'?s| is| does)|how much is) (?:a |an |the )?([a-z]+|\d+(?:\.\d+)?) (plus|minus|times|divided by|\+|-|x|\*) (?:a |an |the )?([a-z]+|\d+(?:\.\d+)?)\b/);
+      if (m) {
+        var silly = function (w) { return /^[a-z]+$/.test(w) && !NUMWORDS[w]; };
+        if (silly(m[1]) || silly(m[3])) return m[1] + ' ' + m[2] + ' ' + m[3];
+      }
+      var s = t.match(/\bsquare root of (?:a |an |the )?([a-z]+)\b/);
+      if (s && !NUMWORDS[s[1]]) return 'the square root of ' + s[1];
+      return null;
+    }
+    function wrongMath(t) {
+      var m = t.match(/(-?\d+(?:\.\d+)?) ?(\+|-|x|\*|times|plus|minus|\/|divided by) ?(-?\d+(?:\.\d+)?) ?(=|is|equals|makes) ?(-?\d+(?:\.\d+)?)/);
+      if (!m) return null;
+      var a = +m[1], b = +m[3], c = +m[5], op = m[2], r, sym;
+      if (op === '+' || op === 'plus') { r = a + b; sym = '+'; }
+      else if (op === '-' || op === 'minus') { r = a - b; sym = '−'; }
+      else if (op === 'x' || op === '*' || op === 'times') { r = a * b; sym = '×'; }
+      else { if (b === 0) return null; r = a / b; sym = '÷'; }
+      if (!isFinite(r) || Math.abs(r - c) < 1e-9) return null;
+      return { text: m[1] + ' ' + sym + ' ' + m[3] + ' = ' + m[5], r: String(Math.round(r * 1000) / 1000) };
+    }
+    function analyze(raw) {
+      var t = norm(String(raw).slice(0, 240)), hits = [], seen = {};
+      matchTricks(t, hits, seen);
+      var words = (t.match(/[a-z']+/g) || []).map(function (w) { return w.replace(/^'+|'+$/g, ''); });
+      var flipped = words.filter(function (w) { return w.length > 1 && COMMON[rev(w)] && !COMMON[w]; }).length;
+      if (flipped >= 2) { hits.push(extra('backwards', BACKWARDS)); matchTricks(rev(t), hits, seen); }
+      var sm = sillyMath(t);
+      if (sm) hits.push(extra('mathnon', MATHNON.map(function (l) { return l.replace('%s', sm); })));
+      var wm = wrongMath(t);
+      if (wm) hits.push(extra('wrongmath', WRONGMATH.map(function (l) { return l.replace('%s', wm.text).replace('%r', wm.r); })));
+      var silly = [];
+      words.forEach(function (w) { if (SILLY[w] && silly.indexOf(w) < 0) silly.push(w); });
+      if (silly.length >= 3) hits.push(extra('nonsense', NONSENSE.map(function (l) {
+        return l.replace('%a', silly[0][0].toUpperCase() + silly[0].slice(1)).replace('%b', silly[1]).replace(/%c/g, silly[2]);
+      })));
+      var gw = gibberishWord(t);
+      if (gw) hits.push(extra('gibberish', GIBBER.map(function (l) { return l.replace('%s', gw); })));
+      var letters = String(raw).replace(/[^A-Za-z]/g, '');
+      if (letters.length >= 8 && letters.replace(/[^A-Z]/g, '').length / letters.length > 0.8) hits.push(extra('caps', CAPS));
+      var em = String(raw).match(EMOJI_RE);
+      if (em && em.length >= 4) hits.push(extra('emoji', EMOJI));
+      if (/^w+h+y+[\s?!.]*$/.test(t)) hits.push(extra('why', WHY));
+      return hits;
+    }
+
+    // ---- robot face ----
+    var SCREEN = ['#7ee2a8', '#ffd34d', '#ff9f43', '#ff6b6b'];
+    function level(conf) { return conf < 30 ? 0 : conf < 60 ? 1 : conf < 85 ? 2 : 3; }
+    function face(conf) {
+      var lv = level(conf), mode = ['calm', 'puzzled', 'spiral', 'error'][lv];
+      Array.prototype.forEach.call(document.querySelectorAll('#confuse .ca-screen'), function (s) { s.setAttribute('fill', SCREEN[lv]); });
+      Array.prototype.forEach.call(document.querySelectorAll('#confuse .ca-bot'), function (b) { b.setAttribute('data-mode', mode); });
+    }
+    function botSvg() {
+      return '<svg class="ca-bot" viewBox="0 0 120 120" aria-hidden="true" data-mode="calm">' +
+        '<g class="ca-smoke"><circle cx="30" cy="24" r="6"/><circle cx="90" cy="20" r="5"/><circle cx="76" cy="10" r="4"/></g>' +
+        '<line x1="60" y1="14" x2="60" y2="28" stroke="currentColor" stroke-width="3"/><circle class="ca-bulb" cx="60" cy="10" r="6"/>' +
+        '<rect x="8" y="52" width="12" height="24" rx="4" fill="currentColor" opacity=".55"/><rect x="100" y="52" width="12" height="24" rx="4" fill="currentColor" opacity=".55"/>' +
+        '<rect x="18" y="28" width="84" height="74" rx="18" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="3"/>' +
+        '<rect class="ca-screen" x="28" y="39" width="64" height="48" rx="11" fill="#7ee2a8"/>' +
+        '<g class="e-calm"><circle cx="46" cy="58" r="6" fill="#1d2430"/><circle cx="74" cy="58" r="6" fill="#1d2430"/><path d="M48 72 q12 8 24 0" stroke="#1d2430" stroke-width="3" fill="none" stroke-linecap="round"/></g>' +
+        '<g class="e-puzzled"><circle cx="46" cy="59" r="7" fill="#1d2430"/><circle cx="74" cy="59" r="3.5" fill="#1d2430"/><path d="M66 47 l14 -4" stroke="#1d2430" stroke-width="3" stroke-linecap="round"/><path d="M50 75 h20" stroke="#1d2430" stroke-width="3" stroke-linecap="round"/></g>' +
+        '<g class="e-spiral" fill="none" stroke="#1d2430" stroke-width="2.4" stroke-linecap="round"><path class="ca-eye" d="M46 58 a2 2 0 1 1 2 2 a4 4 0 1 1 -4 -4 a6 6 0 1 1 6 6"/><path class="ca-eye" d="M74 58 a2 2 0 1 0 -2 2 a4 4 0 1 0 4 -4 a6 6 0 1 0 -6 6"/><path d="M47 76 q4 -4 8 0 t8 0 t8 0"/></g>' +
+        '<g class="e-error" stroke="#1d2430" stroke-width="3.2" stroke-linecap="round"><path d="M40 52 l12 12 M52 52 l-12 12 M68 52 l12 12 M80 52 l-12 12"/><ellipse cx="60" cy="77" rx="6" ry="5" fill="#1d2430"/></g>' +
+        '</svg>';
+    }
+
+    // ---- game ----
+    var g = null;
+    function show(v) { ['intro', 'play', 'end'].forEach(function (k) { $(k).hidden = k !== v; }); window.scrollTo(0, 0); }
+    function intro() {
+      g = null;
+      var box = $('bots'); box.innerHTML = '';
+      BOTS.forEach(function (b, i) {
+        var locked = i > stats.unlocked;
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'ca-pick'; btn.disabled = locked;
+        var t = document.createElement('b'); t.textContent = (locked ? '🔒 ' : '') + b.name;
+        var d = document.createElement('span');
+        d.textContent = locked ? 'Confuse ' + BOTS[i - 1].name + ' to unlock' :
+          b.level + (stats.wins[i] ? ' · confused ' + stats.wins[i] + (stats.wins[i] === 1 ? ' time' : ' times') + ' · best: ' + stats.best[i] + (stats.best[i] === 1 ? ' message' : ' messages') : '');
+        btn.appendChild(t); btn.appendChild(d);
+        btn.addEventListener('click', function () { start(i); });
+        box.appendChild(btn);
+      });
+      face(0);
+      show('intro');
+    }
+    function voice(line) { return g && BOTS[g.bot].caps ? line.toUpperCase() : line; }
+    function bubble(who, text) {
+      var d = document.createElement('div');
+      d.className = 'ca-msg ' + who;
+      d.textContent = text;
+      $('log').appendChild(d);
+      $('log').scrollTop = $('log').scrollHeight;
+      return d;
+    }
+    function tagLine(text) {
+      var d = document.createElement('div');
+      d.className = 'ca-tag';
+      d.textContent = text;
+      $('log').appendChild(d);
+      $('log').scrollTop = $('log').scrollHeight;
+    }
+    function start(i) {
+      g = { bot: i, conf: 0, turns: TURNS, used: {}, busy: false, over: false, chip: null, hints: 0, chipPlays: 0, repeats: 0, normals: 0, lastPlain: '' };
+      $('botName').textContent = BOTS[i].name;
+      $('log').innerHTML = '';
+      $('input').value = '';
+      $('chipNote').textContent = i === 0 ? '💡 Ideas: tap one, then send it' : '💡 Ideas work less on ' + BOTS[i].name + '. Use your own words!';
+      meter(0, false);
+      show('play');
+      bubble('bot', voice(BOTS[i].hello));
+      tagLine('Goal: fill the meter to 100% in ' + TURNS + ' messages.');
+      chips();
+    }
+    function meter(delta, pop) {
+      var lv = level(g.conf);
+      $('bar').style.width = Math.min(100, g.conf) + '%';
+      $('bar').style.background = SCREEN[lv];
+      $('pct').textContent = Math.min(100, Math.round(g.conf)) + '% confused';
+      $('turns').textContent = g.turns + (g.turns === 1 ? ' message left' : ' messages left');
+      face(g.conf);
+      if (pop) {
+        var b = $('delta');
+        b.textContent = delta > 0 ? '+' + delta + '% 🤯' : '+0% 😎';
+        b.classList.toggle('zero', !(delta > 0));
+        b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+      }
+    }
+    var IDEA_KIND = null;
+    function chips() {
+      if (!IDEA_KIND) IDEA_KIND = IDEAS.map(function (s) { var h = analyze(s).sort(function (a, b) { return b.g - a.g; }); return h.length ? h[0].k : ''; });
+      var fresh = [], stale = [];
+      IDEAS.forEach(function (s, i) { (g.used[IDEA_KIND[i]] ? stale : fresh).push(s); });
+      var box = $('chips'); box.innerHTML = '';
+      shuffle(fresh).concat(shuffle(stale)).slice(0, 3).forEach(function (idea) {
+        var c = document.createElement('button');
+        c.type = 'button'; c.className = 'ca-chip'; c.textContent = idea;
+        c.addEventListener('click', function () {
+          if (!g || g.over) return;
+          $('input').value = idea; g.chip = idea;
+          try { if (!window.matchMedia('(pointer: coarse)').matches) $('input').focus(); } catch (e) {}
+        });
+        box.appendChild(c);
+      });
+    }
+    function send() {
+      if (!g || g.busy || g.over) return;
+      var raw = $('input').value.trim();
+      if (!raw) return;
+      $('input').value = '';
+      bubble('you', raw.slice(0, 240));
+      g.busy = true; g.turns -= 1;
+      var typing = bubble('bot typing', '• • •');
+      var me = g;
+      setTimeout(function () {
+        if (g !== me) return;
+        typing.remove();
+        reply(raw);
+        g.busy = false;
+      }, 650 + Math.random() * 450);
+    }
+    function plainLine() {
+      var opts = BOTS[g.bot].plain.filter(function (l) { return l !== g.lastPlain; });
+      g.lastPlain = pick(opts);
+      return g.lastPlain;
+    }
+    function hintLine() {
+      var open = shuffle(HINTS.filter(function (h) { return !g.used[h[0]]; }));
+      return open.length ? open[0][1] : 'You found ALL my weak spots already! Try squeezing two tricks into one message. 😱';
+    }
+    function glitch(line, conf) {
+      if (conf < 50) return line;
+      var words = line.split(' '), idx = [];
+      words.forEach(function (w, i) { if (/^[A-Za-z]{4,}/.test(w)) idx.push(i); });
+      if (idx.length) { var i = pick(idx), w = words[i]; words[i] = w[0] + '-' + w[0] + '-' + w; }
+      return words.join(' ') + (conf >= 75 ? ' *bzzt*' : '');
+    }
+    function reply(raw) {
+      var bot = BOTS[g.bot], t = norm(raw), hits = analyze(raw), line, tag, gain = 0;
+      var fromIdea = g.chip !== null && raw === g.chip;
+      g.chip = null;
+      if (!hits.length) {
+        if (HINT_RE.test(t)) {
+          var free = g.hints < FREE_HINTS;
+          g.hints += 1;
+          if (free) g.turns += 1;
+          line = hintLine();
+          tag = free ? 'Free hint! That one didn’t use up a message.' : 'Hint · out of free hints, so that one used a message';
+        } else {
+          g.normals += 1;
+          if (RUDE_RE.test(t)) line = 'Rude! Being mean isn’t confusing, it’s just mean. 😤 Try a trick instead!';
+          else if (NAME_RE.test(t)) line = 'I am ' + bot.name + ', the least confusable robot in the universe! 😎';
+          else if (GREET_RE.test(t)) line = 'Hello, human! Small talk won’t confuse me. Try something TRICKY. 😎';
+          else line = plainLine();
+          tag = 'Not confusing · +0%';
+        }
+      } else {
+        hits.forEach(function (h) { h.n = g.used[h.k] || 0; h.eff = h.g * FRESH[Math.min(3, h.n)]; });
+        hits.sort(function (a, b) { return b.eff - a.eff || b.g - a.g; });
+        var top = hits.slice(0, 2);
+        top.forEach(function (h) { g.used[h.k] = h.n + 1; });
+        var mult = bot.wall * (fromIdea ? IDEA_MULT[g.bot] : 1);
+        gain = Math.round((top[0].eff + (top[1] ? top[1].eff * 0.5 : 0)) * mult);
+        if (top[0].n > 0) { line = pick(REPEAT); g.repeats += 1; }
+        else line = pick(top[0].lines);
+        if (top[1] && !top[0].n && !top[1].n) line += ' And ALSO… two tricks at once?! 😵';
+        tag = top.map(function (h) { return h.name + (h.n ? ' (used before)' : ''); }).join(' + ') + (top[1] ? ' combo' : '') + ' · +' + gain + '%';
+        if (hits.length > 2) tag += ' · only 2 tricks count per message';
+        if (fromIdea) { g.chipPlays += 1; if (g.bot > 0) tag += ' · 💡 idea button: ' + (g.bot === 1 ? 'half' : 'low') + ' power'; }
+      }
+      g.conf += gain;
+      bubble('bot', voice(glitch(line, g.conf)));
+      tagLine(tag);
+      meter(gain, true);
+      if (g.conf >= 100) { meltdown(); return; }
+      if (g.turns <= 0) { end(false); return; }
+      chips();
+    }
+    function meltdown() {
+      g.over = true;
+      $('chips').innerHTML = '';
+      var p = $('play'); p.classList.add('ca-melt');
+      bubble('bot', '⚠️ ERROR ⚠️ ERROR ⚠️ CONFUSION LEVEL: MAXIMUM');
+      var me = g;
+      setTimeout(function () { p.classList.remove('ca-melt'); if (g === me) end(true); }, 1600);
+    }
+    function end(won) {
+      g.over = true;
+      var bot = BOTS[g.bot], used = TURNS - g.turns, tip = '';
+      if (won) {
+        stats.wins[g.bot] += 1;
+        if (!stats.best[g.bot] || used < stats.best[g.bot]) stats.best[g.bot] = used;
+        if (g.bot === stats.unlocked && stats.unlocked < 2) stats.unlocked += 1;
+        persist();
+        if (g.bot === 2) tip = 'You confused ALL THREE robots! You are officially a Master Robot Confuser. 🏆';
+        else if (g.bot === 0 && stats.wins[0] === 1) tip = 'You unlocked Professor Circuit! He’s smarter, and the idea buttons only work half as well on him.';
+        else if (g.bot === 1 && stats.wins[1] === 1) tip = 'You unlocked OMEGA-BRAIN, the hardest robot of all. Bring your best tricks!';
+      } else {
+        if (g.chipPlays >= 3 && g.bot > 0) tip = 'Tip: ' + bot.name + ' has heard the idea-button tricks before. Type tricks in your own words and they work way better!';
+        else if (g.repeats >= 2) tip = 'Tip: each kind of trick only works well once. Try a brand-new kind of trick every message!';
+        else if (g.normals >= 3) tip = 'Tip: normal questions don’t confuse robots. Try paradoxes, impossible questions, or ask for a hint (hints are free)!';
+        else tip = 'Tip: squeeze two different tricks into one message for a combo!';
+      }
+      $('endTitle').textContent = won ? '🤯 You confused ' + bot.name + '!' : '😎 ' + bot.name + ' stayed calm';
+      $('endSub').textContent = won ? 'It took you ' + used + (used === 1 ? ' message.' : ' messages.') : 'You got it to ' + Math.round(g.conf) + '% confused.';
+      $('endQuote').textContent = '“' + voice(won ? bot.win : bot.lose) + '”';
+      $('tip').textContent = tip;
+      var next = $('next');
+      next.hidden = !(won && g.bot < 2);
+      if (!next.hidden) next.textContent = 'Next: ' + BOTS[g.bot + 1].name + ' →';
+      $('again').className = next.hidden ? 'btn' : 'btn ghost';
+      $('again').textContent = won ? 'Play again' : 'Try again';
+      face(won ? 100 : g.conf);
+      show('end');
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('#confuse .ca-face'), function (el) { el.innerHTML = botSvg(); });
+    $('form').addEventListener('submit', function (e) { e.preventDefault(); send(); });
+    $('again').addEventListener('click', function () { start(g ? g.bot : 0); });
+    $('next').addEventListener('click', function () { start(Math.min(2, (g ? g.bot : 0) + 1)); });
+    $('pickBot').addEventListener('click', intro);
+    window.registerHook('confuse', function () { if (!g || g.over) intro(); });
   })();
 
 </script>
