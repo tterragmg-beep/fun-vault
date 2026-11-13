@@ -8984,7 +8984,10 @@
     function rand(a) { return a && a.length ? pick(a) : null; }
     function chance(p) { return Math.random() < p; }
     function clamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
-    function capOf(k) { return k === 'smarts' && L ? 100 + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id].brain || 0); }, 0) : 100; }   // brain implants let Smarts go past 100%
+    function capOf(k) {   // brain implants let Smarts go past 100%, and body implants do the same for Health
+      var f = k === 'smarts' ? 'brain' : k === 'health' ? 'vital' : null;
+      return f && L ? 100 + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id][f] || 0); }, 0) : 100;
+    }
     function capStat(k, v) { return Math.max(0, Math.min(capOf(k), Math.round(v))); }
     function val(v) { return Array.isArray(v) ? R(v[0], v[1]) : v; }
     function cr(n) { n = Math.round(n || 0); return (n < 0 ? '−' : '') + Math.abs(n).toLocaleString('en-US') + ' cr'; }
@@ -9051,24 +9054,26 @@
       { id: 'arm', e: '🦾', t: 'Chrome arm', cost: 12000, min: 0, body: 10, fx: { health: 6, style: 5 }, desc: 'Stronger punches', msg: 'You got a chrome arm. You can now open any pickle jar in the city.' },
       { id: 'legs', e: '🦿', t: 'Jump-jet legs', cost: 14000, min: 0, body: 15, fx: { health: 5, happy: 6 }, desc: 'Jump kick move', msg: 'You got jump-jet legs. You can jump onto a two-story roof. (Please don’t.)' },
       { id: 'chip', e: '🧠', t: 'Brain booster chip', cost: 15000, min: 0, body: 3, fx: { smarts: 12 }, brain: 10, desc: 'Smarts can go up to 10% past 100', msg: 'You got a brain booster chip and learned nine languages before lunch.' },
-      { id: 'heart', e: '💓', t: 'Turbo heart', cost: 25000, min: 0, body: 6, fx: { health: 15 }, desc: 'Second wind move', msg: 'You got a turbo heart. It goes vroom! You might live longer.' },
+      { id: 'heart', e: '💓', t: 'Turbo heart', cost: 25000, min: 0, body: 6, fx: { health: 15 }, vital: 10, desc: 'Second wind move · Health can go 10% past 100', msg: 'You got a turbo heart. It goes vroom! You might live longer.' },
       { id: 'knees', e: '🦿', t: 'Chrome knees', cost: 5000, min: 55, body: 4, fx: { health: 10 }, hide: 1 },
       { id: 'wings', e: '🌈', t: 'Rainbow chrome wings', cost: 60000, min: 0, body: 6, fx: { style: 15, happy: 8 }, desc: 'Glide move', msg: 'You got rainbow chrome wings! Now you can glide between rooftops.', prem: 1 },
       { id: 'speakers', e: '🎧', t: 'Built-in ear speakers', cost: 2500, min: 0, body: 2, fx: { happy: 5 }, msg: 'You got built-in ear speakers. Now your life has its own soundtrack.' },
       { id: 'magnet', e: '🧲', t: 'Magnet fingertips', cost: 3000, min: 0, body: 2, fx: { happy: 4 }, desc: 'Yank move', msg: 'You got magnet fingertips. You can pick up spoons without touching them!' },
       { id: 'lungs', e: '🫁', t: 'Smog-filter lungs', cost: 10000, min: 0, body: 6, fx: { health: 6 }, msg: 'You got smog-filter lungs. Neon Harbor air tastes like mountain air now.' },
-      { id: 'armor', e: '🛡️', t: 'Sub-skin armor', cost: 18000, min: 0, body: 10, fx: { health: 10 }, desc: 'Take less damage', msg: 'You got sub-skin armor. You’re as tough as a hover-bike tire.' },
+      { id: 'armor', e: '🛡️', t: 'Sub-skin armor', cost: 18000, min: 0, body: 10, fx: { health: 10 }, vital: 5, desc: 'Take less damage · Health can go 5% past 100', msg: 'You got sub-skin armor. You’re as tough as a hover-bike tire.' },
       { id: 'memory', e: '💾', t: 'Memory expansion', cost: 22000, min: 0, body: 3, fx: { smarts: 10 }, brain: 10, desc: 'Smarts can go up to 10% past 100', msg: 'You got a memory expansion. You remember every noodle you’ve ever eaten.' },
       { id: 'spine', e: '🧊', t: 'Cooling spine', cost: 30000, min: 0, body: 6, limit: 15, fx: {}, msg: 'You got a cooling spine. It keeps your chrome from overheating. Your cyberware tolerance goes up by 15!' },
       { id: 'cortex', e: '🧠', t: 'Neural overclock', cost: 60000, min: 0, body: 5, fx: { smarts: 15 }, brain: 25, desc: 'Smarts can go up to 25% past 100', msg: 'You got a neural overclock. Your brain runs faster than ever, and your Smarts can go past 100% now!' },
-      { id: 'bones', e: '🦴', t: 'Titanium bones', cost: 20000, min: 0, body: 8, fx: { health: 10 }, desc: 'More HP in battles', msg: 'You got titanium bones. You’re basically unbreakable now.' },
+      { id: 'booster', e: '🧬', t: 'Health booster', cost: 55000, min: 0, body: 5, fx: { health: 15 }, vital: 15, desc: 'Health can go up to 15% past 100', msg: 'You got a health booster. Your body is tougher than ever, and your Health can go past 100% now!' },
+      { id: 'muscle', e: '💪', t: 'Synth-muscle weave', cost: 45000, min: 0, body: 6, fx: { health: 6 }, desc: '+20 power in fights, stronger punches', msg: 'You got synth-muscle weave. You’re WAY stronger now: +20 power!' },
+      { id: 'bones', e: '🦴', t: 'Titanium bones', cost: 20000, min: 0, body: 8, fx: { health: 10 }, vital: 10, desc: 'More HP in battles · Health can go 10% past 100', msg: 'You got titanium bones. You’re basically unbreakable now.' },
       { id: 'reflex', e: '⚡', t: 'Reflex booster', cost: 24000, min: 0, body: 3, fx: { health: 3 }, desc: 'Easier dodges and parries', msg: 'You got a reflex booster in your nerves. Dodging and parrying are easier now!' },
       { id: 'blades', e: '🗡️', t: 'Glow blades', cost: 28000, min: 0, body: 6, fx: { style: 6 }, desc: 'Blade slash move', msg: 'You got glow blades that fold out of your arms. Very dramatic. Very shiny.' },
       { id: 'rocket', e: '🚀', t: 'Pop-rocket arm launcher', cost: 32000, min: 0, body: 6, fx: { style: 4 }, desc: 'A huge pop-rocket, once per battle', msg: 'You got a pop-rocket launcher in your arm. It fires confetti too, if you ask nicely.' },
       { id: 'camo', e: '👻', t: 'Optical camo skin', cost: 40000, min: 0, body: 4, fx: { style: 5 }, desc: 'Vanish from an attack, once per battle', msg: 'You got optical camo. You can turn invisible for a few seconds. Hide-and-seek will never be the same.' },
-      { id: 'heart2', e: '🫀', t: 'Backup heart', cost: 45000, min: 0, body: 5, fx: { health: 8 }, desc: 'Jump-starts you once if you get knocked out in a battle', msg: 'You got a backup heart. If you ever get knocked out in a battle, it jump-starts you!' },
-      { id: 'chassis', e: '🤖', t: 'Smasher Chassis', cost: 250000, min: 0, body: 40, fx: { health: 30, style: 10, happy: 5 }, ach: 'smasher', desc: 'A full-borg body: tons more HP, takes less damage, and a Smasher cannon move', msg: 'You got a Smasher Chassis. Most of you is chrome now: huge, armored, and LOUD.' },
-      { id: 'exo', e: '🦾', t: 'Titan Exoskeleton', cost: 120000, min: 0, body: 25, fx: { health: 25, style: 12, happy: 8 }, desc: 'Titan smash move', msg: 'You strapped into a Titan Exoskeleton. You can lift a hover-bus with one hand!', ach: 'legend' },
+      { id: 'heart2', e: '🫀', t: 'Backup heart', cost: 45000, min: 0, body: 5, fx: { health: 8 }, vital: 5, desc: 'Jump-starts you once if you get knocked out in a battle · Health can go 5% past 100', msg: 'You got a backup heart. If you ever get knocked out in a battle, it jump-starts you!' },
+      { id: 'chassis', e: '🤖', t: 'Smasher Chassis', cost: 250000, min: 0, body: 40, fx: { health: 30, style: 10, happy: 5 }, ach: 'smasher', vital: 15, desc: 'A full-borg body: tons more HP, takes less damage, a Smasher cannon move · Health can go 15% past 100', msg: 'You got a Smasher Chassis. Most of you is chrome now: huge, armored, and LOUD.' },
+      { id: 'exo', e: '🦾', t: 'Titan Exoskeleton', cost: 120000, min: 0, body: 25, fx: { health: 25, style: 12, happy: 8 }, desc: 'Titan smash, 🪐 Anti-gravity, 🌌 Gravity pull, and ☄️ Gravity slam moves', msg: 'You strapped into a Titan Exoskeleton. You can lift a hover-bus with one hand!', ach: 'legend' },
       // 🖥️ operating systems: ⏱️ Sandys (time-slow), 😤 Berserk, 💻 Cyberdecks. One of each; a better one replaces the old one.
       { id: 'timeslow', e: '⏱️', t: 'Starter Sandy', cost: 40000, min: 0, body: 4, fx: { health: 4, style: 6 }, os: 'sandy', tier: 1, desc: 'Slows time for 33 turns in battles', msg: 'You got a Starter Sandy, a time-slow reflex chip. Whenever you want, the whole world slows down around you. Whoa.' },
       { id: 'sandy2', e: '⏱️', t: 'Hummingbird Sandy', cost: 95000, min: 0, body: 5, fx: { health: 5, style: 8 }, os: 'sandy', tier: 2, desc: 'Costs less humanity, hits harder', msg: 'You installed the Hummingbird Sandy. It costs less humanity now, and you hit even harder while it’s on!' },
@@ -9079,7 +9084,7 @@
       { id: 'deck1', e: '💻', t: 'Starter Cyberdeck', cost: 12000, min: 0, body: 4, fx: { smarts: 4 }, os: 'deck', tier: 1, ram: 4, net: 1, desc: 'Hack people in battles · 4 RAM · 2 quickhacks', msg: 'You got a Starter Cyberdeck. Now you can hack people! In battles, quickhacks use RAM, which refills a little every turn.' },
       { id: 'deck2', e: '💻', t: 'Ghostwire Cyberdeck', cost: 45000, min: 0, body: 5, fx: { smarts: 6 }, os: 'deck', tier: 2, ram: 7, net: 1, desc: '7 RAM · 4 quickhacks', msg: 'You got a Ghostwire Cyberdeck. More RAM and more quickhacks!' },
       { id: 'deck3', e: '💻', t: 'Black ICE Cyberdeck', cost: 140000, min: 0, body: 6, fx: { smarts: 8 }, os: 'deck', tier: 3, ram: 10, net: 1, desc: '10 RAM · all 7 quickhacks', msg: 'You got a Black ICE Cyberdeck, a pro netrunner’s deck. You can run every quickhack now!' },
-      { id: 'capri', e: '💠', t: 'Capri', cost: 0, min: 0, body: 6, fx: { smarts: 12, style: 6 }, os: 'deck', tier: 4, ram: 14, net: 1, brain: 15, ach: 'capri', desc: 'The legendary cyberdeck · 14 RAM · every quickhack is FREE', msg: 'You installed Capri, the legendary cyberdeck. Every quickhack is free now: no RAM needed!' },
+      { id: 'capri', e: '💠', t: 'Capri', cost: 0, min: 0, body: 6, fx: { smarts: 12, style: 6 }, os: 'deck', tier: 4, ram: 14, net: 1, brain: 15, ach: 'capri', desc: 'The legendary cyberdeck · 14 RAM · every quickhack is FREE · 6 quickhacks only Capri can run', msg: 'You installed Capri, the legendary cyberdeck. Every quickhack is free now: no RAM needed!' },
       // 🕸️ netrunner gear
       { id: 'port', e: '🔌', t: 'Neural hacking port', cost: 7000, min: 0, body: 2, fx: { smarts: 3 }, net: 1, desc: 'Jack-in stun move', msg: 'You got a neural hacking port. Swiping data shards just got way easier!' },
       { id: 'ramup', e: '🧠', t: 'RAM booster', cost: 18000, min: 0, body: 3, fx: { smarts: 3 }, net: 1, desc: '+3 RAM for your cyberdeck', msg: 'You got a RAM booster. Your cyberdeck holds 3 more RAM!' },
@@ -9144,7 +9149,7 @@
       { id: 'champ', e: '🐉', t: 'Ring Champion', d: 'Beat The Neon Dragon in the underground ring.' },
       { id: 'netgrad', e: '🕸️', t: 'Certified Netrunner', d: 'Graduate from Netrunner School (in 💼 Job, from age 16).' },
       { id: 'breach', e: '💻', t: 'Breach Protocol', d: 'Use 3 quickhacks in one battle and win it.' },
-      { id: 'capri', e: '💠', t: 'Capri', d: 'Install every piece of netrunner gear (with a Black ICE Cyberdeck) and graduate from Netrunner School.', reward: 'Gives you 💠 Capri, the legendary cyberdeck: every quickhack is free!' },
+      { id: 'capri', e: '💠', t: 'Capri', d: 'Install every piece of netrunner gear (with a Black ICE Cyberdeck) and graduate from Netrunner School.', reward: 'Gives you 💠 Capri, the legendary cyberdeck: every quickhack is free, plus 6 quickhacks only Capri can run!' },
       { id: 'breakout', e: '🔓', t: 'Great Escape', d: 'Break out of the Neon Harbor Lockup.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
@@ -9564,7 +9569,7 @@
       var gone = L.implants.filter(function (id) { return id !== 'tattoo'; });
       gone.forEach(function (id) { var fx = (IMP[id] && IMP[id].fx) || {}; Object.keys(fx).forEach(function (k) { if (L.st[k] != null) L.st[k] = clamp(L.st[k] - fx[k]); }); });
       L.implants = L.implants.filter(function (id) { return id === 'tattoo'; });
-      L.st.smarts = capStat('smarts', L.st.smarts);
+      L.st.smarts = capStat('smarts', L.st.smarts); L.st.health = capStat('health', L.st.health);
       return gone.length;
     }
     function overloadRescue() {
@@ -9897,14 +9902,14 @@
       L.homes.forEach(function (h) { joy += HOME[h].joy; });
       L.rides.forEach(function (r) { joy += RIDE[r].joy; });
       s.happy = clamp(s.happy + (55 - s.happy) * 0.08 + R(-3, 3) + Math.min(3, joy * 0.5));
-      if (a > 45) s.health = clamp(s.health - R(0, a > 80 ? 5 : a > 65 ? 3 : 2) * (has('heart') ? 0.5 : 1));
-      else s.health = clamp(s.health + R(-1, 2));
+      if (a > 45) s.health = capStat('health', s.health - R(0, a > 80 ? 5 : a > 65 ? 3 : 2) * (has('heart') ? 0.5 : 1));
+      else s.health = capStat('health', s.health + R(-1, 2));
       if (a > 55) s.style = clamp(s.style - R(0, 2));
       if (a > 72) s.smarts = capStat('smarts', s.smarts - R(0, 2));
       if (L.fame > 0 && !(L.job && JOB[L.job.id].fame)) L.fame = Math.max(0, L.fame - R(0, 2));
       // getting sick
       if (L.ill) {
-        s.health = clamp(s.health - R(3, 8));
+        s.health = capStat('health', s.health - R(3, 8));
         if (chance(0.4)) { log('💪 You got over ' + L.ill + ' all by yourself!'); L.ill = null; }
       } else if (a > 0 && chance(0.04 + (s.health < 40 ? 0.08 : 0) + (a > 60 ? 0.06 : 0))) {
         L.ill = pick(a > 60 ? ILL_OLD : ILL); s.happy = clamp(s.happy - 4);
@@ -9929,14 +9934,14 @@
       // too much chrome: glitches near your limit, chrome overload over it
       var ch = chrome(), lim = limitOf();
       if (!L.smasherBody && ch > lim && chance(overloadP(L.done.cool === a - 1))) L.pending.unshift('overload');
-      else if (!L.smasherBody && ch > 0 && ch >= lim - 5 && chance(0.25)) { log(pick(GLITCH)); s.happy = clamp(s.happy - R(2, 5)); s.health = clamp(s.health - R(0, 3)); }
+      else if (!L.smasherBody && ch > 0 && ch >= lim - 5 && chance(0.25)) { log(pick(GLITCH)); s.happy = clamp(s.happy - R(2, 5)); s.health = capStat('health', s.health - R(0, 3)); }
       L.happySum += s.happy; L.happyN += 1;
     }
     function deathCause() {
       var a = L.age, s = L.st;
       if (s.health <= 0) return L.doom || L.ill || 'poor health';
       if (a >= 118) return 'old age';
-      if (a >= 70 && chance(Math.pow((a - 70) / 45, 2.4) * (1.25 - s.health / 100) * (has('heart') ? 0.7 : 1))) return 'old age';
+      if (a >= 70 && chance(Math.pow((a - 70) / 45, 2.4) * (1.25 - Math.min(100, s.health) / 100) * (has('heart') ? 0.7 : 1))) return 'old age';
       return null;
     }
     function ribbon() {
@@ -10337,6 +10342,7 @@
         }
         if (L.age >= 16) opt(c, '🥊', 'Underground fight ring', 'Fight for prizes. Tough opponents start a real battle!', ringSheet);
         sec(c, '🦾 Chrome Clinic'); opt(c, '🦾', 'Visit the Chrome Clinic', 'Implants that boost your stats (watch your tolerance!)', clinicSheet);
+        if (has('exo')) { var fj = doneYet('float'); opt(c, '🪐', 'Anti-gravity joyride', fj ? 'Done this year ✓' : 'Float over the city in your Titan Exoskeleton', function () { L.done.float = L.age; doThing('🪐', [{ happy: [6, 10], fame: 2 }, pick(['🪐 You switched on your exo’s anti-gravity and floated over the neon rooftops. People pointed and waved!', '🪐 You hovered over the Glow Market with anti-gravity and caught a noodle bowl in midair.', '🪐 You floated to the top of the Kumo-Tek tower using anti-gravity and watched the sunrise.'])]); }, fj); }
       });
     }
     function clinicSheet() {
@@ -10490,7 +10496,7 @@
     function personFoe(p) {
       if (p.power == null) p.power = Math.max(12, 26 + (p.age >= 20 && p.age <= 50 ? 10 : p.age >= 65 ? -14 : 0) + (p.label === 'Crew leader' ? 42 : 0) + R(-8, 8));
       var pw = p.power;
-      return { id: 'person', e: p.age >= 65 ? '🧓' : '🧑', t: p.first + (p.last ? ' ' + p.last : ''), hp: 50 + Math.round(pw * 0.6), atk: [5 + Math.round(pw / 14), 8 + Math.round(pw / 10)], hits: [1, pw >= 55 ? 3 : 2], dodge: 0.18, power: pw, speed: 1 + pw / 500, weapon: '👊', feint: 0.15 };
+      return { id: 'person', e: p.age >= 65 ? '🧓' : '🧑', t: p.first + (p.last ? ' ' + p.last : ''), hp: 50 + Math.round(pw * 0.6), atk: [5 + Math.round(pw / 14), 8 + Math.round(pw / 10)], hits: [1, pw >= 55 ? 3 : 2], dodge: 0.18, power: pw, speed: 1 + pw / 500, weapon: '👊', feint: 0.15, combo: 0.1 };
     }
     function copsChance(p) { return Math.max(0.15, Math.min(0.85, 0.45 + (p.rel === 'partner' ? 0.2 : 0) - L.st.smarts / 400 - (deckOf() ? 0.12 : 0) - (hasSandy() ? 0.08 : 0))); }
     function attackOpt(c, p) {
@@ -10557,13 +10563,13 @@
     // ---------------- ⚔️ battles: turn-based moves + timed DODGE / PARRY ----------------
     var ENEMIES = [   // feint = chance each hit is a fake-out; weapon swings across the arena; sword users leave a slash
       { id: 'bot', e: '🤖', t: 'Rusty Sparring Bot', hp: 45, atk: [5, 8], hits: [1, 2], dodge: 0.15, power: 20, speed: 1, prize: 300, robot: 1, weapon: '🔧' },
-      { id: 'brute', e: '🦍', t: 'Chrome Brute', hp: 75, atk: [8, 12], hits: [1, 3], dodge: 0.1, power: 45, speed: 1, prize: 1500, weapon: '👊', feint: 0.1 },
-      { id: 'ninja', e: '🥷', t: 'Glitch Ninja', hp: 75, atk: [7, 10], hits: [3, 4], dodge: 0.45, power: 58, speed: 1.3, prize: 3500, weapon: '🗡️', sword: 1, feint: 0.35 },
+      { id: 'brute', e: '🦍', t: 'Chrome Brute', hp: 75, atk: [8, 12], hits: [1, 3], dodge: 0.1, power: 45, speed: 1, prize: 1500, weapon: '👊', feint: 0.1, combo: 0.15 },
+      { id: 'ninja', e: '🥷', t: 'Glitch Ninja', hp: 75, atk: [7, 10], hits: [3, 4], dodge: 0.45, power: 58, speed: 1.3, prize: 3500, weapon: '🗡️', sword: 1, feint: 0.35, combo: 0.4 },
       { id: 'mech', e: '🛡️', t: 'Corp Security Mech', hp: 115, atk: [11, 15], hits: [2, 3], dodge: 0.15, power: 72, speed: 1.1, prize: 6000, robot: 1, weapon: '🦾' },
-      { id: 'samurai', e: '🤺', t: 'Chrome Samurai', hp: 130, atk: [11, 15], hits: [2, 4], dodge: 0.3, power: 82, speed: 1.25, prize: 10000, weapon: '⚔️', sword: 1, feint: 0.3 },
-      { id: 'dragon', e: '🐉', t: 'The Neon Dragon', hp: 160, atk: [12, 17], hits: [2, 4], dodge: 0.25, power: 90, speed: 1.2, prize: 15000, fame: 10, boss: 1, weapon: '🔥', feint: 0.2 },
-      { id: 'warden', e: '🤖', t: 'Lockup Guard-Mech', hp: 110, atk: [10, 14], hits: [2, 3], dodge: 0.2, power: 68, speed: 1.15, robot: 1, noRing: 1, weapon: '🔨', feint: 0.1 },
-      { id: 'patrol', e: '🚨', t: 'The Chrome Patrol', hp: 1, atk: [0, 0], hits: [2, 3], dodge: 1, power: 999, speed: 1.3, noRing: 1, weapon: '⚡', feint: 0.15 }
+      { id: 'samurai', e: '🤺', t: 'Chrome Samurai', hp: 130, atk: [11, 15], hits: [2, 4], dodge: 0.3, power: 82, speed: 1.25, prize: 10000, weapon: '⚔️', sword: 1, feint: 0.3, combo: 0.35 },
+      { id: 'dragon', e: '🐉', t: 'The Neon Dragon', hp: 160, atk: [12, 17], hits: [2, 4], dodge: 0.25, power: 90, speed: 1.2, prize: 15000, fame: 10, boss: 1, weapon: '🔥', feint: 0.2, combo: 0.3 },
+      { id: 'warden', e: '🤖', t: 'Lockup Guard-Mech', hp: 110, atk: [10, 14], hits: [2, 3], dodge: 0.2, power: 68, speed: 1.15, robot: 1, noRing: 1, weapon: '🔨', feint: 0.1, combo: 0.1 },
+      { id: 'patrol', e: '🚨', t: 'The Chrome Patrol', hp: 1, atk: [0, 0], hits: [2, 3], dodge: 1, power: 999, speed: 1.3, noRing: 1, weapon: '⚡', feint: 0.15, combo: 0.2 }
     ];
     var ENEMY = byId(ENEMIES);
     var MOVES = {
@@ -10571,7 +10577,7 @@
       aim: ['🎯', 'Aimed shot', 'Can’t be dodged'], slash: ['🗡️', 'Blade slash', 'Hard to dodge'], rocket: ['🚀', 'Pop-rocket', 'Huge damage (once)'],
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
-      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], berserk: ['😤', 'Berserk', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
+      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -10580,7 +10586,13 @@
       { id: 'qburn', e: '🔥', t: 'Overheat', ram: 3, tier: 2, d: 'Burns them for 3 turns' },
       { id: 'qfreeze', e: '🧊', t: 'System Freeze', ram: 4, tier: 3, d: 'They skip their next attack' },
       { id: 'qburnout', e: '💥', t: 'Synapse Burnout', ram: 5, tier: 3, d: 'Hurts more the more hurt they are' },
-      { id: 'qreset', e: '🌀', t: 'System Reset', ram: 7, tier: 3, d: 'Shuts down anyone under 40% HP' }
+      { id: 'qreset', e: '🌀', t: 'System Reset', ram: 7, tier: 3, d: 'Shuts down anyone under 40% HP' },
+      { id: 'qvoid', e: '🕳️', t: 'Void Gateway', ram: 0, tier: 4, once: 1, d: 'Huge damage from the void' },
+      { id: 'qvirus', e: '🦠', t: 'Contagion', ram: 0, tier: 4, once: 1, d: 'A virus hurts them for 4 turns' },
+      { id: 'qsleep', e: '💤', t: 'Sleep Mode', ram: 0, tier: 4, once: 1, d: 'They skip their next 2 attacks' },
+      { id: 'qleech', e: '🔋', t: 'Power Siphon', ram: 0, tier: 4, once: 1, d: 'Steal 25 HP and heal yourself' },
+      { id: 'qwipe', e: '🧽', t: 'Memory Wipe', ram: 0, tier: 4, once: 1, d: 'No more fake-outs or combos' },
+      { id: 'qmirror', e: '🪞', t: 'Mirror Shield', ram: 0, tier: 4, once: 1, d: 'Their next attack bounces back at them' }
     ];
     var QH = byId(QHACKS);
     function tolBonus(t) { return t >= 90 ? 3 : t >= 75 ? 2 : t >= 60 ? 1 : t < 28 ? -2 : t < 35 ? -1 : 0; }
@@ -10588,7 +10600,7 @@
       var lim = limitOf(), cy = chrome();
       return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0)));
     }
-    var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3 };   // humanity cost for an average body (tolerance 45% or less)
+    var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3, float: 3, pull: 2 };   // humanity cost for an average body (tolerance 45% or less)
     function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body: free!
       if (L.smasherBody) return 0;
       var t = limitOf(), m = t <= 45 ? 1 : Math.max(0.125, 1 - (t - 45) / 56), X = rageOf();
@@ -10599,7 +10611,7 @@
     function rageTurns() { var X = rageOf(); return X && X.tier >= 2 ? 6 : 4; }
     function hackCost(Q) { return has('capri') ? 0 : Math.max(1, Q.ram - (L.netrunner ? 1 : 0)); }
     function fightPower() {
-      var bonus = { arm: 8, legs: 8, exo: 30, chassis: 35, armor: 10, timeslow: 15, sandy2: 20, sandy3: 26, sandy4: 32, berserk: 10, berserk2: 16, deck1: 6, deck2: 10, deck3: 14, capri: 20,
+      var bonus = { arm: 8, legs: 8, exo: 30, chassis: 35, muscle: 20, booster: 4, armor: 10, timeslow: 15, sandy2: 20, sandy3: 26, sandy4: 32, berserk: 10, berserk2: 16, deck1: 6, deck2: 10, deck3: 14, capri: 20,
         eyes: 4, port: 6, heart: 6, wings: 5, magnet: 3, blades: 8, rocket: 6, camo: 4, heart2: 4, reflex: 5, bones: 6, ice: 3 }, p = L.st.health * 0.4 + (L.crew ? 5 : 0);
       L.implants.forEach(function (id) { p += bonus[id] || 0; });
       return Math.round(p);
@@ -10680,7 +10692,7 @@
       var en = foeOf(id), D = deckOf(), ram = D ? D.ram + (has('ramup') ? 3 : 0) : 0, hm = humanityMax();
       var max = 60 + Math.round(L.st.health * 0.6) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0);
       B = { en: en, mode: mode, done: done, enHP: en.hp, hp: max, max: max, hum: hm, humMax: hm, sandy: 0, rage: 0, stun: false, glide: false, glideAll: false, camo: false, yank: false,
-        ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, menu: null, hacked: 0,
+        ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
         parries: 0, hitsTaken: 0, wave: 0, hits: [], lock: 0, phase: 'wait', over: false, timer: 0 };
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
@@ -10695,7 +10707,7 @@
     function renderF() {
       if (!B) return;
       var fx = [];
-      if (B.mode === 'fight') { if (B.blind) fx.push('🙈'); if (B.burn) fx.push('🔥'); if (B.cripple) fx.push('🦵'); }
+      if (B.mode === 'fight') { if (B.blind) fx.push('🙈'); if (B.burn) fx.push('🔥'); if (B.virus) fx.push('🦠'); if (B.cripple) fx.push('🦵'); if (B.sleep) fx.push('💤'); if (B.mirror) fx.push('🪞'); }
       $('enemy').textContent = B.en.e;
       $('fEnName').textContent = B.en.t;
       if (B.mode === 'escape') { var left = Math.max(0, 3 - B.hitsTaken); $('fEnHp').textContent = 'Catches you in ' + left + (left === 1 ? ' hit' : ' hits'); $('fEnBar').style.width = (left / 3 * 100) + '%'; }
@@ -10706,6 +10718,7 @@
       $('hum').textContent = L.smasherBody ? '🧠 Humanity: no limit (🤖 Smasher Body)' : '🧠 Humanity ' + '●'.repeat(B.hum) + '○'.repeat(Math.max(0, B.humMax - B.hum)) + ' ' + B.hum + '/' + B.humMax;
       var on = [];
       if (B.sandy) on.push('⏱️ Sandy · ' + B.sandy + (B.sandy === 1 ? ' turn left' : ' turns left'));
+      if (B.float > 0) on.push('🪐 Floating · ' + B.float + (B.float === 1 ? ' attack' : ' attacks'));
       if (B.rage) on.push('😤 Berserk · ' + B.rage + (B.rage === 1 ? ' turn left' : ' turns left'));
       $('sandy').textContent = on.join('   ');
       $('ram').textContent = B.ramMax ? '💾 RAM ' + '▰'.repeat(B.ram) + '▱'.repeat(Math.max(0, B.ramMax - B.ram)) + ' ' + B.ram + '/' + B.ramMax + (has('capri') ? ' · 💠 hacks are free' : '') : '';
@@ -10732,7 +10745,7 @@
         if (has('heart') && !B.usedHeart) list.push('heal');
         if (has('wings') && !B.usedWings) list.push('glide');
         if (has('camo') && !B.usedCamo) list.push('camo');
-        if (has('exo')) list.push('smash');
+        if (has('exo')) { list.push('smash'); if (!B.usedFloat) list.push('float'); list.push('pull'); if (B.float > 0) list.push('slam'); }
         if (has('chassis')) list.push('cannon');
         if (rageOf() && !B.rage) list.push('berserk');
         if (hasSandy() && !B.sandy) list.push('sandy');
@@ -10741,9 +10754,10 @@
       box.classList.toggle('many', list.length > 10);
       list.forEach(function (id) {
         var Q = QH[id], M = Q ? [Q.e, Q.t, ''] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
-        if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
+        if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
+        else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
         if (id === 'netrun') sub = 'RAM ' + B.ram + '/' + B.ramMax;
-        if (heavy) sub = (cost ? '−' + cost + ' humanity' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
+        if (heavy) sub = (cost ? '−' + cost + ' humanity' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
         var b = mk('button', 'lf-move' + (heavy ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
         b.appendChild(document.createTextNode(M[0] + ' ' + M[1]));
@@ -10797,9 +10811,19 @@
       if (id === 'glide') { B.usedWings = true; B.glide = true; msgF('🌈 You spread your wings. You’ll glide right past their next attack!'); enemySoon(); return; }
       if (id === 'camo') { B.usedCamo = true; B.glide = true; B.camo = true; msgF('👻 You flicker and vanish! Their next attack will go right through you.'); enemySoon(); return; }
       if (QH[id]) { doHack(QH[id]); return; }
+      if (id === 'float') {   // 🪐 anti-gravity is a free action, like the Sandy
+        B.usedFloat = true; B.float = 2; sfx('slow');
+        if (spend(heavyCost('float'))) return;
+        popF('ANTI-GRAVITY!', 'great');
+        msgF('🪐 ANTI-GRAVITY! You float up out of reach. Their next 2 attacks can’t touch you, and your hits are 50% stronger while you float. Now pick your move!');
+        renderF(); buildMoves();
+        return;
+      }
+      if (id === 'slam') { B.float = 0; dmg = Math.round(R(50, 65) * rg); if (chance(0.7)) { B.stun = true; extra = ' They’re stunned!'; } }
+      if (id === 'pull') { if (spend(heavyCost('pull'))) return; dmg = Math.round(R(22, 30) * rg); B.yank2 = true; extra = ' Their next attack will have 2 fewer hits.'; }
       if (id === 'cannon') { if (spend(heavyCost('cannon'))) return; dmg = R(55, 70); if (chance(0.4)) { B.stun = true; extra = ' They’re stunned!'; } }
       if (id === 'smash') { if (spend(heavyCost('smash'))) return; dmg = Math.round(R(40, 55) * (B.sandy ? 1.5 : 1) * rg); if (chance(0.5)) { B.stun = true; extra = ' They’re stunned!'; } }
-      if (id === 'punch') dmg = Math.round((R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0)) * mult * rg);
+      if (id === 'punch') dmg = Math.round((R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0)) * mult * rg);
       if (id === 'kick') dmg = Math.round(R(16, 22) * mult * rg);
       if (id === 'slash') dmg = Math.round(R(18, 24) * Math.max(1, mult * 0.75) * rg);
       if (id === 'rocket') { B.usedRocket = true; dmg = R(35, 45); }
@@ -10807,11 +10831,12 @@
       if (id === 'aim') dmg = R(14, 18);
       if (id === 'hack') { dmg = 4; if (chance(0.6)) { B.stun = true; extra = ' They’re stunned!'; } else extra = ' The stun fizzled.'; }
       if (id === 'yank') { dmg = 3; B.yank = true; extra = ' Their next attack will have fewer hits.'; }
-      var dodge = B.cripple ? 0 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0 }[id] || 0;
+      var dodge = B.cripple ? 0 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, pull: 0, slam: en.dodge * 0.3, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0 }[id] || 0;
       if (B.cripple) B.cripple -= 1;
       if (chance(dodge)) { B.stun = false; B.yank = false; popF('MISS', 'bad'); msgF('💨 ' + en.t + ' dodged your ' + MOVES[id][1].toLowerCase() + '!'); enemySoon(); return; }
+      if (B.float > 0 && ['punch', 'kick', 'smash', 'pull', 'slash', 'cannon'].indexOf(id) >= 0) { dmg = Math.round(dmg * 1.5); extra += ' (🪐 from above!)'; }
       if (B.sandy && st >= 4 && chance(0.25)) { dmg = Math.round(dmg * 1.5); extra += ' 💥 CRIT!'; }   // the Apylee Sandy lands critical hits
-      hitFoe(dmg, MOVES[id][0] + ' ' + { punch: 'POW!', kick: 'WHAM!', slash: 'SHING!', rocket: 'KA-BOOM!', shoot: 'ZAP!', aim: 'Bullseye!', hack: 'Bzzt!', yank: 'Yoink!', smash: 'TITAN SMASH!', cannon: 'BOOOM!' }[id] + ' ' + dmg + ' damage.' + extra);
+      hitFoe(dmg, MOVES[id][0] + ' ' + { punch: 'POW!', kick: 'WHAM!', slash: 'SHING!', rocket: 'KA-BOOM!', shoot: 'ZAP!', aim: 'Bullseye!', hack: 'Bzzt!', yank: 'Yoink!', smash: 'TITAN SMASH!', cannon: 'BOOOM!', pull: 'GRAVITY PULL!', slam: 'KA-THOOM!' }[id] + ' ' + dmg + ' damage.' + extra);
     }
     function doHack(Q) {   // quickhacks never miss
       var cost = hackCost(Q), en = B.en, up = has('uplink') ? 1.3 : 1, d;
@@ -10826,6 +10851,13 @@
       if (Q.id === 'qblind') { B.blind = 2; popF('BLINDED', 'great'); msgF('🙈 Reboot Optics! ' + en.t + ' can barely see. Their next 2 attacks have fewer hits and come slower.'); }
       if (Q.id === 'qcripple') { B.cripple = 3; popF('CRIPPLED', 'great'); msgF('🦵 Cripple Movement! ' + en.t + ' can’t dodge your next 3 attacks.'); }
       if (Q.id === 'qburn') { B.burn = 3; popF('OVERHEAT', 'great'); msgF('🔥 Overheat! ' + en.t + ' will burn for 3 turns.'); }
+      if (Q.once) B.usedQ[Q.id] = 1;
+      if (Q.id === 'qvoid') { d = Math.round(R(45, 60) * up); hitFoe(d, '🕳️ VOID GATEWAY! A rip in the Net swallows ' + en.t + ' for ' + d + ' damage!'); return; }
+      if (Q.id === 'qleech') { d = Math.round(25 * up); var heal = Math.min(B.max - B.hp, d); B.hp += heal; hitFoe(d, '🔋 Power Siphon! You drained ' + d + ' HP from ' + en.t + ' and healed ' + heal + '.'); return; }
+      if (Q.id === 'qvirus') { B.virus = 4; popF('CONTAGION', 'great'); msgF('🦠 Contagion! A nasty virus will hurt ' + en.t + ' for 4 turns.'); }
+      if (Q.id === 'qsleep') { B.sleep = 2; popF('ZZZ…', 'great'); msgF('💤 Sleep Mode! ' + en.t + ' will snooze through their next 2 attacks.'); }
+      if (Q.id === 'qwipe') { B.wiped = true; B.yank = true; popF('WIPED', 'great'); msgF('🧽 Memory Wipe! ' + en.t + ' forgot all their tricks: no more fake-outs or combos, and their next attack has fewer hits.'); }
+      if (Q.id === 'qmirror') { B.mirror = true; popF('MIRROR', 'great'); msgF('🪞 Mirror Shield! If their next attack hits you, it bounces right back at them.'); }
       if (Q.id === 'qfreeze') { B.stun = true; popF('FROZEN', 'great'); msgF('🧊 System Freeze! ' + en.t + ' will skip their next attack.'); }
       enemySoon();
     }
@@ -10839,24 +10871,29 @@
     function enemyTurn() {
       if (!B || B.over) return;
       var en = B.en, fm = B.mode === 'fight';
-      if (fm && B.burn) {
-        B.burn -= 1;
-        var bd = Math.round(R(6, 9) * (has('uplink') ? 1.3 : 1));
-        B.enHP = Math.max(0, B.enHP - bd); popF('🔥 −' + bd, 'great'); renderF();
-        if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); msgF('🔥 ' + en.t + ' overheated and went down!'); B.timer = setTimeout(function () { endBattle({ win: true }); }, 900); return; }
+      if (fm && (B.burn || B.virus)) {   // 🔥 Overheat and 🦠 Contagion hurt them at the start of their turn
+        var bd = 0, up = has('uplink') ? 1.3 : 1, icon = (B.burn ? '🔥' : '') + (B.virus ? '🦠' : '');
+        if (B.burn) { B.burn -= 1; bd += Math.round(R(6, 9) * up); }
+        if (B.virus) { B.virus -= 1; bd += Math.round(R(9, 12) * up); }
+        B.enHP = Math.max(0, B.enHP - bd); popF(icon + ' −' + bd, 'great'); renderF();
+        if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); msgF(icon + ' ' + en.t + ' went down!'); B.timer = setTimeout(function () { endBattle({ win: true }); }, 900); return; }
       }
       if (fm && B.stun) { B.stun = false; msgF('⚡ ' + en.t + ' is stunned and can’t attack!'); B.timer = setTimeout(playerTurn, 1100); return; }
+      if (fm && B.sleep) { B.sleep -= 1; msgF('💤 ' + en.t + ' is fast asleep and can’t attack!'); renderF(); B.timer = setTimeout(playerTurn, 1100); return; }
       var blind = fm && B.blind > 0;
       if (blind) B.blind -= 1;
-      var n = Math.max(1, R(en.hits[0], en.hits[1]) - (B.yank ? 1 : 0) - (blind ? 1 : 0)), slow = slowF() * (blind ? 1.35 : 1), t = performance.now() + R(900, 1500) / en.speed * slow;
-      B.yank = false; B.glideAll = B.glide; B.camoNow = B.camo; B.glide = false; B.camo = false; B.hits = [];
+      var combo = !B.wiped && !!en.combo && chance(en.combo);   // ⚡ a combo: several hits, really close together
+      var n = Math.max(1, (combo ? Math.max(3, R(en.hits[0], en.hits[1])) : R(en.hits[0], en.hits[1])) - (B.yank ? 1 : 0) - (B.yank2 ? 2 : 0) - (blind ? 1 : 0)), slow = slowF() * (blind ? 1.35 : 1), t = performance.now() + R(900, 1500) / en.speed * slow;
+      B.floatNow = fm && B.float > 0; if (B.floatNow) B.float -= 1;
+      B.yank = false; B.yank2 = false; B.glideAll = B.glide || B.floatNow; B.camoNow = B.camo; B.mirrorNow = B.mirror; B.glide = false; B.camo = false; B.mirror = false; B.hits = []; B.combo = combo;
       for (var i = 0; i < n; i++) {   // a fake-out winds up at `fake`, then the real hit comes a bit later
-        var fk = !!en.feint && chance(en.feint), at = t + (fk ? R(500, 750) / en.speed * slow : 0);
+        var fk = !combo && !B.wiped && !!en.feint && chance(en.feint), at = t + (fk ? R(500, 750) / en.speed * slow : 0);
         B.hits.push({ at: at, fake: fk ? t : 0, fshown: false, fglint: false, done: false, glint: false });
-        t = at + R(450, 800) / en.speed * slow;
+        t = at + (combo ? R(170, 260) : R(450, 800)) / en.speed * slow;
       }
       B.phase = 'enemy';
-      msgF(B.mode === 'escape' ? '🚨 The Chrome Patrol lunges at you! Tap DODGE right as they strike.' : '⚠️ ' + en.t + ' attacks (' + n + (n === 1 ? ' hit' : ' hits') + ')' + (blind ? ', but can barely see' : '') + '! Tap DODGE right as each one lands. Perfect timing = PARRY!' + (en.feint ? ' Watch out for fake-outs!' : ''));
+      if (combo) msgF(B.mode === 'escape' ? '🚨 The Chrome Patrol lunges with a fast COMBO! Tap DODGE quick, once for each grab!' : '⚡ ' + en.t + ' goes for a COMBO: ' + n + ' fast hits! Tap DODGE quick, once for each hit!');
+      else msgF(B.mode === 'escape' ? '🚨 The Chrome Patrol lunges at you! Tap DODGE right as they strike.' : '⚠️ ' + en.t + ' attacks (' + n + (n === 1 ? ' hit' : ' hits') + ')' + (blind ? ', but can barely see' : '') + '! Tap DODGE right as each one lands. Perfect timing = PARRY!' + (en.feint ? ' Watch out for fake-outs!' : ''));
       renderF(); buildMoves();
     }
     function slowF() { return B.sandy ? (sandyTier() >= 4 ? 2 : 1.6) : 1; }   // how much the Sandy slows their attacks down
@@ -10904,6 +10941,7 @@
         if (has('armor')) dmg = Math.round(dmg * 0.75);
         if (has('exo')) dmg = Math.round(dmg * 0.85);
         if (has('chassis')) dmg = Math.round(dmg * 0.7);
+        if (B.mirrorNow) { B.enHP = Math.max(0, B.enHP - dmg); popF('🪞 BOUNCED −' + dmg, 'great'); if (B.enHP <= 0) B.hits.forEach(function (x) { x.done = true; }); $('enemy').style.transform = ''; renderF(); return; }
         if (B.rage) dmg = Math.round(dmg * (X && X.tier >= 2 ? 0.45 : 0.6));
         B.hp = Math.max(0, B.hp - dmg); popF('−' + dmg, 'bad');
         if (B.hp <= 0 && has('heart2') && !B.revived) { B.revived = true; B.hp = Math.round(B.max * 0.4); popF('🫀 BACKUP HEART!', 'good'); msgF('🫀 You got knocked down, but your backup heart jump-started you! Keep fighting!'); }
@@ -10952,7 +10990,7 @@
               en.style.transform = ft < lunge ? 'scale(' + (1 + (lunge - Math.max(0, ft)) / lunge * 0.35).toFixed(3) + ')' : '';
             }
           }
-          else if (B.glideAll && tt <= 0) { h.done = true; swing(false); popF(B.camoNow ? '👻 VANISHED!' : '🌈 GLIDE!', 'good'); en.style.transform = ''; afterHit(); }
+          else if (B.glideAll && tt <= 0) { h.done = true; swing(false); popF(B.floatNow ? '🪐 TOO HIGH!' : B.camoNow ? '👻 VANISHED!' : '🌈 GLIDE!', 'good'); en.style.transform = ''; afterHit(); }
           else if (tt < -w.post) { h.done = true; takeHit(); afterHit(); }
           else {
             if (!h.glint && tt <= G) { h.glint = true; sfx('glint'); }
@@ -11010,6 +11048,7 @@
       var rows = ['happy', 'health', 'smarts', 'style'].map(function (k) { return [STAT[k][0] + ' ' + STAT[k][1], L.st[k], L.st[k] > 100 ? 'fame' : null]; });
       if (L.fame > 0) rows.push(['⭐ Fame', L.fame, 'fame']);
       var chr = chrome(), lim = limitOf();
+      var pw = fightPower(); rows.push(['💪 Power', pw / 2, 'fame', String(pw)]);   // fight power (it can go way past 100)
       rows.push(['🧬 Tolerance', chr / lim * 100, chr > lim ? 'lo' : chr > 0 && chr >= lim - 5 && !L.smasherBody ? 'mid' : 'tol', chr + '/' + (L.smasherBody ? 'MAX' : lim)]);   // used / total
       rows.forEach(function (r) {
         var row = mk('div', 'lf-stat');
@@ -11354,9 +11393,9 @@
           '🏠 Stuff: buy robo-pets, hover-bikes, and homes.',
           '❤️ People: your family, friends, partner, and kids. Spend time with them so they stay close.',
           '⚡ Do: activities, mischief, street life, and the Chrome Clinic. Most things can be done once a year.',
-          '🥊 Easy fights are over fast, but tough ones start a real battle. Pick moves on your turn. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back). Some enemies fake you out: they wind up, then wait. Don’t fall for it! Most implant moves are free, but heavy chrome like your Sandy (time-slow) and Berserk costs humanity. Hit zero humanity and the Chrome Patrol shows up!',
+          '🥊 Easy fights are over fast, but tough ones start a real battle. Pick moves on your turn. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back). Some enemies fake you out: they wind up, then wait. Don’t fall for it! Others go for a ⚡ COMBO: several hits super fast, so tap once for each. Most implant moves are free, but heavy chrome like your Sandy (time-slow) and Berserk costs humanity. Hit zero humanity and the Chrome Patrol shows up!',
           '🧬 Every life gets its own cyberware tolerance (high tolerance is rare). Every implant takes up some of it, and if you go over, you could have a chrome overload. The higher your tolerance, the less humanity heavy chrome like your Sandy costs.',
-          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job.',
+          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only it can run.',
           '💀 From age 16, you can attack friends and partners. If you win, they’re gone for good, and if the cops catch you, you go to the Lockup.',
           'Keep your bars up! If your health hits zero, your life ends. When you die, you get a ribbon, and if you have kids, you can keep playing as one of them.'
         ].forEach(function (t) { note(c, t); });
