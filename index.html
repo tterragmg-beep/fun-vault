@@ -616,6 +616,129 @@
     .ca-meter span { transition: none; }
   }
 
+  /* ---- Lifetimes ---- */
+  .lf [hidden] { display: none !important; }
+  .lf { --lf-a: #ff3ea5; --lf-b: #22d3ee; --lf-ink: color-mix(in srgb, var(--lf-a) 62%, var(--fg)); }
+  body.lf-lock { overflow: hidden; }
+  .lf-sec { font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 18px 0 8px; }
+  .lf-continue { display: block; width: 100%; margin-top: 16px; font: inherit; font-weight: 700; text-align: left; color: #fff; background: linear-gradient(135deg, var(--lf-a), #8b2fd6); border: 0; border-radius: 14px; padding: 14px 16px; cursor: pointer; box-shadow: 0 10px 24px -12px var(--lf-a); }
+  .lf-worldlist { display: grid; gap: 10px; }
+  .lf-world { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; cursor: pointer; }
+  .lf-world .em { font-size: 2rem; width: 44px; text-align: center; flex: none; }
+  .lf-world > span:nth-child(2) { flex: 1; min-width: 0; }
+  .lf-world b { display: block; font-family: var(--font-display); font-size: 1.08rem; }
+  .lf-world small { display: block; color: var(--muted); font-size: 0.86rem; line-height: 1.35; margin-top: 2px; }
+  .lf-world .tag { flex: none; font-size: 0.74rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); color: var(--muted); }
+  .lf-world.live { background: linear-gradient(135deg, #1d0b36 0%, #0b2140 100%); border: 2px solid var(--lf-a); color: #f8f5ff; box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.35), 0 12px 30px -14px var(--lf-a); }
+  .lf-world.live small { color: #cdc5ec; }
+  .lf-world.live .tag { background: var(--lf-a); color: #fff; border: 0; }
+  .lf-world:disabled { cursor: default; opacity: 0.62; }
+  .lf-graves { display: grid; gap: 6px; }
+  .lf-grave { display: flex; gap: 10px; align-items: center; font-size: 0.88rem; padding: 8px 12px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; }
+  .lf-grave > b { font-size: 1.3rem; }
+  .lf-grave span { color: var(--muted); }
+  .lf-banner { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #1d0b36, #0b2140); color: #f8f5ff; border: 2px solid var(--lf-a); }
+  .lf-banner > span { font-size: 2.2rem; }
+  .lf-banner b { display: block; font-family: var(--font-display); font-size: 1.2rem; }
+  .lf-banner small { display: block; color: #cdc5ec; font-size: 0.86rem; line-height: 1.35; }
+  .lf-label { display: block; font-weight: 700; font-size: 0.9rem; margin: 16px 0 6px; }
+  .lf-namerow { display: flex; gap: 8px; }
+  .lf-namerow input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .lf-dice { flex: none; width: 48px; font-size: 1.3rem; border-radius: 12px; border: 1px solid var(--line); background: var(--panel-2); cursor: pointer; }
+  .lf-districts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+  .lf-dist { text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 12px; padding: 10px; cursor: pointer; }
+  .lf-dist b { display: block; font-size: 0.9rem; }
+  .lf-dist small { display: block; color: var(--muted); font-size: 0.78rem; line-height: 1.3; margin-top: 2px; }
+  .lf-dist[aria-checked="true"] { border-color: var(--lf-a); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lf-a) 25%, transparent); }
+  .lf-head { display: flex; align-items: center; gap: 12px; }
+  .lf-avatar { flex: none; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 1.9rem; background: linear-gradient(135deg, var(--lf-a), var(--lf-b)); box-shadow: 0 0 18px -4px var(--lf-a); }
+  .lf-who { flex: 1; min-width: 0; }
+  .lf-name { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lf-sub { color: var(--muted); font-size: 0.84rem; line-height: 1.3; }
+  .lf-money { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .lf-money span { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .lf-money span.neg { color: var(--bad); }
+  .lf-menu { font: inherit; font-size: 0.95rem; padding: 2px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); cursor: pointer; }
+  .lf-log { height: clamp(220px, 40vh, 440px); overflow-y: auto; overscroll-behavior: contain; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 2px 14px 10px; margin: 12px 0; }
+  .lf-agehd { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; color: var(--lf-ink); margin: 12px 0 4px; }
+  .lf-entry { margin: 0 0 6px; font-size: 0.92rem; line-height: 1.45; }
+  .lf-stats { display: grid; gap: 7px; }
+  .lf-stat { display: grid; grid-template-columns: 92px 1fr 42px; align-items: center; gap: 8px; font-size: 0.86rem; }
+  .lf-stat-v { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .lf-bar { height: 11px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lf-stats .lf-bar { background: color-mix(in srgb, var(--fg) 8%, var(--panel)); }
+  .lf-bar span { display: block; height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+  .lf-bar .hi { background: #34c46f; }
+  .lf-bar .mid { background: #f2b200; }
+  .lf-bar .lo { background: var(--bad); }
+  .lf-bar .fame { background: linear-gradient(90deg, var(--lf-a), var(--lf-b)); }
+  .lf-nav { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; gap: 6px; align-items: center; margin-top: 16px; }
+  .lf-tab { font: inherit; font-size: 0.74rem; font-weight: 700; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 8px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+  .lf-tab b { font-size: 1.3rem; line-height: 1.15; }
+  .lf-ageup { width: 74px; height: 74px; border-radius: 50%; border: 0; cursor: pointer; color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; background: radial-gradient(circle at 32% 28%, #ff8fd0, var(--lf-a) 60%, #b5177a); box-shadow: 0 0 0 4px color-mix(in srgb, var(--lf-b) 50%, transparent), 0 10px 26px -8px var(--lf-a); }
+  .lf-ageup span { font-size: 2rem; font-weight: 700; margin-bottom: 2px; }
+  .lf-ageup:active { transform: scale(0.95); }
+  .lf-tab:focus-visible, .lf-ageup:focus-visible, .lf-opt:focus-visible, .lf-choice:focus-visible, .lf-world:focus-visible, .lf-dist:focus-visible, .lf-continue:focus-visible, .lf-x:focus-visible, .lf-menu:focus-visible, .lf-dice:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .lf-ov { position: fixed; inset: 0; z-index: 80; background: rgba(6, 8, 20, 0.62); display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .lf-ov.sheet { align-items: flex-end; padding: 0; }
+  .lf-card { width: 100%; max-width: 440px; max-height: 88vh; overflow-y: auto; overscroll-behavior: contain; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 22px; padding: 20px; box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55); animation: lf-pop 0.18s ease-out; }
+  .lf-ov.sheet .lf-card { max-width: 600px; max-height: 84vh; border-radius: 22px 22px 0 0; padding: 0 16px calc(20px + env(safe-area-inset-bottom)); animation: lf-up 0.2s ease-out; }
+  @keyframes lf-pop { from { transform: scale(0.94); opacity: 0; } }
+  @keyframes lf-up { from { transform: translateY(30px); opacity: 0; } }
+  .lf-sh-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; position: sticky; top: 0; z-index: 1; background: var(--panel); padding: 16px 0 8px; }
+  .lf-sh-title { margin: 0; font-family: var(--font-display); font-size: 1.15rem; }
+  .lf-x { flex: none; width: 36px; height: 36px; font: inherit; border-radius: 50%; border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); cursor: pointer; }
+  .lf-opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; cursor: pointer; }
+  .lf-opt:hover:not(:disabled) { border-color: var(--lf-a); }
+  .lf-opt i { flex: none; width: 34px; font-style: normal; font-size: 1.5rem; text-align: center; }
+  .lf-opt > span { flex: 1; min-width: 0; }
+  .lf-opt b { display: block; font-size: 0.96rem; }
+  .lf-opt small { display: block; color: var(--muted); font-size: 0.8rem; line-height: 1.35; margin-top: 1px; }
+  .lf-opt:disabled { cursor: default; opacity: 0.55; }
+  .lf-opt .lf-bar { margin-top: 6px; height: 7px; }
+  .lf-card > .lf-bar { margin: -4px 0 12px; }
+  .lf-note { color: var(--muted); font-size: 0.88rem; line-height: 1.45; margin: 4px 0 10px; }
+  .lf-ev-emoji { font-size: 2.8rem; text-align: center; line-height: 1.1; }
+  .lf-ev-text { font-size: 1.06rem; line-height: 1.5; text-align: center; margin: 10px 0 16px; text-wrap: balance; }
+  .lf-choices { display: grid; gap: 8px; }
+  .lf-choice { font: inherit; font-weight: 700; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 14px; padding: 12px; cursor: pointer; }
+  .lf-choice:hover { border-color: var(--lf-a); }
+  .lf-deltas { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: -4px 0 16px; }
+  .lf-deltas span { font-size: 0.85rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--line); }
+  .lf-deltas .up { color: color-mix(in srgb, #22c55e 70%, var(--fg)); }
+  .lf-deltas .down { color: var(--bad); }
+  .lf-ok { width: 100%; margin: 0; }
+  .lf-rip { font-size: 3rem; text-align: center; }
+  .lf-ribbon { display: flex; align-items: center; gap: 12px; margin: 14px 0; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--lf-a) 22%, var(--panel-2)), color-mix(in srgb, var(--lf-b) 18%, var(--panel-2))); border: 1px solid var(--line); }
+  .lf-ribbon > span { font-size: 2.2rem; }
+  .lf-ribbon b { display: block; font-family: var(--font-display); font-size: 1.1rem; }
+  .lf-ribbon small { color: var(--muted); }
+  .lf-dstats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; }
+  .lf-dstats div { background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px; font-size: 0.8rem; color: var(--muted); }
+  .lf-dstats b { display: block; color: var(--fg); font-size: 0.98rem; overflow-wrap: anywhere; }
+  .lf-heir { background: linear-gradient(135deg, var(--lf-a), #8b2fd6); color: #fff; border: 0; }
+  .lf-angel { margin: -2px 0 12px; padding: 10px 12px; border-radius: 12px; font-size: 0.86rem; line-height: 1.4; background: color-mix(in srgb, #facc15 16%, var(--panel-2)); border: 1px solid color-mix(in srgb, #facc15 45%, var(--line)); }
+  .lf-premline { margin: 12px 0 0; padding: 10px 12px; border-radius: 12px; font-size: 0.88rem; font-weight: 700; background: color-mix(in srgb, #facc15 16%, var(--panel-2)); border: 1px solid color-mix(in srgb, #facc15 45%, var(--line)); }
+  .lf-codes { margin-top: 12px; }
+  .lf-codeform { display: flex; gap: 8px; margin: 6px 0 14px; }
+  .lf-codeform input, .lf-nameform input { flex: 1; min-width: 0; font: inherit; font-size: 1rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .lf-codeform .btn { width: auto; margin: 0; padding: 10px 18px; }
+  .lf-nameform { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 14px; }
+  .lf-nameform .btn { grid-column: 1 / -1; margin: 0; }
+  .lf-codeform input:focus-visible, .lf-nameform input:focus-visible, .lf-namerow input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+  .lf-god { display: grid; grid-template-columns: 96px 1fr 46px; align-items: center; gap: 10px; margin: 10px 0; font-size: 0.9rem; }
+  .lf-god input[type="range"] { width: 100%; accent-color: var(--lf-a); }
+  .lf-god b { text-align: right; font-variant-numeric: tabular-nums; }
+  .lf-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+  .lf-pill { font: inherit; font-size: 0.86rem; font-weight: 700; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+  .lf-pill:hover { border-color: var(--lf-a); }
+  .lf-pill:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .lf-card, .lf-ov.sheet .lf-card { animation: none; }
+    .lf-bar span { transition: none; }
+    .lf-ageup:active { transform: none; }
+  }
+
   /* ---- Emoji Sayings ---- */
   .es [hidden] { display: none !important; }
   .es .btn:disabled { opacity: 0.45; cursor: default; filter: none; transform: none; }
@@ -781,6 +904,13 @@
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5"/><circle cx="12" cy="3.5" r="1.3"/><path d="M8.5 12.5l2 2M10.5 12.5l-2 2M13.5 12.5l2 2M15.5 12.5l-2 2"/><path d="M9.5 17.5h5"/></svg></span>
         <h2>Confuse the AI</h2>
         <p>Chat with know-it-all robots and melt their brains with paradoxes, impossible questions, and sneaky tricks.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+      <button class="card" style="--hue: var(--c5);" data-goto="life">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12"/><path d="M8 3v3.5a4 4 0 0 0 1.6 3.2L12 12l2.4-2.3A4 4 0 0 0 16 6.5V3"/><path d="M8 21v-3.5a4 4 0 0 1 1.6-3.2L12 12l2.4 2.3a4 4 0 0 1 1.6 3.2V21"/></svg></span>
+        <h2>Lifetimes</h2>
+        <p>Live a whole life, one year at a time, in a world you pick. First up: a neon cyberpunk city. Inspired by BitLife.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -1408,6 +1538,70 @@
       <button class="btn" id="ca-next" type="button" hidden>Next robot →</button>
       <button class="btn" id="ca-again" type="button">Try again</button>
       <button class="btn ghost" id="ca-pickBot" type="button">Pick a robot</button>
+    </div>
+  </section>
+
+  <!-- ================= LIFETIMES ================= -->
+  <section id="life" class="screen lf">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Lifetimes</span></div>
+
+    <div class="panel" id="lf-worlds">
+      <div class="bs-kicker">Life simulator</div>
+      <div class="dd-big">Lifetimes</div>
+      <p class="ch-sub" style="margin:0;">Pick a world and live a whole life in it, one year at a time. Make choices, chase your dreams, and see how your story ends.</p>
+      <button class="lf-continue" id="lf-continue" type="button" hidden></button>
+      <div class="lf-sec">Pick a world</div>
+      <div class="lf-worldlist" id="lf-worldList"></div>
+      <div id="lf-graveBox" hidden>
+        <div class="lf-sec">🪦 Past lives</div>
+        <div class="lf-graves" id="lf-graves"></div>
+      </div>
+      <p class="lf-premline" id="lf-premLine" hidden>👑 Premium unlocked: God Mode, Time Machine, Guardian Angel, and premium stuff. Find them in ☰ Menu while you play.</p>
+      <button class="btn ghost lf-codes" id="lf-codes" type="button">🔑 Enter a code</button>
+      <p class="bs-stats">Inspired by BitLife by Candywriter. This is a fan-made game and isn’t connected to BitLife.</p>
+    </div>
+
+    <div class="panel" id="lf-new" hidden>
+      <div class="lf-banner"><span aria-hidden="true">🌃</span><div><b>Neon Harbor</b><small>A rainy megacity of neon signs, hover-bikes, robot pets, and chrome implants.</small></div></div>
+      <label class="lf-label" for="lf-first">Your name</label>
+      <div class="lf-namerow"><input id="lf-first" maxlength="16" autocomplete="off" aria-label="First name"><input id="lf-last" maxlength="16" autocomplete="off" aria-label="Last name"><button class="lf-dice" id="lf-rand" type="button" aria-label="Random name and district">🎲</button></div>
+      <div class="lf-label" id="lf-distLabel">Where you’re born</div>
+      <div class="lf-districts" id="lf-districts" role="radiogroup" aria-labelledby="lf-distLabel"></div>
+      <button class="btn" id="lf-start" type="button">Start life →</button>
+      <button class="btn ghost" id="lf-backWorlds" type="button">← Worlds</button>
+    </div>
+
+    <div class="panel" id="lf-life" hidden>
+      <div class="lf-head">
+        <div class="lf-avatar" id="lf-avatar" aria-hidden="true">👶</div>
+        <div class="lf-who"><div class="lf-name" id="lf-name"></div><div class="lf-sub" id="lf-sub"></div></div>
+        <div class="lf-money"><span id="lf-money">0 cr</span><button class="lf-menu" id="lf-menu" type="button" aria-label="Menu">☰</button></div>
+      </div>
+      <div class="lf-log" id="lf-log" role="log" aria-live="polite" aria-label="Your life story"></div>
+      <p class="lf-angel" id="lf-angel" hidden></p>
+      <div class="lf-stats" id="lf-stats"></div>
+      <nav class="lf-nav" aria-label="Life actions">
+        <button class="lf-tab" id="lf-tJob" type="button"><b aria-hidden="true">💼</b>Job</button>
+        <button class="lf-tab" id="lf-tStuff" type="button"><b aria-hidden="true">🏠</b>Stuff</button>
+        <button class="lf-ageup" id="lf-age" type="button" aria-label="Age up one year"><span aria-hidden="true">＋</span>Age</button>
+        <button class="lf-tab" id="lf-tPeople" type="button"><b aria-hidden="true">❤️</b>People</button>
+        <button class="lf-tab" id="lf-tDo" type="button"><b aria-hidden="true">⚡</b>Do</button>
+      </nav>
+    </div>
+
+    <div class="panel" id="lf-dead" hidden>
+      <div class="lf-rip" aria-hidden="true">🕯️</div>
+      <div class="ch-res-title" id="lf-dName"></div>
+      <p class="ch-res-sub" id="lf-dYears"></p>
+      <div class="lf-ribbon" id="lf-ribbon"></div>
+      <div class="lf-dstats" id="lf-dStats"></div>
+      <div id="lf-heirs"></div>
+      <button class="btn" id="lf-again" type="button">New life</button>
+      <button class="btn ghost" id="lf-toWorlds" type="button">Worlds & past lives</button>
+    </div>
+
+    <div class="lf-ov" id="lf-ov" hidden>
+      <div class="lf-card" id="lf-card" role="dialog" aria-modal="true" aria-labelledby="lf-cardTitle"></div>
     </div>
   </section>
 
@@ -4533,7 +4727,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -8693,6 +8887,1397 @@
     $('next').addEventListener('click', function () { start(Math.min(2, (g ? g.bot : 0) + 1)); });
     $('pickBot').addEventListener('click', intro);
     window.registerHook('confuse', function () { if (!g || g.over) intro(); });
+  })();
+  // ============ Lifetimes: a life simulator, inspired by BitLife (by Candywriter) ============
+  (function () {
+    var KEY = 'funvault-lifetimes-v1', GKEY = 'funvault-lifetimes-graves-v1', PKEY = 'funvault-lifetimes-premium-v1', TKEY = 'funvault-lifetimes-timemachine-v1';
+    var LOG_MAX = 700, TUITION = 6000, SNAP_MAX = 25, CODES = { cyberpunk: 'premium' };
+    function $(id) { return document.getElementById('lf-' + id); }
+    function R(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+    function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+    function rand(a) { return a && a.length ? pick(a) : null; }
+    function chance(p) { return Math.random() < p; }
+    function clamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
+    function val(v) { return Array.isArray(v) ? R(v[0], v[1]) : v; }
+    function cr(n) { n = Math.round(n || 0); return (n < 0 ? '−' : '') + Math.abs(n).toLocaleString('en-US') + ' cr'; }
+    function sign(n) { return (n > 0 ? '+' : '−') + Math.abs(n); }
+    function mk(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    function byId(list) { var m = {}; list.forEach(function (x) { m[x.id] = x; }); return m; }
+
+    // ---------------- worlds ----------------
+    var WORLDS = [
+      { id: 'cyber', e: '🌃', name: 'Cyberpunk', place: 'Neon Harbor', blurb: 'A rainy megacity of neon signs, hover-bikes, robot pets, and chrome implants.', live: 1 },
+      { id: 'ninja', e: '🥷', name: 'Ninja Village', blurb: 'Ninja clans, secret scrolls, and sneaky missions.' },
+      { id: 'pirate', e: '🏴‍☠️', name: 'Pirate Seas', blurb: 'Treasure maps, wild islands, and a crew to lead.' },
+      { id: 'magic', e: '🪄', name: 'Magic Academy', blurb: 'Spells, familiars, and a school in the clouds.' },
+      { id: 'mecha', e: '🤖', name: 'Mecha Pilots', blurb: 'Giant robots and a city to protect.' }
+    ];
+    var NH = {
+      first: ['Kai', 'Nova', 'Rin', 'Mika', 'Zara', 'Dex', 'Lumi', 'Ryo', 'Iris', 'Axel', 'Suki', 'Theo', 'Vex', 'Juno', 'Kenji', 'Aria', 'Milo', 'Sami', 'Rex', 'Echo', 'Niko', 'Tali', 'Bo', 'Ines', 'Omar', 'Priya', 'Lev', 'Mei', 'Ezra', 'Kaya', 'Jules', 'Remy', 'Asha', 'Tomo', 'Uma', 'Felix', 'Noor', 'Cass', 'Haru', 'Wren'],
+      last: ['Okada', 'Reyes', 'Nakamura', 'Volkov', 'Chen', 'Okafor', 'Silva', 'Kim', 'Park', 'Novak', 'Mendez', 'Ishida', 'Sato', 'Kaur', 'Rossi', 'Haddad', 'Larsen', 'Mbeki', 'Tanaka', 'Ortiz', 'Quinn', 'Byrne', 'Moreau', 'Lindqvist', 'Adeyemi', 'Fujita', 'Castillo', 'Petrov', 'Ng', 'Varga'],
+      districts: [
+        { name: 'the Stacks', tier: 0, blurb: 'Apartment towers stacked like noodle boxes.' },
+        { name: 'Rustyard', tier: 0, blurb: 'Scrap markets and junk robots.' },
+        { name: 'the Glow Market', tier: 1, blurb: 'The busiest night market in the city.' },
+        { name: 'Canal Ward', tier: 1, blurb: 'Hover-boats on glowing canals.' },
+        { name: 'Skyline Heights', tier: 2, blurb: 'Fancy towers above the clouds.' }
+      ],
+      parentJobs: ['drone mechanic', 'noodle chef', 'hacker', 'nurse', 'hover-taxi driver', 'holo-ad designer', 'security guard', 'robot repair tech', 'teacher', 'corp accountant', 'street musician', 'chrome doctor'],
+      corps: ['Kumo-Tek', 'Zephyr Dynamics', 'Nimbus Bio', 'Glint Media'],
+      schools: { primary: 'Glow Street Primary', high: 'Neon Harbor High', uni: 'Harbor Tech University' },
+      petNames: ['Bolt', 'Pixel', 'Sprocket', 'Widget', 'Byte', 'Gizmo', 'Chip', 'Static', 'Nugget', 'Waffles', 'Turbo', 'Glitch'],
+      kidPlaces: ['at the playground', 'in class', 'at the arcade', 'at a drone race'],
+      adultPlaces: ['at a noodle bar', 'at the gym', 'at a drone race', 'on the canal boardwalk', 'at karaoke night'],
+      datePlaces: ['at a rooftop noodle bar', 'at the holo-cinema', 'at a drone race', 'at the Glow Market', 'at a hacking meetup', 'at a robot-pet show', 'on the canal boardwalk']
+    };
+    var STAT = { happy: ['😊', 'Happy'], health: ['❤️', 'Health'], smarts: ['🧠', 'Smarts'], style: ['😎', 'Style'] };
+    var JOBS = [
+      { id: 'helper', e: '🍜', t: 'Noodle Bar Helper', pay: 2500, pt: 1, min: 14 },
+      { id: 'washer', e: '🧽', t: 'Hover-Car Washer', pay: 2200, pt: 1, min: 14 },
+      { id: 'arcade', e: '🕹️', t: 'Arcade Attendant', pay: 2800, pt: 1, min: 15, need: { style: 30 } },
+      { id: 'cook', e: '🍜', t: 'Noodle Bar Cook', pay: 21000 },
+      { id: 'courier', e: '📦', t: 'Drone Courier', pay: 24000 },
+      { id: 'vendor', e: '🛍️', t: 'Glow Market Vendor', pay: 23000, need: { style: 30 } },
+      { id: 'guard', e: '🛡️', t: 'Security Guard', pay: 32000, need: { health: 55 } },
+      { id: 'mech', e: '🔧', t: 'Hover-Car Mechanic', pay: 36000, need: { smarts: 40 } },
+      { id: 'racer', e: '🏍️', t: 'Hover-Bike Racer', pay: 38000, fame: 1500, flat: 1, need: { health: 60, style: 45, license: 1 } },
+      { id: 'idol', e: '🎤', t: 'Holo Pop Idol', pay: 25000, fame: 2500, flat: 1, need: { style: 70 } },
+      { id: 'designer', e: '🎨', t: 'Holo-Ad Designer', pay: 48000, need: { style: 55, smarts: 35 }, alt: { major: 'art' } },
+      { id: 'office', e: '🏢', t: 'Office Worker', pay: 52000, need: { degree: 1 } },
+      { id: 'hacker', e: '💻', t: 'White-Hat Hacker', pay: 76000, need: { smarts: 70 }, alt: { major: 'code', smarts: 50 } },
+      { id: 'engineer', e: '🤖', t: 'Robotics Engineer', pay: 92000, need: { major: 'robo' } },
+      { id: 'chromedoc', e: '🦾', t: 'Chrome Doctor', pay: 130000, need: { major: 'med', smarts: 60 } },
+      { id: 'exec', e: '💼', t: 'Corp Executive', pay: 260000, flat: 1, need: { major: 'biz', smarts: 60, style: 50 } },
+      { id: 'mayor', e: '🏛️', t: 'Mayor of Neon Harbor', pay: 180000, fame: 500, flat: 1, need: { age: 35, fame: 40, smarts: 55 } },
+      { id: 'pilot', e: '🚀', t: 'Starship Pilot', pay: 150000, flat: 1, prem: 1, need: { smarts: 60, health: 60 } }
+    ];
+    var JOB = byId(JOBS), LV = [0.85, 1, 1.3, 1.7], LV_NAME = ['Junior ', '', 'Senior ', 'Head '];
+    var MAJORS = { robo: ['🤖', 'Cyber-Engineering'], med: ['🦾', 'Medicine'], code: ['💻', 'Netcode'], art: ['🎨', 'Holo-Arts'], biz: ['📊', 'Business'] };
+    var IMPLANTS = [
+      { id: 'tattoo', e: '✨', t: 'Glowing neon tattoo', cost: 400, min: 16, chrome: 0, fx: { style: 8 }, msg: 'You got a glowing neon tattoo. Your arm now glows in the dark!' },
+      { id: 'eyes', e: '👁️', t: 'Cyber-eyes with zoom', cost: 6000, min: 18, chrome: 1, fx: { smarts: 4, style: 5 }, msg: 'You got cyber-eyes. You can now read signs from three blocks away!' },
+      { id: 'voice', e: '🎵', t: 'Auto-tune voice box', cost: 8000, min: 18, chrome: 1, fx: { style: 6 }, msg: 'You got an auto-tune voice box. Even your burps are in tune now.' },
+      { id: 'skin', e: '🦎', t: 'Color-changing skin', cost: 9000, min: 18, chrome: 1, fx: { style: 10 }, msg: 'You got color-changing skin. You turn purple when you’re happy and green when you’re hungry.' },
+      { id: 'arm', e: '🦾', t: 'Chrome arm', cost: 12000, min: 18, chrome: 2, fx: { health: 6, style: 5 }, msg: 'You got a chrome arm. You can now open any pickle jar in the city.' },
+      { id: 'legs', e: '🦿', t: 'Jump-jet legs', cost: 14000, min: 18, chrome: 2, fx: { health: 5, happy: 6 }, msg: 'You got jump-jet legs. You can jump onto a two-story roof. (Please don’t.)' },
+      { id: 'chip', e: '🧠', t: 'Brain booster chip', cost: 15000, min: 18, chrome: 2, fx: { smarts: 12 }, msg: 'You got a brain booster chip and learned nine languages before lunch.' },
+      { id: 'heart', e: '💓', t: 'Turbo heart', cost: 25000, min: 18, chrome: 2, fx: { health: 15 }, msg: 'You got a turbo heart. It goes vroom! You might live longer.' },
+      { id: 'knees', e: '🦿', t: 'Chrome knees', cost: 5000, min: 55, chrome: 1, fx: { health: 10 }, hide: 1 },
+      { id: 'wings', e: '🌈', t: 'Rainbow chrome wings', cost: 60000, min: 18, chrome: 2, fx: { style: 15, happy: 8 }, msg: 'You got rainbow chrome wings! Now you can glide between rooftops.', prem: 1 }
+    ];
+    var IMP = byId(IMPLANTS);
+    var HOMES = [
+      { id: 'pod', e: '🛏️', t: 'Capsule pod', cost: 18000, joy: 1 },
+      { id: 'apt', e: '🏢', t: 'Stacks apartment', cost: 75000, joy: 2 },
+      { id: 'loft', e: '🌉', t: 'Canal loft', cost: 220000, joy: 3 },
+      { id: 'pent', e: '🌆', t: 'Sky penthouse', cost: 1200000, joy: 5 },
+      { id: 'castle', e: '🏯', t: 'Floating sky castle', cost: 5000000, joy: 6, prem: 1 }
+    ];
+    var RIDES = [
+      { id: 'scooter', e: '🛴', t: 'Hover-scooter', cost: 1500, min: 12, joy: 1 },
+      { id: 'bike', e: '🏍️', t: 'Hover-bike', cost: 14000, min: 16, lic: 1, joy: 2 },
+      { id: 'car', e: '🚗', t: 'Hover-car', cost: 48000, min: 16, lic: 1, joy: 2 },
+      { id: 'limo', e: '🚀', t: 'Aero-limo', cost: 350000, min: 18, lic: 1, joy: 4 },
+      { id: 'ship', e: '🛸', t: 'Personal starship', cost: 2500000, min: 18, lic: 1, joy: 5, prem: 1 }
+    ];
+    var PETS = [
+      { id: 'cat', e: '🐱', t: 'Robo-cat', cost: 600 },
+      { id: 'dog', e: '🐶', t: 'Robo-dog', cost: 900 },
+      { id: 'dragon', e: '🐉', t: 'Pocket dragon drone', cost: 4000 },
+      { id: 'unicorn', e: '🦄', t: 'Robo-unicorn', cost: 25000, prem: 1 }
+    ];
+    var HOME = byId(HOMES), RIDE = byId(RIDES), PET = byId(PETS);
+    var ILL = ['Glitch Flu', 'Neon Eye Strain', 'Smog Sniffles', 'Static Hiccups'], ILL_OLD = ['Rust Cough', 'Static Shakes', 'Creaky Bones'];
+    var GLITCH = ['🦾 Your chrome glitched and high-fived a vending machine all day.', '👁️ Your cyber-parts glitched and showed everything upside down for a week.',
+      '🦿 Your chrome glitched and you moonwalked into a noodle shop.', '🧠 A glitch made the same song play in your head for three days straight.', '⚡ Your implants glitched and you sneezed sparks at a dinner party.'];
+    var QUIET = ['🍜 A quiet year. You ate a LOT of noodles.', '🌧️ It rained most of the year. Neon Harbor is like that.', '📺 You binge-watched an entire holo-series. All 400 episodes.',
+      '🌃 You spent a lot of nights watching the neon signs blink.', '🛰️ Not much happened. A satellite waved at you once. Probably.'];
+    var RIBBONS = {
+      superstar: ['🎤', 'Superstar', 'You became super famous.'],
+      tycoon: ['💰', 'Credit Tycoon', 'You ended up with over 10 million credits.'],
+      ancient: ['🧓', 'Living Legend', 'You lived to 100 or older!'],
+      chrome: ['🤖', 'Full Chrome', 'You were more machine than human.'],
+      rebel: ['😈', 'Troublemaker', 'You caused a LOT of mischief.'],
+      boss: ['💼', 'Big Boss', 'You had one of the top-paying jobs in the city.'],
+      genius: ['🧠', 'Genius', 'Your brain was off the charts.'],
+      family: ['👨‍👩‍👧', 'Family Hero', 'You raised a big family.'],
+      style: ['😎', 'Style Icon', 'Everyone copied your look.'],
+      saint: ['😇', 'Good Egg', 'You were kind to everyone.'],
+      short: ['⚡', 'Short Circuit', 'Your life was short but bright.'],
+      couch: ['🛋️', 'Couch Potato', 'You never really got a job.'],
+      happy: ['😊', 'Happy Life', 'You were happy most of your life.'],
+      normal: ['🌱', 'Just Living', 'A normal life in a not-so-normal city.']
+    };
+
+    // ---------------- yearly events ----------------
+    // a = [min age, max age], w = how often, once = once per life, need = who must exist, if = extra check.
+    // auto events just happen. Choice events: c = [[label, outcomes]], outcomes = [[weight, effects, text], ...] or a function.
+    var EVENTS = [
+      // baby
+      { id: 'firstword', a: [1, 2], w: 8, once: 1, auto: function () { return [{ happy: 3 }, '🗣️ Your first word was “' + pick(['Glitch', 'Robot', 'Noodles', 'Beep-boop', 'Neon', 'Drone']) + '!” Your parents were very confused.']; } },
+      { id: 'steps', a: [1, 2], w: 8, once: 1, auto: function () { return [{ happy: 2 }, '👣 You took your first steps… straight into a hologram.']; } },
+      { id: 'dronecrib', a: [0, 3], w: 3, auto: function () { return [{ happy: 2 }, '🚁 A delivery drone landed in your crib by mistake. You tried to eat its propeller.']; } },
+      { id: 'lullaby', a: [0, 4], w: 3, auto: function () { return [{ happy: 4 }, '🎶 Your robo-nanny sang you a lullaby in 47 languages.']; } },
+      { id: 'lightstick', a: [1, 4], w: 4, e: '🪄', t: 'You found a glowing light-stick on the floor.', c: [
+        ['Chew on it', [[1, { health: -4 }, 'You chewed on a light-stick. It tasted like electricity. Not great.']]],
+        ['Wave it around', [[1, { happy: 5 }, 'You put on the cutest little light show with a light-stick. Your parents filmed it.']]]] },
+      { id: 'robobear', a: [2, 4], w: 4, e: '🧸', t: 'You REALLY want a talking robo-bear from the toy store.', c: [
+        ['Throw a tantrum', [[1, { happy: 6, bond: { parents: -3 } }, 'Your tantrum worked! You got a robo-bear, but your parents look tired.'], [1, { happy: -3, bond: { parents: -3 } }, 'Your tantrum did NOT work. No robo-bear, just a timeout.']]],
+        ['Make puppy eyes', [[2, { happy: 5 }, 'Your puppy eyes worked! You named your robo-bear Mr. Bolts.'], [3, { happy: -1 }, 'Your parents are immune to puppy eyes. No robo-bear.']]]] },
+      // kid
+      { id: 'shoes', a: [6, 12], w: 3, e: '👟', t: 'A kid at school says your shoes are “so last century.”', c: [
+        ['Laugh it off', [[1, { happy: 2, style: 1 }, 'You laughed off a joke about your shoes. Confidence is the best outfit.']]],
+        ['Roast them back', [[3, { happy: 5, style: 3 }, 'You roasted a kid who teased your shoes. Everyone laughed. Even the teacher-bot beeped.'], [2, { happy: -4 }, 'You tried to roast a kid who teased your shoes, but it came out as “no u.” Ouch.']]],
+        ['Tell the teacher-bot', [[1, { good: 1, happy: -1 }, 'You told the teacher-bot about the teasing. It gave everyone a 10-minute talk about kindness.']]]] },
+      { id: 'robocat', a: [5, 14], w: 3, once: 1, if: function () { return !pets().length; }, e: '🐱', t: 'You found a lost robo-cat meowing in binary in an alley.', c: [
+        ['Take it home', function () { var p = addPet('cat'); return [{ happy: 8 }, 'You took home a lost robo-cat and named it ' + p.first + '!']; }],
+        ['Find its owner', [[1, { good: 3, money: 20 }, 'You returned a lost robo-cat to its owner and got a 20 cr reward!'], [1, { good: 3, happy: 2 }, 'You returned a lost robo-cat to its owner. They cried happy tears.']]],
+        ['Leave it alone', [[1, { happy: -2 }, 'You walked away from a lost robo-cat. You thought about it all week.']]]] },
+      { id: 'sciencefair', a: [7, 12], w: 3, need: 'school', e: '🔬', t: 'Your class is having a science fair!', c: [
+        ['Build a mini drone', [[function () { return L.st.smarts; }, { smarts: 4, happy: 6, grade: 4 }, 'Your mini drone won 1st place at the science fair! 🏆'], [60, { smarts: 3 }, 'Your mini drone flew straight into the principal’s coffee. You still learned a lot.']]],
+        ['Make a slime volcano', [[1, { happy: 3, smarts: 2 }, 'Your glowing slime volcano was a hit at the science fair. It also got on the ceiling.']]],
+        ['Skip it', [[1, { happy: 1, grade: -3 }, 'You skipped the science fair and played video games instead.']]]] },
+      { id: 'popquiz', a: [6, 17], w: 3, need: 'school', e: '📝', t: 'The teacher-bot just announced a surprise quiz!', c: [
+        ['Do your best', function () { return chance(0.3 + L.st.smarts / 140) ? [{ grade: 6, happy: 3 }, 'You aced a surprise quiz! 💯'] : [{ grade: -2 }, 'You did your best on a surprise quiz, but it was really hard.']; }],
+        ['Guess everything', [[1, { grade: 3, happy: 2 }, 'You guessed every answer on a quiz… and somehow passed!'], [2, { grade: -5 }, 'You guessed every answer on a quiz. The teacher-bot was not impressed.']]],
+        ['Pretend to glitch', [[1, { happy: 4 }, 'You pretended to glitch during a quiz. The teacher-bot rebooted itself out of sympathy!'], [2, { grade: -5, happy: -2 }, 'You pretended to glitch during a quiz. The teacher-bot was not fooled.']]]] },
+      { id: 'dream', a: [7, 11], w: 6, once: 1, e: '💭', t: 'Your parents ask what you want to be when you grow up.', c: [
+        ['A hacker 💻', function () { L.dream = 'hacker'; return [{ smarts: 2 }, 'You told your parents you want to be a hacker when you grow up.']; }],
+        ['A pop idol 🎤', function () { L.dream = 'idol'; return [{ style: 2 }, 'You told your parents you want to be a pop idol when you grow up.']; }],
+        ['A chrome doctor 🦾', function () { L.dream = 'chromedoc'; return [{ smarts: 2 }, 'You told your parents you want to be a chrome doctor when you grow up.']; }],
+        ['A hover-bike racer 🏍️', function () { L.dream = 'racer'; return [{ health: 2 }, 'You told your parents you want to be a hover-bike racer when you grow up.']; }]] },
+      { id: 'vrparty', a: [5, 12], w: 3, e: '🥽', t: 'You got invited to a VR birthday party on a virtual volcano.', c: [
+        ['Go to the party', function () { var t = 'You went to a VR birthday party on a virtual volcano. So much fun!'; if (chance(0.4) && friends().length < 8) { var f = addPerson('friend', Math.max(5, L.age + R(-1, 1))); t += ' You also made a new friend, ' + f.first + '.'; } return [{ happy: 6 }, t]; }],
+        ['Stay home', [[1, { smarts: 1, happy: -1 }, 'You skipped a VR party and read a book about robots instead.']]]] },
+      { id: 'dare', a: [8, 14], w: 3, e: '⚡', t: 'A kid dared you to touch the old power-station fence.', c: [
+        ['Do it', [[7, { happy: 4, style: 3 }, 'You touched the power-station fence on a dare. Zzzt! Your hair stood up for a week. Legendary.'], [3, { health: -6 }, 'You touched the power-station fence on a dare. Bad idea. Your fingers are still buzzing.']]],
+        ['Nope', [[1, { good: 1 }, 'You said no to a silly dare. Smart choice. The fence hummed at you.']]]] },
+      { id: 'blackout', a: [5, 17], w: 2, e: '🔦', t: 'A city-wide blackout! All of Neon Harbor went dark.', c: [
+        ['Tell spooky stories', [[1, { happy: 5 }, 'During the big blackout, you told spooky stories by flashlight.']]],
+        ['Stargaze from the roof', [[1, { happy: 4, smarts: 2 }, 'During the big blackout, you saw real stars from the roof for the first time!']]]] },
+      { id: 'foundcredits', a: [6, 16], w: 2, e: '💳', t: 'You found a credit chip with 50 cr on the sidewalk.', c: [
+        ['Keep it', [[1, { money: 50, good: -1 }, 'You found 50 cr on the sidewalk and kept it.']]],
+        ['Give it to the lost-and-found bot', [[1, { good: 3, money: 20 }, 'You turned in a lost credit chip. The owner gave you a 20 cr reward!'], [1, { good: 3, happy: 2 }, 'You turned in a lost credit chip. The lost-and-found bot gave you a sticker.']]]] },
+      { id: 'babysib', a: [3, 12], w: 3, once: 1, if: function () { var m = byLabel('Mom'); return !!(m && m.alive && m.age <= 43); }, e: '👶', t: 'Big news: your parents had a baby! Your new little sibling is named {new}.', c: [
+        ['Yay!', function (c) { addPerson('sib', 0, c.new); return [{ happy: 4 }, 'Your parents had a baby! You’re a big sibling to ' + c.new + ' now.']; }],
+        ['Ugh, more noise', function (c) { addPerson('sib', 0, c.new); return [{ happy: -2 }, 'Your parents had a baby named ' + c.new + '. Now home is even louder.']; }]] },
+      { id: 'snowday', a: [5, 12], w: 2, auto: function () { return [{ happy: 4 }, '❄️ It snowed in Neon Harbor! The snow glowed pink under the neon signs.']; } },
+      { id: 'newfriend', a: [6, 17], w: 3, if: function () { return friends().length < 8; }, e: '🤝', t: '{new} from your class wants to be friends.', c: [
+        ['Sure!', function (c) { addPerson('friend', Math.max(5, L.age + R(-1, 1)), c.new); return [{ happy: 3 }, 'You became friends with ' + c.new + '.']; }],
+        ['Maybe later', [[1, {}, 'You told a classmate “maybe later” about being friends.']]]] },
+      { id: 'lunchswap', a: [6, 11], w: 2, e: '🍱', t: 'A classmate offers to swap your lunch for a “mystery protein bar.”', c: [
+        ['Swap!', [[1, { happy: 4 }, 'You swapped lunches for a mystery protein bar. It tasted like strawberry pancakes!'], [1, { health: -3 }, 'You swapped lunches for a mystery protein bar. It tasted like a battery.']]],
+        ['Keep your lunch', [[1, { health: 1 }, 'You kept your own lunch. Noodles are noodles.']]]] },
+      { id: 'homeworkbot', a: [8, 13], w: 2, need: 'school', e: '🤖', t: 'Your homework-bot broke the night before a big project.', c: [
+        ['Fix it yourself', [[1, { smarts: 4, happy: 2 }, 'You fixed your broken homework-bot yourself!'], [1, { smarts: 2 }, 'You tried to fix your homework-bot. Now it only speaks in rhymes.']]],
+        ['Do the project by hand', [[1, { smarts: 2, happy: -2, grade: 3 }, 'You did a whole project by hand when your homework-bot broke. Old school!']]],
+        ['Ask your parents for help', [[1, { bond: { parents: 4 }, grade: 2 }, 'Your parents helped fix your homework-bot. Teamwork!']]]] },
+      // teen
+      { id: 'club', a: [12, 16], w: 6, once: 1, need: 'school', e: '🎒', t: 'There are new clubs at {school}. Want to join one?', c: [
+        ['Hacker Club 💻', function () { L.club = 'hacker'; return [{ smarts: 3, happy: 2 }, 'You joined the Hacker Club!']; }],
+        ['Drone Racing 🚁', function () { L.club = 'drone'; return [{ happy: 4 }, 'You joined the Drone Racing Club!']; }],
+        ['Holo-Art 🎨', function () { L.club = 'art'; return [{ style: 3, happy: 2 }, 'You joined the Holo-Art Club!']; }],
+        ['Street Dance 💃', function () { L.club = 'dance'; return [{ health: 3, happy: 2 }, 'You joined the Street Dance Club!']; }],
+        ['No thanks', [[1, {}, 'You decided not to join a club.']]]] },
+      { id: 'copyhw', a: [12, 17], w: 2, need: 'friend', e: '📄', t: '{friend} asks to copy your homework.', c: [
+        ['Let them', [[3, { bond: { friend: 4 }, good: -1 }, 'You let {friend} copy your homework.'], [1, { grade: -3, happy: -3, good: -1 }, 'You let {friend} copy your homework, and you BOTH got caught. Detention!']]],
+        ['Say no', [[1, { good: 1, bond: { friend: -2 } }, 'You told {friend} they couldn’t copy your homework.']]],
+        ['Help them understand it', [[1, { smarts: 2, good: 1, bond: { friend: 4 } }, 'You helped {friend} understand the homework instead of letting them copy.']]]] },
+      { id: 'concert', a: [13, 17], w: 3, e: '🎶', t: 'A secret holo-concert is happening downtown tonight!', c: [
+        ['Sneak out', [[3, { happy: 10 }, 'You snuck out to a secret holo-concert. Best. Night. Ever.'], [2, { happy: -5, bond: { parents: -6 } }, 'You snuck out to a holo-concert, but your parents caught you climbing back in. Grounded!']]],
+        ['Ask your parents', function () { return avgParentBond() > 60 && chance(0.7) ? [{ happy: 8, bond: { parents: 2 } }, 'Your parents said yes to the holo-concert! It was amazing.'] : [{ happy: -3 }, 'Your parents said no to the holo-concert.']; }],
+        ['Stay home', [[1, { happy: -2, smarts: 1 }, 'You stayed home instead of going to a holo-concert.']]]] },
+      { id: 'cheatchip', a: [13, 17], w: 2, need: 'school', e: '🧠', t: 'Your big exam is tomorrow. A kid is selling a “cheat chip” for 50 cr.', c: [
+        ['Study all night', [[1, { smarts: 3, grade: 5, health: -2 }, 'You studied all night for a big exam. Your brain hurts, but you know your stuff.']]],
+        ['Get some sleep', [[1, { health: 2, grade: 1 }, 'You got a good night’s sleep before a big exam.']]],
+        ['Buy the cheat chip', function () { if (L.money < 50) return [{ smarts: 1 }, 'You couldn’t afford a cheat chip, so you studied a little instead.']; return chance(0.5) ? [{ money: -50, grade: 6, good: -2 }, 'You used a cheat chip on an exam. It worked… but you feel kinda weird about it.'] : [{ money: -50, grade: -10, good: -2, happy: -5 }, 'You bought a cheat chip, but it only knew facts about cheese. You got caught!']; }]] },
+      { id: 'parttime', a: [14, 17], w: 3, once: 1, if: function () { return !L.job; }, e: '💼', t: 'The noodle bar down the street needs a helper. It pays 2,500 cr a year.', c: [
+        ['Take the job', function () { setJob('helper'); return [{ happy: 2 }, 'You got your first job: Noodle Bar Helper!']; }],
+        ['Pass', [[1, {}, 'You passed on a part-time job at the noodle bar.']]]] },
+      { id: 'tattoo16', a: [16, 17], w: 3, once: 1, if: function () { return !has('tattoo'); }, e: '✨', t: 'You REALLY want a glowing neon tattoo.', c: [
+        ['Ask your parents', function () { if (avgParentBond() >= 65 && chance(0.6)) { L.implants.push('tattoo'); return [{ style: 8, happy: 5 }, 'Your parents let you get a glowing neon tattoo! ✨']; } return [{ happy: -3 }, 'Your parents said no to a neon tattoo. “When you’re older!”']; }],
+        ['Wait until you’re older', [[1, { good: 1 }, 'You decided to wait on getting a neon tattoo.']]]] },
+      { id: 'license', a: [15, 17], w: 4, once: 1, if: function () { return !L.license; }, e: '🏍️', t: 'Time for your hover-bike license test!', c: [
+        ['Take the test', function () { return licenseTest(); }],
+        ['Not yet', [[1, {}, 'You decided to wait on your hover-bike license test.']]]] },
+      { id: 'foodstall', a: [13, 17], w: 2, e: '🍦', t: 'Your friend wants to run a street-food stall with you for the summer.', c: [
+        ['Let’s do it', function () { if (chance(0.6)) { var m = R(200, 800); return [{ money: m, happy: 4 }, 'Your summer food stall was a hit! You earned ' + cr(m) + '.']; } return [{ happy: -2 }, 'Your summer food stall flopped. Nobody wanted squid-flavored ice cream.']; }],
+        ['Pass', [[1, {}, 'You skipped running a food stall this summer.']]]] },
+      { id: 'growth', a: [12, 15], w: 4, once: 1, auto: function () { return [{ style: -2, health: 3 }, '📏 You had a huge growth spurt! None of your clothes fit anymore.']; } },
+      { id: 'secretnote', a: [13, 17], w: 2, e: '💌', t: 'Someone left a holo-note in your locker that says “You’re awesome.” No name!', c: [
+        ['Find out who', function () { var f = rand(friends()); if (f && chance(0.5)) { f.bond = clamp(f.bond + 10); return [{ happy: 5 }, 'The secret “You’re awesome” note was from ' + f.first + '! You’re best friends now.']; } return [{ happy: 2 }, 'You never found out who left the secret note. The mystery continues…']; }],
+        ['Frame it', [[1, { happy: 5 }, 'You framed a secret “You’re awesome” note. It glows on your wall.']]]] },
+      { id: 'viral', a: [13, 25], w: 2, e: '📹', t: 'Your video of a robot dog falling asleep is getting tons of views on StreamNet!', c: [
+        ['Post more videos', [[1, { fame: 5, happy: 3 }, 'Your robot dog video went viral, so you posted more!']]],
+        ['Delete it', [[1, { happy: -1 }, 'You deleted your viral robot dog video. Too embarrassing!']]]] },
+      { id: 'clubhacker', a: [12, 17], w: 4, if: function () { return L.club === 'hacker' && !!L.school; }, e: '💻', t: 'The Hacker Club entered a city coding contest!', c: [
+        ['Lead the team', function () { return chance(L.st.smarts / 130) ? [{ money: 300, fame: 3, happy: 6 }, 'You led the Hacker Club to victory in a city coding contest! 🏆'] : [{ happy: -2, smarts: 2 }, 'Your Hacker Club team lost the coding contest, but you learned a ton.']; }],
+        ['Bring snacks', [[1, { happy: 3 }, 'You were the Hacker Club’s official snack captain at the coding contest.']]]] },
+      { id: 'clubdrone', a: [12, 17], w: 4, if: function () { return L.club === 'drone' && !!L.school; }, e: '🚁', t: 'It’s the Drone Racing Club finals!', c: [
+        ['Go full speed', [[1, { happy: 8, fame: 3 }, 'You won the drone racing finals at full speed! 🏆'], [1, { happy: -3 }, 'You went full speed in the drone finals and crashed into a noodle sign.']]],
+        ['Play it safe', [[1, { happy: 5 }, 'You played it safe in the drone finals and came in 2nd!'], [2, { happy: 1 }, 'You played it safe in the drone finals and finished in the middle.']]]] },
+      { id: 'clubart', a: [12, 17], w: 4, if: function () { return L.club === 'art' && !!L.school; }, e: '🎨', t: 'Your holo-art is going in the school gallery!', c: [
+        ['Add way more glitter', [[1, { style: 4, happy: 3 }, 'Your extra-glittery holo-art was the star of the school gallery.']]],
+        ['Keep it simple', [[1, { smarts: 2, style: 2 }, 'Your simple, clean holo-art impressed the art teacher.']]]] },
+      { id: 'clubdance', a: [12, 17], w: 4, if: function () { return L.club === 'dance' && !!L.school; }, e: '💃', t: 'The Street Dance Club got invited to a dance battle at the Glow Market!', c: [
+        ['Show off your best move', [[11, { fame: 4, happy: 6 }, 'You won a dance battle at the Glow Market! The crowd went wild.'], [9, { happy: -3 }, 'You slipped on a noodle in the middle of a dance battle. Everyone saw.']]],
+        ['Cheer from the side', [[1, { happy: 2 }, 'You cheered on your dance crew from the side.']]]] },
+      { id: 'neondance', a: [13, 17], w: 2, need: 'school', e: '🪩', t: 'The school’s big Neon Dance is coming up!', c: [
+        ['Go with friends', [[1, { happy: 6, style: 2 }, 'You went to the Neon Dance with your friends and danced all night.']]],
+        ['Stay home and game', [[1, { happy: 2 }, 'You skipped the Neon Dance and beat a video game instead.']]]] },
+      // adult
+      { id: 'contract', a: [18, 40], w: 2, if: function () { return !L.job && !L.school && !L.uni && !L.retired; }, e: '📜', t: 'A {corp} recruiter offers you a job, but the contract is 99 pages long.', c: [
+        ['Sign without reading', function (c) { setJob('office', c.corp); return chance(0.35) ? [{ happy: -4 }, 'You signed a 99-page contract with ' + c.corp + '. Page 87 says you must wear a mascot costume on Fridays.'] : [{ happy: 4 }, 'You signed a 99-page contract and got a job at ' + c.corp + '!']; }],
+        ['Read every page', function (c) { setJob('office', c.corp); return [{ smarts: 2, happy: 2 }, 'You read all 99 pages, found a typo on page 42, and got a job at ' + c.corp + '!']; }],
+        ['No thanks', [[1, {}, 'You turned down a corp job offer.']]]] },
+      { id: 'aiadvice', a: [18, 95], w: 2, e: '🏠', t: 'Your home AI assistant started giving you life advice.', c: [
+        ['Listen to it', [[1, { smarts: 3, happy: 2 }, 'Your home AI gave you some surprisingly wise life advice.'], [1, { happy: -2 }, 'Your home AI told you to eat more batteries. You stopped listening.']]],
+        ['Turn it off', [[1, { happy: 1 }, 'You turned off your home AI’s life advice mode. Peace and quiet.']]]] },
+      { id: 'sneakers', a: [16, 60], w: 2, e: '👟', t: 'A street vendor is selling “vintage” 2020s sneakers for 800 cr.', c: [
+        ['Buy them', function () { return L.money < 800 ? [{}, 'You wanted some vintage sneakers, but you couldn’t afford them.'] : [{ money: -800, style: 6, happy: 2 }, 'You bought a pair of vintage 2020s sneakers. So retro!']; }],
+        ['Pass', [[1, {}, 'You passed on the vintage sneakers.']]]] },
+      { id: 'ticket', a: [17, 95], w: 2, if: function () { return L.rides.length > 0; }, e: '🚨', t: 'A traffic drone gave you a 200 cr parking ticket.', c: [
+        ['Pay it', [[1, { money: -200 }, 'You paid a 200 cr parking ticket from a traffic drone.']]],
+        ['Argue with the drone', [[3, { happy: 3 }, 'You argued with a traffic drone… and it apologized and flew away!'], [7, { money: -400, happy: -2 }, 'You argued with a traffic drone, so it doubled your ticket to 400 cr. Never argue with a drone.']]]] },
+      { id: 'hacktourney', a: [18, 60], w: 2, e: '🏆', t: 'The city is holding a giant hacking tournament!', c: [
+        ['Enter it', function () { if (chance(L.st.smarts / 160 + (L.major === 'code' ? 0.2 : 0))) { var m = R(2000, 8000); return [{ money: m, fame: 6, happy: 8 }, 'You won the city hacking tournament and ' + cr(m) + '! 🏆']; } return [{ happy: -2, smarts: 1 }, 'You got knocked out in round 1 of the hacking tournament.']; }],
+        ['Watch from the stands', [[1, { happy: 3 }, 'You watched the city hacking tournament. The final was intense!']]]] },
+      { id: 'startup', a: [20, 65], w: 2, if: function () { return L.money >= 2000; }, e: '🚀', t: 'A friend wants you to invest 2,000 cr in self-stirring noodles.', c: [
+        ['Invest', function () { if (chance(0.35)) { var m = R(5000, 15000); return [{ money: m, happy: 8 }, 'You invested in self-stirring noodles, and they made you ' + cr(m) + '!']; } return [{ money: -2000, happy: -4 }, 'You invested 2,000 cr in self-stirring noodles. They stirred themselves right out the window.']; }],
+        ['Pass', [[1, {}, 'You passed on investing in self-stirring noodles.']]]] },
+      { id: 'barking', a: [18, 95], w: 2, e: '🐕', t: 'Your neighbor’s robot dog barks at 3 a.m. every night.', c: [
+        ['Complain', [[1, { happy: 3 }, 'You complained about a barking robot dog, and your neighbor turned its volume down.'], [1, { happy: -2 }, 'You complained about a barking robot dog. Now your neighbor won’t wave at you.']]],
+        ['Make friends with the dog', [[1, { happy: 4 }, 'You made friends with your neighbor’s robot dog. Now it brings you a newspaper every morning. Someone’s newspaper.']]],
+        ['Buy earplugs (100 cr)', [[1, { money: -100, health: 2 }, 'You bought noise-canceling earplugs and finally got some sleep.']]]] },
+      { id: 'weekend', a: [18, 70], w: 3, need: 'job', e: '🏢', t: 'Your boss asks you to work this weekend.', c: [
+        ['Say yes', [[1, { perf: 8, happy: -4 }, 'You worked all weekend. Your boss noticed.']]],
+        ['Say no', [[1, { perf: -4, happy: 3 }, 'You said no to working the weekend and went to the arcade instead.']]]] },
+      { id: 'reality', a: [18, 50], w: 2, if: function () { return L.st.style >= 65; }, e: '📺', t: 'A producer wants you on the reality show “Neon Roommates”!', c: [
+        ['Join the show', [[1, { fame: 12, happy: 6 }, 'You joined the reality show “Neon Roommates” and became a fan favorite!'], [1, { fame: 10, happy: -6 }, 'You joined “Neon Roommates,” but the show edited you to look like the villain.']]],
+        ['No way', [[1, { happy: 1 }, 'You turned down a reality show.']]]] },
+      { id: 'flu', a: [3, 105], w: 2, if: function () { return !L.ill; }, e: '🤧', t: 'Glitch Flu is going around the city.', c: [
+        ['Get a flu shot (100 cr)', function () { return L.age < 18 ? [{ health: 1 }, 'Your parents took you for a Glitch Flu shot. Ouch, but safe!'] : [{ money: -100, health: 1 }, 'You got a Glitch Flu shot. Ouch, but safe!']; }],
+        ['Take your chances', function () { if (chance(0.5)) { L.ill = 'Glitch Flu'; return [{ health: -5, happy: -3 }, 'You caught Glitch Flu. Everything sounds like dial-up internet.']; } return [{}, 'You skipped the flu shot and didn’t get sick. Lucky!']; }]] },
+      { id: 'moonmall', a: [8, 95], w: 1, e: '🌙', t: 'You won a free trip to the Moon Mall!', c: [
+        ['Go to the Moon!', [[1, { happy: 12, style: 3 }, 'You went on a free trip to the Moon Mall! Low-gravity shopping is the best.']]],
+        ['Sell the ticket', [[1, { money: 3000 }, 'You sold your free Moon Mall ticket for 3,000 cr.']]]] },
+      { id: 'hackcrew', a: [16, 50], w: 2, e: '🕶️', t: 'A mysterious hacker messages you: “Want to join our crew?”', c: [
+        ['Join the crew', function () { L.good -= 1; if (chance(0.55)) { L.mischief += 1; return [{ happy: 6, fame: 2 }, 'You joined a hacker crew and “redecorated” a corp website with dancing hamsters.']; } return caught('You joined a hacker crew, but the Net Police tracked you down.'); }],
+        ['Report it', [[1, { good: 3 }, 'You reported a suspicious hacker crew to the Net Police.']]],
+        ['Ignore it', [[1, {}, 'You ignored a message from a mysterious hacker.']]]] },
+      { id: 'wedding', a: [20, 85], w: 2, need: 'friend', if: function () { return L.money >= 150; }, e: '💒', t: '{friend} invited you to their wedding on a floating barge!', c: [
+        ['Go and bring a gift', [[1, { money: -150, happy: 6, bond: { friend: 6 } }, 'You went to {friend}’s wedding on a floating barge. You danced until sunrise.']]],
+        ['Just send a gift', [[1, { money: -100, bond: { friend: 2 } }, 'You sent {friend} a wedding gift.']]]] },
+      { id: 'bossimpressed', a: [18, 70], w: 3, need: 'job', if: function () { return !!L.job && L.job.perf >= 70 && !JOB[L.job.id].pt; }, e: '📈', t: 'Your boss is really impressed with your work.', c: [
+        ['Ask for a raise', function () { if (chance(0.6)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, 'You asked for a raise and got it! +10% pay.']; } return [{ happy: -2 }, 'You asked for a raise. Your boss said “maybe next year.”']; }],
+        ['Ask for a promotion', function () { if (!JOB[L.job.id].flat && L.job.level < 3 && chance(0.45)) { L.job.level += 1; return [{ happy: 8 }, 'You got promoted! You’re now a ' + jobTitle() + '.']; } return [{ happy: -2 }, 'You asked for a promotion, but it didn’t happen this year.']; }],
+        ['Just say thanks', [[1, { perf: 3, happy: 2 }, 'You thanked your boss for the kind words.']]]] },
+      { id: 'wallet', a: [18, 95], w: 2, e: '👛', t: 'You found a wallet with 2,000 cr inside.', c: [
+        ['Return it', [[3, { good: 4, money: 200 }, 'You returned a lost wallet. The owner gave you a 200 cr reward!'], [2, { good: 4, happy: 3 }, 'You returned a lost wallet. The owner gave you a big hug.']]],
+        ['Keep it', [[4, { money: 2000, good: -4 }, 'You found a wallet with 2,000 cr and kept it.'], [1, { good: -4, happy: -5 }, 'You tried to keep a lost wallet, but its tracker chip led the owner straight to you. Awkward.']]]] },
+      { id: 'implantsale', a: [18, 60], w: 2, if: function () { return !has('eyes'); }, e: '👁️', t: 'The Chrome Clinic is having a sale: cyber-eyes for just 4,200 cr!', c: [
+        ['Get cyber-eyes', function () { if (L.money < 4200) return [{}, 'You wanted cyber-eyes on sale, but you couldn’t afford them.']; L.implants.push('eyes'); return [{ money: -4200, smarts: 4, style: 5, happy: 3 }, 'You got cyber-eyes on sale! You can now read signs from three blocks away.']; }],
+        ['Not interested', [[1, {}, 'You skipped the Chrome Clinic sale.']]]] },
+      { id: 'puppy', a: [18, 75], w: 2, if: function () { return !pets().length; }, e: '🐶', t: 'The robo-pet shelter is giving away a robo-puppy.', c: [
+        ['Adopt it', function () { var p = addPet('dog'); return [{ happy: 7 }, 'You adopted a robo-puppy and named it ' + p.first + '!']; }],
+        ['No thanks', [[1, {}, 'You decided not to adopt a robo-puppy.']]]] },
+      { id: 'marathon', a: [16, 65], w: 2, e: '🏃', t: 'The Neon Night Marathon is this weekend.', c: [
+        ['Run it', function () { return L.st.health >= 50 ? [{ health: 4, happy: 6 }, 'You finished the Neon Night Marathon! Your legs glowed (that was the paint).'] : [{ health: -3, happy: -1 }, 'You tried the Neon Night Marathon and took a nap at mile 3.']; }],
+        ['Cheer on the runners', [[1, { happy: 2 }, 'You cheered on the runners at the Neon Night Marathon.']]]] },
+      { id: 'karaoke', a: [16, 90], w: 2, e: '🎤', t: 'It’s karaoke night at the holo-bar!', c: [
+        ['Sing your heart out', function () { return L.st.style >= 50 || has('voice') ? [{ happy: 6, fame: 2 }, 'You crushed karaoke night. People asked for an encore!'] : [{ happy: 3 }, 'You sang at karaoke night. Everyone covered their ears, but you had fun.']; }],
+        ['Just listen', [[1, { happy: 2 }, 'You listened at karaoke night. Someone sang a 12-minute robot opera.']]]] },
+      { id: 'kidhelp', a: [25, 95], w: 3, need: 'schoolkid', e: '🧒', t: 'Your kid {kid} needs help with a school project.', c: [
+        ['Help them all night', [[1, { bond: { kid: 8 }, happy: 3, health: -1 }, 'You helped {kid} with a school project all night. They got an A!']]],
+        ['Tell them to ask the AI', [[1, { bond: { kid: -4 } }, 'You told {kid} to ask the AI for help with their project.']]]] },
+      { id: 'pbday', a: [18, 95], w: 3, need: 'partner', e: '🎁', t: 'It’s {partner}’s birthday!', c: [
+        ['Buy a fancy gift (500 cr)', function () { return L.money < 500 ? [{ bond: { partner: 3 } }, 'You couldn’t afford a fancy gift for {partner}, so you made a card.'] : [{ money: -500, bond: { partner: 10 }, happy: 3 }, 'You got {partner} a fancy birthday gift. They loved it!']; }],
+        ['Make something yourself', [[1, { bond: { partner: 8 }, happy: 2 }, 'You made {partner} a homemade birthday gift. They loved it!']]],
+        ['Forget it…', [[1, { bond: { partner: -12 } }, 'You forgot {partner}’s birthday. Oops.']]]] },
+      { id: 'noodlecontest', a: [10, 85], w: 2, e: '🌶️', t: 'There’s a spicy noodle eating contest at the Glow Market!', c: [
+        ['Enter it', [[1, { money: 500, happy: 6, fame: 1 }, 'You won the spicy noodle eating contest and 500 cr! 🌶️'], [1, { health: -3, happy: 1 }, 'You entered the spicy noodle contest. Your tongue is still on fire.']]],
+        ['Just watch', [[1, { happy: 2 }, 'You watched the spicy noodle eating contest. Someone cried. It wasn’t you.']]]] },
+      { id: 'garden', a: [18, 95], w: 2, e: '🌱', t: 'Your building is starting a rooftop garden.', c: [
+        ['Grow tomatoes', [[1, { health: 3, happy: 3 }, 'You grew tomatoes in the rooftop garden. Fresh food in the big city!']]],
+        ['Grow glowing mushrooms', [[1, { style: 2, happy: 4 }, 'You grew glowing mushrooms in the rooftop garden. They light up the whole roof.']]],
+        ['Skip it', [[1, {}, 'You skipped the rooftop garden.']]]] },
+      // older
+      { id: 'knees', a: [58, 100], w: 3, once: 1, if: function () { return !has('knees'); }, e: '🦿', t: 'Your knees are creaky. The clinic offers chrome knees for 5,000 cr.', c: [
+        ['Get chrome knees', function () { if (L.money < 5000) return [{}, 'You wanted chrome knees, but you couldn’t afford them.']; L.implants.push('knees'); return [{ money: -5000, health: 10, happy: 4 }, 'You got chrome knees! You can do the robot dance again.']; }],
+        ['Stay natural', [[1, { happy: 1 }, 'You decided to keep your creaky original knees.']]]] },
+      { id: 'memoir', a: [60, 105], w: 2, once: 1, e: '📖', t: 'A publisher wants you to write the story of your life.', c: [
+        ['Write it', function () { var m = R(1000, 6000) + L.fame * 200; return [{ money: m, fame: 5, smarts: 2 }, 'You wrote your memoir and earned ' + cr(m) + '!']; }],
+        ['Nah', [[1, { happy: 1 }, 'You decided your life story is nobody’s business.']]]] },
+      { id: 'oldhackers', a: [60, 105], w: 2, e: '👴', t: 'The Retired Hackers Club invites you to their Thursday game night.', c: [
+        ['Join them', [[1, { happy: 6, smarts: 2 }, 'You joined the Retired Hackers Club. They’re surprisingly good at video games.']]],
+        ['Pass', [[1, {}, 'You skipped game night with the Retired Hackers Club.']]]] },
+      { id: 'grandkid', a: [55, 105], w: 2, if: function () { return kids().some(function (k) { return k.age >= 25; }); }, e: '🚁', t: 'Your grandkid wants you to teach them to fly a drone.', c: [
+        ['Teach them', [[1, { happy: 7 }, 'You taught your grandkid to fly a drone. They’re a natural!']]],
+        ['Watch from a bench', [[1, { happy: 3, health: 1 }, 'You watched your grandkid fly a drone from a comfy bench.']]]] },
+      { id: 'backup', a: [65, 110], w: 2, once: 1, e: '💾', t: 'The clinic offers you a free memory backup.', c: [
+        ['Back up my brain', [[1, { happy: 4, smarts: 1 }, 'You backed up your memories. Now you’ll never forget where you parked.']]],
+        ['No thanks', [[1, {}, 'You decided to keep your memories in your own head.']]]] },
+      { id: 'oldnap', a: [70, 120], w: 2, auto: function () { return [{ happy: 2, health: 1 }, '😴 You fell asleep during a holo-movie. Again.']; } },
+      { id: 'updates', a: [65, 110], w: 2, e: '📱', t: 'Your phone-implant wants you to update 37 apps.', c: [
+        ['Update them all', [[1, { smarts: 2, happy: -2 }, 'You updated 37 apps on your phone-implant. It took all day.']]],
+        ['Ignore them forever', [[1, { happy: 3 }, 'You ignored 37 app updates forever. Living dangerously.']]]] },
+      // any age
+      { id: 'adbot', a: [8, 100], w: 2, e: '📢', t: 'A floating ad-bot is following you around, yelling about soda.', c: [
+        ['Swat it away', [[1, { happy: 2 }, 'You swatted away a pushy ad-bot.']]],
+        ['Hack it to play music', function () { return L.st.smarts >= 50 ? [{ happy: 5, smarts: 1 }, 'You hacked a pushy ad-bot. Now it follows you around playing your favorite songs.'] : [{ happy: -2 }, 'You tried to hack an ad-bot, and now it yells even louder.']; }],
+        ['Just buy the soda (5 cr)', [[1, { money: -5, happy: 2 }, 'You bought the ad-bot’s soda. It was… fine.']]]] },
+      { id: 'magician', a: [5, 100], w: 2, e: '🎩', t: 'A street magician made a hologram rabbit appear!', c: [
+        ['Tip them (10 cr)', [[1, { money: -10, happy: 3, good: 1 }, 'You tipped a street magician. The hologram rabbit bowed to you.']]],
+        ['Ask how they did it', [[1, { smarts: 2 }, 'You asked a street magician how the trick worked. They said “magic.” (It was a projector.)']]]] },
+      { id: 'neonrain', a: [0, 118], w: 2, auto: function () { return [{ happy: 2 }, '🌧️ It rained neon-colored rain for a whole week. Very pretty. Very sticky.']; } },
+      { id: 'vending', a: [6, 110], w: 2, auto: function () { return [{ happy: 1 }, '🥤 All the vending machines in your neighborhood went on strike for “more snacks.”']; } },
+      // milestones (only happen when the game asks for them)
+      { id: 'graduate', forced: 1, e: '🎓', t: 'You graduated from {school}! What’s next?', c: [
+        ['Go to university', function () { finishSchool(); if ((L.hsGrade || 0) >= 45 || L.st.smarts >= 60) { L.pending.unshift('major'); return [{ happy: 6 }, '🎓 You graduated from Neon Harbor High and got into Harbor Tech University!']; } return [{ happy: -4 }, '🎓 You graduated from Neon Harbor High, but your grades weren’t high enough for Harbor Tech University. You can apply again later from 💼 Job.']; }],
+        ['Get a job', function () { finishSchool(); return [{ happy: 5 }, '🎓 You graduated from Neon Harbor High! Time to find a job in the 💼 Job tab.']; }],
+        ['Take a gap year', function () { finishSchool(); return [{ happy: 8, smarts: 1 }, '🎓 You graduated from Neon Harbor High and took a gap year to explore the city.']; }]] },
+      { id: 'major', forced: 1, e: '🏛️', t: 'Harbor Tech University: pick your major! (It costs 6,000 cr a year for 4 years.)', c: [
+        ['🤖 Cyber-Engineering', function () { return enroll('robo'); }],
+        ['🦾 Medicine', function () { return enroll('med'); }],
+        ['💻 Netcode', function () { return enroll('code'); }],
+        ['🎨 Holo-Arts', function () { return enroll('art'); }],
+        ['📊 Business', function () { return enroll('biz'); }]] }
+    ];
+    var EV = byId(EVENTS);
+
+    // ---------------- activities ----------------
+    var ACTS = [
+      { id: 'library', e: '📚', t: 'Visit the data library', min: 5, sub: 'Get smarter', run: function () { return [{ smarts: [3, 6] }, pick(['📚 You read a book about how hover-bikes work.', '📚 You learned how to say “hello” in 12 robot languages.', '📚 You read the whole history of Neon Harbor. It has a LOT of noodle shops.'])]; } },
+      { id: 'gym', e: '🏋️', t: 'Hit the gym', min: 12, sub: 'Get healthier', run: function () { return [{ health: [4, 8], style: [0, 2] }, pick(['🏋️ You lifted weights shaped like robots.', '🏋️ You ran on a treadmill that played motivational holograms.', '🏋️ You did 50 push-ups. Okay, 12.'])]; } },
+      { id: 'zen', e: '🧘', t: 'Rooftop zen garden', min: 8, sub: 'Relax and feel happier', run: function () { return [{ happy: [3, 7], health: [1, 2] }, '🧘 You meditated in a rooftop zen garden above the neon lights.']; } },
+      { id: 'arcade', e: '🕹️', t: 'Neon arcade', min: 5, cost: 20, sub: 'Have fun', run: function () { return [{ happy: [5, 10] }, pick(['🕹️ You beat the high score on Laser Llama!', '🕹️ You played claw machines for an hour and won a tiny robot.', '🕹️ You had a dance-game battle with a stranger. You won.'])]; } },
+      { id: 'vr', e: '🥽', t: 'VR lounge', min: 10, cost: 60, sub: 'Explore virtual worlds', run: function () { return chance(0.2) ? [{ health: -2, happy: 2 }, '🥽 You explored a VR jungle and got super dizzy.'] : [{ happy: [6, 10] }, pick(['🥽 You rode a virtual dragon over a virtual ocean.', '🥽 You explored an underwater VR city.'])]; } },
+      { id: 'shop', e: '🛍️', t: 'Shop at the Glow Market', min: 10, cost: 300, sub: 'Look cooler', run: function () { return [{ style: [4, 8], happy: [1, 3] }, pick(['🛍️ You bought a jacket with light-up sleeves.', '🛍️ You got sneakers that change color when you walk.', '🛍️ You bought sunglasses that show the weather.'])]; } },
+      { id: 'clinic', e: '🏥', t: 'Clinic checkup', min: 0, cost: 200, sub: 'Feel better (free for kids)', run: function () { if (L.ill) { var t = '🏥 The doctor-bot cured your ' + L.ill + '!'; L.ill = null; return [{ health: [6, 12] }, t]; } return [{ health: [1, 3] }, '🏥 The doctor-bot says you’re doing great.']; } },
+      { id: 'stream', e: '📹', t: 'Post a video on StreamNet', min: 13, sub: 'Get famous (maybe)', run: function () { if (chance(0.08)) return [{ fame: [10, 20], happy: 8 }, '📹 Your video went MEGA viral! Millions of views!']; var cash = L.fame >= 30 ? L.fame * 20 : 0; return [{ fame: [1, 4], money: cash, happy: 2 }, pick(['📹 You posted a video of your robo-pet dancing.', '📹 You posted a video reviewing every noodle shop on your street.', '📹 You posted a tutorial on making light-up shoes.']) + (cash ? ' Your fans sent you ' + cr(cash) + '.' : '')]; } },
+      { id: 'volunteer', e: '🤝', t: 'Volunteer at the robo-pet shelter', min: 10, sub: 'Be kind, feel good', run: function () { return [{ happy: [3, 6], good: 2 }, '🤝 You volunteered at the robo-pet shelter and oiled a lot of tiny robot paws.']; } },
+      { id: 'license', e: '🏍️', t: 'Hover-bike license test', min: 15, sub: 'Needed for hover-bikes and racing', if: function () { return !L.license; }, run: function () { return licenseTest(); } }
+    ];
+    var MISCHIEF = [
+      { id: 'mural', e: '🎨', t: 'Paint a glowing mural on a corp wall', min: 10, risk: 0.3, ok: [{ style: 5, happy: 5 }, '🎨 You painted a giant glowing mural on a corp wall. People take selfies with it!'], no: 'A security drone caught you painting a mural on a corp wall.' },
+      { id: 'billboard', e: '📺', t: 'Hack a billboard to show cat videos', min: 12, risk: 0.35, ok: [{ happy: 8, fame: 3 }, '📺 You hacked a giant billboard to show cat videos. The whole city loved it.'], no: 'The Net Police caught you hacking a billboard.' },
+      { id: 'concertsneak', e: '🎟️', t: 'Sneak into a sold-out holo-concert', min: 12, risk: 0.4, ok: [{ happy: 10, style: 3 }, '🎟️ You snuck into a sold-out holo-concert and danced right up front!'], no: 'A bouncer-bot caught you sneaking into a holo-concert.' },
+      { id: 'joyride', e: '🚁', t: 'Take a delivery drone for a joyride', min: 13, risk: 0.45, ok: [{ happy: 12 }, '🚁 You rode a delivery drone over the glowing canals. Wheee!'], no: 'The drone flew you straight to the police station.' },
+      { id: 'tower', e: '🏙️', t: 'Climb to the top of the Kumo-Tek tower', min: 15, risk: 0.5, ok: [{ happy: 15, fame: 5 }, '🏙️ You climbed to the very top of the Kumo-Tek tower and waved at the whole city!'], no: 'Security drones caught you halfway up the Kumo-Tek tower.' }
+    ];
+    var TIME = {
+      parent: ['You and {p} watched old cartoons from the 2020s together.', 'You and {p} cooked noodles together. The kitchen survived. Barely.', 'You and {p} went for a walk along the glowing canals.'],
+      sib: ['You and {p} built a pillow fort with a force field.', 'You and {p} had a drone race in the hallway.', 'You and {p} played video games until 2 a.m.'],
+      friend: ['You and {p} raced drones at the canal.', 'You and {p} hung out at the neon arcade.', 'You and {p} shared a giant bowl of spicy noodles.'],
+      partner: ['You and {p} shared noodles on a rooftop under the neon rain.', 'You and {p} went to the holo-cinema.', 'You and {p} took a hover-boat ride through Canal Ward.'],
+      kid: ['You taught {p} how to fix a toaster-bot.', 'You and {p} built a robot out of old cans.', 'You took {p} to the Moon Mall arcade.'],
+      baby: ['You rocked {p} to sleep while humming a robot lullaby.', 'You played peekaboo with {p} using a hologram.'],
+      pet: ['You played fetch with {p}. It fetched a drone.', 'You took {p} for a walk. It beeped at every pigeon.', 'You taught {p} a new trick: the moonwalk.']
+    };
+
+    // ---------------- state ----------------
+    var L = null, graves = [];
+    try { var raw = JSON.parse(localStorage.getItem(KEY) || 'null'); if (raw && raw.v === 1 && raw.st && Array.isArray(raw.log) && Array.isArray(raw.people)) L = raw; } catch (e) {}
+    try { var gr = JSON.parse(localStorage.getItem(GKEY) || '[]'); if (Array.isArray(gr)) graves = gr.filter(function (x) { return x && typeof x.n === 'string'; }).slice(0, 30); } catch (e) {}
+    var premium = false, snaps = [];
+    try { premium = localStorage.getItem(PKEY) === '1'; } catch (e) {}
+    try { var tm = JSON.parse(localStorage.getItem(TKEY) || '[]'); if (Array.isArray(tm)) snaps = tm.filter(function (x) { return x && typeof x.s === 'string'; }); } catch (e) {}
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(L)); } catch (e) {} }
+    function saveGraves() { try { localStorage.setItem(GKEY, JSON.stringify(graves)); } catch (e) {} }
+    function saveSnaps() { try { localStorage.setItem(TKEY, JSON.stringify(snaps)); } catch (e) { snaps = snaps.slice(-8); try { localStorage.setItem(TKEY, JSON.stringify(snaps)); } catch (e2) {} } }
+    function push(en) { L.log.push(en); L.logTotal = (L.logTotal || 0) + 1; if (L.log.length > LOG_MAX) L.log.splice(0, L.log.length - LOG_MAX); }
+    function log(t) { push({ a: L.age, t: t }); }
+    function lifeSnaps() { return snaps.filter(function (x) { return x.lid === L.lid; }); }
+    function snapshot() {   // the Time Machine remembers each year (without the story, which it trims instead)
+      var copy = Object.assign({}, L, { log: [] });
+      snaps = lifeSnaps().filter(function (x) { return x.age < L.age; });
+      snaps.push({ lid: L.lid, age: L.age, total: L.logTotal || 0, s: JSON.stringify(copy) });
+      if (snaps.length > SNAP_MAX) snaps = snaps.slice(-SNAP_MAX);
+      saveSnaps();
+    }
+
+    function blank(first, last, district) {
+      var d = NH.districts[district] || NH.districts[0];
+      return { v: 1, world: 'cyber', lid: Date.now().toString(36) + R(100, 999), logTotal: 0, gen: 1, born: 2088 + R(0, 20), first: first, last: last, age: 0, alive: true,
+        st: { happy: R(60, 90), health: R(70, 100), smarts: R(20, 85), style: R(20, 85) },
+        money: 0, fame: 0, good: 0, mischief: 0, district: district, tier: d.tier, people: [], nextId: 1,
+        school: null, hsGrade: null, edu: 'none', major: null, uni: null, job: null, lastJob: null, everJob: false, retired: false, pension: 0,
+        homes: [], rides: [], implants: [], seen: {}, done: {}, club: null, dream: null, license: false, ill: null,
+        pending: [], log: [], happySum: 0, happyN: 0, cause: null, ribbon: null };
+    }
+    function usedNames() { var u = {}; u[L.first] = 1; L.people.forEach(function (p) { if (p.alive) u[p.first] = 1; }); return u; }
+    function freshName() { var u = usedNames(), opts = NH.first.filter(function (n) { return !u[n]; }); return pick(opts.length ? opts : NH.first); }
+    var LABEL = { parent: 'Parent', sib: 'Sibling', friend: 'Friend', partner: 'Partner', spouse: 'Spouse', kid: 'Kid', pet: 'Pet' };
+    function addPerson(rel, age, first, last, label) {
+      var fam = rel === 'sib' || rel === 'kid';
+      var p = { id: L.nextId++, rel: rel, label: label || LABEL[rel], first: first || freshName(), last: last != null ? last : fam ? L.last : pick(NH.last),
+        age: Math.max(0, age), bond: rel === 'kid' ? 85 : R(50, 75), alive: true, done: {} };
+      L.people.push(p);
+      return p;
+    }
+    function addPet(kind) {
+      var P = PET[kind], u = {}; L.people.forEach(function (x) { if (x.rel === 'pet') u[x.first] = 1; });
+      var names = NH.petNames.filter(function (n) { return !u[n]; });
+      var p = addPerson('pet', 0, pick(names.length ? names : NH.petNames), '', P.t);
+      p.kind = kind; p.e = P.e; p.bond = 80;
+      return p;
+    }
+    function living(rel) { return L.people.filter(function (p) { return p.alive && (rel.indexOf(p.rel) >= 0); }); }
+    function parents() { return living(['parent']); }
+    function friends() { return living(['friend']); }
+    function kids() { return living(['kid']); }
+    function pets() { return living(['pet']); }
+    function partner() { return living(['partner', 'spouse'])[0] || null; }
+    function spouse() { return living(['spouse'])[0] || null; }
+    function byLabel(label) { for (var i = 0; i < L.people.length; i++) if (L.people[i].label === label) return L.people[i]; return null; }
+    function avgParentBond() { var ps = parents(); return ps.length ? ps.reduce(function (s, p) { return s + p.bond; }, 0) / ps.length : 50; }
+    function has(id) { return L.implants.indexOf(id) >= 0; }
+    function chrome() { return L.implants.reduce(function (s, id) { return s + (IMP[id] ? IMP[id].chrome : 0); }, 0); }
+    function netWorth() {
+      var w = L.money;
+      L.homes.forEach(function (h) { w += HOME[h].cost * 0.9; });
+      L.rides.forEach(function (r) { w += RIDE[r].cost * 0.6; });
+      return Math.round(w);
+    }
+    function jobTitle(j) {
+      j = j || L.job; if (!j) return '';
+      var J = JOB[j.id], t = j.id === 'office' ? (j.corp || 'Corp') + ' Office Worker' : J.t;
+      return J.flat || J.pt ? t : LV_NAME[j.level] + t;
+    }
+    function salary(j) {
+      j = j || L.job; var J = JOB[j.id];
+      return Math.round(J.pay * (J.flat || J.pt ? 1 : LV[j.level]) * (j.bonus || 1) + (J.fame ? L.fame * J.fame : 0));
+    }
+    function setJob(id, corp) {
+      var J = JOB[id];
+      L.job = { id: id, level: J.flat || J.pt ? 1 : 0, perf: 55, years: 0, bonus: 1, corp: corp || pick(NH.corps) };
+      if (!J.pt) L.everJob = true;
+    }
+    function endJob() { if (L.job) L.lastJob = jobTitle(); L.job = null; }
+    function finishSchool() { L.edu = 'high'; L.hsGrade = L.school ? L.school.grade : 50; L.school = null; L.club = null; }
+    function enroll(m) {
+      L.uni = { major: m, year: 1 };
+      return [{ money: -TUITION, happy: 5, smarts: 2 }, '🏛️ You started studying ' + MAJORS[m][1] + ' at Harbor Tech University! Tuition is ' + cr(TUITION) + ' a year.'];
+    }
+    // Guardian Angel (premium): shows your real chances before risky choices
+    function odds(p, what) { return '😇 ' + Math.round(Math.max(0, Math.min(1, p)) * 100) + '% ' + what; }
+    function licenseChance() { return 0.45 + L.st.smarts / 400 + L.st.health / 400; }
+    function caughtChance(m) { return m.risk * (1.25 - L.st.smarts / 200); }
+    function hireChance(j) { return j.id === 'mayor' ? 0.25 + L.fame / 200 + Math.max(0, L.good) / 100 : j.id === 'exec' ? 0.45 : 0.8; }
+    function moneyChance(p) { return 0.25 + p.bond / 200 + L.tier * 0.12; }
+    function pTitle(X) { return (X.prem ? '👑 ' : '') + X.t; }
+    function licenseTest() {
+      if (chance(licenseChance())) { L.license = true; return [{ happy: 6 }, '🏍️ You passed your hover-bike license test!']; }
+      return [{ happy: -4 }, '🏍️ You failed your hover-bike license test. You flew straight into a noodle sign.'];
+    }
+    function caught(text) {
+      L.good -= 1;
+      if (L.age < 18) return [{ happy: -8, bond: { parents: -6 } }, '🚨 ' + text + ' Your parents grounded you for a month.'];
+      if (chance(0.5)) { var f = R(3, 15) * 100; return [{ money: -f, happy: -5 }, '🚨 ' + text + ' You had to pay a ' + cr(f) + ' fine.']; }
+      return [{ happy: -10 }, '🚨 ' + text + ' You had to do 100 hours of community service scrubbing robot graffiti.'];
+    }
+    function occupation() {
+      if (!L.alive) return 'Passed away';
+      if (L.age < 3) return 'Baby';
+      if (L.age < 5) return 'Toddler';
+      var parts = [];
+      if (L.school) parts.push('Student at ' + NH.schools[L.school.kind]);
+      else if (L.uni) parts.push(MAJORS[L.uni.major][1] + ' student');
+      if (L.job) parts.push(jobTitle());
+      if (!parts.length) parts.push(L.retired ? 'Retired' : L.age >= 18 ? 'Unemployed' : 'Kid');
+      return parts.join(' · ');
+    }
+    function avatar() { if (chrome() >= 6) return '🤖'; return L.age < 3 ? '👶' : L.age < 13 ? '🧒' : L.age < 65 ? '🧑' : '🧓'; }
+    function who(p) { return p.rel === 'parent' ? 'your ' + p.label.toLowerCase() : p.first; }
+    function personEmoji(p) {
+      if (!p.alive) return '🕯️';
+      if (p.rel === 'pet') return p.e || '🐾';
+      if (p.rel === 'parent') return p.label === 'Mom' ? '👩' : p.label === 'Dad' ? '👨' : '🧑';
+      if (p.rel === 'partner') return '💖';
+      if (p.rel === 'spouse') return '💍';
+      return p.age < 3 ? '👶' : p.age < 13 ? '🧒' : p.age < 65 ? '🧑' : '🧓';
+    }
+
+    // ---------------- effects ----------------
+    function applyFx(fx, c) {
+      var d = [];
+      if (!fx) return d;
+      ['happy', 'health', 'smarts', 'style'].forEach(function (k) {
+        if (fx[k] == null) return;
+        var old = L.st[k]; L.st[k] = clamp(old + val(fx[k]));
+        if (L.st[k] !== old) d.push(STAT[k][0] + ' ' + sign(L.st[k] - old));
+      });
+      if (fx.money) {
+        var m = val(fx.money);
+        if (m && !(m < 0 && L.age < 18 && L.money + m < 0)) { L.money += m; d.push('💰 ' + (m > 0 ? '+' : '−') + cr(Math.abs(m))); }
+      }
+      if (fx.fame) { var f0 = L.fame; L.fame = clamp(L.fame + val(fx.fame)); if (L.fame !== f0) d.push('⭐ Fame ' + sign(L.fame - f0)); }
+      if (fx.good) L.good += fx.good;
+      if (fx.grade && L.school) { var g0 = L.school.grade; L.school.grade = clamp(g0 + val(fx.grade)); if (L.school.grade !== g0) d.push('📝 Grades ' + sign(L.school.grade - g0)); }
+      if (fx.perf && L.job) { var p0 = L.job.perf; L.job.perf = clamp(p0 + val(fx.perf)); if (L.job.perf !== p0) d.push('📈 Work ' + sign(L.job.perf - p0)); }
+      if (fx.bond) {
+        Object.keys(fx.bond).forEach(function (w) {
+          var n = val(fx.bond[w]), list = w === 'parents' ? parents() : c && c[w] ? [c[w]] : [];
+          list.forEach(function (p) { if (p.alive) p.bond = clamp(p.bond + n); });
+          if (list.length && n) d.push('🤝 ' + sign(n));
+        });
+      }
+      return d;
+    }
+    function fill(t, c) {
+      c = c || {};
+      return String(t).replace(/\{(\w+)\}/g, function (m, k) {
+        if (k === 'name') return L.first;
+        if (k === 'school') return L.school ? NH.schools[L.school.kind] : NH.schools.high;
+        var v = c[k];
+        if (typeof v === 'string') return v;
+        if (v && v.first) return v.first;
+        return k === 'corp' ? 'Kumo-Tek' : 'someone';
+      });
+    }
+    function pickWeighted(list, wfn) {
+      var ws = list.map(wfn), tot = ws.reduce(function (a, b) { return a + b; }, 0), r = Math.random() * tot;
+      for (var i = 0; i < list.length; i++) { r -= ws[i]; if (r < 0) return list[i]; }
+      return list[list.length - 1];
+    }
+    function runOutcome(o, c) {
+      if (typeof o === 'function') return o(c);
+      var v = pickWeighted(o, function (x) { return Math.max(0, typeof x[0] === 'function' ? x[0]() : x[0]); });
+      return [Object.assign({}, v[1]), v[2]];
+    }
+
+    // ---------------- events ----------------
+    function ctxFor(ev) {
+      var c = { corp: pick(NH.corps), new: freshName() };
+      if (ev.need === 'friend' && !(c.friend = rand(friends()))) return null;
+      if (ev.need === 'partner' && !(c.partner = partner())) return null;
+      if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
+      if (ev.need === 'job' && !L.job) return null;
+      if (ev.need === 'school' && !L.school) return null;
+      return c;
+    }
+    function eligible(ev) {
+      if (ev.forced || L.age < ev.a[0] || L.age > ev.a[1]) return false;
+      if (L.seen[ev.id] != null && (ev.once || L.age - L.seen[ev.id] < 4)) return false;
+      if (!ctxFor(ev)) return false;
+      return !ev.if || !!ev.if();
+    }
+    function pickEvents() {
+      var out = [], n = L.age < 5 ? (chance(0.55) ? 1 : 0) : chance(0.78) ? (chance(0.22) ? 2 : 1) : 0;
+      for (var i = 0; i < n; i++) {
+        var pool = EVENTS.filter(function (ev) { return out.indexOf(ev.id) < 0 && eligible(ev); });
+        if (!pool.length) break;
+        var ev = pickWeighted(pool, function (x) { return x.w; });
+        L.seen[ev.id] = L.age;
+        if (ev.auto) { var r = ev.auto(); applyFx(r[0], {}); log(r[1]); }
+        else out.push(ev.id);
+      }
+      return out;
+    }
+
+    // ---------------- a year goes by ----------------
+    function yearTick() {
+      var a = L.age, s = L.st;
+      // family and friends get older
+      L.people.slice().forEach(function (p) {
+        if (!p.alive) return;
+        p.age += 1;
+        if (p.rel === 'pet') {
+          if (p.age >= 12 && chance((p.age - 11) * 0.05)) { p.alive = false; s.happy = clamp(s.happy - 6); log('🕯️ Your ' + p.label.toLowerCase() + ' ' + p.first + ' powered down for the last time. Thanks for all the happy beeps, ' + p.first + '.'); }
+          return;
+        }
+        p.bond = clamp(p.bond - R(0, p.rel === 'partner' || p.rel === 'spouse' ? 4 : 3));
+        if (p.age >= 78 && chance(Math.pow((p.age - 75) / 35, 2))) {
+          p.alive = false; s.happy = clamp(s.happy - (p.bond > 60 ? 15 : 8));
+          log('🕯️ Your ' + p.label.toLowerCase() + ' ' + p.first + ' ' + p.last + ' passed away peacefully at age ' + p.age + '.');
+          return;
+        }
+        if ((p.rel === 'partner' || p.rel === 'spouse') && p.bond < 15 && chance(0.5)) {
+          L.people.splice(L.people.indexOf(p), 1); s.happy = clamp(s.happy - 8);
+          log('💔 ' + p.first + ' broke up with you. You hadn’t been spending much time together.');
+          return;
+        }
+        if (p.rel === 'kid' && p.age === 18) log('🎓 Your kid ' + p.first + ' turned 18 and moved into their own capsule pod.');
+      });
+      // school
+      if (a === 5) { L.school = { kind: 'primary', grade: clamp(45 + (s.smarts - 50) / 2 + R(-8, 8)) }; log('🎒 You started at ' + NH.schools.primary + '!'); }
+      else if (a === 12 && L.school) { L.school.kind = 'high'; log('🏫 You started at ' + NH.schools.high + '!'); }
+      else if (L.school && a > 5) {
+        L.school.grade = clamp(L.school.grade + (s.smarts - L.school.grade) * 0.15 + R(-5, 5));
+        s.smarts = clamp(s.smarts + R(0, 2));
+      }
+      if (L.school && L.club) { var k = { hacker: 'smarts', drone: 'happy', art: 'style', dance: 'health' }[L.club]; if (k) s[k] = clamp(s[k] + R(0, 2)); }
+      if (a >= 18 && L.school && L.pending.indexOf('graduate') < 0) L.pending.push('graduate');
+      // university
+      if (L.uni) {
+        L.uni.year += 1;
+        if (L.uni.year > 4) {
+          L.edu = 'uni'; L.major = L.uni.major; L.uni = null; s.happy = clamp(s.happy + 10); s.smarts = clamp(s.smarts + 5);
+          log('🎓 You graduated from Harbor Tech University with a degree in ' + MAJORS[L.major][1] + '!');
+        } else { L.money -= TUITION; s.smarts = clamp(s.smarts + R(1, 3)); }
+      }
+      // work
+      if (L.job) {
+        var J = JOB[L.job.id];
+        L.job.years += 1;
+        var pay = salary();
+        L.money += pay; L.bestPay = Math.max(L.bestPay || 0, pay);
+        L.job.perf = clamp(L.job.perf + R(-6, 3));
+        if (J.fame) L.fame = clamp(L.fame + R(1, 4) + (L.job.perf > 70 ? 2 : 0));
+        if (!J.flat && !J.pt && L.job.perf >= 75 && L.job.level < 3 && chance(0.35)) { L.job.level += 1; s.happy = clamp(s.happy + 6); log('📈 You got promoted! You’re now a ' + jobTitle() + '.'); }
+        else if (L.job.perf <= 20 && chance(0.4)) { log('📉 You got fired from your job as a ' + jobTitle() + '. Oops.'); endJob(); s.happy = clamp(s.happy - 10); }
+      }
+      if (L.retired) L.money += L.pension;
+      // how you feel this year
+      var joy = 0;
+      L.homes.forEach(function (h) { joy += HOME[h].joy; });
+      L.rides.forEach(function (r) { joy += RIDE[r].joy; });
+      s.happy = clamp(s.happy + (55 - s.happy) * 0.08 + R(-3, 3) + Math.min(3, joy * 0.5));
+      if (a > 45) s.health = clamp(s.health - R(0, a > 80 ? 5 : a > 65 ? 3 : 2) * (has('heart') ? 0.5 : 1));
+      else s.health = clamp(s.health + R(-1, 2));
+      if (a > 55) s.style = clamp(s.style - R(0, 2));
+      if (a > 72) s.smarts = clamp(s.smarts - R(0, 2));
+      if (L.fame > 0 && !(L.job && JOB[L.job.id].fame)) L.fame = Math.max(0, L.fame - R(0, 2));
+      // getting sick
+      if (L.ill) {
+        s.health = clamp(s.health - R(3, 8));
+        if (chance(0.4)) { log('💪 You got over ' + L.ill + ' all by yourself!'); L.ill = null; }
+      } else if (a > 0 && chance(0.04 + (s.health < 40 ? 0.08 : 0) + (a > 60 ? 0.06 : 0))) {
+        L.ill = pick(a > 60 ? ILL_OLD : ILL); s.happy = clamp(s.happy - 4);
+        log('🤒 You caught ' + L.ill + '. A clinic checkup in ⚡ Do could help.');
+      }
+      // too much chrome
+      var ch = chrome();
+      if (ch > 5 && chance((ch - 5) * 0.15)) { log(pick(GLITCH)); s.happy = clamp(s.happy - R(2, 5)); s.health = clamp(s.health - R(0, 3)); }
+      L.happySum += s.happy; L.happyN += 1;
+    }
+    function deathCause() {
+      var a = L.age, s = L.st;
+      if (s.health <= 0) return L.ill || 'poor health';
+      if (a >= 118) return 'old age';
+      if (a >= 70 && chance(Math.pow((a - 70) / 45, 2.4) * (1.25 - s.health / 100) * (has('heart') ? 0.7 : 1))) return 'old age';
+      return null;
+    }
+    function ribbon() {
+      var kidsEver = L.people.filter(function (p) { return p.rel === 'kid'; }).length;
+      if (L.fame >= 70) return 'superstar';
+      if (netWorth() >= 10000000) return 'tycoon';
+      if (L.age >= 100) return 'ancient';
+      if (L.implants.filter(function (id) { return IMP[id] && IMP[id].chrome > 0; }).length >= 5) return 'chrome';
+      if (L.mischief >= 8) return 'rebel';
+      if ((L.bestPay || 0) >= 150000) return 'boss';
+      if (L.st.smarts >= 95) return 'genius';
+      if (kidsEver >= 3) return 'family';
+      if (L.st.style >= 92) return 'style';
+      if (L.good >= 15) return 'saint';
+      if (L.age < 40) return 'short';
+      if (!L.everJob && L.age >= 30) return 'couch';
+      if (L.happyN && L.happySum / L.happyN >= 85) return 'happy';
+      return 'normal';
+    }
+    function die(cause) {
+      closeCard();
+      if (L.job) endJob();
+      L.alive = false; L.cause = cause; L.pending = [];
+      log('🕯️ You passed away at age ' + L.age + '. Cause: ' + cause + '.');
+      L.ribbon = ribbon();
+      graves.unshift({ n: L.first + ' ' + L.last, b: L.born, a: L.age, c: cause, r: L.ribbon, w: netWorth(), g: L.gen || 1 });
+      graves = graves.slice(0, 30);
+      saveGraves(); save();
+      showDead();
+    }
+    function ageUp() {
+      if (!L || !L.alive || L.pending.length || !$('ov').hidden) return;
+      snapshot();
+      L.age += 1;
+      push({ a: L.age, h: 1 });
+      var before = L.log.length;
+      yearTick();
+      var cause = deathCause();
+      if (cause) { die(cause); return; }
+      L.pending = L.pending.concat(pickEvents());
+      if (L.log.length === before && !L.pending.length && chance(0.5)) log(pick(QUIET));
+      save(); render();
+      nextEvent();
+    }
+
+    // ---------------- pop-ups and sheets ----------------
+    var lastFocus = null;
+    function openCard(asSheet) {
+      var ov = $('ov'), card = $('card');
+      if (ov.hidden) lastFocus = document.activeElement;
+      ov.hidden = false;
+      ov.classList.toggle('sheet', !!asSheet);
+      ov.setAttribute('data-kind', asSheet ? 'sheet' : 'modal');
+      card.innerHTML = ''; card.scrollTop = 0;
+      document.body.classList.add('lf-lock');
+      return card;
+    }
+    function closeCard() {
+      var ov = $('ov');
+      if (ov.hidden) return;
+      ov.hidden = true; $('card').innerHTML = '';
+      document.body.classList.remove('lf-lock');
+      if (lastFocus && document.body.contains(lastFocus)) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+    }
+    function focusFirst() { var b = $('card').querySelector('button:not([disabled])'); if (b) { try { b.focus({ preventScroll: true }); } catch (e) {} } }
+    function nextEvent() {
+      if (!L || !L.alive) return;
+      while (L.pending.length) {
+        var ev = EV[L.pending[0]], c = ev ? ctxFor(ev) : null;
+        if (ev && c) { showEvent(ev, c); return; }
+        L.pending.shift();
+      }
+      closeCard(); save(); render();
+    }
+    function showEvent(ev, c) {
+      var card = openCard(false);
+      card.appendChild(mk('div', 'lf-ev-emoji', ev.e));
+      var p = mk('p', 'lf-ev-text', fill(ev.t, c)); p.id = 'lf-cardTitle'; card.appendChild(p);
+      var box = mk('div', 'lf-choices');
+      ev.c.forEach(function (ch) {
+        var b = mk('button', 'lf-choice', ch[0]); b.type = 'button';
+        b.addEventListener('click', function () {
+          if (L.pending[0] !== ev.id) return;
+          L.pending.shift();
+          var r = runOutcome(ch[1], c), d = applyFx(r[0], c), text = fill(r[1], c);
+          log(text); save(); render();
+          outcome(ev.e, text, d);
+        });
+        box.appendChild(b);
+      });
+      card.appendChild(box);
+      focusFirst();
+    }
+    function outcome(emoji, text, d, next) {
+      var card = openCard(false);
+      card.appendChild(mk('div', 'lf-ev-emoji', emoji));
+      var p = mk('p', 'lf-ev-text', text); p.id = 'lf-cardTitle'; card.appendChild(p);
+      if (d && d.length) {
+        var box = mk('div', 'lf-deltas');
+        d.forEach(function (x) { box.appendChild(mk('span', x.indexOf('−') >= 0 ? 'down' : 'up', x)); });
+        card.appendChild(box);
+      }
+      var ok = mk('button', 'btn lf-ok', 'OK'); ok.type = 'button';
+      ok.addEventListener('click', next || afterOutcome);
+      card.appendChild(ok);
+      focusFirst();
+    }
+    function afterOutcome() {
+      if (!L) { closeCard(); return; }
+      if (L.alive && L.st.health <= 0) { die(L.ill || 'poor health'); return; }
+      if (L.pending.length) nextEvent(); else { closeCard(); render(); }
+    }
+    function doThing(emoji, r, c, next) {   // run an action's result: apply it, write it in the story, and show it
+      var d = applyFx(r[0], c || {});
+      log(r[1]); save(); render();
+      outcome(emoji, r[1], d, next);
+    }
+    function confirmBox(emoji, text, yes, onYes) {
+      var card = openCard(false);
+      card.appendChild(mk('div', 'lf-ev-emoji', emoji));
+      var p = mk('p', 'lf-ev-text', text); p.id = 'lf-cardTitle'; card.appendChild(p);
+      var box = mk('div', 'lf-choices');
+      var y = mk('button', 'lf-choice', yes); y.type = 'button'; y.addEventListener('click', onYes);
+      var n = mk('button', 'lf-choice', 'Never mind'); n.type = 'button'; n.addEventListener('click', closeCard);
+      box.appendChild(y); box.appendChild(n); card.appendChild(box);
+      focusFirst();
+    }
+    function sheet(title, build) {
+      var c = openCard(true);
+      var h = mk('div', 'lf-sh-head');
+      var t = mk('h3', 'lf-sh-title', title); t.id = 'lf-cardTitle'; h.appendChild(t);
+      var x = mk('button', 'lf-x', '✕'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.addEventListener('click', closeCard);
+      h.appendChild(x); c.appendChild(h);
+      build(c);
+      focusFirst();
+    }
+    function sec(c, text) { c.appendChild(mk('div', 'lf-sec', text)); }
+    function note(c, text) { c.appendChild(mk('p', 'lf-note', text)); }
+    function opt(c, emoji, title, sub, onClick, disabled, bar) {
+      var b = mk('button', 'lf-opt'); b.type = 'button';
+      b.appendChild(mk('i', null, emoji));
+      var t = mk('span'); t.appendChild(mk('b', null, title));
+      if (sub) t.appendChild(mk('small', null, sub));
+      if (bar != null) t.appendChild(barEl(bar));
+      b.appendChild(t);
+      if (disabled) b.disabled = true; else b.addEventListener('click', onClick);
+      c.appendChild(b);
+      return b;
+    }
+    function barEl(v, cls) { var bar = mk('div', 'lf-bar'), f = mk('span', cls || (v >= 60 ? 'hi' : v >= 30 ? 'mid' : 'lo')); f.style.width = clamp(v) + '%'; bar.appendChild(f); bar.setAttribute('aria-hidden', 'true'); return bar; }
+    function doneYet(key) { return L.done[key] === L.age; }
+    function fxText(fx) { return Object.keys(fx).filter(function (k) { return STAT[k]; }).map(function (k) { return STAT[k][0] + ' +' + fx[k]; }).join(' '); }
+
+    // ---- 💼 school and work ----
+    function jobSheet() {
+      sheet('💼 School & work', function (c) {
+        if (L.age < 5) { note(c, 'You’re too little for school. Age up!'); return; }
+        if (L.school) {
+          sec(c, '🏫 ' + NH.schools[L.school.kind]);
+          note(c, 'Grades: ' + L.school.grade + '%' + (L.club ? ' · Club: ' + { hacker: 'Hacker Club', drone: 'Drone Racing', art: 'Holo-Art', dance: 'Street Dance' }[L.club] : ''));
+          c.appendChild(barEl(L.school.grade));
+          schoolOpt(c, 'study', '📖', 'Study harder', 'Better grades, more smarts', function () { return [{ grade: [6, 12], smarts: [1, 3], happy: -1 }, '📖 You studied extra hard this year.']; });
+          schoolOpt(c, 'teacher', '🤖', 'Ask the teacher-bot for help', 'A little boost', function () { return [{ grade: 3, smarts: 1 }, '🤖 The teacher-bot helped you with the hard stuff. It said “beep” encouragingly.']; });
+          schoolOpt(c, 'skip', '😎', 'Skip class', 'More fun, worse grades', function () { return chance(0.3) ? [{ grade: -8, happy: 2, bond: { parents: -5 } }, '😬 You skipped class and the school messaged your parents.'] : [{ grade: -8, happy: 5 }, '😎 You skipped class and went to the arcade.']; });
+        }
+        if (L.uni) {
+          sec(c, '🏛️ Harbor Tech University');
+          note(c, MAJORS[L.uni.major][1] + ' · Year ' + L.uni.year + ' of 4 · Tuition ' + cr(TUITION) + '/year');
+          schoolOpt(c, 'ustudy', '📖', 'Study hard', 'Get smarter', function () { return [{ smarts: [2, 4], happy: -1 }, '📖 You studied hard at Harbor Tech University.']; });
+          schoolOpt(c, 'party', '🎉', 'Go to a dorm party', 'Have fun', function () { return [{ happy: [5, 8], smarts: -1 }, '🎉 You went to a dorm party with a hologram DJ.']; });
+          opt(c, '🚪', 'Drop out', 'Leave university', function () { confirmBox('🚪', 'Drop out of Harbor Tech University?', 'Yes, drop out', function () { L.uni = null; doThing('🚪', [{ happy: -3 }, '🚪 You dropped out of Harbor Tech University.']); }); });
+        }
+        if (L.job) {
+          var J = JOB[L.job.id];
+          sec(c, J.e + ' ' + jobTitle());
+          note(c, cr(salary()) + ' a year · ' + L.job.years + (L.job.years === 1 ? ' year' : ' years') + ' here · Work performance: ' + L.job.perf + '%');
+          c.appendChild(barEl(L.job.perf));
+          schoolOpt(c, 'work', '💪', 'Work harder', 'Better performance', function () { return [{ perf: [8, 15], happy: -2 }, '💪 You worked extra hard this year.']; });
+          schoolOpt(c, 'slack', '😴', 'Slack off', 'More fun, worse performance', function () { return [{ perf: -10, happy: 5 }, '😴 You took lots of long noodle breaks at work.']; });
+          if (!J.pt) schoolOpt(c, 'raise', '💸', 'Ask for a raise', premium ? odds(L.job.perf / 120, 'chance of a raise') : 'Works better if you work hard', function () { if (chance(L.job.perf / 120)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, '💸 You asked for a raise and got it! +10% pay.']; } return [{ happy: -2, perf: -2 }, '💸 You asked for a raise. Your boss laughed and walked away.']; });
+          if (L.age >= 60 && !J.pt) opt(c, '🏖️', 'Retire', 'Get a pension of ' + cr(salary() * 0.5) + ' a year', function () { confirmBox('🏖️', 'Retire from your job?', 'Yes, retire', function () { L.pension = Math.round(salary() * 0.5); L.retired = true; endJob(); doThing('🏖️', [{ happy: 10 }, '🏖️ You retired! You’ll get a pension of ' + cr(L.pension) + ' a year.']); }); });
+          opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
+        }
+        if (L.retired) note(c, '🏖️ You’re retired! Your pension is ' + cr(L.pension) + ' a year.');
+        if (!L.school && !L.uni && L.age >= 18 && L.edu !== 'uni') {
+          sec(c, '🏛️ University');
+          var ok = (L.hsGrade || 0) >= 45 || L.st.smarts >= 60;
+          opt(c, '🎓', 'Apply to Harbor Tech University', doneYet('uni') ? 'Applied this year ✓' : ok ? 'You can get in! ' + cr(TUITION) + ' a year for 4 years' : 'Needs better grades or 🧠 Smarts 60+', function () {
+            L.done.uni = L.age; closeCard(); L.pending.unshift('major'); nextEvent();
+          }, !ok || doneYet('uni'));
+        }
+        if (L.age >= 14 && !L.retired) {
+          var student = L.age < 18 || L.school || L.uni;
+          sec(c, student ? '🧑‍🍳 Part-time jobs' : '📋 Job board');
+          JOBS.forEach(function (j) {
+            if (!!j.pt !== !!student || (j.prem && !premium)) return;
+            if (L.job && L.job.id === j.id) return;
+            var miss = missing(j), applied = doneYet('apply-' + j.id);
+            var pay = j.fame ? cr(j.pay) + ' + fame bonus' : cr(j.pay) + ' a year';
+            opt(c, j.e, pTitle(j), applied ? 'Applied this year ✓' : miss ? 'Needs: ' + miss : pay + ' · ' + (premium ? odds(hireChance(j), 'chance to get hired') : '✅ You qualify'), function () { applyJob(j); }, applied || !!miss);
+          });
+        }
+      });
+    }
+    function schoolOpt(c, key, e, t, sub, run) {
+      opt(c, e, t, doneYet(key) ? 'Done this year ✓' : sub, function () { L.done[key] = L.age; doThing(e, run()); }, doneYet(key));
+    }
+    function needText(n) {
+      var out = [];
+      if (n.age && L.age < n.age) out.push('age ' + n.age + '+');
+      if (n.degree && L.edu !== 'uni') out.push('a university degree');
+      if (n.major && L.major !== n.major) out.push('a ' + MAJORS[n.major][1] + ' degree');
+      if (n.license && !L.license) out.push('a hover-bike license');
+      ['smarts', 'style', 'health'].forEach(function (k) { if (n[k] && L.st[k] < n[k]) out.push(STAT[k][0] + ' ' + STAT[k][1] + ' ' + n[k] + '+'); });
+      if (n.fame && L.fame < n.fame) out.push('⭐ Fame ' + n.fame + '+');
+      return out;
+    }
+    function missing(j) {
+      if (j.pt && L.age < (j.min || 14)) return 'age ' + j.min + '+';
+      if (!j.pt && L.age < 18) return 'age 18+';
+      var out = needText(j.need || {});
+      if (out.length && j.alt && !needText(j.alt).length) return '';
+      return out.join(', ');
+    }
+    function applyJob(j) {
+      L.done['apply-' + j.id] = L.age;
+      if (!chance(hireChance(j))) { doThing('📭', [{ happy: -2 }, j.id === 'mayor' ? '🗳️ You ran for mayor of Neon Harbor, but you lost the election.' : '📭 You applied to be a ' + j.t + ', but they hired someone else.']); return; }
+      if (L.job) endJob();
+      setJob(j.id);
+      var fx = { happy: 8 }, t = j.id === 'mayor' ? '🏛️ You won the election! You’re the new Mayor of Neon Harbor!' : '🎉 You got a job as a ' + jobTitle() + '!';
+      if (L.dream === j.id) { fx.happy = 15; t += ' Your childhood dream came true!'; L.dream = null; }
+      doThing(j.e, [fx, t]);
+    }
+
+    // ---- 🏠 stuff ----
+    function stuffSheet() {
+      sheet('🏠 Your stuff', function (c) {
+        note(c, '💰 ' + cr(L.money) + ' · Net worth: ' + cr(netWorth()));
+        if (L.money < 0) note(c, 'You’re in debt (probably student loans). A job will help pay it off!');
+        if (L.homes.length || L.rides.length) {
+          sec(c, 'You own');
+          L.homes.forEach(function (id) { var H = HOME[id]; opt(c, H.e, H.t, 'Sell for ' + cr(H.cost * 0.9), function () { sell('home', id); }); });
+          L.rides.forEach(function (id) { var X = RIDE[id]; opt(c, X.e, X.t, 'Sell for ' + cr(X.cost * 0.6), function () { sell('ride', id); }); });
+        }
+        if (L.implants.length) note(c, '🦾 Implants: ' + L.implants.map(function (id) { return IMP[id] ? IMP[id].t : id; }).join(', '));
+        if (L.age < 8) { note(c, 'You’re too young to buy things. Your parents buy you everything!'); return; }
+        var show = function (X) { return !X.prem || premium; };
+        sec(c, '🐾 Robo-pets');
+        PETS.filter(show).forEach(function (P) { opt(c, P.e, pTitle(P), cr(P.cost) + (L.money < P.cost ? ' · not enough credits' : ''), function () { buy('pet', P); }, L.money < P.cost); });
+        if (L.age >= 12) {
+          sec(c, '🛴 Rides');
+          RIDES.filter(show).forEach(function (X) {
+            var own = L.rides.indexOf(X.id) >= 0, why = own ? 'You own this' : L.age < X.min ? 'Age ' + X.min + '+' : X.lic && !L.license ? 'Needs a hover-bike license' : L.money < X.cost ? cr(X.cost) + ' · not enough credits' : cr(X.cost);
+            opt(c, X.e, pTitle(X), why, function () { buy('ride', X); }, why !== cr(X.cost));
+          });
+        }
+        sec(c, '🏙️ Homes');
+        if (L.age < 18) { note(c, 'You can buy a home when you’re 18. For now you live with your family.'); return; }
+        HOMES.filter(show).forEach(function (H) {
+          var own = L.homes.indexOf(H.id) >= 0, why = own ? 'You own this' : L.money < H.cost ? cr(H.cost) + ' · not enough credits' : cr(H.cost);
+          opt(c, H.e, pTitle(H), why, function () { buy('home', H); }, why !== cr(H.cost));
+        });
+      });
+    }
+    function buy(kind, X) {
+      if (L.money < X.cost) return;
+      if (kind === 'pet') { var p = addPet(X.id); doThing(X.e, [{ money: -X.cost, happy: [4, 8] }, X.e + ' You bought a ' + X.t.toLowerCase() + ' and named it ' + p.first + '!']); return; }
+      (kind === 'home' ? L.homes : L.rides).push(X.id);
+      doThing(X.e, [{ money: -X.cost, happy: [4, 9], style: kind === 'ride' ? [1, 3] : 0 }, X.e + ' You bought a ' + X.t.toLowerCase() + '!']);
+    }
+    function sell(kind, id) {
+      var X = kind === 'home' ? HOME[id] : RIDE[id], price = Math.round(X.cost * (kind === 'home' ? 0.9 : 0.6));
+      confirmBox(X.e, 'Sell your ' + X.t.toLowerCase() + ' for ' + cr(price) + '?', 'Yes, sell it', function () {
+        var list = kind === 'home' ? L.homes : L.rides; list.splice(list.indexOf(id), 1);
+        doThing(X.e, [{ money: price, happy: -2 }, X.e + ' You sold your ' + X.t.toLowerCase() + ' for ' + cr(price) + '.']);
+      });
+    }
+
+    // ---- ⚡ activities ----
+    function actCost(a) { return a.id === 'clinic' && L.age < 18 ? 0 : (a.cost || 0); }
+    function doSheet() {
+      sheet('⚡ Activities', function (c) {
+        if (L.age < 5) note(c, 'You’re still little! More activities unlock as you grow.');
+        sec(c, 'Mind & body');
+        ACTS.forEach(function (a) {
+          if (L.age < a.min || (a.if && !a.if())) return;
+          var cost = actCost(a), done = doneYet(a.id), broke = cost && L.money < cost;
+          var sub = a.id === 'license' && premium ? odds(licenseChance(), 'chance to pass') : a.sub;
+          opt(c, a.e, a.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough credits' : sub + (cost ? ' · ' + cr(cost) : ''), function () {
+            L.done[a.id] = L.age;
+            var r = a.run(); if (cost) r[0].money = (r[0].money || 0) - cost;
+            doThing(a.e, r);
+          }, done || broke);
+        });
+        if (L.age >= 10) {
+          sec(c, '😈 Mischief (you might get caught!)');
+          MISCHIEF.forEach(function (m) {
+            if (L.age < m.min) return;
+            var done = doneYet(m.id);
+            opt(c, m.e, m.t, done ? 'Done this year ✓' : premium ? odds(caughtChance(m), 'chance of getting caught') : 'Risky!', function () {
+              L.done[m.id] = L.age;
+              if (chance(caughtChance(m))) { doThing('🚨', caught(m.no)); return; }
+              L.mischief += 1; L.good -= 1;
+              doThing(m.e, [Object.assign({}, m.ok[0]), m.ok[1]]);
+            }, done);
+          });
+        }
+        if (L.age >= 16) { sec(c, '🦾 Chrome Clinic'); opt(c, '🦾', 'Visit the Chrome Clinic', 'Implants that boost your stats', clinicSheet); }
+      });
+    }
+    function clinicSheet() {
+      sheet('🦾 Chrome Clinic', function (c) {
+        var ch = chrome();
+        note(c, 'Implants boost your stats, but too much chrome makes you glitch! Your chrome level: ' + ch + (ch > 5 ? ' ⚠️ glitchy!' : ch >= 4 ? ' (careful)' : ''));
+        IMPLANTS.forEach(function (im) {
+          if (im.hide || (im.prem && !premium)) return;
+          var own = has(im.id), why = own ? 'Installed ✓' : L.age < im.min ? 'Age ' + im.min + '+' : L.money < im.cost ? cr(im.cost) + ' · not enough credits' : '';
+          opt(c, im.e, pTitle(im), why || cr(im.cost) + ' · ' + fxText(im.fx) + (im.chrome ? ' · chrome +' + im.chrome : ''), function () {
+            L.implants.push(im.id);
+            var fx = Object.assign({ money: -im.cost }, im.fx);
+            doThing(im.e, [fx, im.e + ' ' + im.msg]);
+          }, !!why);
+        });
+        opt(c, '←', 'Back to activities', '', doSheet);
+      });
+    }
+
+    // ---- ❤️ people ----
+    var GROUPS = [['👪 Family', ['parent', 'sib']], ['💞 Love', ['partner', 'spouse']], ['🧒 Kids', ['kid']], ['🤝 Friends', ['friend']], ['🐾 Robo-pets', ['pet']]];
+    function peopleSheet() {
+      sheet('❤️ People', function (c) {
+        var s = spouse();
+        if (L.age >= 5) {
+          sec(c, 'Meet people');
+          opt(c, '🤝', 'Make a friend', doneYet('friend') ? 'Done this year ✓' : friends().length >= 8 ? 'You have lots of friends already!' : premium ? odds(0.8, 'chance to click') : 'Go out and meet someone', function () { L.done.friend = L.age; doThing('🤝', makeFriend()); }, doneYet('friend') || friends().length >= 8);
+          if (L.age >= 18 && !partner()) opt(c, '💘', 'Find a partner', doneYet('date') ? 'Done this year ✓' : premium ? odds(0.7, 'chance to meet someone') : 'Go on some dates', function () { L.done.date = L.age; doThing('💘', findPartner()); }, doneYet('date'));
+          if (s && L.age >= 20 && L.age <= 50 && s.age <= 52 && kids().length < 8) opt(c, '🍼', 'Try for a baby', doneYet('baby') ? 'Done this year ✓' : 'With ' + s.first + (premium ? ' · ' + odds(0.7, 'chance') : ''), function () { L.done.baby = L.age; doThing('🍼', haveBaby(s)); }, doneYet('baby'));
+          if (L.age >= 25 && L.age <= 60 && kids().length < 8) opt(c, '🏠', 'Adopt a kid', doneYet('adopt') ? 'Done this year ✓' : cr(5000) + (L.money < 5000 ? ' · not enough credits' : ''), function () { L.done.adopt = L.age; doThing('🏠', adopt()); }, doneYet('adopt') || L.money < 5000);
+        }
+        GROUPS.forEach(function (gp) {
+          var list = L.people.filter(function (p) { return gp[1].indexOf(p.rel) >= 0 && (p.alive || p.rel === 'parent' || p.rel === 'sib'); });
+          if (!list.length) return;
+          sec(c, gp[0]);
+          list.forEach(function (p) {
+            opt(c, personEmoji(p), p.first + (p.last ? ' ' + p.last : ''), p.label + (p.alive ? ' · age ' + p.age : ' · passed away'), function () { personSheet(p); }, !p.alive, p.alive ? p.bond : null);
+          });
+        });
+        if (L.age < 5) note(c, 'You’re still little! You can make friends when you’re 5.');
+      });
+    }
+    function personSheet(p) {
+      sheet(personEmoji(p) + ' ' + p.first, function (c) {
+        note(c, p.label + ' · age ' + p.age + (p.job ? ' · ' + p.job : '') + ' · Relationship: ' + p.bond + '%');
+        c.appendChild(barEl(p.bond));
+        var A = function (key, e, t, sub, run, off) {
+          var done = p.done[key] === L.age;
+          opt(c, e, t, done ? 'Done this year ✓' : sub, function () { p.done[key] = L.age; doThing(e, run(), { p: p }); }, done || !!off);
+        };
+        var line = function (rel) { return pick(TIME[rel]).replace(/\{p\}/g, p.rel === 'parent' ? who(p) : p.first); };
+        var gift = function () { return [{ money: -100, happy: 1, bond: { p: [5, 12] } }, '🎁 You gave ' + who(p) + ' a gift. They loved it!']; };
+        if (p.rel === 'pet') {
+          A('time', '🎾', 'Play together', 'Makes you both happy', function () { return [{ happy: [3, 6], bond: { p: [5, 10] } }, (p.e || '🐾') + ' ' + line('pet')]; });
+          A('upgrade', '💾', 'Upgrade its software', cr(200), function () { return [{ money: -200, happy: 2, bond: { p: 8 } }, '💾 You upgraded ' + p.first + '’s software. It learned to purr in surround sound.']; }, L.money < 200);
+        } else if (p.rel === 'partner' || p.rel === 'spouse') {
+          A('time', '🌃', 'Date night', cr(150), function () { return [{ money: -150, happy: [4, 8], bond: { p: [8, 14] } }, '🌃 ' + line('partner')]; }, L.money < 150);
+          A('gift', '🎁', 'Give a gift', cr(100), gift, L.money < 100);
+          if (p.rel === 'partner') {
+            var ready = p.bond >= 60 && p.since < L.age && L.money >= 3000;
+            A('propose', '💍', 'Propose', ready ? 'Ring: ' + cr(3000) + (premium ? ' · ' + odds(p.bond / 100 + 0.1, 'chance of a yes') : '') : 'Needs: relationship 60%+, dating 1+ year, and ' + cr(3000) + ' for a ring', function () {
+              if (chance(p.bond / 100 + 0.1)) { p.rel = 'spouse'; p.label = 'Spouse'; return [{ money: -3000, happy: 15, bond: { p: 10 } }, '💍 You proposed to ' + p.first + ' and they said YES! You got married ' + pick(NH.datePlaces) + '.']; }
+              return [{ bond: { p: -15 }, happy: -6 }, '💍 You proposed to ' + p.first + ', but they said they’re not ready yet.'];
+            }, !ready);
+          }
+          opt(c, '💔', p.rel === 'spouse' ? 'Split up' : 'Break up', '', function () {
+            confirmBox('💔', (p.rel === 'spouse' ? 'Split up with ' : 'Break up with ') + p.first + '?', 'Yes', function () { L.people.splice(L.people.indexOf(p), 1); doThing('💔', [{ happy: -8 }, '💔 You and ' + p.first + ' went separate ways.']); });
+          });
+        } else {
+          A('time', '💬', p.rel === 'friend' ? 'Hang out' : 'Spend time together', 'Get closer', function () { return [{ happy: [1, 4], bond: { p: [4, 10] } }, line(p.rel === 'kid' && p.age < 3 ? 'baby' : p.rel)]; });
+          if (L.age >= 8) A('gift', '🎁', 'Give a gift', cr(100), gift, L.money < 100);
+          if (p.rel === 'parent' && L.age >= 5) A('money', '💰', 'Ask for money', premium ? odds(moneyChance(p), 'chance of a yes') : 'They might say yes!', function () {
+            if (!chance(moneyChance(p))) return [{ bond: { p: -3 } }, '💰 You asked ' + who(p) + ' for money. They said: “Money doesn’t grow on robot-trees!”'];
+            var amt = (L.age < 18 ? R(10, 60) : R(200, 1500)) * (L.tier + 1);
+            return [{ money: amt, bond: { p: -1 } }, '💰 You asked ' + who(p) + ' for money and got ' + cr(amt) + '!'];
+          });
+          if ((p.rel === 'sib' || p.rel === 'friend') && L.age >= 6) A('prank', '🤪', 'Prank them', 'Funny… or not', function () {
+            return chance(0.6) ? [{ happy: 5, bond: { p: -2 } }, '🤪 You filled ' + p.first + '’s shoes with glow-in-the-dark goo. Classic.'] : [{ happy: -1, bond: { p: -8 } }, '🤪 You pranked ' + p.first + ', and they did NOT think it was funny.'];
+          });
+          if (p.rel === 'kid' && p.age >= 6 && p.age <= 17) A('allowance', '🪙', 'Give allowance', cr(100), function () { return [{ money: -100, bond: { p: 6 } }, '🪙 You gave ' + p.first + ' some allowance. They bought a tiny robot.']; }, L.money < 100);
+          if (p.rel === 'friend') opt(c, '👋', 'Stop being friends', '', function () {
+            confirmBox('👋', 'Stop being friends with ' + p.first + '?', 'Yes', function () { L.people.splice(L.people.indexOf(p), 1); doThing('👋', [{ happy: -2 }, '👋 You and ' + p.first + ' stopped being friends.']); });
+          });
+        }
+        opt(c, '←', 'Back to people', '', peopleSheet);
+      });
+    }
+    function makeFriend() {
+      if (chance(0.2)) return [{ happy: -1 }, '🤝 You tried to make a new friend, but it didn’t click this time.'];
+      var f = addPerson('friend', Math.max(5, L.age + R(-2, 2)));
+      return [{ happy: 4 }, '🤝 You met ' + f.first + ' ' + pick(L.age < 18 ? NH.kidPlaces : NH.adultPlaces) + ' and became friends!'];
+    }
+    function findPartner() {
+      if (chance(0.3)) return [{ happy: -2 }, '💘 You went on a few dates, but nobody clicked. Maybe next year!'];
+      var p = addPerson('partner', Math.max(18, L.age + R(-4, 4)));
+      p.since = L.age; p.job = pick(NH.parentJobs); p.bond = R(55, 75);
+      return [{ happy: 8 }, '💘 You met ' + p.first + ' ' + p.last + ' (' + p.age + ', ' + p.job + ') ' + pick(NH.datePlaces) + '. You started dating!'];
+    }
+    function haveBaby(s) {
+      if (!chance(0.7)) return [{ happy: -1 }, '🍼 You and ' + s.first + ' tried for a baby this year, but no luck yet.'];
+      var k = addPerson('kid', 0);
+      return [{ happy: 12 }, '🍼 You and ' + s.first + ' had a baby! Welcome to the world, ' + k.first + '!'];
+    }
+    function adopt() {
+      var k = addPerson('kid', R(0, 8)); k.bond = 70;
+      return [{ money: -5000, happy: 10 }, '🏠 You adopted ' + k.first + ', age ' + k.age + '! Welcome to the family.'];
+    }
+
+    // ---------------- screens ----------------
+    function view(v) { ['worlds', 'new', 'life', 'dead'].forEach(function (k) { $(k).hidden = k !== v; }); window.scrollTo(0, 0); }
+    function render() {
+      if (!L) return;
+      $('avatar').textContent = avatar();
+      $('name').textContent = L.first + ' ' + L.last + (premium ? ' 👑' : '');
+      $('sub').textContent = 'Age ' + L.age + ' · ' + occupation();
+      var tip = '';
+      if (premium && L.alive) {
+        if (L.ill) tip = '😇 Guardian Angel: you have ' + L.ill + '. A clinic checkup in ⚡ Do can cure it.';
+        else if (L.st.health < 25) tip = '😇 Guardian Angel: your health is low! Try the gym or a clinic checkup in ⚡ Do.';
+        else if (L.st.happy < 20) tip = '😇 Guardian Angel: you seem sad. Spend time with people you love, or relax in the zen garden.';
+        else if (L.money < 0 && L.age >= 22 && !L.job && !L.uni) tip = '😇 Guardian Angel: you’re in debt. A job from 💼 Job would help!';
+      }
+      $('angel').hidden = !tip; $('angel').textContent = tip;
+      $('money').textContent = cr(L.money);
+      $('money').classList.toggle('neg', L.money < 0);
+      var box = $('stats'); box.innerHTML = '';
+      var rows = ['happy', 'health', 'smarts', 'style'].map(function (k) { return [STAT[k][0] + ' ' + STAT[k][1], L.st[k], null]; });
+      if (L.fame > 0) rows.push(['⭐ Fame', L.fame, 'fame']);
+      rows.forEach(function (r) {
+        var row = mk('div', 'lf-stat');
+        row.appendChild(mk('span', 'lf-stat-l', r[0]));
+        row.appendChild(barEl(r[1], r[2]));
+        row.appendChild(mk('span', 'lf-stat-v', r[1] + '%'));
+        box.appendChild(row);
+      });
+      var logBox = $('log'), frag = document.createDocumentFragment(), shownAge = null;
+      L.log.forEach(function (en) {
+        if (en.h || en.a !== shownAge) { frag.appendChild(mk('div', 'lf-agehd', 'Age ' + en.a)); shownAge = en.a; }
+        if (!en.h) frag.appendChild(mk('p', 'lf-entry', en.t));
+      });
+      logBox.innerHTML = ''; logBox.appendChild(frag); logBox.scrollTop = logBox.scrollHeight;
+    }
+    function worldsView() {
+      closeCard();
+      var cont = $('continue');
+      $('premLine').hidden = !premium;
+      cont.hidden = !(L && L.alive);
+      if (L && L.alive) cont.textContent = '▶ Continue: ' + L.first + ' ' + L.last + ' (age ' + L.age + ')';
+      var box = $('worldList'); box.innerHTML = '';
+      WORLDS.forEach(function (w) {
+        var b = mk('button', 'lf-world' + (w.live ? ' live' : '')); b.type = 'button';
+        b.appendChild(mk('span', 'em', w.e));
+        var t = mk('span'); t.appendChild(mk('b', null, w.name + (w.place ? ': ' + w.place : ''))); t.appendChild(mk('small', null, w.blurb)); b.appendChild(t);
+        b.appendChild(mk('span', 'tag', w.live ? 'Play' : 'Soon'));
+        if (w.live) b.addEventListener('click', function () { if (L && L.alive) confirmBox('🌃', 'Start a new life? ' + L.first + '’s life will end.', 'Yes, new life', function () { closeCard(); newView(); }); else newView(); });
+        else b.disabled = true;
+        box.appendChild(b);
+      });
+      var gb = $('graves'); gb.innerHTML = '';
+      $('graveBox').hidden = !graves.length;
+      graves.slice(0, 10).forEach(function (g) {
+        var rb = RIBBONS[g.r] || RIBBONS.normal, row = mk('div', 'lf-grave');
+        row.appendChild(mk('b', null, rb[0]));
+        var t = mk('div'); t.appendChild(mk('b', null, g.n)); t.appendChild(mk('span', null, ' · ' + g.b + '–' + (g.b + g.a) + ' · ' + rb[1] + (g.g > 1 ? ' · gen ' + g.g : ''))); row.appendChild(t);
+        gb.appendChild(row);
+      });
+      view('worlds');
+    }
+    var district = 0;
+    function newView() {
+      $('first').value = pick(NH.first); $('last').value = pick(NH.last);
+      district = R(0, NH.districts.length - 1);
+      var box = $('districts'); box.innerHTML = '';
+      NH.districts.forEach(function (d, i) {
+        var b = mk('button', 'lf-dist'); b.type = 'button'; b.setAttribute('role', 'radio');
+        b.appendChild(mk('b', null, cap(d.name) + ' ' + '💰'.repeat(d.tier + 1)));
+        b.appendChild(mk('small', null, d.blurb));
+        b.addEventListener('click', function () { district = i; markDistrict(); });
+        box.appendChild(b);
+      });
+      markDistrict();
+      view('new');
+    }
+    function markDistrict() { Array.prototype.forEach.call($('districts').children, function (b, i) { b.setAttribute('aria-checked', i === district ? 'true' : 'false'); }); }
+    function clean(s) { return String(s || '').replace(/\s+/g, ' ').trim().slice(0, 16); }
+    function startLife() {
+      var first = clean($('first').value) || pick(NH.first), last = clean($('last').value) || pick(NH.last);
+      L = blank(first, last, district);
+      var d = NH.districts[district];
+      var mom = addPerson('parent', R(22, 40), null, last, 'Mom'), dad = addPerson('parent', R(22, 42), null, last, 'Dad');
+      mom.job = pick(NH.parentJobs); dad.job = pick(NH.parentJobs); mom.bond = R(65, 95); dad.bond = R(65, 95);
+      var sibs = pickWeighted([0, 1, 2], function (n) { return [45, 40, 15][n]; }), sibNames = [];
+      for (var i = 0; i < sibs; i++) sibNames.push(addPerson('sib', R(1, 9)).first);
+      snaps = []; saveSnaps();
+      push({ a: 0, h: 1 });
+      log('🌃 You were born in Neon Harbor, in ' + d.name + '. ' + d.blurb);
+      log('👪 Your mom is ' + mom.first + ' ' + last + ', a ' + mom.job + '. Your dad is ' + dad.first + ' ' + last + ', a ' + dad.job + '.');
+      if (sibNames.length) log(sibNames.length === 1 ? '🧒 You have an older sibling, ' + sibNames[0] + '.' : '🧒 You have two older siblings, ' + sibNames[0] + ' and ' + sibNames[1] + '.');
+      log('Welcome to the world, ' + first + '! Tap ＋ Age to grow up.');
+      save(); view('life'); render();
+    }
+    function showDead() {
+      var rb = RIBBONS[L.ribbon] || RIBBONS.normal;
+      $('dName').textContent = L.first + ' ' + L.last;
+      $('dYears').textContent = L.born + ' – ' + (L.born + L.age) + ' · Age ' + L.age + ' · ' + cap(L.cause || 'old age');
+      var r = $('ribbon'); r.innerHTML = '';
+      r.appendChild(mk('span', null, rb[0]));
+      var t = mk('div'); t.appendChild(mk('b', null, rb[1] + ' ribbon')); t.appendChild(mk('small', null, rb[2])); r.appendChild(t);
+      var kidsEver = L.people.filter(function (p) { return p.rel === 'kid'; }).length;
+      var st = $('dStats'); st.innerHTML = '';
+      [['Net worth', cr(netWorth())], ['Last job', L.lastJob || (L.retired ? 'Retired' : 'None')], ['Kids', String(kidsEver)], ['Generation', String(L.gen || 1)]].forEach(function (x) {
+        var d = mk('div'); d.appendChild(mk('b', null, x[1])); d.appendChild(document.createTextNode(x[0])); st.appendChild(d);
+      });
+      var hb = $('heirs'); hb.innerHTML = '';
+      var heirs = kids();
+      if (heirs.length) hb.appendChild(mk('div', 'lf-sec', 'Keep the family going'));
+      heirs.slice(0, 4).forEach(function (k) {
+        var b = mk('button', 'btn lf-heir', 'Continue as ' + k.first + ' (age ' + k.age + ') →'); b.type = 'button';
+        b.addEventListener('click', function () { continueAs(k.id); });
+        hb.appendChild(b);
+      });
+      if (premium && lifeSnaps().some(function (x) { return x.age < L.age; })) {
+        hb.appendChild(mk('div', 'lf-sec', '👑 Premium'));
+        var tmb = mk('button', 'btn lf-heir', '⏳ Time Machine: go back and try again'); tmb.type = 'button';
+        tmb.addEventListener('click', timeSheet);
+        hb.appendChild(tmb);
+      }
+      view('dead');
+    }
+    function continueAs(kidId) {
+      var old = L, k = null;
+      old.people.forEach(function (p) { if (p.id === kidId) k = p; });
+      if (!k || !k.alive) return;
+      var worth = Math.max(0, netWorth()), mate = old.people.filter(function (p) { return p.alive && (p.rel === 'spouse' || p.rel === 'partner'); })[0];
+      L = blank(k.first, k.last || old.last, old.district);
+      L.gen = (old.gen || 1) + 1; L.age = k.age; L.born = old.born + old.age - k.age; L.money = worth;
+      L.tier = Math.min(2, old.tier + (worth >= 500000 ? 1 : 0));
+      L.st.smarts = clamp((old.st.smarts + R(10, 90)) / 2); L.st.style = clamp((old.st.style + R(10, 90)) / 2);
+      var me = addPerson('parent', old.age, old.first, old.last); me.alive = false; me.bond = k.bond;
+      if (mate) { var pp = addPerson('parent', mate.age, mate.first, mate.last); pp.bond = R(60, 90); pp.job = mate.job; }
+      old.people.forEach(function (p) { if (p.rel === 'kid' && p.id !== k.id && p.alive) { var sb = addPerson('sib', p.age, p.first, p.last); sb.bond = R(50, 85); } });
+      if (L.age >= 18) L.edu = 'high';
+      else if (L.age >= 5) L.school = { kind: L.age >= 12 ? 'high' : 'primary', grade: clamp(45 + (L.st.smarts - 50) / 2 + R(-8, 8)) };
+      snaps = []; saveSnaps();
+      push({ a: L.age, h: 1 });
+      log('🧬 You are ' + L.first + ' ' + L.last + ', the child of ' + old.first + ' ' + old.last + '. Generation ' + L.gen + ' begins!');
+      if (worth > 0) log('💰 You inherited ' + cr(worth) + '.');
+      save(); view('life'); render();
+    }
+    function menuSheet() {
+      sheet('☰ Menu', function (c) {
+        if (premium && L && L.alive) {
+          sec(c, '👑 Premium');
+          opt(c, '🧬', 'God Mode', 'Change your stats, credits, and more', godSheet);
+          opt(c, '⏳', 'Time Machine', 'Go back to an earlier age', timeSheet);
+        }
+        sec(c, 'Game');
+        opt(c, '🔑', 'Codes', premium ? 'Premium unlocked ✓' : 'Got a secret code?', function () { codeSheet(menuSheet); });
+        opt(c, '🌍', 'Worlds & new life', 'Pick a world and start over', worldsView);
+        opt(c, '❓', 'How to play', '', howSheet);
+        note(c, 'Inspired by BitLife by Candywriter. This is a fan-made game and isn’t connected to BitLife.');
+      });
+    }
+
+    // ---- 🔑 codes and 👑 premium ----
+    function codeSheet(back) {
+      sheet('🔑 Codes', function (c) {
+        note(c, premium ? '👑 Premium is unlocked! You have God Mode, the Time Machine, a Guardian Angel, and premium stuff to buy.' : 'Got a secret code? Type it here to unlock extras.');
+        var f = mk('form', 'lf-codeform'), inp = mk('input'), b = mk('button', 'btn', 'Redeem');
+        inp.id = 'lf-code'; inp.type = 'text'; inp.maxLength = 30; inp.placeholder = 'Type a code';
+        inp.setAttribute('autocomplete', 'off'); inp.setAttribute('autocapitalize', 'none'); inp.setAttribute('spellcheck', 'false'); inp.setAttribute('aria-label', 'Code');
+        b.type = 'submit';
+        f.appendChild(inp); f.appendChild(b);
+        f.addEventListener('submit', function (e) { e.preventDefault(); redeem(inp.value, back); });
+        c.appendChild(f);
+        if (back) opt(c, '←', 'Back', '', back);
+      });
+      try { $('code').focus({ preventScroll: true }); } catch (e) {}
+    }
+    function redeem(raw, back) {
+      var code = String(raw || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!code) return;
+      if (CODES[code] === 'premium') {
+        var already = premium;
+        premium = true;
+        try { localStorage.setItem(PKEY, '1'); } catch (e) {}
+        if (!already && L && L.alive) { log('👑 You unlocked Premium with a secret code!'); save(); }
+        outcome('👑', already ? 'You already have Premium! 👑' : 'Premium unlocked! You now have 🧬 God Mode, ⏳ the Time Machine, 😇 a Guardian Angel, and 👑 premium stuff to buy. Find them in the ☰ menu. You still make every choice!', [], refresh);
+        return;
+      }
+      outcome('❌', 'That code didn’t work. Check the spelling and try again!', [], function () { codeSheet(back); });
+    }
+    function refresh() {   // redraw whatever screen is showing
+      closeCard();
+      if (!$('worlds').hidden) worldsView();
+      else if (!$('dead').hidden) showDead();
+      else if (L) render();
+    }
+    function godUsed() { if (L.done.god !== L.age) { L.done.god = L.age; log('🧬 You used God Mode.'); } }
+    function godSheet() {
+      sheet('🧬 God Mode', function (c) {
+        note(c, 'Change anything about yourself. You still make all the choices!');
+        [['happy', '😊 Happy'], ['health', '❤️ Health'], ['smarts', '🧠 Smarts'], ['style', '😎 Style'], ['fame', '⭐ Fame']].forEach(function (s) {
+          var k = s[0], row = mk('label', 'lf-god'), out = mk('b'), inp = mk('input');
+          inp.type = 'range'; inp.min = '0'; inp.max = '100'; inp.step = '1';
+          inp.value = String(k === 'fame' ? L.fame : L.st[k]);
+          inp.setAttribute('data-stat', k);
+          out.textContent = inp.value + '%';
+          inp.addEventListener('input', function () { out.textContent = inp.value + '%'; });
+          inp.addEventListener('change', function () { var v = clamp(+inp.value); if (k === 'fame') L.fame = v; else L.st[k] = v; godUsed(); save(); render(); });
+          row.appendChild(mk('span', null, s[1])); row.appendChild(inp); row.appendChild(out);
+          c.appendChild(row);
+        });
+        sec(c, '💰 Credits');
+        var have = mk('p', 'lf-note', 'You have ' + cr(L.money) + '.');
+        c.appendChild(have);
+        var pills = mk('div', 'lf-pills');
+        [1000, 10000, 100000, 1000000].forEach(function (n) {
+          var b = mk('button', 'lf-pill', '+' + cr(n)); b.type = 'button';
+          b.addEventListener('click', function () { L.money += n; godUsed(); save(); render(); have.textContent = 'You have ' + cr(L.money) + '.'; });
+          pills.appendChild(b);
+        });
+        var debt = mk('button', 'lf-pill', 'Clear debt'); debt.type = 'button';
+        debt.addEventListener('click', function () { if (L.money < 0) { L.money = 0; godUsed(); save(); render(); have.textContent = 'You have ' + cr(L.money) + '.'; } });
+        pills.appendChild(debt);
+        c.appendChild(pills);
+        sec(c, '✨ Quick fixes');
+        if (L.ill) opt(c, '💊', 'Cure ' + L.ill, 'Feel better instantly', function () { var t = L.ill; L.ill = null; doThing('🧬', [{ health: 10 }, '🧬 You used God Mode to cure your ' + t + '.'], null, godSheet); });
+        if (!L.license && L.age >= 15) opt(c, '🏍️', 'Get a hover-bike license', 'No test needed', function () { L.license = true; doThing('🧬', [{}, '🧬 You used God Mode to get a hover-bike license.'], null, godSheet); });
+        if (L.people.some(function (p) { return p.alive; })) opt(c, '💞', 'Max out all relationships', 'Everyone adores you', function () { L.people.forEach(function (p) { if (p.alive) p.bond = 100; }); doThing('🧬', [{ happy: 3 }, '🧬 You used God Mode, and now everyone in your life adores you.'], null, godSheet); });
+        opt(c, '✏️', 'Change your name', L.first + ' ' + L.last, nameSheet);
+        opt(c, '←', 'Back to menu', '', menuSheet);
+      });
+    }
+    function nameSheet() {
+      sheet('✏️ Change your name', function (c) {
+        var f = mk('form', 'lf-nameform'), a = mk('input'), b = mk('input'), s = mk('button', 'btn', 'Save name');
+        a.value = L.first; b.value = L.last; a.maxLength = 16; b.maxLength = 16;
+        a.setAttribute('aria-label', 'First name'); b.setAttribute('aria-label', 'Last name');
+        a.setAttribute('autocomplete', 'off'); b.setAttribute('autocomplete', 'off');
+        s.type = 'submit';
+        f.appendChild(a); f.appendChild(b); f.appendChild(s);
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var nf = clean(a.value), nl = clean(b.value);
+          if (!nf || !nl) return;
+          var old = L.first + ' ' + L.last;
+          L.first = nf; L.last = nl;
+          doThing('✏️', [{}, '✏️ You changed your name from ' + old + ' to ' + nf + ' ' + nl + '.'], null, godSheet);
+        });
+        c.appendChild(f);
+        opt(c, '←', 'Back to God Mode', '', godSheet);
+      });
+    }
+    function timeSheet() {
+      sheet('⏳ Time Machine', function (c) {
+        var list = lifeSnaps().filter(function (x) { return x.age < L.age; }).sort(function (a, b) { return b.age - a.age; });
+        if (!list.length) note(c, 'There’s nowhere to go back to yet. Live a little first!');
+        else note(c, 'Go back to an earlier age. Everything after that will un-happen!');
+        list.forEach(function (x, i) {
+          var back = L.age - x.age;
+          if ([1, 2, 3, 5, 10, 15, 20].indexOf(back) < 0 && i !== list.length - 1) return;
+          opt(c, '⏳', 'Go back ' + back + (back === 1 ? ' year' : ' years'), 'To age ' + x.age, function () { travel(x); });
+        });
+        if (L.alive) opt(c, '←', 'Back to menu', '', menuSheet);
+      });
+    }
+    function travel(x) {
+      var wasDead = !L.alive, back;
+      try { back = JSON.parse(x.s); } catch (e) { return; }
+      if (wasDead && graves.length && graves[0].n === L.first + ' ' + L.last && graves[0].b === L.born) { graves.shift(); saveGraves(); }
+      back.log = L.log.slice(0, Math.max(0, L.log.length - ((L.logTotal || 0) - x.total)));
+      back.logTotal = x.total;
+      L = back;
+      L.alive = true; L.cause = null; L.ribbon = null; L.pending = [];
+      if (L.st.health < 15) L.st.health = 15;   // never land back in time with zero health
+      snaps = snaps.filter(function (s) { return s.lid === L.lid && s.age < L.age; });
+      saveSnaps();
+      log('⏳ You used the Time Machine and went back to age ' + L.age + '!');
+      save(); closeCard(); view('life'); render();
+    }
+    function howSheet() {
+      sheet('❓ How to play', function (c) {
+        ['Tap ＋ Age to live one year. Things happen every year, and you choose what to do.',
+          '💼 Job: school, university, and jobs. Study and work hard to get ahead.',
+          '🏠 Stuff: buy robo-pets, hover-bikes, and homes.',
+          '❤️ People: your family, friends, partner, and kids. Spend time with them so they stay close.',
+          '⚡ Do: activities, mischief, and the Chrome Clinic. Most things can be done once a year.',
+          'Keep your bars up! If your health hits zero, your life ends. When you die, you get a ribbon, and if you have kids, you can keep playing as one of them.'
+        ].forEach(function (t) { note(c, t); });
+        opt(c, '←', 'Back', '', menuSheet);
+      });
+    }
+
+    // ---------------- wiring ----------------
+    $('ov').addEventListener('click', function (e) { if (e.target === $('ov') && $('ov').getAttribute('data-kind') === 'sheet') closeCard(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('ov').hidden && $('ov').getAttribute('data-kind') === 'sheet') closeCard(); });
+    $('age').addEventListener('click', ageUp);
+    $('tJob').addEventListener('click', jobSheet);
+    $('tStuff').addEventListener('click', stuffSheet);
+    $('tPeople').addEventListener('click', peopleSheet);
+    $('tDo').addEventListener('click', doSheet);
+    $('menu').addEventListener('click', menuSheet);
+    $('continue').addEventListener('click', function () { view('life'); render(); nextEvent(); });
+    $('rand').addEventListener('click', function () { $('first').value = pick(NH.first); $('last').value = pick(NH.last); district = R(0, NH.districts.length - 1); markDistrict(); });
+    $('start').addEventListener('click', startLife);
+    $('backWorlds').addEventListener('click', worldsView);
+    $('again').addEventListener('click', newView);
+    $('toWorlds').addEventListener('click', worldsView);
+    $('codes').addEventListener('click', function () { codeSheet(); });
+    window.registerHook('life', function () {
+      if (L && L.alive) { view('life'); render(); nextEvent(); } else worldsView();
+    }, closeCard);
   })();
 
 </script>
