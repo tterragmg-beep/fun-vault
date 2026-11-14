@@ -9448,12 +9448,20 @@
       { id: 'coyotes', e: '🐺', name: 'the Chrome Coyotes', blurb: 'hover-bike racers who never brake' },
       { id: 'owls', e: '🦉', name: 'the Night Owls', blurb: 'sneaky couriers who own the rooftops' }
     ];
+    var CREWMATES = ['Vex', 'Pixel', 'Rook', 'Jinx', 'Moxie', 'Tank', 'Zip', 'Echo', 'Nova', 'Bolt'];
+    var GANGS = [   // 🛡️ rival gangs that want your turf
+      { id: 'rats', e: '🐀', short: 'Rust Rats', name: 'the Rust Rats', w: '🔧', boss: 'the Rat King', bt: 'Rat King', be: '🐀' },
+      { id: 'vipers', e: '🐍', short: 'Neon Vipers', name: 'the Neon Vipers', w: '⚡', boss: 'the Viper Queen', bt: 'Viper Queen', be: '🐍' },
+      { id: 'scrap', e: '🦾', short: 'Scrap Lords', name: 'the Scrap Lords', w: '🔨', boss: 'the Scrap Baron', bt: 'Scrap Baron', be: '🤖' }
+    ];
+    var CREW_SPEC = { kings: 'heist', coyotes: 'race', owls: 'delivery' };   // each crew is extra good at one thing
+    var MOON = 1000000, SPEC_TXT = ' · ⭐ your crew’s specialty!';   // 🌙 the crew's big dream
     var CREW_JOBS = ['You delivered a mystery package across the city for your crew without peeking. (Okay, you peeked. It was glitter.)',
       'You distracted corp guards with an epic dance-off while your crew slipped inside.',
       'You helped your crew hack a corp vault, and everyone split the credits.',
       'You won a midnight street race for your crew’s honor.',
       'You and your crew rescued a stolen robo-dog from a corp lab.'];
-    var PLAN = byId(PLANS), CREW = byId(CREWS);
+    var PLAN = byId(PLANS), CREW = byId(CREWS), GANG = byId(GANGS);
     var ACH = [
       { id: 'firstlife', e: '🌱', t: 'First Life', d: 'Live a whole life, from baby to the very end.' },
       { id: 'grad', e: '🎓', t: 'Big Brain', d: 'Graduate from a university.' },
@@ -9488,6 +9496,10 @@
       { id: 'zen', e: '🧘', t: 'Inner Peace', d: 'Finish all 3 years of humanity training.' },
       { id: 'chip', e: '🤖', t: 'Best Buddy', d: 'Get Chip, the smart gun that never misses.' },
       { id: 'arsenal', e: '🔫', t: 'Arsenal', d: 'Own every gun in the weapon shop.' },
+      { id: 'turf', e: '🛡️', t: 'Turf Defender', d: 'Win 3 turf wars against rival gangs in one life.' },
+      { id: 'rescue', e: '🆘', t: 'No One Left Behind', d: 'Break a crewmate out of a corp van.' },
+      { id: 'boss', e: '👑', t: 'Crew Boss', d: 'Become the leader of a street crew.' },
+      { id: 'moon', e: '🌙', t: 'Moonshot', d: 'Fill your crew’s Moon fund and take everyone to the Moon.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9768,6 +9780,14 @@
       { id: 'crewinvite', forced: 1, e: '🏙️', t: 'A street crew has been looking out for you. Their leader, {new}, says: “You’ve got nobody left. Run with us, and we’ll be your family.”', c: [
         ['Join the crew', function (c) { return joinCrew(pick(CREWS).id, c.new); }],
         ['Stay on your own', [[1, { happy: -2, good: 1 }, 'You told the street crew you’d rather stay on your own.']]]] },
+      { id: 'crewrescue', a: [14, 90], w: 3, every: 3, need: 'crew', e: '🆘', t: 'Corp security grabbed your crewmate {mate} and threw them in the back of an armored van! Your crew needs you.', c: [
+        ['⚔️ Break them out (2 fights)', function (c) { return rescueFight(c.mate); }],
+        ['💳 Pay a fixer to get them out (5,000 cr)', function (c) { if (L.money < 5000) return [{ happy: -3, rep: -3 }, '💳 You didn’t have enough credits for the fixer. ' + c.mate + ' got out on their own a week later.']; return [{ money: -5000, happy: 4, rep: 8 }, '💳 You paid a fixer ' + cr(5000) + ', and ' + c.mate + ' was back at the hideout by dinner. Your crew owes you one.']; }],
+        ['🙈 Stay out of it', function (c) { return [{ happy: -6, rep: -12 }, '🙈 You stayed out of it. ' + c.mate + ' got out a month later and won’t even look at you.']; }]] },
+      { id: 'crewrival', a: [16, 90], w: 3, every: 3, need: 'crew', e: '🎨', t: '{Gang} spray-painted their tag all over your crew’s turf! {Gboss} says your block belongs to them now.', c: [
+        ['🛡️ Fight them for your turf', function (c) { return turfFight(c.gid); }],
+        ['🎨 Paint a giant mural over their tag', function (c) { return [{ happy: 6, style: 2, rep: 5 }, '🎨 You and your crew painted a giant glowing mural right over their tag. Even ' + c.gboss + ' had to admit it looked cool.']; }],
+        ['🤷 Let them have the block', function (c) { return [{ happy: -5, rep: -8 }, '🤷 You let ' + c.gang + ' have the block. Your crew was NOT impressed.']; }]] },
       { id: 'psychocall', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'patrol'; }, e: '🚨', t: 'CYBERPSYCHO ALERT! Somebody went haywire with way too much chrome, and your Chrome Patrol squad is the closest.', c: [
         ['⚔️ Take them down', function () { return psychoCall(); }],
         ['🗣️ Try to talk them down', function () { if (chance(0.2 + L.st.smarts / 250)) { L.psychos = (L.psychos || 0) + 1; checkPsycho(); return [{ good: 3, perf: 8, happy: 6, fame: 2 }, '🗣️ You talked the cyberpsycho down, slow and calm. Nobody got hurt, and they’re getting help now.']; } var r = psychoCall(); if (r.battle) r.intro = 'They didn’t listen!'; return r; }],
@@ -9964,6 +9984,122 @@
       if (chance(0.5)) return caught('Security drones caught you on a job for ' + C.name + '.');
       return [{ health: -R(8, 18), happy: -5 }, '🤕 A job for ' + C.name + ' went wrong, and you got banged up getting away.'];
     }
+    function crewPay(m) { return Math.round(m * (L.age >= 18 ? 2 : 1) * (L.crewBoss ? 1.5 : 1)); }   // 👑 the leader gets a bigger cut
+    function crewSpec(kind) { return CREW_SPEC[L.crew] === kind; }
+    function quitCrew() { L.crew = null; L.crewRep = 0; L.crewFund = 0; L.crewBoss = 0; L.people.forEach(function (p) { if (p.label === 'Crew leader' || p.label === 'Crewmate') p.label = 'Friend'; }); }
+    function squadOf(list, extra, intro) {   // a fight against a few foes, one after another
+      var of = list.length, all = list.map(function (F, i) { return Object.assign({ power: 88 }, F, { id: 'crewfoe', waveN: i + 1, waveOf: of }, extra || {}); });
+      return Object.assign({}, all[0], { waves: all.slice(1), intro: intro });
+    }
+    function oneYear(c, key, e, t, sub, fn, off) {   // a crew activity you can do once a year
+      var d = doneYet(key);
+      opt(c, e, t, d ? 'Done this year ✓' : sub, function () { L.done[key] = L.age; play(e, fn()); }, d || !!off);
+    }
+    function deliveryChance() { return Math.min(0.92, 0.6 + L.st.smarts / 500 + (has('legs') ? 0.1 : 0) + (hasSandy() ? 0.08 : 0) + (crewSpec('delivery') ? 0.15 : 0)); }
+    function heistChance() { var Dk = deckOf(); return Math.min(0.9, 0.3 + L.st.smarts / 400 + (Dk ? Dk.tier * 0.12 : 0) + (crewSpec('heist') ? 0.15 : 0)); }
+    function raceChance() { return Math.min(0.9, 0.4 + (has('legs') ? 0.1 : 0) + (hasSandy() ? 0.15 : 0) + (crewSpec('race') ? 0.15 : 0) + (L.rides.length ? 0.1 : 0)); }
+    function crewSheet() {   // 🏙️ the crew hideout: lots to do all year, not just one job
+      if (L.crewRep == null) L.crewRep = 10;   // joined a crew before the hideout existed
+      var C = CREW[L.crew], rep = L.crewRep || 0, kid = L.age < 16, tr = L.crewTrain || 0;
+      sheet('🏙️ Crew hideout', function (c) {
+        note(c, C.e + ' ' + (L.crewBoss ? '👑 You’re the leader of ' + C.name + '! You get 50% more from every gig.' : 'You run with ' + C.name + ', ' + C.blurb + '.') + ' 🤝 Crew rep: ' + rep + '/100' + (L.crewBoss || rep >= 100 ? '.' : ' (get it to 100 to become the leader).'));
+        c.appendChild(barEl(rep));
+        if (!L.crewBoss && rep >= 100) opt(c, '👑', 'Take over as crew leader', 'Your crew trusts you more than anyone. Lead them!', becomeBoss);
+        sec(c, '💼 Gigs from the fixer');
+        oneYear(c, 'gig_delivery', '📦', 'Delivery run', 'Sneak a package across the city · safer, smaller pay' + (crewSpec('delivery') ? SPEC_TXT : '') + (premium ? ' · ' + odds(deliveryChance(), 'chance it goes well') : ''), function () { return gig('delivery'); });
+        oneYear(c, 'gig_heist', '🔓', 'Data heist', 'Hack a corp server for big pay' + (deckOf() ? '' : ' (way easier with a cyberdeck)') + (crewSpec('heist') ? SPEC_TXT : '') + (premium ? ' · ' + odds(heistChance(), 'chance it goes well') : ''), function () { return gig('heist'); });
+        if (!kid) oneYear(c, 'gig_convoy', '🚚', 'Raid a corp convoy', 'Fight the guards, then their armored drone · huge pay', function () { return gig('convoy'); });
+        sec(c, '🏚️ Crew life');
+        oneYear(c, 'crewbar', '🍹', 'Hang out at the Neon Diner', 'Have some fun with your crew', crewDiner);
+        oneYear(c, 'crewtrain', '🏋️', 'Train with the crew', tr >= 12 ? 'Fully trained! (+12 fight power)' : 'Sparring and dodge drills · +2 fight power for the rest of this life (' + tr + '/12)', crewTraining, tr >= 12);
+        oneYear(c, 'crewrace', '🏍️', 'Midnight street race', 'Entry ' + cr(1000) + (L.money < 1000 ? ' · not enough credits' : ' · the winner gets ' + cr(4000)) + (crewSpec('race') ? SPEC_TXT : '') + (premium ? ' · ' + odds(raceChance(), 'chance to win') : ''), crewRace, L.money < 1000);
+        if (!kid) oneYear(c, 'crewturf', '🛡️', 'Defend your turf', 'A rival gang is moving in. Fight them off! (a real battle)', function () { return turfFight(); });
+        else note(c, '🔒 Convoy raids and turf wars unlock at 16.');
+        sec(c, '🌙 The crew’s big dream');
+        note(c, '🌙 Your crew dreams of flying to the Moon together. Moon fund: ' + cr(L.crewFund || 0) + ' of ' + cr(MOON) + '.');
+        c.appendChild(barEl((L.crewFund || 0) / MOON * 100, 'tol'));
+        [5000, 50000, 500000].forEach(function (v) { opt(c, '🌙', 'Chip in ' + cr(v), L.money < v ? 'Not enough credits' : 'Put it in the Moon fund', function () { chipIn(v); }, L.money < v); });
+        opt(c, '←', 'Back to activities', '', doSheet);
+      });
+    }
+    function gig(kind) {   // 💼 a gig from the fixer
+      var C = CREW[L.crew], bonus = crewSpec(kind) ? 1.3 : 1, m, cg;
+      if (kind === 'delivery') {
+        if (chance(deliveryChance())) { m = crewPay(R(1500, 4000) * bonus); L.mischief += 1; return [{ money: m, happy: 4, rep: 6 }, '📦 ' + pick(['You zipped a secret package across Neon Harbor', 'You carried a mystery crate over the rooftops', 'You smuggled a box of chrome parts past three drone checkpoints']) + ' for ' + C.name + ' without getting spotted. The fixer paid you ' + cr(m) + '.']; }
+        if (chance(0.4)) { cg = caught('Security drones caught you on a delivery run for ' + C.name + '.'); cg[0].rep = -4; return cg; }
+        return [{ happy: -4, rep: -4 }, '📦 You lost the package in a chase across the rooftops. The fixer is NOT happy.'];
+      }
+      if (kind === 'heist') {
+        if (chance(heistChance())) { m = crewPay(R(5000, 12000) * bonus); L.mischief += 1; return [{ money: m, smarts: 1, fame: 1, happy: 6, rep: 10 }, '🔓 You jacked into a ' + pick(NH.corps) + ' server, dodged the firewall, and grabbed the data. Your cut: ' + cr(m) + '!']; }
+        if (L.age >= 18 && chance(0.25)) return lockupResult(1, '🚨 Corp security traced your data heist back to you!', { rep: -5 });
+        cg = caught('A corp firewall traced your data heist for ' + C.name + '.'); cg[0].rep = -5; return cg;
+      }
+      var en = squadOf([
+        { e: '💂', t: 'Convoy Guards', hp: 110, atk: [11, 15], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '🔫', feint: 0.15, combo: 0.2, power: 88 },
+        { e: '🛸', t: 'Armored Drone', hp: 140, atk: [12, 16], hits: [2, 3], dodge: 0.25, speed: 1.25, weapon: '⚡', robot: 1, heavy: 0.2, enrage: 1, boss: 1 }], null,
+        '🚚 You and ' + C.name + ' ambushed a corp convoy on the sky-highway! First the guards, then their armored drone.');
+      return fight(en, function (res) {   // 🚚 the convoy raid
+        var h = hurt(res);
+        if (res.win) { var m3 = crewPay(R(10000, 22000)); L.mischief += 1; if (!res.auto) award('brawler'); return [{ money: m3, fame: 3, happy: 8, health: h, rep: 15 }, '🚚 You and ' + C.name + ' stopped a corp convoy and beat its guards AND its armored drone! Your cut of the loot: ' + cr(m3) + '.']; }
+        if (res.fled) return [{ happy: -4, health: h, rep: -3 }, '🏃 The convoy raid went bad, so you got out of there. No pay this time.'];
+        var cg2 = caught('Corp security knocked you out during a convoy raid.'); cg2[0].health = (cg2[0].health || 0) + h; cg2[0].rep = -5; return cg2;
+      });
+    }
+    function crewDiner() {   // 🍹 hanging out with your crew
+      var mate = pick(CREWMATES);
+      return [{ happy: [6, 12], rep: 8 }, '🍹 ' + pick([
+        'Karaoke night at the Neon Diner! ' + mate + ' sang so badly that the robot waiter unplugged itself.',
+        'You arm-wrestled ' + mate + ' at the Neon Diner. ' + (L.st.health > 70 ? 'You won, and they bought everyone synth-sodas!' : 'You lost, but everybody cheered anyway.'),
+        mate + ' told the whole crew about outrunning a hover-cop on a pogo stick. Nobody believed it, but everybody loved it.',
+        'Your crew threw you a surprise party at the Neon Diner, just because. 🎉',
+        'Your crew had a noodle-eating contest. ' + mate + ' ate 14 bowls and had to lie down on the floor.',
+        'You and ' + mate + ' sat on the hideout roof all night, watching the city lights and talking about the future.'])];
+    }
+    function crewTraining() { L.crewTrain = Math.min(12, (L.crewTrain || 0) + 2); return [{ health: [2, 4], rep: 5 }, '🏋️ You trained at the hideout with ' + pick(CREWMATES) + ': sparring, dodge drills, and WAY too many push-ups. +2 fight power (' + L.crewTrain + '/12).']; }
+    function turfFight(gid) {   // 🛡️ a rival gang moves in on your turf
+      var G = (gid && GANG[gid]) || pick(GANGS), C = CREW[L.crew];
+      var en = squadOf([
+        { e: G.e, t: G.short, hp: 95, atk: [10, 14], hits: [2, 3], dodge: 0.28, speed: 1.2, weapon: G.w, feint: 0.2, combo: 0.2, power: 86 },
+        { e: G.be, t: G.bt, hp: 160, atk: [13, 17], hits: [2, 4], dodge: 0.25, speed: 1.2, weapon: '⛓️', heavy: 0.2, combo: 0.25, enrage: 1, boss: 1 }], { always: 1 },
+        '🛡️ ' + cap(G.name) + ' are moving in on your turf! Beat their crew, then ' + G.boss + '.');
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) { L.turfWins = (L.turfWins || 0) + 1; if (L.turfWins >= 3) award('turf'); var m = crewPay(R(2000, 6000)); if (!res.auto) award('brawler'); return [{ money: m, fame: 2, happy: 8, health: h, rep: 15 }, '🛡️ You chased ' + G.name + ' off your turf and beat ' + G.boss + '! ' + cap(C.name) + ' paid you ' + cr(m) + '. (Turf wars won: ' + L.turfWins + ')']; }
+        if (res.fled) return [{ happy: -5, health: h, rep: -4 }, '🏃 You backed off, and ' + G.name + ' tagged your whole block.'];
+        return [{ happy: -8, health: h, rep: -6 }, '😵 ' + cap(G.boss) + ' knocked you down, and ' + G.name + ' took over a street corner. Your crew wants payback.'];
+      });
+    }
+    function rescueFight(mate) {   // 🆘 get your crewmate back
+      var en = squadOf([
+        { e: '💂', t: 'Van Guards', hp: 100, atk: [11, 14], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '🔫', feint: 0.15, combo: 0.2, power: 88 },
+        { e: '🤖', t: 'Enforcer Mech', hp: 170, atk: [14, 18], hits: [1, 3], dodge: 0.1, speed: 1, weapon: '🦾', robot: 1, heavy: 0.3, enrage: 1, boss: 1 }], { always: 1 },
+        '🆘 You tracked down the corp van holding ' + mate + '! Get past the guards, then their enforcer mech.');
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) { award('rescue'); if (!res.auto) award('brawler'); return [{ happy: 12, fame: 3, health: h, rep: 20 }, '🆘 You smashed through the guards AND the enforcer mech and got ' + mate + ' out! The whole crew chanted your name all night.']; }
+        if (res.fled) return [{ happy: -6, health: h, rep: -3 }, '🏃 You had to retreat. ' + mate + ' escaped on their own a week later.'];
+        var cg = caught('Corp security caught you trying to rescue ' + mate + '.'); cg[0].health = (cg[0].health || 0) + h; cg[0].rep = -3; return cg;
+      });
+    }
+    function crewRace() {   // 🏍️ the midnight street race
+      if (chance(raceChance())) return [{ money: 3000, fame: 1, happy: 8, rep: 5 }, '🏍️ You won the midnight street race by a hair! Prize: ' + cr(4000) + ' (you paid ' + cr(1000) + ' to enter).'];
+      return [{ money: -1000, happy: -3 }, '🏍️ You came in ' + pick(['2nd', '3rd', '5th']) + ' in the midnight street race. There goes your ' + cr(1000) + ' entry fee.'];
+    }
+    function chipIn(v) {   // 🌙 save up for the crew's trip to the Moon
+      if (L.money < v) return;
+      L.crewFund = (L.crewFund || 0) + v;
+      if (L.crewFund >= MOON) {
+        L.crewFund -= MOON; award('moon');
+        doThing('🌙', [{ money: -v, happy: 30, fame: 10, rep: 20 }, '🚀 The Moon fund is full! Your whole crew packed into a rocket and flew to the Moon together. You bounced around in low gravity, watched the Earth rise over the craters, and promised you’d never forget it.']);
+        return;
+      }
+      doThing('🌙', [{ money: -v, happy: 3, rep: v >= 50000 ? 10 : 3 }, '🌙 You put ' + cr(v) + ' in the crew’s Moon fund. It’s at ' + cr(L.crewFund) + ' of ' + cr(MOON) + ' now.']);
+    }
+    function becomeBoss() {   // 👑 you run the crew now
+      var C = CREW[L.crew], old = null; L.crewBoss = 1; award('boss');
+      L.people.forEach(function (p) { if (p.label === 'Crew leader') { p.label = 'Crewmate'; old = p; } });
+      doThing('👑', [{ fame: 5, happy: 12 }, '👑 ' + (old && old.alive ? old.first + ' stepped aside, and the' : 'The') + ' whole crew cheered: you’re the new leader of ' + C.name + '! From now on, you get 50% more from every gig.']);
+    }
     function runAway() {   // nothing left to lose: a street crew will come looking for you
       parents().forEach(function (p) { p.alive = false; p.away = true; });
       L.ranAway = true;
@@ -9972,7 +10108,7 @@
     }
     function joinCrew(id, leader) {
       var C = CREW[id];
-      L.crew = id;
+      L.crew = id; L.crewRep = 10; L.crewFund = 0; L.crewBoss = 0;
       var p = addPerson('friend', Math.max(18, L.age + R(3, 12)), leader || null);
       p.label = 'Crew leader'; p.bond = R(60, 80);
       award('crew');
@@ -10137,6 +10273,7 @@
         if (m && !(m < 0 && L.age < 18 && L.money + m < 0)) { L.money += m; d.push('💰 ' + (m > 0 ? '+' : '−') + cr(Math.abs(m))); }
       }
       if (fx.fame) { var f0 = L.fame; L.fame = clamp(L.fame + val(fx.fame)); if (L.fame !== f0) d.push('⭐ Fame ' + sign(L.fame - f0)); }
+      if (fx.rep && L.crew) { var r0 = L.crewRep || 0; L.crewRep = Math.max(0, Math.min(100, r0 + val(fx.rep))); if (L.crewRep !== r0) d.push('🤝 Crew rep ' + sign(L.crewRep - r0)); }
       if (fx.good) L.good += fx.good;
       if (fx.grade && L.school) { var g0 = L.school.grade; L.school.grade = clamp(g0 + val(fx.grade)); if (L.school.grade !== g0) d.push('📝 Grades ' + sign(L.school.grade - g0)); }
       if (fx.perf && L.job) { var p0 = L.job.perf; L.job.perf = clamp(p0 + val(fx.perf)); if (L.job.perf !== p0) d.push('📈 Work ' + sign(L.job.perf - p0)); }
@@ -10180,6 +10317,7 @@
       if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
       if (ev.need === 'job' && !L.job) return null;
       if (ev.need === 'school' && !L.school) return null;
+      if (ev.need === 'crew') { if (!L.crew || L.jail) return null; var gg = pick(GANGS); c.gid = gg.id; c.gang = gg.name; c.Gang = cap(gg.name); c.gboss = gg.boss; c.Gboss = cap(gg.boss); c.mate = pick(CREWMATES); }
       if (ev.need === 'loot') { if (!L.loot || !IMP[L.loot.id] || !L.job || L.job.id !== 'patrol') return null; c.psycho = L.loot.n; c.item = IMP[L.loot.id].e + ' ' + IMP[L.loot.id].t + (IMP[L.loot.id].illegal ? ' ☠️ (illegal black-market chrome: extra strong!)' : ''); c.odds = premium ? ' 😇 ' + Math.round(lootCatch(IMP[L.loot.id]) * 100) + '% chance of getting caught if you take it.' : ' Taking it is risky!'; }
       return c;
     }
@@ -10723,8 +10861,9 @@
             if (!L.crew) opt(c, '🏙️', 'Join a street crew', 'Run with a crew and do jobs for them', crewPick);
             else {
               var C = CREW[L.crew], cj = doneYet('crewjob');
+              opt(c, '🏙️', 'Crew hideout', 'Gigs, hanging out, training, street races, turf wars, the Moon fund…', crewSheet);
               opt(c, C.e, 'Do a job for ' + C.name, cj ? 'Done this year ✓' : premium ? odds(crewChance(), 'chance it goes well') : 'Risky, but it pays well', function () { L.done.crewjob = L.age; play(C.e, crewJob()); }, cj);
-              opt(c, '🚪', 'Leave ' + C.name, '', function () { confirmBox('🚪', 'Leave ' + C.name + '?', 'Yes, leave', function () { L.crew = null; L.people.forEach(function (p) { if (p.label === 'Crew leader') p.label = 'Friend'; }); doThing('🚪', [{}, '🚪 You left ' + C.name + '.']); }); });
+              opt(c, '🚪', 'Leave ' + C.name, '', function () { confirmBox('🚪', 'Leave ' + C.name + '?', 'Yes, leave', function () { quitCrew(); doThing('🚪', [{}, '🚪 You left ' + C.name + '.']); }); });
             }
           }
         }
@@ -11118,7 +11257,7 @@
       return fight(personFoe(p), function (res) {
         var h = hurt(res), nm = p.first, kick = '';
         if (res.fled) { p.bond = clamp(p.bond - 30); return [{ happy: -4, health: h }, '🏃 You lost your nerve and ran off. ' + nm + ' won’t forget that.']; }
-        if (p.label === 'Crew leader' && L.crew) { kick = ' ' + cap(CREW[L.crew].name) + ' kicked you out of the crew.'; L.crew = null; }
+        if (p.label === 'Crew leader' && L.crew) { kick = ' ' + cap(CREW[L.crew].name) + ' kicked you out of the crew.'; quitCrew(); }
         if (res.win) {
           p.alive = false; p.gone = 'attacked'; L.good -= 10; L.mischief += 3;
           var t = '💀 You attacked ' + nm + ' in a dark alley, and they didn’t make it. ' + nm + ' is gone for good.' + kick;
@@ -11267,7 +11406,7 @@
     }
     function fightPower() {
       var bonus = { arm: 8, legs: 8, exo: 30, chassis: 35, muscle: 20, booster: 4, armor: 10, timeslow: 15, sandy2: 20, sandy3: 26, sandy4: 32, berserk: 10, berserk2: 16, deck1: 6, deck2: 10, deck3: 14, capri: 20,
-        eyes: 4, port: 6, heart: 6, wings: 5, magnet: 3, blades: 8, rocket: 6, camo: 4, heart2: 4, reflex: 5, bones: 6, ice: 3 }, p = L.st.health * 0.4 + (L.crew ? 5 : 0);
+        eyes: 4, port: 6, heart: 6, wings: 5, magnet: 3, blades: 8, rocket: 6, camo: 4, heart2: 4, reflex: 5, bones: 6, ice: 3 }, p = L.st.health * 0.4 + (L.crew ? 5 : 0) + (L.crewTrain || 0);
       L.implants.forEach(function (id) { p += bonus[id] || (IMP[id] && IMP[id].power) || 0; });
       p += gunOf().power;   // 🔫 a better gun makes you tougher
       return Math.round(p);
