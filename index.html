@@ -9508,6 +9508,7 @@
       { id: 'boss', e: '👑', t: 'Crew Boss', d: 'Become the leader of a street crew.' },
       { id: 'moon', e: '🌙', t: 'Moonshot', d: 'Fill your crew’s Moon fund and take everyone to the Moon.' },
       { id: 'fullride', e: '🎓', t: 'Full Ride', d: 'Go to university for free with a full scholarship.' },
+      { id: 'whizkid', e: '🧒', t: 'Whiz Kid', d: 'Finish school early and get a full-time job before you turn 16.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9657,7 +9658,7 @@
         ['Go with friends', [[1, { happy: 6, style: 2 }, 'You went to the Neon Dance with your friends and danced all night.']]],
         ['Stay home and game', [[1, { happy: 2 }, 'You skipped the Neon Dance and beat a video game instead.']]]] },
       // adult
-      { id: 'contract', a: [18, 40], w: 2, if: function () { return !L.job && !L.school && !L.uni && !L.retired; }, e: '📜', t: 'A {corp} recruiter offers you a job, but the contract is 99 pages long.', c: [
+      { id: 'contract', a: [10, 40], w: 2, if: function () { return grownUp() && !L.job && !L.school && !L.uni && !L.retired; }, e: '📜', t: 'A {corp} recruiter offers you a job, but the contract is 99 pages long.', c: [
         ['Sign without reading', function (c) { setJob('office', c.corp); return chance(0.35) ? [{ happy: -4 }, 'You signed a 99-page contract with ' + c.corp + '. Page 87 says you must wear a mascot costume on Fridays.'] : [{ happy: 4 }, 'You signed a 99-page contract and got a job at ' + c.corp + '!']; }],
         ['Read every page', function (c) { setJob('office', c.corp); return [{ smarts: 2, happy: 2 }, 'You read all 99 pages, found a typo on page 42, and got a job at ' + c.corp + '!']; }],
         ['No thanks', [[1, {}, 'You turned down a corp job offer.']]]] },
@@ -9680,7 +9681,7 @@
         ['Complain', [[1, { happy: 3 }, 'You complained about a barking robot dog, and your neighbor turned its volume down.'], [1, { happy: -2 }, 'You complained about a barking robot dog. Now your neighbor won’t wave at you.']]],
         ['Make friends with the dog', [[1, { happy: 4 }, 'You made friends with your neighbor’s robot dog. Now it brings you a newspaper every morning. Someone’s newspaper.']]],
         ['Buy earplugs (100 cr)', [[1, { money: -100, health: 2 }, 'You bought noise-canceling earplugs and finally got some sleep.']]]] },
-      { id: 'weekend', a: [18, 70], w: 3, need: 'job', e: '🏢', t: 'Your boss asks you to work this weekend.', c: [
+      { id: 'weekend', a: [10, 70], w: 3, need: 'job', if: function () { return grownUp(); }, e: '🏢', t: 'Your boss asks you to work this weekend.', c: [
         ['Say yes', [[1, { perf: 8, happy: -4 }, 'You worked all weekend. Your boss noticed.']]],
         ['Say no', [[1, { perf: -4, happy: 3 }, 'You said no to working the weekend and went to the arcade instead.']]]] },
       { id: 'reality', a: [18, 50], w: 2, if: function () { return L.st.style >= 65; }, e: '📺', t: 'A producer wants you on the reality show “Neon Roommates”!', c: [
@@ -9699,7 +9700,7 @@
       { id: 'wedding', a: [20, 85], w: 2, need: 'friend', if: function () { return L.money >= 150; }, e: '💒', t: '{friend} invited you to their wedding on a floating barge!', c: [
         ['Go and bring a gift', [[1, { money: -150, happy: 6, bond: { friend: 6 } }, 'You went to {friend}’s wedding on a floating barge. You danced until sunrise.']]],
         ['Just send a gift', [[1, { money: -100, bond: { friend: 2 } }, 'You sent {friend} a wedding gift.']]]] },
-      { id: 'bossimpressed', a: [18, 70], w: 3, need: 'job', if: function () { return !!L.job && L.job.perf >= 70 && !JOB[L.job.id].pt; }, e: '📈', t: 'Your boss is really impressed with your work.', c: [
+      { id: 'bossimpressed', a: [10, 70], w: 3, need: 'job', if: function () { return grownUp() && !!L.job && L.job.perf >= 70 && !JOB[L.job.id].pt; }, e: '📈', t: 'Your boss is really impressed with your work.', c: [
         ['Ask for a raise', function () { if (chance(0.6)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, 'You asked for a raise and got it! +10% pay.']; } return [{ happy: -2 }, 'You asked for a raise. Your boss said “maybe next year.”']; }],
         ['Ask for a promotion', function () { if (!JOB[L.job.id].flat && L.job.level < 3 && chance(0.45)) { L.job.level += 1; return [{ happy: 8 }, 'You got promoted! You’re now a ' + jobTitle() + '.']; } return [{ happy: -2 }, 'You asked for a promotion, but it didn’t happen this year.']; }],
         ['Just say thanks', [[1, { perf: 3, happy: 2 }, 'You thanked your boss for the kind words.']]]] },
@@ -9765,7 +9766,7 @@
       // milestones (only happen when the game asks for them)
       { id: 'graduate', forced: 1, e: '🎓', t: 'You graduated from {school}! What’s next?', c: [
         ['Go to university', function () { finishSchool(); if ((L.hsGrade || 0) >= 45 || L.st.smarts >= 60 || L.scholarship) { L.pending.unshift('major'); return [{ happy: 6 }, '🎓 You graduated from Neon Harbor High and got into Harbor Tech University!' + schTxt()]; } return [{ happy: -4 }, '🎓 You graduated from Neon Harbor High, but your grades weren’t high enough for Harbor Tech University. You can apply again later from 💼 Job.']; }],
-        ['Get a job', function () { finishSchool(); return [{ happy: 5 }, '🎓 You graduated from Neon Harbor High! Time to find a job in the 💼 Job tab.']; }],
+        ['Get a job', function () { finishSchool(); return [{ happy: 5 }, '🎓 You graduated from Neon Harbor High! Time to find a job in the 💼 Job tab.' + (L.age < 18 ? ' You finished school early, so you can work for companies and go to university right now!' : '')]; }],
         ['Take a gap year', function () { finishSchool(); return [{ happy: 8, smarts: 1 }, '🎓 You graduated from Neon Harbor High and took a gap year to explore the city.']; }]] },
       { id: 'major', forced: 1, e: '🏛️', t: 'Harbor Tech University: pick your major! {uniFee}', c: [
         ['🤖 Cyber-Engineering', function () { return enroll('robo'); }],
@@ -9796,7 +9797,7 @@
         ['🛡️ Fight them for your turf', function (c) { return turfFight(c.gid); }],
         ['🎨 Paint a giant mural over their tag', function (c) { return [{ happy: 6, style: 2, rep: 5 }, '🎨 You and your crew painted a giant glowing mural right over their tag. Even ' + c.gboss + ' had to admit it looked cool.']; }],
         ['🤷 Let them have the block', function (c) { return [{ happy: -5, rep: -8 }, '🤷 You let ' + c.gang + ' have the block. Your crew was NOT impressed.']; }]] },
-      { id: 'psychocall', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'patrol'; }, e: '🚨', t: 'CYBERPSYCHO ALERT! Somebody went haywire with way too much chrome, and your Chrome Patrol squad is the closest.', c: [
+      { id: 'psychocall', a: [10, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'patrol'; }, e: '🚨', t: 'CYBERPSYCHO ALERT! Somebody went haywire with way too much chrome, and your Chrome Patrol squad is the closest.', c: [
         ['⚔️ Take them down', function () { return psychoCall(); }],
         ['🗣️ Try to talk them down', function () { if (chance(0.2 + L.st.smarts / 250)) { L.psychos = (L.psychos || 0) + 1; checkPsycho(); return [{ good: 3, perf: 8, happy: 6, fame: 2 }, '🗣️ You talked the cyberpsycho down, slow and calm. Nobody got hurt, and they’re getting help now.']; } var r = psychoCall(); if (r.battle) r.intro = 'They didn’t listen!'; return r; }],
         ['📞 Wait for backup', [[1, { perf: -4 }, '📞 You waited for backup, and the rest of your squad handled the cyberpsycho. Your captain sighed.']]]] },
@@ -9804,10 +9805,10 @@
         ['🤫 Keep it (get it installed for free)', function () { return stealChrome('keep'); }],
         ['💰 Sell it to a fixer', function () { return stealChrome('sell'); }],
         ['🧾 Turn it all in', function () { var n = L.loot.n; L.loot = null; return [{ good: 2, perf: 4 }, '🧾 You turned in all the chrome from ' + n + ', like a good agent. Your captain gave you a nod.']; }]] },
-      { id: 'corpalert', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'enforcer'; }, e: '🏢', t: 'KUMO-TEK ALERT! A gang of attackers is storming the tower, and you’re the enforcer on duty. You’ll have to fight them one after another!', c: [
+      { id: 'corpalert', a: [10, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'enforcer'; }, e: '🏢', t: 'KUMO-TEK ALERT! A gang of attackers is storming the tower, and you’re the enforcer on duty. You’ll have to fight them one after another!', c: [
         ['⚔️ Stop them (2–3 fights in a row)', function () { return corpThreat(); }],
         ['📞 Call for backup', [[1, { perf: -4 }, '📞 You called for backup and let the rest of the security team handle it. Your boss sighed.']]]] },
-      { id: 'corpleak', a: [18, 90], w: 4, need: 'job', if: function () { return L.job.id === 'enforcer' || L.job.id === 'kexec'; }, e: '📰', t: 'A reporter found out some of Kumo-Tek’s dirty secrets and is about to tell the whole city. Your boss wants it handled.', c: [
+      { id: 'corpleak', a: [10, 90], w: 4, need: 'job', if: function () { return L.job.id === 'enforcer' || L.job.id === 'kexec'; }, e: '📰', t: 'A reporter found out some of Kumo-Tek’s dirty secrets and is about to tell the whole city. Your boss wants it handled.', c: [
         ['💳 Offer them corp money to keep quiet', function () { if (chance(0.6)) return [{ perf: 8, good: -3 }, '💳 The reporter took the money and dropped the story. Your boss was pleased. You feel a little gross.']; return [{ perf: -6, good: -1, fame: 2 }, '📰 The reporter said no, and wrote about the bribe too. Oops.']; }],
         ['🤷 Let them publish it', [[1, { perf: -10, good: 3 }, '🤷 You let the story run. The whole city learned the truth, and your boss was furious.']]],
         ['📢 Help them expose Kumo-Tek', function () { endJob(); return [{ good: 8, fame: 8, happy: 4 }, '📢 You gave the reporter even MORE proof. The story was huge! Kumo-Tek fired you, but the city thinks you’re a hero.']; }]] },
@@ -10207,6 +10208,7 @@
       if (!J.pt) L.everJob = true;
     }
     function endJob() { if (L.job) L.lastJob = jobTitle(); L.job = null; }
+    function grownUp() { return L.age >= 18 || (!!L.edu && L.edu !== 'none'); }   // 🎓 finished school (even early) = you can work and go to university
     function finishSchool() {
       L.edu = 'high'; L.hsGrade = L.school ? L.school.grade : 50; L.school = null; L.club = null;
       if (L.hsGrade >= 90 && schPct() < 1) { L.scholarship = { id: 'top', pct: 1 }; log('🎓 You finished high school at the top of your class and won the Top of the Class Scholarship: free university!'); }   // 🏅 great grades pay off
@@ -10258,7 +10260,7 @@
       if (L.school) parts.push('Student at ' + NH.schools[L.school.kind]);
       else if (L.uni) parts.push(MAJORS[L.uni.major][1] + ' student');
       if (L.job) parts.push(jobTitle());
-      if (!parts.length) parts.push(L.retired ? 'Retired' : L.age >= 18 ? 'Unemployed' : 'Kid');
+      if (!parts.length) parts.push(L.retired ? 'Retired' : grownUp() ? 'Unemployed' : 'Kid');
       return parts.join(' · ');
     }
     function avatar() { if (chrome() >= 50) return '🤖'; return L.age < 3 ? '👶' : L.age < 13 ? '🧒' : L.age < 65 ? '🧑' : '🧓'; }
@@ -10669,7 +10671,7 @@
           opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
         }
         if (L.retired) note(c, '🏖️ You’re retired! Your pension is ' + cr(L.pension) + ' a year.');
-        if (!L.school && !L.uni && L.age >= 18) {
+        if (!L.school && !L.uni && grownUp()) {
           sec(c, '🏛️ Universities');
           var dg = degrees();
           note(c, dg.length ? '🎓 Your degrees: ' + dg.map(function (d) { return MAJORS[d.major][0] + ' ' + MAJORS[d.major][1]; }).join(', ') + '. You can always go back for another!' : 'Pick a university, then a major. Each degree takes 4 years.');
@@ -10680,7 +10682,7 @@
           });
         }
         if (L.netrunner) note(c, '🕸️ You’re a certified netrunner! Quickhacks cost you 1 less RAM.');
-        else if (L.age >= 16) {
+        else if (L.age >= 16 || grownUp()) {
           sec(c, '🕸️ Netrunner School');
           if (L.netSchool) {
             note(c, 'Year ' + L.netSchool.year + ' of 2. Learning to hack anything with a chip in it!');
@@ -10694,8 +10696,8 @@
             }, !nOk);
           }
         }
-        if (L.age >= 14 && !L.retired) {
-          var student = L.age < 18 || L.school || L.uni;
+        if ((L.age >= 14 || grownUp()) && !L.retired) {
+          var student = !grownUp() || L.school || L.uni;
           sec(c, student ? '🧑‍🍳 Part-time jobs' : '📋 Job board');
           JOBS.forEach(function (j) {
             if (!!j.pt !== !!student || (j.prem && !premium)) return;
@@ -10838,8 +10840,8 @@
       return out;
     }
     function missing(j) {
-      if (j.pt && L.age < (j.min || 14)) return 'age ' + j.min + '+';
-      if (!j.pt && L.age < 18) return 'age 18+';
+      if (j.pt && L.age < (j.min || 14) && !grownUp()) return 'age ' + (j.min || 14) + '+';
+      if (!j.pt && !grownUp()) return 'age 18+ (or finish school early)';
       var out = needText(j.need || {});
       if (out.length && j.alt && !needText(j.alt).length) return '';
       return out.join(', ');
@@ -10851,6 +10853,7 @@
       setJob(j.id);
       var fx = { happy: 8 }, t = j.id === 'mayor' ? '🏛️ You won the election! You’re the new Mayor of Neon Harbor!' : '🎉 You got a job as a ' + jobTitle() + '!';
       if (L.dream === j.id) { fx.happy = 15; t += ' Your childhood dream came true!'; L.dream = null; }
+      if (!j.pt && L.age < 16) { t += ' You’re only ' + L.age + ', so you’re the youngest ' + j.t + ' Neon Harbor has ever seen!'; award('whizkid'); }   // 🧒
       doThing(j.e, [fx, t]);
     }
 
