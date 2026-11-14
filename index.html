@@ -9587,7 +9587,7 @@
     function limitOf() { return L.smasherBody ? 100 : baseLimit(); }   // your cyberware tolerance
     function rollTolerance() {   // every life gets its own cyberware tolerance, and high tolerance is rare
       var r = Math.random();
-      return r < 0.12 ? R(25, 34) : r < 0.72 ? R(35, 50) : r < 0.92 ? R(51, 64) : r < 0.99 ? R(65, 79) : R(80, 92);
+      return r < 0.10 ? R(25, 34) : r < 0.62 ? R(35, 50) : r < 0.89 ? R(51, 64) : r < 0.98 ? R(65, 79) : R(80, 92);   // about 38% of lives start over 50
     }
     function tolName(t) { return t >= 100 ? 'MAX' : t >= 80 ? 'legendary' : t >= 65 ? 'super high' : t >= 51 ? 'good' : t >= 35 ? 'average' : 'low'; }
     function tolLine() {
