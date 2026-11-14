@@ -9185,6 +9185,7 @@
       { id: 'closecall', e: '😅', t: 'Close Call', d: 'Win a battle on the very last turn before your military pills wear off.' },
       { id: 'blackmarket', e: '🕶️', t: 'Off the Books', d: 'Buy illegal chrome on the black market (and get away with it).' },
       { id: 'heist', e: '🔓', t: 'Vault Breaker', d: 'Steal Capri or a Titan Exoskeleton in a Kumo-Tek raid.' },
+      { id: 'patrolbuster', e: '🚓', t: 'Patrol Buster', d: 'Beat a whole Chrome Patrol squad while you were cyberpsycho.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9452,6 +9453,7 @@
         ['📊 Business', function () { return enroll('biz'); }]] },
       { id: 'overload', forced: 1, e: '⚠️', t: 'CHROME OVERLOAD! You have way more chrome than your body can handle. Your implants took over, and you went haywire in the middle of the Glow Market!', c: [
         ['🏃 Try to escape the Chrome Patrol', function () { return { battle: 'patrol', mode: 'escape', then: overloadAfter }; }],
+        ['⚔️ Fight the Chrome Patrol', function () { return patrolFight(); }],
         ['Hope the Chrome Patrol saves you…', function () { return overloadRescue(); }]] },
       { id: 'mugging', a: [16, 75], w: 2, e: '🦹', t: 'A cyber-thug with chrome fists tries to steal {loot}!', c: [
         ['Fight back', function () { return fight('brute', function (res) {
@@ -10490,6 +10492,28 @@
         { n: 'a Kumo-Tek heavy trooper', e: '🪖', t: 'Heavy Trooper', hp: 150, atk: [13, 17], hits: [1, 3], dodge: 0.1, speed: 1, weapon: '🔨', heavy: 0.25, combo: 0.15 },
         { n: 'the Armory Mech', e: '🤖', t: 'Armory Mech', hp: 240, atk: [15, 20], hits: [2, 4], dodge: 0.1, speed: 1.1, weapon: '🦾', robot: 1, heavy: 0.35, combo: 0.25, enrage: 1, boss: 1 }] }
     };
+    var PATROL_SQUAD = [   // 🚓 the Chrome Patrol squad that comes for cyberpsychos
+      { n: 'a Chrome Patrol officer', e: '🚓', t: 'Patrol Officer', hp: 120, atk: [12, 16], hits: [2, 3], dodge: 0.2, speed: 1.2, weapon: '🔫', feint: 0.2, combo: 0.25 },
+      { n: 'a Chrome Patrol netrunner', e: '👾', t: 'Patrol Netrunner', hp: 110, atk: [11, 14], hits: [2, 3], dodge: 0.35, speed: 1.3, weapon: '🔌', hacker: 0.45, feint: 0.25 },
+      { n: 'the Chrome Patrol captain', e: '🦾', t: 'Patrol Captain', hp: 230, atk: [15, 20], hits: [2, 4], dodge: 0.2, speed: 1.25, weapon: '🔨', heavy: 0.3, combo: 0.3, enrage: 1, boss: 1 }];
+    function patrolFight() {   // ⚔️ cyberpsycho vs. the Chrome Patrol
+      var cop = L.job && L.job.id === 'patrol';
+      var list = PATROL_SQUAD.map(function (F, i) { return Object.assign({}, F, { id: 'squad', always: 1, power: 100 + R(-4, 4), waveN: i + 1, waveOf: PATROL_SQUAD.length }); }), boss = list[list.length - 1];
+      var en = Object.assign({}, list[0], { waves: list.slice(1), intro: (cop ? '🚨 Your own Chrome Patrol squad showed up to stop you!' : '🚨 The Chrome Patrol surrounded you in the Glow Market!') + ' You’re too far gone to talk. Fight them: 2 officers, then ' + boss.n + '.' });
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) {
+          award('overload'); award('patrolbuster'); if (!res.auto) award('brawler');
+          if (cop) endJob();
+          return [{ happy: -10, fame: 10, health: h }, '⚔️ You beat ' + listAnd(list.slice(0, -1).map(function (x) { return x.n; })) + ', AND ' + boss.n + '! You vanished into the back alleys before their backup showed up. It took a few days for your chrome to calm down, and now everyone in Neon Harbor knows your name.' + (cop ? ' (You’re SO fired from the Chrome Patrol.)' : '') + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
+        }
+        if (res.fled) { award('overload'); award('untouchable'); return [{ happy: -12, health: h }, '🏃 You broke away from the fight and lost the Chrome Patrol in the back alleys. It took days to feel like yourself again.']; }
+        var r = overloadRescue();   // 😵 they got you
+        if (h && r[0].health > -100) r[0].health = (r[0].health || 0) + h;
+        r[1] = '😵 The Chrome Patrol knocked you out. ' + r[1];
+        return r;
+      });
+    }
     function kumoJob() { return !!L.job && (L.job.id === 'kexec' || L.job.id === 'enforcer'); }
     function sneakChance(k) {   // 🤫 smarts, optical camo, a Sandy, a good cyberdeck (for the vault), and knowing the building all help
       var D = deckOf();
