@@ -9403,6 +9403,7 @@
       { id: 'blackmarket', e: '🕶️', t: 'Off the Books', d: 'Buy illegal chrome on the black market (and get away with it).' },
       { id: 'heist', e: '🔓', t: 'Vault Breaker', d: 'Steal Capri or a Titan Exoskeleton in a Kumo-Tek raid.' },
       { id: 'patrolbuster', e: '🚓', t: 'Patrol Buster', d: 'Beat a whole Chrome Patrol squad while you were cyberpsycho.' },
+      { id: 'zen', e: '🧘', t: 'Inner Peace', d: 'Finish all 3 years of humanity training.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -10651,7 +10652,7 @@
           : '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance (' + tolName(lim) + (hasDegree('bio') ? ', +5 from your Bio-Hacking degree' : '') + '). Every implant takes up some. ' + (L.meds > 0 ? '💊 You have ' + L.meds + (L.meds === 1 ? ' dose' : ' doses') + ' of neuro-blockers. ' : '') + (ch > lim ? '⚠️ You’re OVER your tolerance! A chrome overload could happen any year.' : ch >= lim - 5 && ch > 0 ? 'You’re almost full. Careful!' : 'Go over your tolerance and you could have a chrome overload!'));
         c.appendChild(barEl(sb ? ch : ch / lim * 100, ch > lim ? 'lo' : ch > 0 && ch >= lim - 5 && !sb ? 'mid' : 'tol'));
         opt(c, '🔧', 'Remove or sell chrome', L.implants.length ? 'Take out implants you don’t want · the clinic buys back normal chrome for 25%' : 'You don’t have any chrome to remove yet', removeSheet, !L.implants.length);   // right at the top, so it’s easy to find
-        if (!sb) note(c, '🧠 In battles you have ' + humanityMax() + ' humanity. Heavy chrome uses it up, and the better your tolerance, the less it costs. For you, the Sandy costs ' + heavyCost('sandy') + '. Hit zero and the Chrome Patrol shows up!' + (ch > 0 ? ' 😢 The sadder you are, the more likely a chrome overload is.' : ''));
+        if (!sb) note(c, '🧠 In battles you have ' + humanityMax() + ' humanity. Heavy chrome uses it up, and the better your tolerance, the less it costs. For you, the Sandy costs ' + heavyCost('sandy') + '. Hit zero and the Chrome Patrol shows up! Get more with 🧘 Humanity training, or 🧘 Calm down in battles.' + (ch > 0 ? ' 😢 The sadder you are, the more likely a chrome overload is.' : ''));
         if (canSmasher()) smasherOpt(c, clinicSheet);
         if (hasDegree('robo')) opt(c, '🛠️', 'Cyberware Workshop', 'Invent and build your own implant', workshopSheet);
         else { var wl = mk('div', 'lf-opt lf-info'); wl.appendChild(mk('i', null, '🛠️')); var wt = mk('span'); wt.appendChild(mk('b', null, 'Cyberware Workshop')); wt.appendChild(mk('small', null, 'Make your own cyberware! Needs a 🤖 Cyber-Engineering degree (Harbor Tech or Kumo-Tek).')); wl.appendChild(wt); c.appendChild(wl); }
@@ -10661,6 +10662,7 @@
           var cd = doneYet('cool');
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
         }
+        if (!sb) { var hb = L.humBonus || 0, hd = doneYet('humtrain'); opt(c, '🧘', 'Humanity training', hb >= HUM_MAX ? 'All done: +' + HUM_MAX + ' humanity for the rest of this life ✓' : hd ? 'Trained this year ✓ (' + hb + '/' + HUM_MAX + ')' : cr(HUM_COST) + (L.money < HUM_COST ? ' · not enough credits' : '') + ' · +1 humanity in battles for the rest of this life (' + hb + '/' + HUM_MAX + ' · once a year)', function () { L.done.humtrain = L.age; L.humBonus = hb + 1; if (L.humBonus >= HUM_MAX) award('zen'); doThing('🧘', [{ money: -HUM_COST, happy: 4 }, '🧘 You spent a week at a mind gym, learning to stay calm and remember who you are, even with all that chrome. +1 humanity in battles (you have ' + humanityMax() + ' now)!' + (L.humBonus >= HUM_MAX ? ' That’s all the training there is. 🏆' : '')]); }, hb >= HUM_MAX || hd || L.money < HUM_COST); }
         if (!sb) { var pl = L.pills || 0, pf = pl > PILL_MAX - 3; opt(c, '💊', 'Military-grade pills (pack of 3)', pf ? 'You have ' + pl + '. That’s all you can carry!' : cr(PILL_PACK) + (L.money < PILL_PACK ? ' · not enough credits' : '') + ' · you have ' + pl + ' · In battles: +4 humanity, but then you have to win within ' + pillTurns() + ' turns or take another, or you go cyberpsycho!', function () { L.pills = pl + 3; doThing('💊', [{ money: -PILL_PACK }, '💊 You bought a pack of 3 military-grade pills (you have ' + L.pills + ' now). In a battle, one gives you back 4 humanity… but then the clock starts: win within ' + pillTurns() + ' turns or take another one, or you’ll go cyberpsycho when they wear off!']); }, pf || L.money < PILL_PACK); }
         sec(c, '🖥️ Operating systems');
         note(c, '⏱️ Sandys (time-slow), 😤 Berserk, and 💻 Cyberdecks for hacking people. You can run one of each, and a better one replaces the one you have.');
@@ -11095,7 +11097,7 @@
       aim: ['🎯', 'Aimed shot', 'Can’t be dodged'], slash: ['🗡️', 'Blade slash', 'Hard to dodge'], rocket: ['🚀', 'Pop-rocket', 'Huge damage (once)'],
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
-      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], psyfight: ['⚔️', 'Fight them', ''], psyrun: ['🏃', 'Run from them', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
+      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], psyfight: ['⚔️', 'Fight them', ''], calm: ['🧘', 'Calm down', ''], psyrun: ['🏃', 'Run from them', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -11116,7 +11118,8 @@
     function tolBonus(t) { return t >= 90 ? 3 : t >= 75 ? 2 : t >= 60 ? 1 : t < 28 ? -2 : t < 35 ? -1 : 0; }
     function humanityMax() {   // about 9: more with high tolerance; less with low tolerance, too much chrome, or sadness
       var lim = limitOf(), cy = chrome();
-      return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0) - xtra('hum')));   // ☠️ illegal chrome eats humanity
+      var tr = L.humBonus || 0;   // 🧘 humanity training
+      return Math.max(2, Math.min(12 + tr, 9 + tr + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0) - xtra('hum')));   // ☠️ illegal chrome eats humanity
     }
     var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3, float: 3, pull: 2 };   // humanity cost for an average body (tolerance 45% or less)
     function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body (and going cyberpsycho): free!
@@ -11326,7 +11329,7 @@
         return [{ money: got, perf: -8, happy: -6, health: h }, '😵 ' + cap(list[beat].n) + ' knocked you down and got away. Your boss is NOT happy.' + part];
       });
     }
-    var B = null, quickFights = false, AC = null, PILL_PACK = 9000, PILL_MAX = 9;
+    var B = null, quickFights = false, AC = null, PILL_PACK = 9000, PILL_MAX = 9, HUM_COST = 2500, HUM_MAX = 3;
     function pillTurns() { return L.mode === 'hard' ? 4 : 5; }   // 💊 how long military pills last in a battle
     function sfx(kind) {
       try {
@@ -11417,6 +11420,7 @@
         if (rageOf() && !B.rage) list.push('berserk');
         if (hasSandy() && !B.sandy) list.push('sandy');
         if (L.pills > 0 && !L.smasherBody && !B.psycho) list.push('pill');
+        if (!L.smasherBody && !B.psycho && B.hum < B.humMax) list.push('calm');
         list.push('run');
       }
       box.classList.toggle('many', list.length > 10);
@@ -11429,6 +11433,7 @@
         if (id === 'run' && B.pillT) sub = '⚠️ Your pills are on: run now and you go cyberpsycho!';
         if (id === 'psyfight') { off = false; sub = '3 battles: 2 officers, then their captain. 🤖 No humanity limits, and you hit 25% harder!'; }
         if (id === 'psyrun') { off = false; sub = 'Dodge them 3 times to get away'; }
+        if (id === 'calm') sub = '+2 humanity (uses your turn)';
         if (heavy) sub = (cost ? '−' + cost + ' humanity' : B.psycho ? 'Free (cyberpsycho!)' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
         var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
@@ -11488,6 +11493,14 @@
         popF('SANDY!', 'great');
         msgF('⏱️ SANDY! Time slows way down. Dodging is way easier and your punches hit ' + ['twice', 'twice', '2.5 times', 'three times', '3.5 times'][st] + ' as hard for 33 turns.' + (st >= 4 ? ' Apylee bonus: your punches, kicks, slashes and shots strike 3 times a turn, they can CRIT, and perfect parries give back humanity!' : '') + ' Now pick your attack!');
         renderF(); buildMoves();
+        return;
+      }
+      if (id === 'calm') {   // 🧘 breathe: skip your attack to get back some humanity
+        var back = Math.min(2, B.humMax - B.hum);
+        B.hum += back; B.calms = (B.calms || 0) + 1; sfx('glint');
+        popF('🧘 +' + back + ' 🧠', 'good');
+        msgF('🧘 You took a deep breath and remembered who you are: +' + back + ' humanity.');
+        renderF(); enemySoon();
         return;
       }
       if (id === 'berserk') {   // also a free action
