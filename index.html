@@ -837,6 +837,128 @@
     .spinner { animation-duration: 2.4s; }
     .card, .btn, .q-choice, .pad button, .t-wpm, .play .arrow { transition: none; }
   }
+  /* ---- Overclock ---- */
+  .rg { --rg-a: var(--c1); padding-bottom: 150px; }
+  .rg [hidden] { display: none !important; }
+  .rg .panel { padding: 18px 16px; margin-top: 14px; }
+  .rg-intro { margin: 0 0 14px; }
+  .rg-how { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; line-height: 1.4; }
+  .rg-note { color: var(--muted); font-size: 0.82rem; line-height: 1.4; margin: 12px 0 0; }
+  .rg-hud { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .rg-cash { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.1rem, 10vw, 2.7rem); line-height: 1; color: var(--accent-2); font-variant-numeric: tabular-nums; }
+  .rg-rate { font-family: var(--font-mono); font-size: 0.86rem; color: var(--muted); margin-top: 6px; }
+  .rg-status { flex: none; font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; padding: 6px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); white-space: nowrap; }
+  .rg-status.ok { color: var(--accent-2); }
+  .rg-status.hot { color: var(--op); border-color: var(--op); }
+  .rg-status.bad { color: var(--bad); border-color: var(--bad); }
+  .rg-ticker { min-height: 2.7em; margin: 10px 2px 12px; color: var(--muted); font-size: 0.9rem; line-height: 1.35; }
+  .rg-ticker.good { color: var(--fg); }
+  .rg-ticker.bad { color: var(--bad); font-weight: 700; }
+
+  /* the computer itself: a dark case with a glowing window, in both themes */
+  .rg-case { position: relative; display: grid; gap: 10px; padding: 14px; border-radius: 22px; color: #e8eef7; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #182234, #0b0f16 70%); border: 2px solid #2a3446;
+    box-shadow: 0 18px 44px rgba(0,0,0,0.35), 0 0 30px var(--rg-glow, rgba(77,182,255,0.22)); transition: box-shadow .4s ease; }
+  .rg-caseTop { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 600; font-size: 0.86rem; color: #9fb0c6; }
+  .rg-power { font-family: var(--font-display); font-weight: 700; font-size: 0.86rem; color: #0b0f16; background: #5ad1a0; border: none; border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+  .rg-power[aria-pressed="false"] { background: #3a4558; color: #cfd8e6; }
+  .rg-power:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .rg-part { position: relative; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09); overflow: hidden; }
+  .rg-partHead { display: flex; align-items: center; gap: 10px; }
+  .rg-partHead > div { flex: 1; min-width: 0; }
+  .rg-partHead b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 0.96rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rg-partHead small { display: block; color: #9fb0c6; font-size: 0.76rem; line-height: 1.3; }
+  .rg-pe { flex: none; font-size: 1.6rem; line-height: 1; }
+  .rg-deg { flex: none; font-family: var(--font-mono); font-weight: 600; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+  .rg-tbar { height: 8px; margin-top: 8px; border-radius: 999px; background: rgba(255,255,255,0.09); overflow: hidden; }
+  .rg-tbar > span { display: block; height: 100%; width: 0%; border-radius: 999px; background: #5ad1a0; transition: width .2s linear; }
+  .rg-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rg-row2 .rg-partHead b { font-size: 0.88rem; }
+  .rg-mini { display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: 6px; margin-top: 7px; font-size: 0.72rem; color: #9fb0c6; }
+  .rg-mini .rg-tbar { margin-top: 0; height: 6px; }
+  .rg-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 9px; }
+  .rg-slot { display: grid; place-items: center; min-height: 40px; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.2); font-size: 1.25rem; color: #6f7f96; }
+  .rg-slot.on { border-style: solid; background: rgba(255,255,255,0.06); }
+  .rg-slot.locked { opacity: 0.3; font-size: 0.95rem; }
+  .rg-slot.burning { border-color: #ff5d3a; background: rgba(255,93,58,0.3); }
+  .rg-spin { display: inline-block; animation: rg-spin 1s linear infinite; }
+  @keyframes rg-spin { to { transform: rotate(360deg); } }
+  .rg-flames, .rg-puffs { display: none; position: absolute; pointer-events: none; }
+  .rg-part.smoking .rg-puffs { display: block; right: 22px; bottom: 6px; width: 1px; height: 1px; }
+  .rg-puffs i { position: absolute; bottom: 0; left: 0; font-style: normal; font-size: 1.15rem; opacity: 0; animation: rg-puff 1.6s ease-out infinite; }
+  .rg-puffs i:nth-child(2) { left: -16px; animation-delay: .55s; }
+  .rg-puffs i:nth-child(3) { left: 10px; animation-delay: 1.1s; }
+  @keyframes rg-puff { 0% { transform: translateY(0) scale(.6); opacity: 0; } 25% { opacity: .9; } 100% { transform: translateY(-44px) scale(1.5); opacity: 0; } }
+  .rg-part.smoking { border-color: rgba(255,177,95,0.7); }
+  .rg-part.burning { border-color: #ff5d3a; box-shadow: inset 0 0 26px rgba(255,93,58,0.55); animation: rg-heat .5s ease-in-out infinite alternate; }
+  .rg-part.burning .rg-flames { display: block; left: 0; right: 0; bottom: -8px; text-align: center; letter-spacing: -6px; font-size: calc(1.3rem + var(--rg-fire, 0.3) * 1.9rem); line-height: 1; transform-origin: 50% 100%; animation: rg-flick .3s ease-in-out infinite alternate; }
+  @keyframes rg-flick { from { transform: scaleY(.88) translateX(-2px); } to { transform: scaleY(1.12) translateX(2px); } }
+  @keyframes rg-heat { from { background: rgba(255,93,58,0.12); } to { background: rgba(255,140,58,0.26); } }
+  .rg-cat { position: absolute; left: calc(50% - 30px); top: 8px; z-index: 2; font-size: 1.7rem; line-height: 1; background: rgba(11,15,22,0.65); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 4px 6px; cursor: pointer; animation: rg-bob 2s ease-in-out infinite; }
+  .rg-cat:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @keyframes rg-bob { 50% { transform: translateY(-3px); } }
+
+  /* controls */
+  .rg-sl { display: block; margin-top: 14px; }
+  .rg-sl:first-child { margin-top: 0; }
+  .rg-sl > span { display: flex; justify-content: space-between; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; }
+  .rg-sl b { font-family: var(--font-mono); font-weight: 600; font-size: 0.86rem; color: var(--rg-a); text-align: right; }
+  .rg-sl input { display: block; width: 100%; height: 30px; margin: 6px 0 0; accent-color: var(--rg-a); }
+  .rg-ocBar { height: 6px; margin: 0 2px; border-radius: 999px; opacity: .8; background: linear-gradient(90deg, #4db6ff 0 var(--rg-base, 50%), var(--op) var(--rg-base, 50%), var(--bad)); }
+  .rg-ocKey { display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.72rem; color: var(--muted); }
+  .rg-care { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .rg-tool { display: grid; gap: 3px; padding: 11px 8px; font-family: var(--font-display); font-weight: 700; font-size: 0.92rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; cursor: pointer; }
+  .rg-tool small { font-family: var(--font-body); font-weight: 600; font-size: 0.74rem; color: var(--muted); }
+  .rg-tool:hover:not(:disabled) { border-color: var(--rg-a); }
+  .rg-tool:disabled { opacity: .5; cursor: not-allowed; }
+  .rg-tool:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* shop */
+  .rg-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+  .rg-tab { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+  .rg-tab[aria-selected="true"] { background: color-mix(in srgb, var(--rg-a) 18%, var(--panel-2)); border-color: var(--rg-a); }
+  .rg-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .rg-tabNote { margin: 8px 0 0; }
+  .rg-list { display: grid; gap: 8px; margin-top: 10px; }
+  .rg-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; }
+  .rg-item.mine { border-color: color-mix(in srgb, var(--accent-2) 65%, var(--line)); }
+  .rg-item > i { font-style: normal; font-size: 1.5rem; line-height: 1; }
+  .rg-item b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; }
+  .rg-item small { display: block; color: var(--muted); font-size: 0.78rem; line-height: 1.3; }
+  .rg-slotsLeft { margin: 2px 2px 0; }
+  .rg-buy { min-width: 76px; padding: 8px 12px; font-family: var(--font-display); font-weight: 700; font-size: 0.86rem; white-space: nowrap; color: #10151c; background: var(--accent); border: none; border-radius: 999px; cursor: pointer; }
+  .rg-buy:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+  .rg-item.mine .rg-buy:disabled { background: transparent; color: var(--accent-2); }
+  .rg-buy.sell { color: var(--fg); background: var(--panel); border: 1px solid var(--line); }
+  .rg-buy:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
+
+  /* log, achievements */
+  .rg-log { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 7px; font-size: 0.86rem; line-height: 1.35; color: var(--muted); }
+  .rg-log li:first-child { color: var(--fg); }
+  .rg-achHead { margin-top: 18px; }
+  .rg-achHead span { color: var(--fg); }
+  .rg-achs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; }
+  .rg-ach { padding: 8px 10px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--line); font-size: 0.78rem; line-height: 1.3; color: var(--muted); }
+  .rg-ach b { display: block; margin-bottom: 2px; font-family: var(--font-display); font-weight: 600; font-size: 0.86rem; color: var(--fg); }
+  .rg-ach.off { opacity: .5; }
+
+  /* the alert bar that sticks to the bottom of the screen */
+  .rg-alert { position: fixed; z-index: 30; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(608px, calc(100% - 24px)); display: grid; gap: 8px;
+    padding: 12px 14px; border-radius: 18px; background: var(--panel); border: 2px solid var(--op); box-shadow: 0 14px 40px rgba(0,0,0,0.45); }
+  .rg-alert.calm { border-color: var(--line); }
+  .rg-alert.fire { border-color: #ff5d3a; background: color-mix(in srgb, #ff5d3a 18%, var(--panel)); }
+  .rg-alertTxt { font-family: var(--font-display); font-weight: 700; font-size: 0.96rem; line-height: 1.3; }
+  .rg-fireBar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .rg-fireBar > span { display: block; height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, #ffb15f, #ff3b2f); }
+  .rg-alertBtn { padding: 14px; font-family: var(--font-display); font-weight: 700; font-size: 1.08rem; color: #fff; background: #e5484d; border: none; border-radius: 14px; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  .rg-alertBtn.calm { color: #10151c; background: var(--accent); }
+  .rg-alertBtn:active:not(:disabled) { transform: scale(0.97); }
+  .rg-alertBtn:disabled { opacity: .5; cursor: not-allowed; }
+  .rg-alertBtn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    .rg-spin, .rg-part.burning, .rg-part.burning .rg-flames, .rg-cat { animation: none; }
+    .rg-puffs i { animation: none; opacity: .8; }
+  }
 </style>
 </head>
 <body>
@@ -977,6 +1099,15 @@
         <p>Live a whole life, one year at a time, in a world you pick. First up: a neon cyberpunk city. Inspired by BitLife.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
+
+      <button class="card" style="--hue: var(--c1);" data-goto="rig">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2.5v3M15 2.5v3M9 18.5v3M15 18.5v3M2.5 9h3M2.5 15h3M18.5 9h3M18.5 15h3"/></svg></span>
+        <h2>Overclock</h2>
+        <p>Run a computer that earns money every second. Overclock the CPU, add graphics cards, and keep it all cool. Manage it wrong and it catches fire!</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+
     </div>
   </section>
 
@@ -1689,6 +1820,92 @@
     </div>
     <div class="lf-ov" id="lf-ov" hidden>
       <div class="lf-card" id="lf-card" role="dialog" aria-modal="true" aria-labelledby="lf-cardTitle"></div>
+    </div>
+  </section>
+
+  <!-- ================= OVERCLOCK ================= -->
+  <section id="rig" class="screen rg">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Overclock</span></div>
+
+    <div class="panel rg-intro" id="rg-intro" hidden>
+      <div class="bs-kicker">How to play</div>
+      <ul class="rg-how">
+        <li>💵 Your computer does jobs for customers and earns money every second.</li>
+        <li>🚀 Crank up the CPU clock to earn more money, but it gets hotter.</li>
+        <li>🌀 Fans and better coolers keep it cool. 🧹 Dust and dried-out thermal paste make cooling worse.</li>
+        <li>⚡ Don’t use more power than your power supply can handle.</li>
+        <li>🔥 Over 100°C things start smoking, and they can catch fire. If that happens, tap 🧯 SPRAY fast!</li>
+      </ul>
+      <p class="rg-note">Real life: real computers have safety limits, so they almost never catch fire. If one ever smells like smoke, tell an adult right away.</p>
+      <button class="btn" id="rg-go" type="button">Let’s build! →</button>
+    </div>
+
+    <div class="rg-hud">
+      <div><div class="rg-cash" id="rg-cash">$0</div><div class="rg-rate" id="rg-rate"></div></div>
+      <div class="rg-status" id="rg-status"></div>
+    </div>
+    <p class="rg-ticker" id="rg-ticker" role="status" aria-live="polite"></p>
+
+    <div class="rg-case" id="rg-case">
+      <div class="rg-caseTop"><span id="rg-caseName"></span><button class="rg-power" id="rg-power" type="button" aria-pressed="true" aria-label="Power switch">⏻ <span id="rg-powerTxt">ON</span></button></div>
+      <div class="rg-part" id="rg-cpuBox">
+        <div class="rg-partHead"><span class="rg-pe" id="rg-cpuE" aria-hidden="true"></span><div><b id="rg-cpuName"></b><small id="rg-cpuSub"></small></div><span class="rg-deg" id="rg-cpuT"></span></div>
+        <div class="rg-tbar"><span id="rg-cpuBar"></span></div>
+        <span class="rg-flames" aria-hidden="true">🔥🔥🔥</span><span class="rg-puffs" aria-hidden="true"><i>💨</i><i>💨</i><i>💨</i></span>
+      </div>
+      <div class="rg-part" id="rg-gpuBox">
+        <div class="rg-partHead"><span class="rg-pe" aria-hidden="true">🎮</span><div><b>Graphics cards</b><small id="rg-gpuSub"></small></div><span class="rg-deg" id="rg-gpuT"></span></div>
+        <div class="rg-tbar"><span id="rg-gpuBar"></span></div>
+        <div class="rg-slots" id="rg-slots"></div>
+        <span class="rg-flames" aria-hidden="true">🔥🔥🔥</span><span class="rg-puffs" aria-hidden="true"><i>💨</i><i>💨</i><i>💨</i></span>
+      </div>
+      <div class="rg-row2">
+        <div class="rg-part" id="rg-psuBox">
+          <div class="rg-partHead"><span class="rg-pe" id="rg-psuE" aria-hidden="true"></span><div><b id="rg-psuName"></b><small id="rg-psuSub"></small></div></div>
+          <div class="rg-tbar"><span id="rg-psuBar"></span></div>
+          <span class="rg-flames" aria-hidden="true">🔥🔥🔥</span>
+        </div>
+        <div class="rg-part" id="rg-fanBox">
+          <div class="rg-partHead"><span class="rg-pe" id="rg-fanIcon" aria-hidden="true">🌀</span><div><b id="rg-coolName"></b><small id="rg-coolSub"></small></div></div>
+          <div class="rg-mini"><span>Dust</span><div class="rg-tbar"><span id="rg-dustBar"></span></div></div>
+          <div class="rg-mini"><span>Paste</span><div class="rg-tbar"><span id="rg-pasteBar"></span></div></div>
+        </div>
+      </div>
+      <button class="rg-cat" id="rg-cat" type="button" aria-label="Move the cat off the air vent" hidden>🐈💤</button>
+    </div>
+
+    <div class="panel rg-ctrl">
+      <label class="rg-sl"><span>🚀 CPU speed <b id="rg-clockV"></b></span><input type="range" id="rg-clock" min="1" max="3" step="0.1"></label>
+      <div class="rg-ocBar" id="rg-ocBar" aria-hidden="true"></div>
+      <div class="rg-ocKey" aria-hidden="true"><span>🐢 eco</span><span>normal</span><span>🔥 overclocked</span></div>
+      <label class="rg-sl"><span>🌀 Fan speed <b id="rg-fanV"></b></span><input type="range" id="rg-fan" min="0" max="100" step="5"></label>
+      <label class="rg-sl" id="rg-gpuPowRow"><span>🎮 GPU power <b id="rg-gpuPowV"></b></span><input type="range" id="rg-gpuPow" min="50" max="130" step="5"></label>
+      <div class="rg-care">
+        <button class="rg-tool" id="rg-clean" type="button">🧹 Clean dust<small id="rg-cleanSub"></small></button>
+        <button class="rg-tool" id="rg-paste" type="button">🧴 New thermal paste<small id="rg-pasteSub"></small></button>
+      </div>
+    </div>
+
+    <div class="panel rg-shop">
+      <div class="bs-kicker">🛒 Parts shop</div>
+      <div class="rg-tabs" id="rg-tabs" role="tablist" aria-label="Shop sections"></div>
+      <p class="ch-sub rg-tabNote" id="rg-tabNote"></p>
+      <div class="rg-list" id="rg-list"></div>
+    </div>
+
+    <div class="panel rg-more">
+      <div class="bs-kicker">📜 What happened</div>
+      <ul class="rg-log" id="rg-log"></ul>
+      <div class="bs-kicker rg-achHead">🏆 Achievements <span id="rg-achN"></span></div>
+      <div class="rg-achs" id="rg-achs"></div>
+      <div class="bs-stats" id="rg-stats"></div>
+      <button class="btn ghost" id="rg-reset" type="button">🔄 Start over</button>
+    </div>
+
+    <div class="rg-alert" id="rg-alert" hidden>
+      <div class="rg-alertTxt" id="rg-alertTxt"></div>
+      <div class="rg-fireBar" id="rg-fireMeter" hidden><span id="rg-fireBar"></span></div>
+      <button class="rg-alertBtn" id="rg-alertBtn" type="button" hidden></button>
     </div>
   </section>
 
@@ -4814,7 +5031,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -11948,6 +12165,474 @@
     window.registerHook('life', function () {
       if (L && L.alive) { view('life'); render(); nextEvent(); } else worldsView();
     }, function () { abortBattle(); closeCard(); });
+  })();
+  // ============ Overclock: run a computer that earns money (and try not to set it on fire) ============
+  (function () {
+    // ---- model (no DOM below this line until the view marker) ----
+    var KEY = 'funvault-rig-v1', AKEY = 'funvault-rig-ach-v1';
+    var RATE = 0.25;                      // $ per second for every core × GHz
+    var CLEAN = 10, PASTE = 40;           // maintenance prices
+    var CPUS = [
+      { id: 'potato', e: '🥔', t: 'Potato Chip 2-Core', cores: 2, base: 2.0, max: 3.0, tdp: 35, cost: 0 },
+      { id: 'q4', e: '⚙️', t: 'Quad Core Q4', cores: 4, base: 3.0, max: 4.4, tdp: 65, cost: 150 },
+      { id: 'h6', e: '🔷', t: 'Hexa Core H6', cores: 6, base: 3.4, max: 5.0, tdp: 95, cost: 1200 },
+      { id: 'x8', e: '💠', t: 'Octa Core X8', cores: 8, base: 3.8, max: 5.6, tdp: 125, cost: 6000 },
+      { id: 'm16', e: '🌌', t: 'Mega Core 16', cores: 16, base: 4.0, max: 6.0, tdp: 180, cost: 30000 },
+      { id: 'q64', e: '⚛️', t: 'Quantum Core 64', cores: 64, base: 4.2, max: 7.0, tdp: 280, cost: 250000 }
+    ];
+    var GPUS = [
+      { id: 'g1', e: '🟩', t: 'Basic GPU', earn: 2, heat: 110, cost: 500 },
+      { id: 'g2', e: '🟦', t: 'Gamer GPU', earn: 8, heat: 220, cost: 3000 },
+      { id: 'g3', e: '🟥', t: 'Beast GPU', earn: 30, heat: 380, cost: 20000 },
+      { id: 'g4', e: '🟪', t: 'Monster GPU', earn: 110, heat: 520, cost: 120000 }
+    ];
+    var COOLERS = [
+      { id: 'stock', e: '🌀', t: 'Stock fan', cap: 1.6, cost: 0 },
+      { id: 'tower', e: '🗼', t: 'Tower cooler', cap: 3, cost: 250 },
+      { id: 'liquid', e: '💧', t: 'Liquid cooler', cap: 5.5, cost: 2000 },
+      { id: 'cryo', e: '🧊', t: 'Cryo cooler', cap: 10, cost: 15000 },
+      { id: 'ln2', e: '🧪', t: 'Liquid nitrogen pot', s: 'Nitrogen pot', cap: 20, cost: 100000 }
+    ];
+    var CASES = [
+      { id: 'shoebox', e: '📦', t: 'Shoebox case', flow: 4, slots: 1, cost: 0 },
+      { id: 'airflow', e: '🌬️', t: 'Airflow case', flow: 9, slots: 2, cost: 600 },
+      { id: 'glass', e: '🪟', t: 'Glass tower', flow: 16, slots: 3, cost: 5000 },
+      { id: 'rack', e: '🗄️', t: 'Server rack', flow: 30, slots: 4, cost: 40000 }
+    ];
+    var PSUS = [
+      { id: 'p300', e: '🔌', t: '300W power supply', cap: 300, cost: 0 },
+      { id: 'p550', e: '🔋', t: '550W power supply', cap: 550, cost: 120 },
+      { id: 'p850', e: '⚡', t: '850W power supply', cap: 850, cost: 900 },
+      { id: 'p1300', e: '🌩️', t: '1300W power supply', cap: 1300, cost: 6000 },
+      { id: 'p2000', e: '🏭', t: '2000W power supply', cap: 2000, cost: 35000 },
+      { id: 'p3500', e: '☀️', t: '3500W power supply', cap: 3500, cost: 200000 }
+    ];
+    var EXTRAS = [
+      { id: 'alarm', e: '🚨', t: 'Smoke alarm', cost: 150, d: 'Catches fires early, so they start out small' },
+      { id: 'surge', e: '🛡️', t: 'Surge protector', cost: 300, d: 'Power surges can’t fry your power supply' },
+      { id: 'exting', e: '🧯', t: 'Pro extinguisher', cost: 400, d: 'Every spray puts out almost twice as much fire' },
+      { id: 'ac', e: '❄️', t: 'Room air conditioner', cost: 1500, d: 'Your room is 6°C cooler, so everything runs cooler' },
+      { id: 'throttle', e: '🤖', t: 'Auto-throttle chip', cost: 2500, d: 'Slows your CPU down by itself when it gets over 92°C' },
+      { id: 'sprinkler', e: '💦', t: 'Auto-sprinkler', cost: 8000, d: 'Puts out fires by itself after 3 seconds (the water damage costs a little money)' }
+    ];
+    var ACH = [
+      { id: 'first', e: '💵', t: 'First Paycheck', d: 'Earn your first $100.' },
+      { id: 'fire', e: '🔥', t: 'This Is Fine', d: 'Let your computer catch fire.' },
+      { id: 'hero', e: '🧯', t: 'Firefighter', d: 'Put out 5 fires yourself.' },
+      { id: 'crisp', e: '🥓', t: 'Extra Crispy', d: 'Let a part burn up completely.' },
+      { id: 'edge', e: '🥵', t: 'Living on the Edge', d: 'Run over 95°C for 30 seconds without catching fire.' },
+      { id: 'oc', e: '🚀', t: 'Overclocker', d: 'Run a CPU at its top speed.' },
+      { id: 'ice', e: '🧊', t: 'Ice Cold', d: 'Run a CPU at its top speed and stay under 50°C.' },
+      { id: 'cat', e: '🐈', t: 'Cat Wrangler', d: 'Move the cat off the air vent.' },
+      { id: 'full', e: '🎮', t: 'Full House', d: 'Fill all 4 GPU slots in a Server rack.' },
+      { id: 'k', e: '💰', t: 'Ten Grand', d: 'Have $10,000 at once.' },
+      { id: 'quantum', e: '⚛️', t: 'Quantum Leap', d: 'Install the Quantum Core 64.' },
+      { id: 'mil', e: '🤑', t: 'Millionaire', d: 'Have $1,000,000 at once.' }
+    ];
+    var EVENTS = [
+      { id: 'heat', w: 3 }, { id: 'cat', w: 3 }, { id: 'surge', w: 2 }, { id: 'order', w: 3 },
+      { id: 'blackout', w: 1 }, { id: 'dust', w: 2 }, { id: 'tip', w: 2 }
+    ];
+    function byId(a) { var o = {}; a.forEach(function (x) { o[x.id] = x; }); return o; }
+    var CPU = byId(CPUS), GPU = byId(GPUS), COOL = byId(COOLERS), CASE = byId(CASES), PSU = byId(PSUS), EXTRA = byId(EXTRAS), ACHD = byId(ACH);
+    var TABLE = { cpu: CPU, gpu: GPU, cooler: COOL, box: CASE, psu: PSU, ex: EXTRA };
+
+    function fresh() {
+      return { v: 1, intro: 0, money: 0, earned: 0, cpu: 'potato', clock: 2, fan: 50, gpuPow: 100, cooler: 'stock', box: 'shoebox', psu: 'p300',
+        gpus: [], ex: {}, dust: 0, paste: 0, on: true, cpuT: 24, gpuT: 24, thr: 1, fire: null, cat: false, ev: null, nextEv: 45,
+        hotT: 0, fires: 0, out: 0, burnt: 0, last: Date.now() };
+    }
+    var S = fresh(), achs = {}, testHold = false, lockUntil = 0;
+    function load() {
+      try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (o && o.v === 1) S = Object.assign(fresh(), o); } catch (e) {}
+      try { achs = JSON.parse(localStorage.getItem(AKEY) || '{}') || {}; } catch (e) { achs = {}; }
+    }
+    function save() { S.last = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+    function award(id) { if (achs[id]) return; achs[id] = Date.now(); try { localStorage.setItem(AKEY, JSON.stringify(achs)); } catch (e) {} var A = ACHD[id]; if (A) say('🏆 Achievement: ' + A.e + ' ' + A.t + '!', 'good'); drawAchs(); }
+
+    function cpu() { return S.cpu ? CPU[S.cpu] : null; }
+    function psu() { return S.psu ? PSU[S.psu] : null; }
+    function clk() { return cpu() ? Math.round(S.clock * S.thr * 100) / 100 : 0; }
+    function cpuHeat(c, ghz) { return c.tdp * Math.pow(ghz / c.base, 2.4); }          // overclocking heats things up FAST
+    function gpuHeat() { return S.gpus.reduce(function (t, id) { return t + GPU[id].heat; }, 0) * Math.pow(S.gpuPow / 100, 1.6); }
+    function room() { return 22 + (S.ev && S.ev.id === 'heat' ? 10 : 0) - (S.ex.ac ? 6 : 0); }
+    function blackout() { return !!(S.ev && S.ev.id === 'blackout'); }
+    function running() { return !!(S.intro && S.on && !S.fire && cpu() && psu() && !blackout()); }
+    function fanF() { return 0.35 + 0.65 * S.fan / 100; }
+    function dustF() { return 1 - S.dust * 0.006; }      // a fully dusty computer cools 60% worse
+    function pasteF() { return 1 - S.paste * 0.0045; }   // dried-out thermal paste: 45% worse
+    function catF() { return S.cat ? 0.5 : 1; }
+    function cpuCap() { return COOL[S.cooler].cap * fanF() * dustF() * pasteF() * catF(); }
+    function gpuCap() { return CASE[S.box].flow * fanF() * dustF() * catF(); }
+    function watts() { var c = cpu(); return Math.round(30 + (c ? cpuHeat(c, clk()) : 0) + gpuHeat() + S.fan * 0.25); }   // what the rig uses while it runs
+    function gpuEarn() { return S.gpus.reduce(function (t, id) { return t + GPU[id].earn; }, 0) * S.gpuPow / 100; }
+    function income() {
+      if (!running()) return 0;
+      var c = cpu(), ci = c.cores * clk() * RATE * (S.cpuT > 90 ? 0.75 : 1), gi = gpuEarn() * (S.gpuT > 90 ? 0.75 : 1);
+      return (ci + gi) * (S.ev && S.ev.id === 'order' ? 2 : 1);
+    }
+
+    function step(dt) {   // ⏱️ one slice of time
+      if (!S.intro || dt <= 0) return;
+      var run = running(), c = cpu();
+      S.dust = Math.min(100, S.dust + dt * (run ? 1 / 9 : 0.03));     // about 15 minutes until it's fully dusty
+      if (run) S.paste = Math.min(100, S.paste + dt / 15);              // thermal paste dries out over ~25 minutes
+      if (S.ev) { S.ev.left -= dt; if (S.ev.left <= 0) endEvent(); }
+      else if (!S.fire) { S.nextEv -= dt; if (S.nextEv <= 0) startEvent(); }
+      run = running();
+      var rm = room(), k = Math.min(1, dt * 0.35);
+      S.cpuT += (rm + (run && c ? cpuHeat(c, clk()) : 0) / cpuCap() - S.cpuT) * k;
+      S.gpuT += (rm + (run ? gpuHeat() : 0) / gpuCap() - S.gpuT) * k;
+      if (S.ex.throttle && run) { if (S.cpuT > 92) S.thr = Math.max(0.6, S.thr - dt * 0.1); else if (S.cpuT < 86) S.thr = Math.min(1, S.thr + dt * 0.05); }
+      else if (!S.ex.throttle) S.thr = 1;
+      var inc = income();
+      S.money += inc * dt; S.earned += inc * dt;
+      if (run) danger(dt);
+      if (S.fire) burn(dt);
+      if (S.earned >= 100) award('first');
+      if (S.money >= 10000) award('k');
+      if (S.money >= 1000000) award('mil');
+      if (run && c && S.clock >= c.max - 0.001 && S.thr >= 1) { award('oc'); if (S.cpuT < 50) award('ice'); }
+    }
+    function risk(t, dt) { return t >= 112 || (t >= 100 && Math.random() < dt * (0.03 + (t - 100) * 0.02)); }
+    function danger(dt) {   // 🔥 too hot or too much power: something might catch fire
+      var hot = Math.max(S.cpuT, S.gpus.length ? S.gpuT : 0);
+      if (hot > 95) { S.hotT += dt; if (S.hotT >= 30) award('edge'); } else S.hotT = 0;
+      if (risk(S.cpuT, dt)) { startFire('cpu'); return; }
+      if (S.gpus.length && risk(S.gpuT, dt)) { startFire('gpu', Math.floor(Math.random() * S.gpus.length)); return; }
+      var r = watts() / psu().cap;
+      if (r >= 1.35 || (r > 1 && Math.random() < dt * (0.05 + (r - 1) * 0.5))) startFire('psu');
+    }
+    function partName(f) { return f.part === 'cpu' ? 'CPU' : f.part === 'psu' ? 'power supply' : GPU[S.gpus[f.idx]] ? GPU[S.gpus[f.idx]].t : 'GPU'; }
+    function startFire(part, idx) {
+      S.fire = { part: part, idx: idx || 0, size: S.ex.alarm ? 12 : 32, t: 0 };
+      S.fires += 1; S.hotT = 0; award('fire');
+      say('🔥 Your ' + partName(S.fire) + ' caught fire! Tap SPRAY as fast as you can!', 'bad');
+      buzz(); render(true);
+    }
+    function fireOver() { S.fire = null; S.on = false; lockUntil = Date.now() + 1500; }
+    function spray() {
+      if (!S.fire) return;
+      S.fire.size -= S.ex.exting ? 11 : 6;
+      if (S.fire.size <= 0) {
+        var n = partName(S.fire);
+        fireOver(); S.out += 1; if (S.out >= 5) award('hero');
+        say('🧯 Fire’s out! Your ' + n + ' is a little crispy, but it still works. Turn the computer back on when you’re ready.', 'good');
+        save(); render(true);
+      }
+    }
+    function burn(dt) {
+      var f = S.fire;
+      f.t += dt; f.size += dt * 18;
+      if (S.ex.sprinkler && f.t >= 3) {
+        var w = Math.min(S.money, Math.max(20, Math.round(S.money * 0.04)));
+        S.money -= w; fireOver();
+        say('💦 The sprinkler put out the fire on your ' + partName(f) + '! The water damage cost you ' + money(w) + '.', 'warn');
+        save(); render(true); return;
+      }
+      if (f.size >= 100) burnUp(f);
+    }
+    function burnUp(f) {   // 💥 too late!
+      var n = partName(f);
+      if (f.part === 'cpu') S.cpu = null;
+      else if (f.part === 'psu') S.psu = null;
+      else S.gpus.splice(f.idx, 1);
+      var loss = Math.min(S.money, Math.max(25, Math.round(S.money * 0.1)));
+      S.money -= loss; S.burnt += 1; fireOver(); award('crisp');
+      say('💥 Your ' + n + ' burned to a crisp!' + (loss ? ' The smoke damage cost you ' + money(loss) + '.' : '') + ' Get a new one in the shop.', 'bad');
+      save(); render(true);
+    }
+
+    function pickW(a) { var t = 0, r; a.forEach(function (x) { t += x.w; }); r = Math.random() * t; for (var i = 0; i < a.length; i++) { r -= a[i].w; if (r < 0) return a[i]; } return a[0]; }
+    function startEvent(id) {   // 🎲 something happens
+      var E = id ? { id: id } : pickW(EVENTS);
+      S.nextEv = 50 + Math.random() * 50;
+      if (E.id === 'heat') { S.ev = { id: 'heat', left: 60 }; say('🌡️ Heat wave! Your room is 10°C hotter for a minute. Watch your temperatures!', 'warn'); }
+      else if (E.id === 'order') { S.ev = { id: 'order', left: 30 }; say('🎬 Big order! A movie studio needs a video rendered fast: you earn DOUBLE for 30 seconds.', 'good'); }
+      else if (E.id === 'blackout') { S.ev = { id: 'blackout', left: 10 }; say('🌩️ Blackout! The power is out for 10 seconds.', 'warn'); }
+      else if (E.id === 'cat') { S.cat = true; say('🐈 Your cat fell asleep on the air vent! Your cooling is way worse until you move it.', 'warn'); }
+      else if (E.id === 'dust') { S.dust = Math.min(100, S.dust + 25); say('🧶 A dust bunny stampede! Dust +25%. Time to clean?', 'warn'); }
+      else if (E.id === 'tip') { var t = Math.max(10, Math.round(income() * 25)); S.money += t; S.earned += t; say('🎁 A happy customer sent you a ' + money(t) + ' tip!', 'good'); }
+      else if (E.id === 'surge') {
+        if (S.ex.surge) say('⚡ Power surge! Your surge protector blocked it. Nice!', 'good');
+        else if (running() && Math.random() < 0.5) { say('⚡ Power surge!', 'bad'); startFire('psu'); }
+        else say('⚡ Power surge! Phew, nothing broke this time. (A surge protector would keep you safe.)', 'warn');
+      }
+      render(true);
+    }
+    function endEvent() {
+      var id = S.ev.id; S.ev = null;
+      say(id === 'heat' ? '🌡️ The heat wave is over.' : id === 'order' ? '🎬 The big order is done. Back to normal pay.' : '💡 The power is back on!', 'good');
+    }
+    function moveCat() { if (!S.cat) return; S.cat = false; award('cat'); say('🐈 You moved the cat. It gave you a dirty look and went back to sleep on your bed.', 'good'); render(true); }
+    function clean() {
+      if (S.fire || S.dust < 1 || S.money < CLEAN) return;
+      S.money -= CLEAN; S.dust = 0; say('🧹 You blew all the dust out. Your computer can breathe again!', 'good'); save(); render(true);
+    }
+    function repaste() {
+      if (S.fire || S.paste < 1 || S.money < PASTE || !cpu()) return;
+      S.money -= PASTE; S.paste = 0; say('🧴 Fresh thermal paste! Your CPU cooler works like new.', 'good'); save(); render(true);
+    }
+    function tradeIn(X) { return X ? Math.round(X.cost * 0.3) : 0; }
+    function canBuy(kind, X) {
+      if (S.fire) return false;
+      if (kind === 'gpu') return S.money >= X.cost && S.gpus.length < CASE[S.box].slots;
+      if (kind === 'ex') return !S.ex[X.id] && S.money >= X.cost;
+      var cur = S[kind] ? TABLE[kind][S[kind]] : null;
+      if (cur && cur.id === X.id) return false;
+      if (kind === 'box' && S.gpus.length > X.slots) return false;
+      return S.money + tradeIn(cur) >= X.cost;
+    }
+    function buy(kind, id) {   // 🛒
+      var X = TABLE[kind][id];
+      if (S.fire) { say('🔥 Put out the fire first!', 'bad'); return; }
+      if (kind === 'gpu' && S.gpus.length >= CASE[S.box].slots) { say('🧩 No free GPU slots! Get a bigger case.', 'bad'); return; }
+      if (kind === 'box' && S.gpus.length > X.slots) { say('🧩 Your ' + S.gpus.length + ' GPUs won’t fit in a ' + X.t + '!', 'bad'); return; }
+      if (!canBuy(kind, X)) return;
+      if (kind === 'gpu') { S.money -= X.cost; S.gpus.push(id); say(X.e + ' You installed a ' + X.t + '. Keep an eye on your power supply and GPU temperature!', 'good'); }
+      else if (kind === 'ex') { S.money -= X.cost; S.ex[id] = 1; say(X.e + ' You got a ' + X.t + '!', 'good'); }
+      else {
+        var cur = S[kind] ? TABLE[kind][S[kind]] : null, back = tradeIn(cur);
+        S.money += back - X.cost; S[kind] = id;
+        if (kind === 'cpu') { S.clock = X.base; S.thr = 1; if (id === 'q64') award('quantum'); }
+        say(X.e + ' You installed the ' + X.t + '.' + (back ? ' You traded in your old ' + cur.t + ' for ' + money(back) + '.' : ''), 'good');
+      }
+      if (S.box === 'rack' && S.gpus.length >= 4) award('full');
+      save(); render(true);
+    }
+    function sellGpu(i) {
+      var id = S.gpus[i];
+      if (!id) return;
+      if (S.fire) { say('🔥 Put out the fire first!', 'bad'); return; }
+      var back = tradeIn(GPU[id]);
+      S.gpus.splice(i, 1); S.money += back;
+      say('💸 You sold your ' + GPU[id].t + ' for ' + money(back) + '.', 'good'); save(); render(true);
+    }
+    function power() {
+      if (S.fire) { say('🔥 It’s on fire! Spray it first!', 'bad'); return; }
+      if (!S.on && !cpu()) { say('❌ You need a CPU first. The Potato Chip in the shop is free!', 'bad'); return; }
+      if (!S.on && !psu()) { say('❌ You need a power supply first. The 300W one in the shop is free!', 'bad'); return; }
+      S.on = !S.on; say(S.on ? '⏻ Your computer is back on. Ka-ching!' : '⏻ You turned your computer off. It’s cooling down, but it isn’t making money.', S.on ? 'good' : 'warn');
+      save(); render(true);
+    }
+    function offline() {   // 💤 while you were away, it ran in safe mode
+      var gone = Math.min(7200, (Date.now() - (S.last || Date.now())) / 1000), c = cpu();
+      if (!S.intro || gone < 60 || S.fire || !S.on || !c || !psu()) return;
+      var got = Math.round((c.cores * c.base * RATE + gpuEarn() * 0.6) * 0.25 * gone);
+      S.cpuT = S.gpuT = room();
+      if (got > 0) { S.money += got; S.earned += got; say('💤 While you were away, your computer ran in safe mode and earned ' + money(got) + '.', 'good'); }
+    }
+
+    // ---- view ----
+    function $(id) { return document.getElementById('rg-' + id); }
+    function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+    function money(n) { n = Math.floor(n); return (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US'); }
+    function per(n) { return '$' + (n < 10 ? n.toFixed(2) : n < 100 ? n.toFixed(1) : Math.round(n).toLocaleString('en-US')); }
+    function rate(n) { return '+' + per(n) + ' a second'; }
+    function tColor(t) { return 'hsl(' + Math.round(Math.max(0, Math.min(200, 200 - (t - 35) * 3.1))) + ' 85% 55%)'; }
+    function buzz() { try { if (navigator.vibrate) navigator.vibrate([180, 80, 180]); } catch (e) {} }
+    var TABS = [['cpu', '🧠 CPUs'], ['gpu', '🎮 GPUs'], ['cooler', '🌀 Cooling'], ['box', '📦 Cases'], ['psu', '⚡ Power'], ['ex', '✨ Extras']];
+    var NOTES = {
+      cpu: 'Faster CPUs earn more money, but they run hotter. When you upgrade, you trade in your old one for 30% of its price.',
+      gpu: 'Graphics cards earn LOTS of money, but they get hot and use a lot of power. Each one needs a slot in your case.',
+      cooler: 'A better CPU cooler lets you overclock without catching fire.',
+      box: 'Bigger cases have more GPU slots and more airflow to keep your graphics cards cool.',
+      psu: 'Everything uses power. If your computer uses more watts than your power supply can handle, the power supply can catch fire!',
+      ex: 'Gadgets that keep you (and your computer) safe.'
+    };
+    var tab = 'cpu', logs = [], buyBtns = [], sellBtns = [], alertAct = null, resetArm = 0, ready = false;
+
+    function say(t, kind) {
+      logs.unshift(t); if (logs.length > 8) logs.length = 8;
+      if (!ready) return;
+      var tk = $('ticker'); tk.textContent = t; tk.className = 'rg-ticker ' + (kind || '');
+      drawLog();
+    }
+    function drawLog() { var ul = $('log'); ul.textContent = ''; logs.forEach(function (t) { ul.appendChild(el('li', null, t)); }); }
+    function drawAchs() {
+      if (!ready) return;
+      var g = $('achs'), n = 0; g.textContent = '';
+      ACH.forEach(function (A) { var on = !!achs[A.id], d = el('div', 'rg-ach' + (on ? '' : ' off')); if (on) n++; d.appendChild(el('b', null, (on ? A.e : '🔒') + ' ' + A.t)); d.appendChild(el('span', null, A.d)); g.appendChild(d); });
+      $('achN').textContent = n + ' of ' + ACH.length;
+    }
+    function tempBar(k, t) {
+      var deg = $(k + 'T'), bar = $(k + 'Bar');
+      if (t == null) { deg.textContent = '—'; deg.style.color = ''; bar.style.width = '0%'; return; }
+      deg.textContent = Math.round(t) + '°C'; deg.style.color = tColor(t);
+      bar.style.width = Math.max(4, Math.min(100, (t - 20) / 95 * 100)) + '%'; bar.style.background = tColor(t);
+    }
+    function setCls(id, cls, on) { $(id).classList.toggle(cls, !!on); }
+    function itemRow(list, X, kind, sub) {
+      var r = el('div', 'rg-item'), m = el('div'), mine = kind === 'ex' ? !!S.ex[X.id] : kind !== 'gpu' && S[kind] === X.id;
+      if (mine) r.classList.add('mine');
+      r.appendChild(el('i', null, X.e)); m.appendChild(el('b', null, X.t)); m.appendChild(el('small', null, sub)); r.appendChild(m);
+      var b = el('button', 'rg-buy', mine ? (kind === 'ex' ? 'Owned' : 'Installed') : X.cost ? money(X.cost) : 'Free');
+      b.type = 'button'; b.setAttribute('aria-label', (mine ? 'Already have ' : 'Buy ') + X.t + (mine ? '' : ' for ' + (X.cost ? money(X.cost) : 'free')));
+      b.addEventListener('click', function () { buy(kind, X.id); });
+      if (!mine) buyBtns.push({ b: b, kind: kind, X: X }); else b.disabled = true;
+      r.appendChild(b); list.appendChild(r);
+    }
+    function drawShop() {
+      var tb = $('tabs'), list = $('list');
+      tb.textContent = ''; list.textContent = ''; buyBtns = []; sellBtns = [];
+      TABS.forEach(function (T) {
+        var b = el('button', 'rg-tab', T[1]); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', tab === T[0] ? 'true' : 'false');
+        b.addEventListener('click', function () { tab = T[0]; drawShop(); updateShop(); }); tb.appendChild(b);
+      });
+      $('tabNote').textContent = NOTES[tab];
+      if (tab === 'cpu') CPUS.forEach(function (X) { itemRow(list, X, 'cpu', X.cores + ' cores · ' + X.base.toFixed(1) + '–' + X.max.toFixed(1) + ' GHz · earns ' + per(X.cores * X.base * RATE) + ' a second (more if you overclock)'); });
+      if (tab === 'gpu') {
+        var cs = CASE[S.box];
+        S.gpus.forEach(function (id, i) {
+          var X = GPU[id], r = el('div', 'rg-item mine'), m = el('div'), b = el('button', 'rg-buy sell', 'Sell ' + money(tradeIn(X)));
+          r.appendChild(el('i', null, X.e)); m.appendChild(el('b', null, X.t + ' (slot ' + (i + 1) + ')')); m.appendChild(el('small', null, 'Installed · earns $' + X.earn + ' a second'));
+          b.type = 'button'; b.setAttribute('aria-label', 'Sell your ' + X.t + ' for ' + money(tradeIn(X)));
+          b.addEventListener('click', function () { sellGpu(i); }); sellBtns.push(b);
+          r.appendChild(m); r.appendChild(b); list.appendChild(r);
+        });
+        list.appendChild(el('p', 'ch-sub rg-slotsLeft', '🧩 ' + (cs.slots - S.gpus.length) + ' of ' + cs.slots + (cs.slots === 1 ? ' slot' : ' slots') + ' free in your ' + cs.t + '.'));
+        GPUS.forEach(function (X) { itemRow(list, X, 'gpu', 'earns $' + X.earn + ' a second · ' + X.heat + 'W of heat and power'); });
+      }
+      if (tab === 'cooler') COOLERS.forEach(function (X) { itemRow(list, X, 'cooler', 'Cooling power ×' + (X.cap / COOLERS[0].cap).toFixed(1)); });
+      if (tab === 'box') CASES.forEach(function (X) { itemRow(list, X, 'box', X.slots + (X.slots === 1 ? ' GPU slot' : ' GPU slots') + ' · airflow ×' + (X.flow / CASES[0].flow).toFixed(1)); });
+      if (tab === 'psu') PSUS.forEach(function (X) { itemRow(list, X, 'psu', 'Handles up to ' + X.cap + 'W'); });
+      if (tab === 'ex') EXTRAS.forEach(function (X) { itemRow(list, X, 'ex', X.d); });
+    }
+    function updateShop() {
+      buyBtns.forEach(function (o) { o.b.disabled = !canBuy(o.kind, o.X); });
+      sellBtns.forEach(function (b) { b.disabled = !!S.fire; });
+    }
+    function drawSlots() {
+      var box = $('slots'), cs = CASE[S.box], f = S.fire; box.textContent = '';
+      for (var i = 0; i < 4; i++) {
+        var id = S.gpus[i], d = el('span', 'rg-slot' + (i >= cs.slots ? ' locked' : id ? ' on' : ''), i >= cs.slots ? '🔒' : id ? GPU[id].e : '＋');
+        if (f && f.part === 'gpu' && f.idx === i) d.classList.add('burning');
+        d.title = i >= cs.slots ? 'Get a bigger case for more slots' : id ? GPU[id].t : 'Empty slot';
+        box.appendChild(d);
+      }
+    }
+    function render(full) {
+      if (!ready) return;
+      var c = cpu(), p = psu(), run = running(), inc = income(), w = watts(), f = S.fire, over = !!(p && w > p.cap);
+      var hot = Math.max(S.cpuT, S.gpus.length ? S.gpuT : 0);
+      $('intro').hidden = !!S.intro;
+      $('cash').textContent = money(S.money);
+      $('rate').textContent = rate(inc) + (S.ev && S.ev.id === 'order' ? ' (🎬 double!)' : '');
+      var s = f ? ['🔥 ON FIRE!', 'bad'] : !c ? ['❌ No CPU', 'bad'] : !p ? ['❌ No power supply', 'bad'] : blackout() ? ['🌩️ Blackout', 'hot'] : !S.on ? ['⏻ Off', ''] : hot >= 100 ? ['💨 Smoking!', 'bad'] : over ? ['⚡ Overloaded!', 'bad'] : hot > 90 ? ['🥵 Too hot', 'hot'] : ['✅ Running', 'ok'];
+      $('status').textContent = s[0]; $('status').className = 'rg-status ' + s[1];
+      $('caseName').textContent = CASE[S.box].e + ' ' + CASE[S.box].t;
+      $('power').setAttribute('aria-pressed', S.on ? 'true' : 'false'); $('powerTxt').textContent = S.on ? 'ON' : 'OFF';
+      $('cpuE').textContent = c ? c.e : '❌'; $('cpuName').textContent = c ? c.t : 'No CPU';
+      $('cpuSub').textContent = c ? clk().toFixed(1) + ' GHz · ' + c.cores + ' cores' + (S.thr < 1 ? ' · 🤖 slowed down' : '') : 'Get one in the shop (the Potato Chip is free)';
+      tempBar('cpu', S.cpuT);
+      var cs = CASE[S.box];
+      $('gpuSub').textContent = S.gpus.length ? S.gpus.length + ' of ' + cs.slots + (cs.slots === 1 ? ' slot' : ' slots') + ' · ' + Math.round(gpuHeat()) + 'W' : 'None yet (' + cs.slots + (cs.slots === 1 ? ' slot' : ' slots') + ')';
+      tempBar('gpu', S.gpus.length ? S.gpuT : null);
+      $('psuE').textContent = p ? p.e : '❌'; $('psuName').textContent = p ? 'Power' : 'No power supply';
+      $('psuSub').textContent = p ? (run ? w : 0) + 'W of ' + p.cap + 'W' : 'Get one in the shop';
+      var pr = p ? w / p.cap : 0, pb = $('psuBar');
+      pb.style.width = (run ? Math.min(100, pr * 100) : 0) + '%'; pb.style.background = pr > 1 ? '#ff5d3a' : pr > 0.85 ? '#ffb15f' : '#5ad1a0';
+      $('coolName').textContent = COOL[S.cooler].s || COOL[S.cooler].t; $('coolSub').textContent = 'Fans at ' + S.fan + '%';
+      var fi = $('fanIcon'), spin = S.fan > 0 && run;
+      fi.classList.toggle('rg-spin', spin); fi.style.animationDuration = spin ? (1.5 - S.fan / 100 * 1.25).toFixed(2) + 's' : '';
+      $('dustBar').style.width = S.dust + '%'; $('dustBar').style.background = S.dust > 70 ? '#ff5d3a' : S.dust > 40 ? '#ffb15f' : '#9fb0c6';
+      $('pasteBar').style.width = (100 - S.paste) + '%'; $('pasteBar').style.background = S.paste > 70 ? '#ff5d3a' : S.paste > 40 ? '#ffb15f' : '#5ad1a0';
+      setCls('cpuBox', 'burning', f && f.part === 'cpu'); setCls('gpuBox', 'burning', f && f.part === 'gpu'); setCls('psuBox', 'burning', f && f.part === 'psu');
+      setCls('cpuBox', 'smoking', !f && run && S.cpuT >= 100); setCls('gpuBox', 'smoking', !f && run && S.gpus.length && S.gpuT >= 100);
+      ['cpuBox', 'gpuBox', 'psuBox'].forEach(function (b) { $(b).style.setProperty('--rg-fire', f ? Math.max(0, Math.min(1, f.size / 100)).toFixed(2) : '0'); });
+      $('case').style.setProperty('--rg-glow', f ? 'rgba(255,93,58,0.6)' : hot >= 100 ? 'rgba(255,93,58,0.45)' : hot > 90 ? 'rgba(255,177,95,0.4)' : 'rgba(77,182,255,0.22)');
+      $('cat').hidden = !S.cat;
+      // controls
+      if (c) $('clockV').textContent = clk().toFixed(1) + ' GHz' + (S.clock > c.base + 0.001 ? ' · overclocked!' : S.clock < c.base - 0.001 ? ' · eco' : ' · normal');
+      else $('clockV').textContent = 'no CPU';
+      $('fanV').textContent = S.fan + '%'; $('gpuPowV').textContent = S.gpuPow + '%';
+      $('gpuPowRow').hidden = !S.gpus.length;
+      var cl = $('clean'), pa = $('paste');
+      cl.disabled = !!f || S.dust < 1 || S.money < CLEAN; $('cleanSub').textContent = 'Dust ' + Math.round(S.dust) + '% · ' + money(CLEAN);
+      pa.disabled = !!f || S.paste < 1 || S.money < PASTE || !c; $('pasteSub').textContent = 'Dried out ' + Math.round(S.paste) + '% · ' + money(PASTE);
+      // the alert bar at the bottom of the screen
+      var A = null;
+      if (f) A = { t: '🔥 Your ' + partName(f) + ' is ON FIRE! Tap SPRAY as fast as you can!', btn: '🧯 SPRAY!', act: 'spray' };
+      else if (run && S.cpuT >= 100) A = { t: '💨 Your CPU is ' + Math.round(S.cpuT) + '°C and smoking! Slow it down or turn up the fans, NOW!', btn: S.fan < 100 ? '🌀 Fans to 100%' : '🐢 Slow the CPU down', act: S.fan < 100 ? 'fans' : 'slow' };
+      else if (run && S.gpus.length && S.gpuT >= 100) A = { t: '💨 Your GPUs are ' + Math.round(S.gpuT) + '°C and smoking! Lower the GPU power or turn up the fans!', btn: S.fan < 100 ? '🌀 Fans to 100%' : '🎮 Less GPU power', act: S.fan < 100 ? 'fans' : 'gpu' };
+      else if (run && over) A = { t: '⚡ Your power supply is overloaded (' + w + 'W of ' + p.cap + 'W)! It could catch fire. Slow down or get a bigger power supply.', btn: S.clock > (c ? c.base : 0) + 0.001 ? '🐢 Slow the CPU down' : S.gpus.length && S.gpuPow > 50 ? '🎮 Less GPU power' : null, act: S.clock > (c ? c.base : 0) + 0.001 ? 'slow' : 'gpu' };
+      else if (run && hot > 90) A = { t: '🥵 It’s getting hot (' + Math.round(hot) + '°C)! Over 100°C, things start smoking.' + (S.dust > 50 ? ' Try cleaning the dust (' + Math.round(S.dust) + '%).' : S.paste > 60 ? ' Your thermal paste is dried out.' : '') };
+      else if (S.cat) A = { t: '🐈 Your cat is asleep on the air vent. Your cooling is way worse!', btn: '🐈 Move the cat', act: 'cat' };
+      else if (!S.on && c && p && S.intro) A = { t: '⏻ Your computer is off, so it isn’t making money.', btn: '⏻ Turn it on', act: 'on', calm: true };
+      var al = $('alert'), ab = $('alertBtn');
+      al.hidden = !A;
+      if (A) {
+        al.className = 'rg-alert' + (f ? ' fire' : A.calm ? ' calm' : '');
+        $('alertTxt').textContent = A.t;
+        $('fireMeter').hidden = !f; if (f) $('fireBar').style.width = Math.max(0, Math.min(100, f.size)) + '%';
+        ab.hidden = !A.btn; if (A.btn) { ab.textContent = A.btn; ab.className = 'rg-alertBtn' + (A.calm ? ' calm' : ''); }
+        alertAct = A.btn ? A.act : null;
+        ab.disabled = !f && Date.now() < lockUntil;
+      } else alertAct = null;
+      $('stats').textContent = '🔥 Fires: ' + S.fires + ' · 🧯 Put out: ' + S.out + ' · 💥 Burnt parts: ' + S.burnt + ' · 💵 Earned: ' + money(S.earned);
+      if (full) {
+        var cr = $('clock');
+        if (c) { cr.disabled = false; cr.min = (Math.round(c.base * 5) / 10).toFixed(1); cr.max = c.max.toFixed(1); cr.value = S.clock; $('ocBar').style.setProperty('--rg-base', ((c.base - c.base / 2) / (c.max - c.base / 2) * 100).toFixed(1) + '%'); }
+        else cr.disabled = true;
+        $('fan').value = S.fan; $('gpuPow').value = S.gpuPow;
+        drawSlots(); drawShop(); drawLog(); drawAchs();
+      } else drawSlots();
+      updateShop();
+    }
+    function act(a) {
+      if (a === 'spray') spray();
+      else if (a === 'fans') { S.fan = 100; $('fan').value = 100; }
+      else if (a === 'slow') { var c = cpu(); if (c) { S.clock = Math.max(Math.round(c.base * 5) / 10, Math.round((S.clock - 0.3) * 10) / 10); $('clock').value = S.clock; } }
+      else if (a === 'gpu') { S.gpuPow = Math.max(50, S.gpuPow - 20); $('gpuPow').value = S.gpuPow; }
+      else if (a === 'cat') moveCat();
+      else if (a === 'on') { if (!S.on) power(); }
+      render(false);
+    }
+
+    // ---- the loop ----
+    var raf = 0, lastT = 0, uiT = 0, saveT = 0, active = false;
+    function frame(now) {
+      if (!active) return;
+      var dt = lastT ? Math.min(0.25, (now - lastT) / 1000) : 0; lastT = now;
+      if (!testHold) step(dt);
+      uiT += dt; saveT += dt;
+      if (uiT >= 0.12) { uiT = 0; render(false); }
+      if (saveT >= 3) { saveT = 0; save(); }
+      raf = requestAnimationFrame(frame);
+    }
+    function wire() {
+      if (ready) return;
+      ready = true;
+      $('go').addEventListener('click', function () { S.intro = 1; say('💻 Your old potato computer is up and running. Time to make some money!', 'good'); save(); render(true); });
+      $('power').addEventListener('click', power);
+      $('clock').addEventListener('input', function () { S.clock = Number(this.value); render(false); });
+      $('fan').addEventListener('input', function () { S.fan = Number(this.value); render(false); });
+      $('gpuPow').addEventListener('input', function () { S.gpuPow = Number(this.value); render(false); });
+      $('clean').addEventListener('click', clean);
+      $('paste').addEventListener('click', repaste);
+      $('alertBtn').addEventListener('click', function () { if (alertAct) act(alertAct); });
+      $('cat').addEventListener('click', moveCat);
+      $('reset').addEventListener('click', function () {
+        var b = this;
+        if (Date.now() > resetArm) { resetArm = Date.now() + 4000; b.textContent = '⚠️ Tap again to erase your computer and money'; setTimeout(function () { if (Date.now() > resetArm) b.textContent = '🔄 Start over'; }, 4100); return; }
+        resetArm = 0; b.textContent = '🔄 Start over';
+        S = fresh(); S.intro = 1; logs = []; lockUntil = 0; save();
+        say('🔄 Fresh start! Here’s your old potato computer again.', 'good'); render(true);
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (!active) return;
+        if (document.hidden) save(); else { lastT = 0; offline(); render(true); }
+      });
+    }
+    function enter() {
+      wire(); load(); offline();
+      active = true; lastT = 0;
+      if (!logs.length && S.intro) say('💻 Welcome back! Your computer is waiting.', '');
+      render(true);
+      raf = requestAnimationFrame(frame);
+    }
+    function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; save(); }
+    window.registerHook('rig', enter, leave);
   })();
 
 </script>
