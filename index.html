@@ -9350,7 +9350,7 @@
     var JOB = byId(JOBS), LV = [0.85, 1, 1.3, 1.7], LV_NAME = ['Junior ', '', 'Senior ', 'Head '];
     var MAJORS = { robo: ['🤖', 'Cyber-Engineering'], med: ['🦾', 'Medicine'], code: ['💻', 'Netcode'], art: ['🎨', 'Holo-Arts'], biz: ['📊', 'Business'], music: ['🎵', 'Holo-Music'], space: ['🚀', 'Space Flight'], bio: ['🧬', 'Bio-Hacking'] };
     var UNIS = [   // you can earn a degree from each of these (as many as you like)
-      { id: 'harbor', e: '🏛️', t: 'Harbor Tech University', fee: 6000, majors: ['robo', 'med', 'code', 'art', 'biz'], ok: function () { return (L.hsGrade || 0) >= 45 || L.st.smarts >= 60; }, needT: 'better grades or 🧠 Smarts 60+' },
+      { id: 'harbor', e: '🏛️', t: 'Harbor Tech University', fee: 6000, majors: ['robo', 'med', 'code', 'art', 'biz'], ok: function () { return (L.hsGrade || 0) >= 45 || L.st.smarts >= 60 || !!L.scholarship; }, needT: 'better grades, 🧠 Smarts 60+, or a 🏅 scholarship' },
       { id: 'kumo', e: '🏙️', t: 'Kumo-Tek Institute', fee: 15000, majors: ['robo', 'code', 'space'], ok: function () { return L.st.smarts >= 70; }, needT: '🧠 Smarts 70+' },
       { id: 'neon', e: '🎭', t: 'Neon Arts Academy', fee: 8000, majors: ['art', 'music', 'biz'], ok: function () { return L.st.style >= 50; }, needT: '😎 Style 50+' },
       { id: 'canal', e: '🩺', t: 'Canal Medical College', fee: 12000, majors: ['med', 'bio'], ok: function () { return L.st.smarts >= 65; }, needT: '🧠 Smarts 65+' }
@@ -9448,6 +9448,13 @@
       { id: 'coyotes', e: '🐺', name: 'the Chrome Coyotes', blurb: 'hover-bike racers who never brake' },
       { id: 'owls', e: '🦉', name: 'the Night Owls', blurb: 'sneaky couriers who own the rooftops' }
     ];
+    var SCH = {   // 🏅 scholarships pay for university
+      exam: { e: '🧮', t: 'Brainiac Scholarship' },
+      essay: { e: '📝', t: 'Neon Dreamers Scholarship' },
+      sport: { e: '🏅', t: 'Hoverball Scholarship' },
+      art: { e: '🎨', t: 'Bright Lights Art Scholarship' },
+      top: { e: '🎓', t: 'Top of the Class Scholarship' }
+    };
     var CREWMATES = ['Vex', 'Pixel', 'Rook', 'Jinx', 'Moxie', 'Tank', 'Zip', 'Echo', 'Nova', 'Bolt'];
     var GANGS = [   // 🛡️ rival gangs that want your turf
       { id: 'rats', e: '🐀', short: 'Rust Rats', name: 'the Rust Rats', w: '🔧', boss: 'the Rat King', bt: 'Rat King', be: '🐀' },
@@ -9500,6 +9507,7 @@
       { id: 'rescue', e: '🆘', t: 'No One Left Behind', d: 'Break a crewmate out of a corp van.' },
       { id: 'boss', e: '👑', t: 'Crew Boss', d: 'Become the leader of a street crew.' },
       { id: 'moon', e: '🌙', t: 'Moonshot', d: 'Fill your crew’s Moon fund and take everyone to the Moon.' },
+      { id: 'fullride', e: '🎓', t: 'Full Ride', d: 'Go to university for free with a full scholarship.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9756,10 +9764,10 @@
       { id: 'vending', a: [6, 110], w: 2, auto: function () { return [{ happy: 1 }, '🥤 All the vending machines in your neighborhood went on strike for “more snacks.”']; } },
       // milestones (only happen when the game asks for them)
       { id: 'graduate', forced: 1, e: '🎓', t: 'You graduated from {school}! What’s next?', c: [
-        ['Go to university', function () { finishSchool(); if ((L.hsGrade || 0) >= 45 || L.st.smarts >= 60) { L.pending.unshift('major'); return [{ happy: 6 }, '🎓 You graduated from Neon Harbor High and got into Harbor Tech University!']; } return [{ happy: -4 }, '🎓 You graduated from Neon Harbor High, but your grades weren’t high enough for Harbor Tech University. You can apply again later from 💼 Job.']; }],
+        ['Go to university', function () { finishSchool(); if ((L.hsGrade || 0) >= 45 || L.st.smarts >= 60 || L.scholarship) { L.pending.unshift('major'); return [{ happy: 6 }, '🎓 You graduated from Neon Harbor High and got into Harbor Tech University!' + schTxt()]; } return [{ happy: -4 }, '🎓 You graduated from Neon Harbor High, but your grades weren’t high enough for Harbor Tech University. You can apply again later from 💼 Job.']; }],
         ['Get a job', function () { finishSchool(); return [{ happy: 5 }, '🎓 You graduated from Neon Harbor High! Time to find a job in the 💼 Job tab.']; }],
         ['Take a gap year', function () { finishSchool(); return [{ happy: 8, smarts: 1 }, '🎓 You graduated from Neon Harbor High and took a gap year to explore the city.']; }]] },
-      { id: 'major', forced: 1, e: '🏛️', t: 'Harbor Tech University: pick your major! (It costs 6,000 cr a year for 4 years.)', c: [
+      { id: 'major', forced: 1, e: '🏛️', t: 'Harbor Tech University: pick your major! {uniFee}', c: [
         ['🤖 Cyber-Engineering', function () { return enroll('robo'); }],
         ['🦾 Medicine', function () { return enroll('med'); }],
         ['💻 Netcode', function () { return enroll('code'); }],
@@ -10199,18 +10207,23 @@
       if (!J.pt) L.everJob = true;
     }
     function endJob() { if (L.job) L.lastJob = jobTitle(); L.job = null; }
-    function finishSchool() { L.edu = 'high'; L.hsGrade = L.school ? L.school.grade : 50; L.school = null; L.club = null; }
+    function finishSchool() {
+      L.edu = 'high'; L.hsGrade = L.school ? L.school.grade : 50; L.school = null; L.club = null;
+      if (L.hsGrade >= 90 && schPct() < 1) { L.scholarship = { id: 'top', pct: 1 }; log('🎓 You finished high school at the top of your class and won the Top of the Class Scholarship: free university!'); }   // 🏅 great grades pay off
+    }
     function enroll(m, U) {
       U = U || UNIS[0];
       L.uni = { major: m, year: 1, school: U.id };
-      return [{ money: -U.fee, happy: 5, smarts: 2 }, '🏛️ You started studying ' + MAJORS[m][1] + ' at ' + U.t + '! Tuition is ' + cr(U.fee) + ' a year.'];
+      var f = tuition(U);
+      if (schPct() >= 1) award('fullride');
+      return [{ money: -f, happy: 5, smarts: 2 }, '🏛️ You started studying ' + MAJORS[m][1] + ' at ' + U.t + '! ' + (f <= 0 ? 'Your ' + SCH[L.scholarship.id].e + ' ' + SCH[L.scholarship.id].t + ' pays for everything, so it’s FREE!' : 'Tuition is ' + cr(f) + ' a year' + (schPct() ? ' (your 🏅 scholarship pays the other half).' : '.'))];
     }
     function degrees() { if (!L.degrees) L.degrees = L.edu === 'uni' && L.major ? [{ major: L.major, school: 'harbor' }] : []; return L.degrees; }
     function hasDegree(m) { return degrees().some(function (d) { return d.major === m; }); }
     function uniOf(id) { return UNI[id] || UNIS[0]; }
     function majorSheet(U) {
       sheet(U.e + ' ' + U.t, function (c) {
-        note(c, 'Pick your major. It costs ' + cr(U.fee) + ' a year for 4 years.');
+        note(c, 'Pick your major. ' + (tuition(U) <= 0 ? 'Your 🏅 scholarship pays for all 4 years!' : 'It costs ' + cr(tuition(U)) + ' a year for 4 years' + (schPct() ? ' (your 🏅 scholarship pays the other half).' : '.')));
         U.majors.forEach(function (m) {
           if (hasDegree(m)) return;
           opt(c, MAJORS[m][0], MAJORS[m][1], { robo: 'Unlocks the 🛠️ Cyberware Workshop: make your own cyberware!', med: 'Become a Chrome Doctor, and brew 💊 neuro-blockers that fight chrome overload', code: 'Great for hacker jobs', art: 'Great for design jobs', biz: 'Become a Corp Executive', music: 'Helps you become a pop idol', space: 'Helps you become a starship pilot', bio: 'Raises your cyberware tolerance by 5' }[m] || '', function () { L.done['uni-' + U.id] = L.age; doThing(U.e, enroll(m, U)); });
@@ -10312,6 +10325,7 @@
     function salePrice() { return Math.round(IMP.eyes.cost * 0.7 / 100) * 100; }   // 30% off cyber-eyes
     function ctxFor(ev) {
       var c = { corp: pick(NH.corps), new: freshName(), sale: cr(salePrice()), kneesP: cr(IMP.knees.cost), loot: L.rides.length ? 'your ' + RIDE[L.rides[0]].t.toLowerCase() : 'your credit chip' };
+      c.uniFee = tuition(UNIS[0]) <= 0 ? 'Your 🏅 scholarship pays for all of it!' : 'It costs ' + cr(tuition(UNIS[0])) + ' a year for 4 years.' + (schPct() ? ' Your 🏅 scholarship pays the other half.' : '');
       if (ev.need === 'friend' && !(c.friend = rand(friends()))) return null;
       if (ev.need === 'partner' && !(c.partner = partner())) return null;
       if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
@@ -10383,7 +10397,8 @@
           L.edu = 'uni'; L.major = L.uni.major; L.uni = null; s.happy = clamp(s.happy + 10); s.smarts = capStat('smarts', s.smarts + 5);
           log('🎓 You graduated from ' + UU.t + ' with a degree in ' + MAJORS[L.major][1] + '!');
           if (degrees().length >= 3) award('scholar');
-        } else { L.money -= UU.fee; s.smarts = capStat('smarts', s.smarts + R(1, 3)); }
+          if (L.scholarship) { log('🏅 Your ' + SCH[L.scholarship.id].t + ' is used up now. Win another one before your next degree!'); L.scholarship = null; }
+        } else { L.money -= tuition(UU); s.smarts = capStat('smarts', s.smarts + R(1, 3)); }
       }
       // netrunner school (2 years)
       if (L.netSchool) {
@@ -10628,11 +10643,13 @@
           schoolOpt(c, 'teacher', '🤖', 'Ask the teacher-bot for help', 'A little boost', function () { return [{ grade: 3, smarts: 1 }, '🤖 The teacher-bot helped you with the hard stuff. It said “beep” encouragingly.']; });
           schoolOpt(c, 'skip', '😎', 'Skip class', 'More fun, worse grades', function () { return chance(0.3) ? [{ grade: -8, happy: 2, bond: { parents: -5 } }, '😬 You skipped class and the school messaged your parents.'] : [{ grade: -8, happy: 5 }, '😎 You skipped class and went to the arcade.']; });
           opt(c, '🧮', 'Take a skip-a-grade test', 'Get 3 ' + gradeName(gradeNow()) + ' math questions right to skip ahead · no limit, but the math gets harder as you skip' + (L.ahead ? ' (you’ve skipped ' + L.ahead + ' so far)' : ''), skipTest);   // no limits at all
+          if (L.school.kind === 'high') opt(c, '🏅', 'Scholarships', schSub(), scholarSheet);
         }
         if (L.uni) {
           var UU = uniOf(L.uni.school);
           sec(c, UU.e + ' ' + UU.t);
-          note(c, MAJORS[L.uni.major][1] + ' · Year ' + L.uni.year + ' of 4 · Tuition ' + cr(UU.fee) + '/year');
+          note(c, MAJORS[L.uni.major][1] + ' · Year ' + L.uni.year + ' of 4 · Tuition ' + (tuition(UU) <= 0 ? 'FREE (🏅 scholarship)' : cr(tuition(UU)) + '/year' + (schPct() ? ' (🏅 half off)' : '')));
+          opt(c, '🏅', 'Scholarships', schSub(), scholarSheet);
           schoolOpt(c, 'ustudy', '📖', 'Study hard', 'Get smarter', function () { return [{ smarts: [2, 4], happy: -1 }, '📖 You studied hard at ' + UU.t + '.']; });
           schoolOpt(c, 'party', '🎉', 'Go to a dorm party', 'Have fun', function () { return [{ happy: [5, 8], smarts: -1 }, '🎉 You went to a dorm party with a hologram DJ.']; });
           opt(c, '🚪', 'Drop out', 'Leave university', function () { confirmBox('🚪', 'Drop out of ' + UU.t + '?', 'Yes, drop out', function () { L.uni = null; doThing('🚪', [{ happy: -3 }, '🚪 You dropped out of ' + UU.t + '.']); }); });
@@ -10656,9 +10673,10 @@
           sec(c, '🏛️ Universities');
           var dg = degrees();
           note(c, dg.length ? '🎓 Your degrees: ' + dg.map(function (d) { return MAJORS[d.major][0] + ' ' + MAJORS[d.major][1]; }).join(', ') + '. You can always go back for another!' : 'Pick a university, then a major. Each degree takes 4 years.');
+          opt(c, '🏅', 'Scholarships', schSub(), scholarSheet);
           UNIS.forEach(function (U) {
             var left = U.majors.filter(function (m) { return !hasDegree(m); }), ok = U.ok(), ap = doneYet('uni-' + U.id);
-            opt(c, U.e, U.t, ap ? 'Applied this year ✓' : !left.length ? 'You have every degree from here ✓' : !ok ? 'Needs ' + U.needT : cr(U.fee) + ' a year · ' + left.map(function (m) { return MAJORS[m][0] + ' ' + MAJORS[m][1]; }).join(', '), function () { majorSheet(U); }, ap || !left.length || !ok);
+            opt(c, U.e, U.t, ap ? 'Applied this year ✓' : !left.length ? 'You have every degree from here ✓' : !ok ? 'Needs ' + U.needT : feeTxt(U) + ' · ' + left.map(function (m) { return MAJORS[m][0] + ' ' + MAJORS[m][1]; }).join(', '), function () { majorSheet(U); }, ap || !left.length || !ok);
           });
         }
         if (L.netrunner) note(c, '🕸️ You’re a certified netrunner! Quickhacks cost you 1 less RAM.');
@@ -10693,8 +10711,8 @@
     function gradeName(g) { return g <= 5 ? 'Kindergarten' : 'Grade ' + Math.min(12, g - 5); }
     function fmtN(n) { return n < 0 ? '−' + Math.abs(n) : String(n); }
     function mathLv(g) { return g < 7 ? 1 : g < 9 ? 2 : g < 11 ? 3 : g < 13 ? 4 : g < 15 ? 5 : g < 17 ? 6 : 7; }
-    function mathQ() {   // a math question for the grade you're in, so skipping ahead makes the test harder too
-      var lv = mathLv(gradeNow()), a, b, c, x, k, q, ans;
+    function mathQ(lvMin) {   // a math question for the grade you're in, so skipping ahead makes the test harder too
+      var lv = Math.max(lvMin || 0, mathLv(gradeNow())), a, b, c, x, k, q, ans;
       if (lv === 1) { a = R(1, 9); b = R(1, 9); q = a + ' + ' + b; ans = a + b; }
       else if (lv === 2) { a = R(10, 60); b = R(2, 39); if (chance(0.5)) { q = a + ' + ' + b; ans = a + b; } else { q = (a + b) + ' − ' + b; ans = a; } }
       else if (lv === 3) { a = R(2, 12); b = R(2, 12); q = a + ' × ' + b; ans = a * b; }
@@ -10719,29 +10737,32 @@
       for (var j = opts.length - 1; j > 0; j--) { var r = Math.floor(Math.random() * (j + 1)), tmp = opts[j]; opts[j] = opts[r]; opts[r] = tmp; }
       return { q: q + ' = ?', a: ans, opts: opts, lv: lv };
     }
-    function skipTest() {   // 🧮 three questions: get all three right to skip a grade
-      var n = 0, right = 0, seen = [], gn = gradeName(gradeNow());
+    function mathQuiz(total, lvMin, title, done) {   // 🧮 a math test, one question at a time (no repeats)
+      var n = 0, right = 0, seen = [];
       function ask() {
-        var P = mathQ();
-        for (var i = 0; i < 20 && seen.indexOf(P.q) >= 0; i++) P = mathQ();   // no repeats in the same test
+        var P = mathQ(lvMin);
+        for (var i = 0; i < 20 && seen.indexOf(P.q) >= 0; i++) P = mathQ(lvMin);
         seen.push(P.q);
         var card = openCard(false);
         card.appendChild(mk('div', 'lf-ev-emoji', '🧮'));
-        var t = mk('p', 'lf-ev-text', 'Skip-a-grade test (' + gn + ' math): question ' + (n + 1) + ' of 3'); t.id = 'lf-cardTitle'; card.appendChild(t);
+        var t = mk('p', 'lf-ev-text', title + ': question ' + (n + 1) + ' of ' + total); t.id = 'lf-cardTitle'; card.appendChild(t);
         var qq = mk('p', 'lf-math', P.q); qq.id = 'lf-mathQ'; card.appendChild(qq);
         var box = mk('div', 'lf-choices lf-mathopts');
         P.opts.forEach(function (o) {
           var b = mk('button', 'lf-choice', fmtN(o)); b.type = 'button';
           b.addEventListener('click', function () {
             n += 1; var ok = o === P.a; if (ok) right += 1;
-            if (n >= 3) { finish(); return; }
+            if (n >= total) { done(right); return; }
             outcome(ok ? '✅' : '❌', (ok ? 'Right! ' : 'Not quite. ') + P.q.replace('?', fmtN(P.a)), [], ask);
           });
           box.appendChild(b);
         });
         card.appendChild(box); focusFirst();
       }
-      function finish() {
+      ask();
+    }
+    function skipTest() {   // 🧮 three questions: get all three right to skip a grade
+      mathQuiz(3, 0, 'Skip-a-grade test (' + gradeName(gradeNow()) + ' math)', function (right) {
         if (right === 3) {
           L.ahead = (L.ahead || 0) + 1;
           var up = '', a = L.age + L.ahead;
@@ -10750,8 +10771,56 @@
           doThing('🧮', [{ smarts: 3, happy: 8, grade: 5 }, '🧮 You aced the skip-a-grade test, 3 out of 3! You skipped ahead a grade (' + L.ahead + ' so far).' + (a < 18 ? ' Next test: ' + gradeName(a) + ' math' + (mathLv(a) > mathLv(a - 1) ? ', and it’s harder!' : '.') : '') + up]);
         }
         else doThing('🧮', [{ smarts: 1, happy: -2 }, '🧮 You got ' + right + ' out of 3 on the skip-a-grade test. You need all 3 right to skip a grade. Try again!']);
-      }
-      ask();
+      });
+    }
+    // ---- 🏅 scholarships: university for half price, or FREE ----
+    function schPct() { return L.scholarship ? L.scholarship.pct : 0; }
+    function tuition(U) { return Math.round(U.fee * (1 - schPct())); }
+    function feeTxt(U) { var f = tuition(U); return f <= 0 ? 'FREE with your 🏅 scholarship' : f < U.fee ? cr(f) + ' a year with your 🏅 scholarship' : cr(U.fee) + ' a year'; }
+    function schTxt() { var S = L.scholarship; return S ? ' ' + SCH[S.id].e + ' Your ' + SCH[S.id].t + ' pays ' + (S.pct >= 1 ? 'for ALL of it!' : 'half!') : ''; }
+    function schSub() { var S = L.scholarship; return S ? (S.pct >= 1 ? '✅ ' + SCH[S.id].t + ': university is FREE!' : '✅ ' + SCH[S.id].t + ' (half off) · go for a full one!') : 'Win one and university costs less, or nothing at all!'; }
+    function winScholar(id, pct, text) {   // 🏅 you keep the best scholarship you've won
+      var S = L.scholarship, X = SCH[id];
+      if (S && S.pct >= pct) return [{ happy: 4 }, text + ' You won the ' + X.t + ', but the scholarship you already have is just as good, so you kept yours.'];
+      L.scholarship = { id: id, pct: pct };
+      return [{ happy: pct >= 1 ? 15 : 8 }, text + ' ' + X.e + ' You won the ' + X.t + '! It pays ' + (pct >= 1 ? 'ALL of your university tuition. College is FREE!' : 'HALF of your university tuition.')];
+    }
+    function essayChance() { return Math.min(0.85, 0.1 + L.st.smarts / 250 + (L.school ? L.school.grade : L.hsGrade || 50) / 400); }
+    function sportChance() { return Math.min(0.85, 0.25 + (L.st.health - 70) / 60 + (L.club === 'dance' ? 0.1 : 0) + (has('legs') ? 0.1 : 0)); }
+    function artChance() { return Math.min(0.85, 0.25 + (L.st.style - 60) / 80 + (L.club === 'art' ? 0.15 : 0)); }
+    function scholarSheet() {
+      sheet('🏅 Scholarships', function (c) {
+        var S = L.scholarship, full = S && S.pct >= 1;
+        note(c, S ? SCH[S.id].e + ' You have the ' + SCH[S.id].t + '! It pays ' + (full ? 'ALL' : 'HALF') + ' of your university tuition' + (L.uni ? ' until you graduate.' : ' for your next 4-year degree.') : '🏅 Win a scholarship and university costs less, or nothing at all! You can try each one once a year.');
+        if (full) { note(c, '🎓 That’s a full ride, so there’s nothing more to win. Go pick a university!'); opt(c, '←', 'Back to school & work', '', jobSheet); return; }
+        sec(c, '📝 Apply');
+        var ex = doneYet('schexam');
+        opt(c, '🧮', 'Take the scholarship exam', ex ? 'Done this year ✓' : '5 hard math questions · all 5 right = FREE university, 4 right = half off', function () { L.done.schexam = L.age; scholarExam(); }, ex);
+        oneYear(c, 'schessay', '📝', 'Write a scholarship essay', 'Smarts and good grades help · wins half off' + (premium ? ' · ' + odds(essayChance(), 'chance to win') : ''), essay);
+        oneYear(c, 'schsport', '🏅', 'Try out for the hoverball team', L.st.health < 70 ? 'Needs ❤️ Health 70+' : 'Make the team and university is FREE' + (premium ? ' · ' + odds(sportChance(), 'chance to make it') : ''), tryouts, L.st.health < 70);
+        oneYear(c, 'schart', '🎨', 'Send in an art portfolio', L.st.style < 60 ? 'Needs 😎 Style 60+' : 'Impress the judges and university is FREE' + (premium ? ' · ' + odds(artChance(), 'chance to win') : ''), portfolio, L.st.style < 60);
+        if (L.school) note(c, '🎓 Finish high school with grades of 90% or more and you’ll get a full scholarship automatically!');
+        opt(c, '←', 'Back to school & work', '', jobSheet);
+      });
+    }
+    function scholarExam() {   // 🧮 5 hard questions
+      mathQuiz(5, 5, 'Scholarship exam', function (right) {
+        if (right >= 4) { doThing('🧮', winScholar('exam', right === 5 ? 1 : 0.5, '🧮 You got ' + right + ' out of 5 on the scholarship exam!')); return; }
+        doThing('🧮', [{ happy: -3, smarts: 1 }, '🧮 You got ' + right + ' out of 5 on the scholarship exam. You need at least 4 right to win a scholarship. Try again next year!']);
+      });
+    }
+    function essay() {
+      var topic = pick(['why robots deserve vacations', 'how hover-bikes could fix Neon Harbor’s traffic', 'your dream of building a city on the Moon', 'the time you rescued a lost delivery drone', 'what the world will look like in 100 years']);
+      if (chance(essayChance())) return winScholar('essay', 0.5, '📝 You wrote an amazing scholarship essay about ' + topic + '.');
+      return [{ happy: -3, smarts: 1 }, '📝 You wrote a scholarship essay about ' + topic + ', but they picked someone else this year. Try again next year!'];
+    }
+    function tryouts() {
+      if (chance(sportChance())) return winScholar('sport', 1, '🏅 You crushed the hoverball tryouts: three goals and a backflip!');
+      return [{ happy: -4, health: 1 }, '🏅 You tried out for the hoverball team, but you didn’t make it this year. Keep training!'];
+    }
+    function portfolio() {
+      if (chance(artChance())) return winScholar('art', 1, '🎨 You sent in a portfolio of glowing holo-paintings, and the judges loved it!');
+      return [{ happy: -4, style: 1 }, '🎨 You sent in your art portfolio, but the judges picked someone else this year.'];
     }
     function schoolOpt(c, key, e, t, sub, run) {
       opt(c, e, t, doneYet(key) ? 'Done this year ✓' : sub, function () { L.done[key] = L.age; doThing(e, run()); }, doneYet(key));
