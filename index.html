@@ -9074,6 +9074,7 @@
       { id: 'armor', e: '🛡️', t: 'Sub-skin armor', cost: 18000, min: 0, body: 10, fx: { health: 10 }, vital: 5, desc: 'Take less damage · Health can go 5% past 100', msg: 'You got sub-skin armor. You’re as tough as a hover-bike tire.' },
       { id: 'memory', e: '💾', t: 'Memory expansion', cost: 22000, min: 0, body: 3, fx: { smarts: 10 }, brain: 10, desc: 'Smarts can go up to 10% past 100', msg: 'You got a memory expansion. You remember every noodle you’ve ever eaten.' },
       { id: 'spine', e: '🧊', t: 'Cooling spine', cost: 30000, min: 0, body: 6, limit: 15, fx: {}, msg: 'You got a cooling spine. It keeps your chrome from overheating. Your cyberware tolerance goes up by 15!' },
+      { id: 'immuno', e: '💉', t: 'Immunosuppressors', cost: 45000, min: 0, body: 2, limit: 20, fx: {}, desc: 'Stops your body from fighting your chrome', msg: 'You got Immunosuppressors: a tiny implant that keeps your body from fighting your chrome. Your cyberware tolerance goes up by 20!' },
       { id: 'cortex', e: '🧠', t: 'Neural overclock', cost: 60000, min: 0, body: 5, fx: { smarts: 15 }, brain: 25, desc: 'Smarts can go up to 25% past 100', msg: 'You got a neural overclock. Your brain runs faster than ever, and your Smarts can go past 100% now!' },
       { id: 'booster', e: '🧬', t: 'Health booster', cost: 55000, min: 0, body: 5, fx: { health: 15 }, vital: 15, desc: 'Health can go up to 15% past 100', msg: 'You got a health booster. Your body is tougher than ever, and your Health can go past 100% now!' },
       { id: 'muscle', e: '💪', t: 'Synth-muscle weave', cost: 45000, min: 0, body: 6, fx: { health: 6 }, desc: '+20 power in fights, stronger punches', msg: 'You got synth-muscle weave. You’re WAY stronger now: +20 power!' },
@@ -9581,7 +9582,7 @@
     function has(id) { return L.implants.indexOf(id) >= 0; }
     function xtra(k) { return L.implants.reduce(function (t, id) { return t + (IMP[id] && IMP[id][k] || 0); }, 0); }   // adds up one power across all your implants
     function illegalCount() { return L.implants.filter(function (id) { return IMP[id] && IMP[id].illegal; }).length; }
-    function chrome() { return Math.min(100, L.implants.reduce(function (s, id) { return s + (IMP[id] ? IMP[id].body : 0); }, 0)); }   // % of your body that's cyberware
+    function chrome() { return L.implants.reduce(function (s, id) { return s + (IMP[id] ? IMP[id].body : 0); }, 0); }   // how much tolerance your cyberware uses (no cap at 100: pile on too much and you're WAY over)
     function baseLimit() { return Math.min(95, (L.chromeLimit || 45) + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id].limit || 0); }, 0)) + (hasDegree('bio') ? 5 : 0); }   // a Bio-Hacking degree adds 5
     function limitOf() { return L.smasherBody ? 100 : baseLimit(); }   // your cyberware tolerance
     function rollTolerance() {   // every life gets its own cyberware tolerance, and high tolerance is rare
@@ -9610,7 +9611,7 @@
       var over = chrome() - limitOf();
       if (over <= 0) return 0;
       var sad = 1 + Math.max(0, 50 - L.st.happy) / 50;   // the sadder you are, the more likely an overload
-      return Math.min(0.95, (0.08 + over * 0.025) * sad * (L.mode === 'hard' ? 1.4 : 1)) * (cooled ? 0.4 : 1) * (L.meds > 0 ? 1 - (L.medPow || 0.4) : 1);   // 💊 neuro-blockers help
+      return Math.min(0.95, (0.08 + over * 0.025) * sad * (L.mode === 'hard' ? 1.4 : 1) * (cooled ? 0.4 : 1) * (L.meds > 0 ? 1 - (L.medPow || 0.4) : 1));   // 🧊 cooldowns and 💊 neuro-blockers help when you're a little over, but not when you're WAY over
     }
     function stripChrome() {   // the Chrome Patrol pulls out all your cyberware (your tattoo is just ink, so it stays)
       var gone = L.implants.filter(function (id) { return id !== 'tattoo'; });
