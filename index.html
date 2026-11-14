@@ -1634,8 +1634,8 @@
       <div class="lf-districts" id="lf-story" role="radiogroup" aria-labelledby="lf-storyLabel"></div>
       <div class="lf-label" id="lf-distLabel">Where you’re born</div>
       <div class="lf-districts" id="lf-districts" role="radiogroup" aria-labelledby="lf-distLabel"></div>
-      <div class="lf-label" id="lf-bodyLabel" hidden>Your body</div>
-      <div class="lf-districts" id="lf-body" role="radiogroup" aria-labelledby="lf-bodyLabel" hidden></div>
+      <div class="lf-label" id="lf-bodyLabel">Difficulty</div>
+      <div class="lf-districts" id="lf-body" role="radiogroup" aria-labelledby="lf-bodyLabel"></div>
       <button class="btn" id="lf-start" type="button">Start life →</button>
       <button class="btn ghost" id="lf-backWorlds" type="button">← Worlds</button>
     </div>
@@ -9087,7 +9087,7 @@
       { id: 'timeslow', e: '⏱️', t: 'Starter Sandy', cost: 40000, min: 0, body: 4, fx: { health: 4, style: 6 }, os: 'sandy', tier: 1, desc: 'Slows time for 33 turns in battles', msg: 'You got a Starter Sandy, a time-slow reflex chip. Whenever you want, the whole world slows down around you. Whoa.' },
       { id: 'sandy2', e: '⏱️', t: 'Hummingbird Sandy', cost: 95000, min: 0, body: 5, fx: { health: 5, style: 8 }, os: 'sandy', tier: 2, desc: 'Costs less humanity, hits harder', msg: 'You installed the Hummingbird Sandy. It costs less humanity now, and you hit even harder while it’s on!' },
       { id: 'sandy3', e: '⏱️', t: 'Stillpoint Sandy', cost: 220000, min: 0, body: 6, fx: { health: 6, style: 10 }, os: 'sandy', tier: 3, desc: 'Even cheaper, even stronger', msg: 'You installed the Stillpoint Sandy. When you turn it on, the world almost stops.' },
-      { id: 'sandy4', e: '⏱️', t: 'Apylee Sandy', cost: 350000, min: 0, body: 6, fx: { health: 8, style: 12 }, os: 'sandy', tier: 4, desc: 'The best Sandy: cheapest, strongest, lands crits, and perfect parries give back humanity', msg: 'You installed the Apylee Sandy, the best Sandy there is! Time almost freezes, your hits can CRIT, and every perfect parry gives you back some humanity.' },
+      { id: 'sandy4', e: '⏱️', t: 'Apylee Sandy', cost: 350000, min: 0, body: 6, fx: { health: 8, style: 12 }, os: 'sandy', tier: 4, desc: 'The best Sandy: cheapest, hits 3 times a turn, lands crits, and perfect parries give back humanity', msg: 'You installed the Apylee Sandy, the best Sandy there is! Time almost freezes, your hits can CRIT, and every perfect parry gives you back some humanity.' },
       { id: 'berserk', e: '😤', t: 'Berserk OS', cost: 35000, min: 0, body: 5, fx: { health: 6 }, os: 'berserk', tier: 1, desc: 'Hit harder and take less damage for 4 turns', msg: 'You installed a Berserk OS. When you turn it on, you hit harder and shrug off hits!' },
       { id: 'berserk2', e: '😤', t: 'Red Mist Berserk OS', cost: 110000, min: 0, body: 6, fx: { health: 9 }, os: 'berserk', tier: 2, desc: 'A stronger berserk for 6 turns', msg: 'You installed the Red Mist Berserk OS. Your berserk mode is stronger and lasts longer!' },
       { id: 'deck1', e: '💻', t: 'Starter Cyberdeck', cost: 12000, min: 0, body: 4, fx: { smarts: 4 }, os: 'deck', tier: 1, ram: 4, net: 1, desc: 'Hack people in battles · 4 RAM · 2 quickhacks', msg: 'You got a Starter Cyberdeck. Now you can hack people! In battles, quickhacks use RAM, which refills a little every turn.' },
@@ -9164,6 +9164,7 @@
       { id: 'psycho', e: '🚨', t: 'Psycho Squad', d: 'Stop 5 cyberpsychos as a Chrome Patrol agent (in one life).' },
       { id: 'giant', e: '🤖', t: 'Bigger They Are', d: 'Beat The Smasher in a boss fight.' },
       { id: 'firewall', e: '🕶️', t: 'Firewall', d: 'Beat Ghostline, the rogue netrunner, in a boss fight.' },
+      { id: 'hardcore', e: '🔴', t: 'Hardcore', d: 'Live to 80 in Hard mode.' },
       { id: 'sticky', e: '🤫', t: 'Sticky Fingers', d: 'Steal chrome off a cyberpsycho you beat, without getting caught.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
@@ -9554,7 +9555,7 @@
     function avgParentBond() { var ps = parents(); return ps.length ? ps.reduce(function (s, p) { return s + p.bond; }, 0) / ps.length : 50; }
     function has(id) { return L.implants.indexOf(id) >= 0; }
     function chrome() { return Math.min(100, L.implants.reduce(function (s, id) { return s + (IMP[id] ? IMP[id].body : 0); }, 0)); }   // % of your body that's cyberware
-    function baseLimit() { return Math.min(95, (L.chromeLimit || 45) + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id].limit || 0); }, 0)); }
+    function baseLimit() { return Math.min(95, (L.chromeLimit || 45) + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id].limit || 0); }, 0)) + (hasDegree('bio') ? 5 : 0); }   // a Bio-Hacking degree adds 5
     function limitOf() { return L.smasherBody ? 100 : baseLimit(); }   // your cyberware tolerance
     function rollTolerance() {   // every life gets its own cyberware tolerance, and high tolerance is rare
       var r = Math.random();
@@ -9586,7 +9587,7 @@
       var over = chrome() - limitOf();
       if (over <= 0) return 0;
       var sad = 1 + Math.max(0, 50 - L.st.happy) / 50;   // the sadder you are, the more likely an overload
-      return Math.min(0.95, (0.08 + over * 0.025) * sad) * (cooled ? 0.4 : 1);
+      return Math.min(0.95, (0.08 + over * 0.025) * sad * (L.mode === 'hard' ? 1.4 : 1)) * (cooled ? 0.4 : 1) * (L.meds > 0 ? 1 - (L.medPow || 0.4) : 1);   // 💊 neuro-blockers help
     }
     function stripChrome() {   // the Chrome Patrol pulls out all your cyberware (your tattoo is just ink, so it stays)
       var gone = L.implants.filter(function (id) { return id !== 'tattoo'; });
@@ -9607,7 +9608,7 @@
       L.doom = 'chrome overload';
       return [{ health: -100 }, '🕯️ The Chrome Patrol couldn’t stop you in time. That much chrome was just too much for one person.'];
     }
-    function swipeChance() { return Math.min(0.92, 0.42 + L.st.smarts / 300 + (has('port') ? 0.15 : 0) + (hasSandy() ? 0.15 : 0) + (deckOf() ? 0.12 : 0)); }
+    function swipeChance() { return Math.min(0.92, 0.42 + L.st.smarts / 300 + (has('port') ? 0.15 : 0) + (hasSandy() ? 0.15 : 0) + (deckOf() ? 0.12 : 0) - (L.mode === 'hard' ? 0.1 : 0)); }
     function swipeChip() {
       if (!chance(swipeChance())) return caught('A sky-train guard-bot caught you swiping a data shard.');
       L.chips = (L.chips || 0) + 1; L.mischief += 1; L.good -= 1;
@@ -9689,6 +9690,7 @@
       if (chrome() >= 96) award('smasher');
       if (L.fame >= 100) award('star');
       if (L.age >= 100) award('century');
+      if (L.mode === 'hard' && L.age >= 80) award('hardcore');
       if ((L.gen || 1) >= 3) award('dynasty');
       if (L.job && L.job.id === 'mayor') award('mayor');
       if (has('exo')) award('exo');
@@ -9725,7 +9727,7 @@
     }
     function salary(j) {
       j = j || L.job; var J = JOB[j.id];
-      return Math.round(J.pay * (J.flat || J.pt ? 1 : LV[j.level]) * (j.bonus || 1) + (J.fame ? L.fame * J.fame : 0));
+      return Math.round((J.pay * (J.flat || J.pt ? 1 : LV[j.level]) * (j.bonus || 1) + (J.fame ? L.fame * J.fame : 0)) * (L.mode === 'hard' ? 0.85 : 1));
     }
     function setJob(id, corp) {
       var J = JOB[id];
@@ -9747,7 +9749,7 @@
         note(c, 'Pick your major. It costs ' + cr(U.fee) + ' a year for 4 years.');
         U.majors.forEach(function (m) {
           if (hasDegree(m)) return;
-          opt(c, MAJORS[m][0], MAJORS[m][1], { robo: 'Unlocks the 🛠️ Cyberware Workshop: make your own cyberware!', med: 'Become a Chrome Doctor', code: 'Great for hacker jobs', art: 'Great for design jobs', biz: 'Become a Corp Executive', music: 'Helps you become a pop idol', space: 'Helps you become a starship pilot', bio: 'Learn how bodies and chrome work together' }[m] || '', function () { L.done['uni-' + U.id] = L.age; doThing(U.e, enroll(m, U)); });
+          opt(c, MAJORS[m][0], MAJORS[m][1], { robo: 'Unlocks the 🛠️ Cyberware Workshop: make your own cyberware!', med: 'Become a Chrome Doctor, and brew 💊 neuro-blockers that fight chrome overload', code: 'Great for hacker jobs', art: 'Great for design jobs', biz: 'Become a Corp Executive', music: 'Helps you become a pop idol', space: 'Helps you become a starship pilot', bio: 'Raises your cyberware tolerance by 5' }[m] || '', function () { L.done['uni-' + U.id] = L.age; doThing(U.e, enroll(m, U)); });
         });
         opt(c, '←', 'Back to school & work', '', jobSheet);
       });
@@ -9755,7 +9757,7 @@
     // Guardian Angel (premium): shows your real chances before risky choices
     function odds(p, what) { return '😇 ' + Math.round(Math.max(0, Math.min(1, p)) * 100) + '% ' + what; }
     function licenseChance() { return 0.45 + L.st.smarts / 400 + L.st.health / 400; }
-    function caughtChance(m) { return m.risk * (1.25 - L.st.smarts / 200); }
+    function caughtChance(m) { return m.risk * (1.25 - L.st.smarts / 200) + (L.mode === 'hard' ? 0.1 : 0); }
     function hireChance(j) { return j.id === 'mayor' ? 0.25 + L.fame / 200 + Math.max(0, L.good) / 100 : j.id === 'exec' ? 0.45 : 0.8; }
     function moneyChance(p) { return 0.25 + p.bond / 200 + L.tier * 0.12; }
     function pTitle(X) { return (X.prem ? '👑 ' : '') + X.t; }
@@ -9978,6 +9980,7 @@
       var ch = chrome(), lim = limitOf();
       if (!L.smasherBody && ch > lim && chance(overloadP(L.done.cool === a - 1))) L.pending.unshift('overload');
       else if (!L.smasherBody && ch > 0 && ch >= lim - 5 && chance(0.25)) { log(pick(GLITCH)); s.happy = clamp(s.happy - R(2, 5)); s.health = capStat('health', s.health - R(0, 3)); }
+      if (L.meds > 0 && ch > 0) { L.meds -= 1; if (!L.meds) log('💊 You took your last dose of neuro-blockers. Brew more at the Chrome Clinic!'); }   // one dose a year
       L.happySum += s.happy; L.happyN += 1;
     }
     function deathCause() {
@@ -10397,12 +10400,14 @@
       sheet('🦾 Chrome Clinic', function (c) {
         var ch = chrome(), lim = limitOf(), sb = !!L.smasherBody;
         note(c, sb ? '🧬 Smasher Body: your tolerance is MAX, so your cyberware (' + ch + ') can’t overload you. No glitches, and heavy chrome costs 0 humanity!'
-          : '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance (' + tolName(lim) + '). Every implant takes up some. ' + (ch > lim ? '⚠️ You’re OVER your tolerance! A chrome overload could happen any year.' : ch >= lim - 5 && ch > 0 ? 'You’re almost full. Careful!' : 'Go over your tolerance and you could have a chrome overload!'));
+          : '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance (' + tolName(lim) + (hasDegree('bio') ? ', +5 from your Bio-Hacking degree' : '') + '). Every implant takes up some. ' + (L.meds > 0 ? '💊 You have ' + L.meds + (L.meds === 1 ? ' dose' : ' doses') + ' of neuro-blockers. ' : '') + (ch > lim ? '⚠️ You’re OVER your tolerance! A chrome overload could happen any year.' : ch >= lim - 5 && ch > 0 ? 'You’re almost full. Careful!' : 'Go over your tolerance and you could have a chrome overload!'));
         c.appendChild(barEl(sb ? ch : ch / lim * 100, ch > lim ? 'lo' : ch > 0 && ch >= lim - 5 && !sb ? 'mid' : 'tol'));
         if (!sb) note(c, '🧠 In battles you have ' + humanityMax() + ' humanity. Heavy chrome uses it up, and the better your tolerance, the less it costs. For you, the Sandy costs ' + heavyCost('sandy') + '. Hit zero and the Chrome Patrol shows up!' + (ch > 0 ? ' 😢 The sadder you are, the more likely a chrome overload is.' : ''));
         if (canSmasher()) smasherOpt(c, clinicSheet);
         if (hasDegree('robo')) opt(c, '🛠️', 'Cyberware Workshop', 'Invent and build your own implant', workshopSheet);
         else { var wl = mk('div', 'lf-opt lf-info'); wl.appendChild(mk('i', null, '🛠️')); var wt = mk('span'); wt.appendChild(mk('b', null, 'Cyberware Workshop')); wt.appendChild(mk('small', null, 'Make your own cyberware! Needs a 🤖 Cyber-Engineering degree (Harbor Tech or Kumo-Tek).')); wl.appendChild(wt); c.appendChild(wl); }
+        if (hasDegree('med')) { var mb = doneYet('brew'); opt(c, '💊', 'Brew neuro-blockers', mb ? 'Brewed this year ✓' : L.money < 800 ? cr(800) + ' · not enough credits' : cr(800) + ' · 3 doses · ' + Math.round(medPower() * 100) + '% less chance of a chrome overload, +1 humanity in battles', function () { L.done.brew = L.age; doThing('💊', brewMeds()); }, mb || L.money < 800); }
+        else infoRow(c, '💊', 'Neuro-blocker lab', 'Brew your own medicine that lowers your chance of a chrome overload. Needs a 🦾 Medicine degree.');
         if (ch > 0 && !sb) {
           var cd = doneYet('cool');
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
@@ -10440,6 +10445,8 @@
       L.implants.push(im.id);
       doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), im.e + ' ' + im.msg + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
     }
+    function craftQ() { return Math.round((0.8 + L.st.smarts / 250) * 100) / 100; }   // your Smarts set how good your inventions are
+    function craftGrade(q) { return q >= 1.2 ? 'Masterwork' : q >= 1.05 ? 'Great' : q >= 0.95 ? 'Solid' : 'Prototype'; }
     function regCustom() { ((L && L.custom) || []).forEach(function (X) { IMP[X.id] = X; }); }   // your own inventions
     var WS = { name: '', e: '⚙️', kind: 'weapon', size: 1 };
     var CW_EMOJI = ['⚙️', '🔮', '💎', '🌟', '🔥', '❄️', '⚡', '🐍', '🦂', '🛸'];
@@ -10447,6 +10454,8 @@
     var CW_SIZE = [null, { t: 'Small', body: 3, cost: 5000, boost: 6, cap: 5, dmg: [16, 22] }, { t: 'Medium', body: 6, cost: 15000, boost: 12, cap: 10, dmg: [24, 32] }, { t: 'Large', body: 10, cost: 40000, boost: 20, cap: 15, dmg: [34, 44] }];
     function workshopSheet() {
       sheet('🛠️ Cyberware Workshop', function (c) {
+        var q = craftQ();
+        note(c, '🧠 With ' + L.st.smarts + '% Smarts, your inventions come out ' + craftGrade(q) + ' quality (' + Math.round(q * 100) + '% strength). The smarter you are, the better they get!');
         note(c, 'Your Cyber-Engineering degree lets you invent your own implant! Name it, pick how it looks, what it does, and how big it is. Bigger is stronger, but uses more tolerance.');
         var f = mk('form', 'lf-codeform'), inp = mk('input');
         inp.id = 'lf-cwName'; inp.maxLength = 20; inp.value = WS.name; inp.placeholder = 'Name your implant'; inp.setAttribute('aria-label', 'Implant name'); inp.setAttribute('autocomplete', 'off');
@@ -10460,7 +10469,7 @@
         sec(c, 'What it does');
         Object.keys(CW_KIND).forEach(function (k) { var K = CW_KIND[k]; opt(c, K[0], K[1] + (WS.kind === k ? ' ✓' : ''), k === 'weapon' ? 'Adds your own move to battles' : 'Boosts ' + STAT[K[2]][1] + (k === 'brain' || k === 'body' ? ', and lets it go past 100%' : ''), function () { WS.kind = k; workshopSheet(); }); });
         sec(c, 'Size');
-        [1, 2, 3].forEach(function (z) { var Z = CW_SIZE[z]; opt(c, ['', '▫️', '◽', '⬜'][z], Z.t + (WS.size === z ? ' ✓' : ''), cr(Z.cost) + ' for parts · uses ' + Z.body + ' tolerance', function () { WS.size = z; workshopSheet(); }); });
+        [1, 2, 3].forEach(function (z) { var Z = CW_SIZE[z], K = CW_KIND[WS.kind]; opt(c, ['', '▫️', '◽', '⬜'][z], Z.t + (WS.size === z ? ' ✓' : ''), cr(Z.cost) + ' for parts · uses ' + Z.body + ' tolerance · ' + (K[2] ? '+' + Math.round(Z.boost * q) + ' ' + STAT[K[2]][1] : Math.round(Z.dmg[0] * q) + '–' + Math.round(Z.dmg[1] * q) + ' damage'), function () { WS.size = z; workshopSheet(); }); });
         var Z = CW_SIZE[WS.size], mine = (L.custom || []).length;
         opt(c, '🛠️', 'Build it!', mine >= 5 ? 'You can build up to 5 implants per life' : L.money < Z.cost ? cr(Z.cost) + ' · not enough credits' : cr(Z.cost) + ' · installs it right away', function () { WS.name = inp.value; doThing('🛠️', buildCustom()); }, mine >= 5 || L.money < Z.cost);
         if (mine) note(c, 'Your inventions: ' + L.custom.map(function (X) { return X.e + ' ' + X.t + (has(X.id) ? '' : ' (removed)'); }).join(', '));
@@ -10473,13 +10482,21 @@
       L.custom = L.custom || [];
       var nm = String(WS.name || '').replace(/\s+/g, ' ').trim().slice(0, 20) || (K[1] + ' Mk.' + (L.custom.length + 1));
       var X = { id: 'x' + Date.now().toString(36) + R(10, 99), e: WS.e, t: nm, cost: Z.cost, min: 0, body: Z.body, custom: 1, fx: {}, desc: 'Your own invention' };
-      if (K[2]) X.fx[K[2]] = Z.boost;
-      if (WS.kind === 'brain') X.brain = Z.cap;
-      if (WS.kind === 'body') X.vital = Z.cap;
-      if (WS.kind === 'weapon') { X.dmg = Z.dmg; X.power = 4 + WS.size * 4; }
+      var q = craftQ(); X.grade = craftGrade(q); X.desc = 'Your own invention (' + X.grade + ')';
+      if (K[2]) X.fx[K[2]] = Math.round(Z.boost * q);
+      if (WS.kind === 'brain') X.brain = Math.round(Z.cap * q);
+      if (WS.kind === 'body') X.vital = Math.round(Z.cap * q);
+      if (WS.kind === 'weapon') { X.dmg = [Math.round(Z.dmg[0] * q), Math.round(Z.dmg[1] * q)]; X.power = Math.round((4 + WS.size * 4) * q); }
       L.custom.push(X); regCustom();
       L.implants.push(X.id);
-      return [Object.assign({ money: -Z.cost }, X.fx), '🛠️ You invented and built your own implant: ' + X.e + ' ' + X.t + '!' + (X.dmg ? ' It adds a new move to your battles.' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
+      return [Object.assign({ money: -Z.cost }, X.fx), '🛠️ You invented and built your own implant: ' + X.e + ' ' + X.t + ' (' + X.grade + ' quality, thanks to your ' + L.st.smarts + '% Smarts)!' + (X.dmg ? ' It adds a new move to your battles.' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
+    }
+    function infoRow(c, e, t, sub) { var r = mk('div', 'lf-opt lf-info'); r.appendChild(mk('i', null, e)); var x = mk('span'); x.appendChild(mk('b', null, t)); x.appendChild(mk('small', null, sub)); r.appendChild(x); c.appendChild(r); }
+    function medPower() { return Math.min(0.75, 0.3 + L.st.smarts / 250); }   // smarter doctors brew stronger medicine
+    function brewMeds() {
+      var p = medPower();
+      L.meds = Math.min(9, (L.meds || 0) + 3); L.medPow = p;
+      return [{ money: -800, smarts: 1 }, '💊 You brewed 3 doses of neuro-blockers in your lab (strength ' + Math.round(p * 100) + '%). Each year you have chrome, a dose lowers your chance of a chrome overload, and in battles they keep you steady: +1 humanity.'];
     }
     function canSmasher() { return hasAch('smasher') || !!(L && L.chromeCode); }
     function giveAllChrome() {   // the "crome" code: every implant (the best of each OS) for this life only
@@ -10604,7 +10621,7 @@
       var pw = p.power;
       return { id: 'person', e: p.age >= 65 ? '🧓' : '🧑', t: p.first + (p.last ? ' ' + p.last : ''), hp: 50 + Math.round(pw * 0.6), atk: [5 + Math.round(pw / 14), 8 + Math.round(pw / 10)], hits: [1, pw >= 55 ? 3 : 2], dodge: 0.18, power: pw, speed: 1 + pw / 500, weapon: '👊', feint: 0.15, combo: 0.1 };
     }
-    function copsChance(p) { return Math.max(0.15, Math.min(0.85, 0.45 + (p.rel === 'partner' ? 0.2 : 0) - L.st.smarts / 400 - (deckOf() ? 0.12 : 0) - (hasSandy() ? 0.08 : 0))); }
+    function copsChance(p) { return Math.max(0.15, Math.min(0.85, 0.45 + (p.rel === 'partner' ? 0.2 : 0) - L.st.smarts / 400 - (deckOf() ? 0.12 : 0) - (hasSandy() ? 0.08 : 0) + (L.mode === 'hard' ? 0.1 : 0))); }
     function attackOpt(c, p) {
       var f = personFoe(p);
       opt(c, '💀', 'Attack ' + p.first, premium ? (isHard(f) ? '⚔️ Real battle! · ' : odds(winChance(f), 'chance to win') + ' · ') + odds(copsChance(p), 'chance the cops catch you') : 'Dangerous! If you win, they’re gone for good', function () {
@@ -10706,7 +10723,7 @@
     function tolBonus(t) { return t >= 90 ? 3 : t >= 75 ? 2 : t >= 60 ? 1 : t < 28 ? -2 : t < 35 ? -1 : 0; }
     function humanityMax() {   // about 9: more with high tolerance; less with low tolerance, too much chrome, or sadness
       var lim = limitOf(), cy = chrome();
-      return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0)));
+      return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0)));
     }
     var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3, float: 3, pull: 2 };   // humanity cost for an average body (tolerance 45% or less)
     function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body: free!
@@ -10725,7 +10742,7 @@
       return Math.round(p);
     }
     function isHard(en) { return en.power > fightPower() * 0.85; }
-    function winChance(en) { return Math.max(0.55, Math.min(0.95, 0.5 + (fightPower() - en.power) / 100)); }
+    function winChance(en) { return Math.max((L.mode === 'hard' ? 0.4 : 0.55), Math.min(0.95, 0.5 + (fightPower() - en.power) / 100 - (L.mode === 'hard' ? 0.1 : 0))); }
     function foeOf(x) { return typeof x === 'string' ? ENEMY[x] : x; }
     function fight(id, then) {   // easy fights end right away (like BitLife); hard ones start a battle
       var en = foeOf(id);
@@ -10813,7 +10830,7 @@
         return [{ perf: -8, happy: -6, health: h }, '😵 ' + en.t + ' knocked you down. Your squad had to finish the job.'];
       });
     }
-    function lootCatch() { return Math.max(0.12, Math.min(0.6, 0.35 - L.st.smarts / 500)); }   // chance Internal Affairs catches you
+    function lootCatch() { return Math.max(0.12, Math.min(0.7, 0.35 - L.st.smarts / 500 + (L.mode === 'hard' ? 0.1 : 0))); }   // chance Internal Affairs catches you
     function stealChrome(mode) {   // 🤫 pocket a beaten cyberpsycho's chrome: keep it, or sell it to a fixer
       var X = IMP[L.loot.id], n = L.loot.n;
       L.loot = null;
@@ -10852,7 +10869,9 @@
     function startBattle(id, mode, done) {
       if (B) return;
       if (quickFights) { done(quickResult(mode)); return; }
-      var en = foeOf(id), D = deckOf(), ram = D ? D.ram + (has('ramup') ? 3 : 0) : 0, hm = humanityMax();
+      var en = foeOf(id);
+      if (L.mode === 'hard' && mode === 'fight') en = Object.assign({}, en, { hp: Math.round(en.hp * 1.25), atk: [Math.round(en.atk[0] * 1.25), Math.round(en.atk[1] * 1.25)] });   // hard mode: tougher enemies
+      var D = deckOf(), ram = D ? D.ram + (has('ramup') ? 3 : 0) : 0, hm = humanityMax();
       var max = 60 + Math.round(L.st.health * 0.6) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0);
       B = { en: en, mode: mode, done: done, enHP: en.hp, hp: max, max: max, hum: hm, humMax: hm, sandy: 0, rage: 0, stun: false, glide: false, glideAll: false, camo: false, yank: false,
         ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
@@ -10955,7 +10974,7 @@
         B.sandy = 33; award('timebender'); sfx('slow');
         if (spend(heavyCost('sandy'))) return;
         popF('SANDY!', 'great');
-        msgF('⏱️ SANDY! Time slows way down. Dodging is way easier and your punches hit ' + ['twice', 'twice', '2.5 times', 'three times', '3.5 times'][st] + ' as hard for 33 turns.' + (st >= 4 ? ' Apylee bonus: your hits can CRIT, and perfect parries give back humanity!' : '') + ' Now pick your attack!');
+        msgF('⏱️ SANDY! Time slows way down. Dodging is way easier and your punches hit ' + ['twice', 'twice', '2.5 times', 'three times', '3.5 times'][st] + ' as hard for 33 turns.' + (st >= 4 ? ' Apylee bonus: your punches, kicks, slashes and shots strike 3 times a turn, they can CRIT, and perfect parries give back humanity!' : '') + ' Now pick your attack!');
         renderF(); buildMoves();
         return;
       }
@@ -10997,12 +11016,27 @@
       if (id === 'aim') dmg = R(14, 18);
       if (id === 'hack') { dmg = 4; if (chance(0.6)) { B.stun = true; extra = ' They’re stunned!'; } else extra = ' The stun fizzled.'; }
       if (id === 'yank') { dmg = 3; B.yank = true; extra = ' Their next attack will have fewer hits.'; }
+      if (B.sandy && st >= 4 && (CX || ['punch', 'kick', 'slash', 'shoot', 'aim'].indexOf(id) >= 0)) { apyleeFlurry(id, CX, NM, rg); return; }   // the Apylee Sandy hits 3 times
       var dodge = B.cripple ? 0 : CX ? en.dodge * 0.3 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, pull: 0, slam: en.dodge * 0.3, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0 }[id] || 0;
       if (B.cripple) B.cripple -= 1;
       if (chance(dodge)) { B.stun = false; B.yank = false; popF('MISS', 'bad'); msgF('💨 ' + en.t + ' dodged your ' + NM[1].toLowerCase() + '!'); enemySoon(); return; }
       if (B.float > 0 && (CX || ['punch', 'kick', 'smash', 'pull', 'slash', 'cannon'].indexOf(id) >= 0)) { dmg = Math.round(dmg * 1.5); extra += ' (🪐 from above!)'; }
       if (B.sandy && st >= 4 && chance(0.25)) { dmg = Math.round(dmg * 1.5); extra += ' 💥 CRIT!'; }   // the Apylee Sandy lands critical hits
       hitFoe(dmg, NM[0] + ' ' + (CX ? 'BAM!' : { punch: 'POW!', kick: 'WHAM!', slash: 'SHING!', rocket: 'KA-BOOM!', shoot: 'ZAP!', aim: 'Bullseye!', hack: 'Bzzt!', yank: 'Yoink!', smash: 'TITAN SMASH!', cannon: 'BOOOM!', pull: 'GRAVITY PULL!', slam: 'KA-THOOM!' }[id]) + ' ' + dmg + ' damage.' + extra);
+    }
+    function apyleeFlurry(id, CX, NM, rg) {   // ⏱️ with the Apylee Sandy on, light attacks strike 3 times in one turn
+      var en = B.en, total = 0, parts = [];
+      for (var i = 0; i < 3; i++) {
+        var d = CX ? R(CX.dmg[0], CX.dmg[1]) * 1.2 : { punch: R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0), kick: R(16, 22), slash: R(18, 24), shoot: R(8, 12) + (has('eyes') ? 3 : 0), aim: R(14, 18) }[id];
+        d = Math.round(d * 1.6 * rg * (B.float > 0 ? 1.5 : 1));
+        var dodge = B.cripple ? 0 : CX ? en.dodge * 0.3 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, shoot: en.dodge * 0.25, aim: 0 }[id];
+        if (chance(dodge)) { parts.push('miss'); continue; }
+        if (chance(0.25)) { d = Math.round(d * 1.5); parts.push(d + ' 💥CRIT'); } else parts.push(String(d));
+        total += d;
+      }
+      if (B.cripple) B.cripple -= 1;
+      if (!total) { popF('MISS ×3', 'bad'); msgF('💨 ' + en.t + ' dodged all three!'); enemySoon(); return; }
+      hitFoe(total, '⏱️ APYLEE FLURRY! Your ' + NM[1].toLowerCase() + ' hit 3 times: ' + parts.join(' + ') + ' = ' + total + ' damage!');
     }
     function doHack(Q) {   // quickhacks never miss
       var cost = hackCost(Q), en = B.en, up = has('uplink') ? 1.3 : 1, d;
@@ -11067,7 +11101,7 @@
       renderF(); buildMoves();
     }
     function slowF() { return B.sandy ? (sandyTier() >= 4 ? 2 : 1.6) : 1; }   // how much the Sandy slows their attacks down
-    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = has('reflex') ? 1.25 : 1; return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf }; }
+    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = has('reflex') ? 1.25 : 1; return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf * (L.mode === 'hard' ? 0.8 : 1) }; }
     function swing(parried) {   // their weapon swings across the arena (swords leave a slash)
       if (!B || !B.en.weapon) return;
       var w = $('weapon'), k = $('streak');
@@ -11204,7 +11238,7 @@
     function render() {
       if (!L) return;
       $('avatar').textContent = avatar();
-      $('name').textContent = L.first + ' ' + L.last + (premium ? ' 👑' : '');
+      $('name').textContent = L.first + ' ' + L.last + (premium ? ' 👑' : '') + (L.mode === 'hard' ? ' 🔴' : '');
       $('sub').textContent = 'Age ' + L.age + ' · ' + occupation();
       checkAch();
       var tip = '';
@@ -11284,10 +11318,11 @@
         sb.appendChild(b);
       });
       var bb = $('body'); bb.innerHTML = '';
-      $('body').hidden = $('bodyLabel').hidden = !hasAch('smasher');   // 🤖 The Smasher's reward can be a starting choice
-      [['normal', '🧬 Normal body', 'Roll your own cyberware tolerance.'], ['smasher', '🤖 Smasher Body', 'MAX cyberware tolerance, no drawbacks at all.']].forEach(function (o) {
+      $('body').hidden = $('bodyLabel').hidden = false; $('bodyLabel').textContent = 'Difficulty';   // 🎚️ easy (Smasher Body), normal, or hard
+      [['smasher', '🤖 Smasher (easy)', hasAch('smasher') ? 'A Smasher Body: install any cyberware with no drawbacks.' : '🔒 Get The Smasher achievement to unlock the Smasher Body.'], ['normal', '🟢 Normal', 'The regular game.'], ['hard', '🔴 Hard', 'Lower tolerance, tougher fights, less pay, and more risk.']].forEach(function (o) {
         var b = mk('button', 'lf-dist'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('data-body', o[0]);
         b.appendChild(mk('b', null, o[1])); b.appendChild(mk('small', null, o[2]));
+        if (o[0] === 'smasher' && !hasAch('smasher')) b.disabled = true;
         b.addEventListener('click', function () { bodyPick = o[0]; markDistrict(); });
         bb.appendChild(b);
       });
@@ -11305,6 +11340,8 @@
     function startLife() {
       var first = clean($('first').value) || pick(NH.first), last = clean($('last').value) || pick(NH.last);
       L = blank(first, last, district);
+      L.mode = bodyPick === 'hard' ? 'hard' : bodyPick === 'smasher' && hasAch('smasher') ? 'easy' : 'normal';
+      if (L.mode === 'hard') L.chromeLimit = Math.max(20, L.chromeLimit - 10);   // hard mode: less tolerance
       var d = NH.districts[district], tier = d.tier;
       L.street = story === 'street';
       var mom = addPerson('parent', R(22, 40), null, last, 'Mom'), dad = addPerson('parent', R(22, 42), null, last, 'Dad');
@@ -11335,7 +11372,8 @@
       else log('👪 Your mom is ' + mom.first + ' ' + last + ', a ' + mom.job + '. Your dad is ' + dad.first + ' ' + last + ', a ' + dad.job + '.');
       if (sibNames.length) log(sibNames.length === 1 ? '🧒 You have an older sibling, ' + sibNames[0] + '.' : '🧒 You have two older siblings, ' + sibNames[0] + ' and ' + sibNames[1] + '.');
       log(tolLine());
-      if (bodyPick === 'smasher' && hasAch('smasher')) { L.smasherBody = true; log('🤖 You started life with a Smasher Body: MAX cyberware tolerance, with no drawbacks at all!'); }
+      if (L.mode === 'easy') { L.smasherBody = true; log('🤖 You started life with a Smasher Body: MAX cyberware tolerance, with no drawbacks at all!'); }
+      if (L.mode === 'hard') log('🔴 HARD MODE! Lower tolerance, tougher fights, less pay, and more risk. Good luck!');
       log('Welcome to the world, ' + first + '! Tap ＋ Age to grow up.');
       save(); view('life'); render();
     }
@@ -11373,6 +11411,9 @@
       if (!k || !k.alive) return;
       var worth = Math.max(0, netWorth()), mate = old.people.filter(function (p) { return p.alive && (p.rel === 'spouse' || p.rel === 'partner'); })[0];
       L = blank(k.first, k.last || old.last, old.district);
+      L.mode = old.mode || 'normal';   // your kid keeps your difficulty
+      if (L.mode === 'hard') L.chromeLimit = Math.max(20, L.chromeLimit - 10);
+      if (L.mode === 'easy' && hasAch('smasher')) L.smasherBody = true;
       L.gen = (old.gen || 1) + 1; L.age = k.age; L.born = old.born + old.age - k.age; L.money = worth;
       L.tier = Math.min(2, old.tier + (worth >= 500000 ? 1 : 0));
       L.st.smarts = clamp((old.st.smarts + R(10, 90)) / 2); L.st.style = clamp((old.st.style + R(10, 90)) / 2);
@@ -11574,6 +11615,7 @@
           '❤️ People: your family, friends, partner, and kids. Spend time with them so they stay close.',
           '⚡ Do: activities, mischief, street life, and the Chrome Clinic. Most things can be done once a year.',
           '🥊 Easy fights are over fast, but tough ones start a real battle. Pick moves on your turn. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back). Some enemies fake you out: they wind up, then wait. Don’t fall for it! Others go for a ⚡ COMBO: several hits super fast, so tap once for each. Most implant moves are free, but heavy chrome like your Sandy (time-slow) and Berserk costs humanity. Hit zero humanity and the Chrome Patrol shows up!',
+          '🎚️ When you start a life, pick a difficulty: 🤖 Smasher (easy, once you have The Smasher), 🟢 Normal, or 🔴 Hard (lower tolerance, tougher fights, less pay, more risk).',
           '🧬 Every life gets its own cyberware tolerance (high tolerance is rare). Every implant takes up some of it, and if you go over, you could have a chrome overload. The higher your tolerance, the less humanity heavy chrome like your Sandy costs.',
           '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only it can run.',
           '💀 From age 16, you can attack friends and partners. If you win, they’re gone for good, and if the cops catch you, you go to the Lockup.',
