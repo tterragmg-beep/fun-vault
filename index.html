@@ -767,6 +767,7 @@
   .lf-streak.go { animation: lf-streak 0.34s ease-out; }
   @keyframes lf-streak { 0% { opacity: 0; transform: rotate(-28deg) scaleX(0.2); } 40% { opacity: 1; transform: rotate(-28deg) scaleX(1); } 100% { opacity: 0; transform: rotate(-28deg) scaleX(1.1); } }
   @media (prefers-reduced-motion: reduce) { .lf-weapon.swing, .lf-weapon.clang, .lf-streak.go { animation: none; } }
+  .lf-pill[aria-pressed="true"] { border-color: var(--lf-a); box-shadow: 0 0 0 3px color-mix(in srgb, var(--lf-a) 30%, transparent); }
   .lf-math { margin: 0 0 14px; text-align: center; font-family: var(--font-display); font-size: 2rem; font-weight: 800; }
   .lf-mathopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .lf-mathopts .lf-choice { text-align: center; font-size: 1.2rem; font-weight: 800; }
@@ -8977,7 +8978,7 @@
   // ============ Lifetimes: a life simulator, inspired by BitLife (by Candywriter) ============
   (function () {
     var KEY = 'funvault-lifetimes-v1', GKEY = 'funvault-lifetimes-graves-v1', PKEY = 'funvault-lifetimes-premium-v1', TKEY = 'funvault-lifetimes-timemachine-v1', AKEY = 'funvault-lifetimes-achievements-v1', OKEY = 'funvault-lifetimes-premium-off-v1', LKEY = 'funvault-lifetimes-luckyguess-v1';
-    var LOG_MAX = 700, TUITION = 6000, SNAP_MAX = 25, CODES = { cyberpunk: 'premium', smasher: 'smasher', luckyguess: 'allach' };
+    var LOG_MAX = 700, TUITION = 6000, SNAP_MAX = 25, CODES = { cyberpunk: 'premium', smasher: 'smasher', luckyguess: 'allach', crome: 'allchrome', chrome: 'allchrome' };
     function $(id) { return document.getElementById('lf-' + id); }
     function R(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
     function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -9033,19 +9034,27 @@
       { id: 'guard', e: '🛡️', t: 'Security Guard', pay: 32000, need: { health: 55 } },
       { id: 'mech', e: '🔧', t: 'Hover-Car Mechanic', pay: 36000, need: { smarts: 40 } },
       { id: 'racer', e: '🏍️', t: 'Hover-Bike Racer', pay: 38000, fame: 1500, flat: 1, need: { health: 60, style: 45, license: 1 } },
-      { id: 'idol', e: '🎤', t: 'Holo Pop Idol', pay: 25000, fame: 2500, flat: 1, need: { style: 70 } },
+      { id: 'idol', e: '🎤', t: 'Holo Pop Idol', pay: 25000, fame: 2500, flat: 1, need: { style: 70 }, alt: { major: 'music', style: 40 } },
       { id: 'designer', e: '🎨', t: 'Holo-Ad Designer', pay: 48000, need: { style: 55, smarts: 35 }, alt: { major: 'art' } },
       { id: 'office', e: '🏢', t: 'Office Worker', pay: 52000, need: { degree: 1 } },
       { id: 'hacker', e: '💻', t: 'White-Hat Hacker', pay: 76000, need: { smarts: 70 }, alt: { major: 'code', smarts: 50 } },
       { id: 'netjob', e: '🕸️', t: 'Corp Netrunner', pay: 88000, need: { netrunner: 1, smarts: 50 } },
+      { id: 'patrol', e: '🚨', t: 'Chrome Patrol Agent', pay: 95000, need: { health: 60, power: 50 } },
       { id: 'engineer', e: '🤖', t: 'Robotics Engineer', pay: 92000, need: { major: 'robo' } },
       { id: 'chromedoc', e: '🦾', t: 'Chrome Doctor', pay: 130000, need: { major: 'med', smarts: 60 } },
       { id: 'exec', e: '💼', t: 'Corp Executive', pay: 260000, flat: 1, need: { major: 'biz', smarts: 60, style: 50 } },
       { id: 'mayor', e: '🏛️', t: 'Mayor of Neon Harbor', pay: 180000, fame: 500, flat: 1, need: { age: 35, fame: 40, smarts: 55 } },
-      { id: 'pilot', e: '🚀', t: 'Starship Pilot', pay: 150000, flat: 1, prem: 1, need: { smarts: 60, health: 60 } }
+      { id: 'pilot', e: '🚀', t: 'Starship Pilot', pay: 150000, flat: 1, prem: 1, need: { smarts: 60, health: 60 }, alt: { major: 'space', smarts: 40, health: 40 } }
     ];
     var JOB = byId(JOBS), LV = [0.85, 1, 1.3, 1.7], LV_NAME = ['Junior ', '', 'Senior ', 'Head '];
-    var MAJORS = { robo: ['🤖', 'Cyber-Engineering'], med: ['🦾', 'Medicine'], code: ['💻', 'Netcode'], art: ['🎨', 'Holo-Arts'], biz: ['📊', 'Business'] };
+    var MAJORS = { robo: ['🤖', 'Cyber-Engineering'], med: ['🦾', 'Medicine'], code: ['💻', 'Netcode'], art: ['🎨', 'Holo-Arts'], biz: ['📊', 'Business'], music: ['🎵', 'Holo-Music'], space: ['🚀', 'Space Flight'], bio: ['🧬', 'Bio-Hacking'] };
+    var UNIS = [   // you can earn a degree from each of these (as many as you like)
+      { id: 'harbor', e: '🏛️', t: 'Harbor Tech University', fee: 6000, majors: ['robo', 'med', 'code', 'art', 'biz'], ok: function () { return (L.hsGrade || 0) >= 45 || L.st.smarts >= 60; }, needT: 'better grades or 🧠 Smarts 60+' },
+      { id: 'kumo', e: '🏙️', t: 'Kumo-Tek Institute', fee: 15000, majors: ['robo', 'code', 'space'], ok: function () { return L.st.smarts >= 70; }, needT: '🧠 Smarts 70+' },
+      { id: 'neon', e: '🎭', t: 'Neon Arts Academy', fee: 8000, majors: ['art', 'music', 'biz'], ok: function () { return L.st.style >= 50; }, needT: '😎 Style 50+' },
+      { id: 'canal', e: '🩺', t: 'Canal Medical College', fee: 12000, majors: ['med', 'bio'], ok: function () { return L.st.smarts >= 65; }, needT: '🧠 Smarts 65+' }
+    ];
+    var UNI = byId(UNIS);
     var IMPLANTS = [
       { id: 'tattoo', e: '✨', t: 'Glowing neon tattoo', cost: 400, min: 0, body: 0, fx: { style: 8 }, msg: 'You got a glowing neon tattoo. Your arm now glows in the dark!' },
       { id: 'eyes', e: '👁️', t: 'Cyber-eyes with zoom', cost: 6000, min: 0, body: 3, fx: { smarts: 4, style: 5 }, desc: 'Aimed shot move', msg: 'You got cyber-eyes. You can now read signs from three blocks away!' },
@@ -9134,7 +9143,8 @@
     var PLAN = byId(PLANS), CREW = byId(CREWS);
     var ACH = [
       { id: 'firstlife', e: '🌱', t: 'First Life', d: 'Live a whole life, from baby to the very end.' },
-      { id: 'grad', e: '🎓', t: 'Big Brain', d: 'Graduate from Harbor Tech University.' },
+      { id: 'grad', e: '🎓', t: 'Big Brain', d: 'Graduate from a university.' },
+      { id: 'scholar', e: '📚', t: 'Triple Degree', d: 'Earn 3 university degrees in one life.' },
       { id: 'married', e: '💍', t: 'Happily Married', d: 'Get married.' },
       { id: 'parent', e: '🍼', t: 'Parent', d: 'Have or adopt a kid.' },
       { id: 'million', e: '💰', t: 'Millionaire', d: 'Have 1,000,000 credits at once.' },
@@ -9151,6 +9161,9 @@
       { id: 'breach', e: '💻', t: 'Breach Protocol', d: 'Use 3 quickhacks in one battle and win it.' },
       { id: 'capri', e: '💠', t: 'Capri', d: 'Install every piece of netrunner gear (with a Black ICE Cyberdeck) and graduate from Netrunner School.', reward: 'Gives you 💠 Capri, the legendary cyberdeck: every quickhack is free, plus 6 quickhacks only Capri can run!' },
       { id: 'breakout', e: '🔓', t: 'Great Escape', d: 'Break out of the Neon Harbor Lockup.' },
+      { id: 'psycho', e: '🚨', t: 'Psycho Squad', d: 'Stop 5 cyberpsychos as a Chrome Patrol agent (in one life).' },
+      { id: 'giant', e: '🤖', t: 'Bigger They Are', d: 'Beat The Smasher in a boss fight.' },
+      { id: 'firewall', e: '🕶️', t: 'Firewall', d: 'Beat Ghostline, the rogue netrunner, in a boss fight.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9430,6 +9443,10 @@
       { id: 'crewinvite', forced: 1, e: '🏙️', t: 'A street crew has been looking out for you. Their leader, {new}, says: “You’ve got nobody left. Run with us, and we’ll be your family.”', c: [
         ['Join the crew', function (c) { return joinCrew(pick(CREWS).id, c.new); }],
         ['Stay on your own', [[1, { happy: -2, good: 1 }, 'You told the street crew you’d rather stay on your own.']]]] },
+      { id: 'psychocall', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'patrol'; }, e: '🚨', t: 'CYBERPSYCHO ALERT! Somebody went haywire with way too much chrome, and your Chrome Patrol squad is the closest.', c: [
+        ['⚔️ Take them down', function () { return psychoCall(); }],
+        ['🗣️ Try to talk them down', function () { if (chance(0.2 + L.st.smarts / 250)) { L.psychos = (L.psychos || 0) + 1; checkPsycho(); return [{ good: 3, perf: 8, happy: 6, fame: 2 }, '🗣️ You talked the cyberpsycho down, slow and calm. Nobody got hurt, and they’re getting help now.']; } var r = psychoCall(); if (r.battle) r.intro = 'They didn’t listen!'; return r; }],
+        ['📞 Wait for backup', [[1, { perf: -4 }, '📞 You waited for backup, and the rest of your squad handled the cyberpsycho. Your captain sighed.']]]] },
       { id: 'crewask', a: [16, 35], w: 1, if: function () { return !L.crew; }, e: '🏙️', t: 'A street crew wants you to run with them. They say you’ve got skills.', c: [
         ['Join them', function () { return joinCrew(pick(CREWS).id); }],
         ['No thanks', [[1, { good: 1 }, 'You turned down a street crew.']]]] }
@@ -9478,6 +9495,7 @@
     try { var lg = localStorage.getItem(LKEY); allAchOwned = lg === '1' || lg === '0'; allAch = lg === '1'; } catch (e) {}
     function hasAch(id) { return allAch || !!achs[id]; }
     function saveAchs() { try { localStorage.setItem(AKEY, JSON.stringify(achs)); } catch (e) {} }
+    if (L) regCustom();
     if (L) { if (L.chromeLimit == null || L.chromeLimit < 20) L.chromeLimit = rollTolerance(); if (L.chips == null) L.chips = 0; if (L.plan === undefined) L.plan = null; if (L.crew === undefined) L.crew = null; }
     try { var tm = JSON.parse(localStorage.getItem(TKEY) || '[]'); if (Array.isArray(tm)) snaps = tm.filter(function (x) { return x && typeof x.s === 'string'; }); } catch (e) {}
     function save() { try { localStorage.setItem(KEY, JSON.stringify(L)); } catch (e) {} }
@@ -9577,7 +9595,9 @@
       if (chance(P ? P.save : NO_PLAN_SAVE)) {
         var bill = Math.round(20000 + Math.max(0, L.money) * 0.3), n = stripChrome();
         award('overload');
-        return [{ money: -bill, happy: -20, health: -Math.min(15, Math.max(0, L.st.health - 20)) }, '🚨 The Chrome Patrol stopped you just in time' + (P ? ' (your ' + P.t + ' got them there fast)' : '') + '! They pulled out all ' + n + ' of your implants and sent you a bill for ' + cr(bill) + '.'];
+        var cop = L.job && L.job.id === 'patrol';   // when you're on the Chrome Patrol yourself…
+        if (cop) endJob();
+        return [{ money: -bill, happy: -20, health: -Math.min(15, Math.max(0, L.st.health - 20)) }, (cop ? '🚨 Your own Chrome Patrol squad had to stop you' : '🚨 The Chrome Patrol stopped you just in time') + (P ? ' (your ' + P.t + ' got them there fast)' : '') + '! They pulled out all ' + n + ' of your implants and sent you a bill for ' + cr(bill) + '.' + (cop ? ' You got kicked off the Chrome Patrol.' : '')];
       }
       L.doom = 'chrome overload';
       return [{ health: -100 }, '🕯️ The Chrome Patrol couldn’t stop you in time. That much chrome was just too much for one person.'];
@@ -9709,9 +9729,23 @@
     }
     function endJob() { if (L.job) L.lastJob = jobTitle(); L.job = null; }
     function finishSchool() { L.edu = 'high'; L.hsGrade = L.school ? L.school.grade : 50; L.school = null; L.club = null; }
-    function enroll(m) {
-      L.uni = { major: m, year: 1 };
-      return [{ money: -TUITION, happy: 5, smarts: 2 }, '🏛️ You started studying ' + MAJORS[m][1] + ' at Harbor Tech University! Tuition is ' + cr(TUITION) + ' a year.'];
+    function enroll(m, U) {
+      U = U || UNIS[0];
+      L.uni = { major: m, year: 1, school: U.id };
+      return [{ money: -U.fee, happy: 5, smarts: 2 }, '🏛️ You started studying ' + MAJORS[m][1] + ' at ' + U.t + '! Tuition is ' + cr(U.fee) + ' a year.'];
+    }
+    function degrees() { if (!L.degrees) L.degrees = L.edu === 'uni' && L.major ? [{ major: L.major, school: 'harbor' }] : []; return L.degrees; }
+    function hasDegree(m) { return degrees().some(function (d) { return d.major === m; }); }
+    function uniOf(id) { return UNI[id] || UNIS[0]; }
+    function majorSheet(U) {
+      sheet(U.e + ' ' + U.t, function (c) {
+        note(c, 'Pick your major. It costs ' + cr(U.fee) + ' a year for 4 years.');
+        U.majors.forEach(function (m) {
+          if (hasDegree(m)) return;
+          opt(c, MAJORS[m][0], MAJORS[m][1], { robo: 'Unlocks the 🛠️ Cyberware Workshop: make your own cyberware!', med: 'Become a Chrome Doctor', code: 'Great for hacker jobs', art: 'Great for design jobs', biz: 'Become a Corp Executive', music: 'Helps you become a pop idol', space: 'Helps you become a starship pilot', bio: 'Learn how bodies and chrome work together' }[m] || '', function () { L.done['uni-' + U.id] = L.age; doThing(U.e, enroll(m, U)); });
+        });
+        opt(c, '←', 'Back to school & work', '', jobSheet);
+      });
     }
     // Guardian Angel (premium): shows your real chances before risky choices
     function odds(p, what) { return '😇 ' + Math.round(Math.max(0, Math.min(1, p)) * 100) + '% ' + what; }
@@ -9814,7 +9848,7 @@
     }
     function eligible(ev) {
       if (ev.forced || L.age < ev.a[0] || L.age > ev.a[1]) return false;
-      if (L.seen[ev.id] != null && (ev.once || L.age - L.seen[ev.id] < 4)) return false;
+      if (L.seen[ev.id] != null && (ev.once || L.age - L.seen[ev.id] < (ev.every || 4))) return false;
       if (!ctxFor(ev)) return false;
       return !ev.if || !!ev.if();
     }
@@ -9867,11 +9901,14 @@
       if (a + (L.ahead || 0) >= 18 && L.school && L.pending.indexOf('graduate') < 0) L.pending.push('graduate');   // skipped grades = graduate early
       // university
       if (L.uni) {
+        var UU = uniOf(L.uni.school);
         L.uni.year += 1;
         if (L.uni.year > 4) {
+          degrees().push({ major: L.uni.major, school: UU.id });
           L.edu = 'uni'; L.major = L.uni.major; L.uni = null; s.happy = clamp(s.happy + 10); s.smarts = capStat('smarts', s.smarts + 5);
-          log('🎓 You graduated from Harbor Tech University with a degree in ' + MAJORS[L.major][1] + '!');
-        } else { L.money -= TUITION; s.smarts = capStat('smarts', s.smarts + R(1, 3)); }
+          log('🎓 You graduated from ' + UU.t + ' with a degree in ' + MAJORS[L.major][1] + '!');
+          if (degrees().length >= 3) award('scholar');
+        } else { L.money -= UU.fee; s.smarts = capStat('smarts', s.smarts + R(1, 3)); }
       }
       // netrunner school (2 years)
       if (L.netSchool) {
@@ -10117,11 +10154,12 @@
           if ((L.ahead || 0) < 3) opt(c, '🧮', 'Take a skip-a-grade test', doneYet('gradetest') ? 'Done this year ✓' : 'Get 3 math questions right to skip ahead a grade', function () { L.done.gradetest = L.age; skipTest(); }, doneYet('gradetest'));
         }
         if (L.uni) {
-          sec(c, '🏛️ Harbor Tech University');
-          note(c, MAJORS[L.uni.major][1] + ' · Year ' + L.uni.year + ' of 4 · Tuition ' + cr(TUITION) + '/year');
-          schoolOpt(c, 'ustudy', '📖', 'Study hard', 'Get smarter', function () { return [{ smarts: [2, 4], happy: -1 }, '📖 You studied hard at Harbor Tech University.']; });
+          var UU = uniOf(L.uni.school);
+          sec(c, UU.e + ' ' + UU.t);
+          note(c, MAJORS[L.uni.major][1] + ' · Year ' + L.uni.year + ' of 4 · Tuition ' + cr(UU.fee) + '/year');
+          schoolOpt(c, 'ustudy', '📖', 'Study hard', 'Get smarter', function () { return [{ smarts: [2, 4], happy: -1 }, '📖 You studied hard at ' + UU.t + '.']; });
           schoolOpt(c, 'party', '🎉', 'Go to a dorm party', 'Have fun', function () { return [{ happy: [5, 8], smarts: -1 }, '🎉 You went to a dorm party with a hologram DJ.']; });
-          opt(c, '🚪', 'Drop out', 'Leave university', function () { confirmBox('🚪', 'Drop out of Harbor Tech University?', 'Yes, drop out', function () { L.uni = null; doThing('🚪', [{ happy: -3 }, '🚪 You dropped out of Harbor Tech University.']); }); });
+          opt(c, '🚪', 'Drop out', 'Leave university', function () { confirmBox('🚪', 'Drop out of ' + UU.t + '?', 'Yes, drop out', function () { L.uni = null; doThing('🚪', [{ happy: -3 }, '🚪 You dropped out of ' + UU.t + '.']); }); });
         }
         if (L.job) {
           var J = JOB[L.job.id];
@@ -10130,17 +10168,20 @@
           c.appendChild(barEl(L.job.perf));
           schoolOpt(c, 'work', '💪', 'Work harder', 'Better performance', function () { return [{ perf: [8, 15], happy: -2 }, '💪 You worked extra hard this year.']; });
           schoolOpt(c, 'slack', '😴', 'Slack off', 'More fun, worse performance', function () { return [{ perf: -10, happy: 5 }, '😴 You took lots of long noodle breaks at work.']; });
+          if (L.job.id === 'patrol') { note(c, '🚨 Cyberpsychos taken down: ' + (L.psychos || 0)); opt(c, '🚨', 'Answer a cyberpsycho call', doneYet('psycho') ? 'Done this year ✓' : 'Take down a cyberpsycho before anyone gets hurt', function () { L.done.psycho = L.age; play('🚨', psychoCall()); }, doneYet('psycho')); }
           if (!J.pt) schoolOpt(c, 'raise', '💸', 'Ask for a raise', premium ? odds(L.job.perf / 120, 'chance of a raise') : 'Works better if you work hard', function () { if (chance(L.job.perf / 120)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, '💸 You asked for a raise and got it! +10% pay.']; } return [{ happy: -2, perf: -2 }, '💸 You asked for a raise. Your boss laughed and walked away.']; });
           if (L.age >= 60 && !J.pt) opt(c, '🏖️', 'Retire', 'Get a pension of ' + cr(salary() * 0.5) + ' a year', function () { confirmBox('🏖️', 'Retire from your job?', 'Yes, retire', function () { L.pension = Math.round(salary() * 0.5); L.retired = true; endJob(); doThing('🏖️', [{ happy: 10 }, '🏖️ You retired! You’ll get a pension of ' + cr(L.pension) + ' a year.']); }); });
           opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
         }
         if (L.retired) note(c, '🏖️ You’re retired! Your pension is ' + cr(L.pension) + ' a year.');
-        if (!L.school && !L.uni && L.age >= 18 && L.edu !== 'uni') {
-          sec(c, '🏛️ University');
-          var ok = (L.hsGrade || 0) >= 45 || L.st.smarts >= 60;
-          opt(c, '🎓', 'Apply to Harbor Tech University', doneYet('uni') ? 'Applied this year ✓' : ok ? 'You can get in! ' + cr(TUITION) + ' a year for 4 years' : 'Needs better grades or 🧠 Smarts 60+', function () {
-            L.done.uni = L.age; closeCard(); L.pending.unshift('major'); nextEvent();
-          }, !ok || doneYet('uni'));
+        if (!L.school && !L.uni && L.age >= 18) {
+          sec(c, '🏛️ Universities');
+          var dg = degrees();
+          note(c, dg.length ? '🎓 Your degrees: ' + dg.map(function (d) { return MAJORS[d.major][0] + ' ' + MAJORS[d.major][1]; }).join(', ') + '. You can always go back for another!' : 'Pick a university, then a major. Each degree takes 4 years.');
+          UNIS.forEach(function (U) {
+            var left = U.majors.filter(function (m) { return !hasDegree(m); }), ok = U.ok(), ap = doneYet('uni-' + U.id);
+            opt(c, U.e, U.t, ap ? 'Applied this year ✓' : !left.length ? 'You have every degree from here ✓' : !ok ? 'Needs ' + U.needT : cr(U.fee) + ' a year · ' + left.map(function (m) { return MAJORS[m][0] + ' ' + MAJORS[m][1]; }).join(', '), function () { majorSheet(U); }, ap || !left.length || !ok);
+          });
         }
         if (L.netrunner) note(c, '🕸️ You’re a certified netrunner! Quickhacks cost you 1 less RAM.');
         else if (L.age >= 16) {
@@ -10214,11 +10255,12 @@
       var out = [];
       if (n.age && L.age < n.age) out.push('age ' + n.age + '+');
       if (n.degree && L.edu !== 'uni') out.push('a university degree');
-      if (n.major && L.major !== n.major) out.push('a ' + MAJORS[n.major][1] + ' degree');
+      if (n.major && !hasDegree(n.major)) out.push('a ' + MAJORS[n.major][1] + ' degree');
       if (n.license && !L.license) out.push('a hover-bike license');
       ['smarts', 'style', 'health'].forEach(function (k) { if (n[k] && L.st[k] < n[k]) out.push(STAT[k][0] + ' ' + STAT[k][1] + ' ' + n[k] + '+'); });
       if (n.fame && L.fame < n.fame) out.push('⭐ Fame ' + n.fame + '+');
       if (n.netrunner && !L.netrunner) out.push('Netrunner School');
+      if (n.power && fightPower() < n.power) out.push('💪 Power ' + n.power + '+ (you have ' + fightPower() + ')');
       return out;
     }
     function missing(j) {
@@ -10352,7 +10394,9 @@
           : '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance (' + tolName(lim) + '). Every implant takes up some. ' + (ch > lim ? '⚠️ You’re OVER your tolerance! A chrome overload could happen any year.' : ch >= lim - 5 && ch > 0 ? 'You’re almost full. Careful!' : 'Go over your tolerance and you could have a chrome overload!'));
         c.appendChild(barEl(sb ? ch : ch / lim * 100, ch > lim ? 'lo' : ch > 0 && ch >= lim - 5 && !sb ? 'mid' : 'tol'));
         if (!sb) note(c, '🧠 In battles you have ' + humanityMax() + ' humanity. Heavy chrome uses it up, and the better your tolerance, the less it costs. For you, the Sandy costs ' + heavyCost('sandy') + '. Hit zero and the Chrome Patrol shows up!' + (ch > 0 ? ' 😢 The sadder you are, the more likely a chrome overload is.' : ''));
-        if (hasAch('smasher')) smasherOpt(c, clinicSheet);
+        if (canSmasher()) smasherOpt(c, clinicSheet);
+        if (hasDegree('robo')) opt(c, '🛠️', 'Cyberware Workshop', 'Invent and build your own implant', workshopSheet);
+        else { var wl = mk('div', 'lf-opt lf-info'); wl.appendChild(mk('i', null, '🛠️')); var wt = mk('span'); wt.appendChild(mk('b', null, 'Cyberware Workshop')); wt.appendChild(mk('small', null, 'Make your own cyberware! Needs a 🤖 Cyber-Engineering degree (Harbor Tech or Kumo-Tek).')); wl.appendChild(wt); c.appendChild(wl); }
         if (ch > 0 && !sb) {
           var cd = doneYet('cool');
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
@@ -10389,6 +10433,62 @@
       if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
       L.implants.push(im.id);
       doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), im.e + ' ' + im.msg + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
+    }
+    function regCustom() { ((L && L.custom) || []).forEach(function (X) { IMP[X.id] = X; }); }   // your own inventions
+    var WS = { name: '', e: '⚙️', kind: 'weapon', size: 1 };
+    var CW_EMOJI = ['⚙️', '🔮', '💎', '🌟', '🔥', '❄️', '⚡', '🐍', '🦂', '🛸'];
+    var CW_KIND = { weapon: ['⚔️', 'Battle weapon', null], brain: ['🧠', 'Brain booster', 'smarts'], body: ['❤️', 'Body booster', 'health'], style: ['😎', 'Style mod', 'style'], mood: ['😊', 'Mood chip', 'happy'] };
+    var CW_SIZE = [null, { t: 'Small', body: 3, cost: 5000, boost: 6, cap: 5, dmg: [16, 22] }, { t: 'Medium', body: 6, cost: 15000, boost: 12, cap: 10, dmg: [24, 32] }, { t: 'Large', body: 10, cost: 40000, boost: 20, cap: 15, dmg: [34, 44] }];
+    function workshopSheet() {
+      sheet('🛠️ Cyberware Workshop', function (c) {
+        note(c, 'Your Cyber-Engineering degree lets you invent your own implant! Name it, pick how it looks, what it does, and how big it is. Bigger is stronger, but uses more tolerance.');
+        var f = mk('form', 'lf-codeform'), inp = mk('input');
+        inp.id = 'lf-cwName'; inp.maxLength = 20; inp.value = WS.name; inp.placeholder = 'Name your implant'; inp.setAttribute('aria-label', 'Implant name'); inp.setAttribute('autocomplete', 'off');
+        inp.addEventListener('input', function () { WS.name = inp.value; });
+        f.addEventListener('submit', function (e) { e.preventDefault(); });
+        f.appendChild(inp); c.appendChild(f);
+        sec(c, 'Look');
+        var pe = mk('div', 'lf-pills');
+        CW_EMOJI.forEach(function (x) { var b = mk('button', 'lf-pill', x); b.type = 'button'; b.setAttribute('aria-pressed', WS.e === x ? 'true' : 'false'); b.setAttribute('aria-label', 'Look ' + x); b.addEventListener('click', function () { WS.e = x; workshopSheet(); }); pe.appendChild(b); });
+        c.appendChild(pe);
+        sec(c, 'What it does');
+        Object.keys(CW_KIND).forEach(function (k) { var K = CW_KIND[k]; opt(c, K[0], K[1] + (WS.kind === k ? ' ✓' : ''), k === 'weapon' ? 'Adds your own move to battles' : 'Boosts ' + STAT[K[2]][1] + (k === 'brain' || k === 'body' ? ', and lets it go past 100%' : ''), function () { WS.kind = k; workshopSheet(); }); });
+        sec(c, 'Size');
+        [1, 2, 3].forEach(function (z) { var Z = CW_SIZE[z]; opt(c, ['', '▫️', '◽', '⬜'][z], Z.t + (WS.size === z ? ' ✓' : ''), cr(Z.cost) + ' for parts · uses ' + Z.body + ' tolerance', function () { WS.size = z; workshopSheet(); }); });
+        var Z = CW_SIZE[WS.size], mine = (L.custom || []).length;
+        opt(c, '🛠️', 'Build it!', mine >= 5 ? 'You can build up to 5 implants per life' : L.money < Z.cost ? cr(Z.cost) + ' · not enough credits' : cr(Z.cost) + ' · installs it right away', function () { WS.name = inp.value; doThing('🛠️', buildCustom()); }, mine >= 5 || L.money < Z.cost);
+        if (mine) note(c, 'Your inventions: ' + L.custom.map(function (X) { return X.e + ' ' + X.t + (has(X.id) ? '' : ' (removed)'); }).join(', '));
+        opt(c, '←', 'Back to the Chrome Clinic', '', clinicSheet);
+      });
+      try { $('cwName').focus({ preventScroll: true }); } catch (e) {}
+    }
+    function buildCustom() {
+      var Z = CW_SIZE[WS.size], K = CW_KIND[WS.kind];
+      L.custom = L.custom || [];
+      var nm = String(WS.name || '').replace(/\s+/g, ' ').trim().slice(0, 20) || (K[1] + ' Mk.' + (L.custom.length + 1));
+      var X = { id: 'x' + Date.now().toString(36) + R(10, 99), e: WS.e, t: nm, cost: Z.cost, min: 0, body: Z.body, custom: 1, fx: {}, desc: 'Your own invention' };
+      if (K[2]) X.fx[K[2]] = Z.boost;
+      if (WS.kind === 'brain') X.brain = Z.cap;
+      if (WS.kind === 'body') X.vital = Z.cap;
+      if (WS.kind === 'weapon') { X.dmg = Z.dmg; X.power = 4 + WS.size * 4; }
+      L.custom.push(X); regCustom();
+      L.implants.push(X.id);
+      return [Object.assign({ money: -Z.cost }, X.fx), '🛠️ You invented and built your own implant: ' + X.e + ' ' + X.t + '!' + (X.dmg ? ' It adds a new move to your battles.' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
+    }
+    function canSmasher() { return hasAch('smasher') || !!(L && L.chromeCode); }
+    function giveAllChrome() {   // the "crome" code: every implant (the best of each OS) for this life only
+      var best = {}, add = [];
+      IMPLANTS.forEach(function (im) { if (im.os && (!best[im.os] || im.tier > best[im.os].tier)) best[im.os] = im; });
+      IMPLANTS.forEach(function (im) {
+        if (im.hide || has(im.id) || (im.os && best[im.os] !== im)) return;
+        if (im.os) { var old = osOf(im.os); if (old) L.implants.splice(L.implants.indexOf(old.id), 1); }
+        L.implants.push(im.id); add.push(im);
+      });
+      add.forEach(function (im) { applyFx(im.fx, {}); });
+      L.smasherBody = true; L.chromeCode = true;
+      log('🦾 You typed the chrome code and got every implant in the game! (Plus a Smasher Body to handle it all.)');
+      save(); render();
+      return add.length;
     }
     function smasherOpt(c, back) {   // 🤖 The Smasher's reward: max tolerance, no drawbacks (you choose when)
       var on = !!L.smasherBody;
@@ -10568,6 +10668,8 @@
       { id: 'mech', e: '🛡️', t: 'Corp Security Mech', hp: 115, atk: [11, 15], hits: [2, 3], dodge: 0.15, power: 72, speed: 1.1, prize: 6000, robot: 1, weapon: '🦾' },
       { id: 'samurai', e: '🤺', t: 'Chrome Samurai', hp: 130, atk: [11, 15], hits: [2, 4], dodge: 0.3, power: 82, speed: 1.25, prize: 10000, weapon: '⚔️', sword: 1, feint: 0.3, combo: 0.35 },
       { id: 'dragon', e: '🐉', t: 'The Neon Dragon', hp: 160, atk: [12, 17], hits: [2, 4], dodge: 0.25, power: 90, speed: 1.2, prize: 15000, fame: 10, boss: 1, weapon: '🔥', feint: 0.2, combo: 0.3 },
+      { id: 'smasher', e: '🤖', t: 'The Smasher', hp: 320, atk: [14, 20], hits: [2, 4], dodge: 0.15, power: 125, speed: 1.15, prize: 60000, fame: 20, boss: 1, robot: 1, weapon: '💥', feint: 0.15, combo: 0.25, heavy: 0.3, enrage: 1, noRing: 1, bossFight: 'A towering full-borg corp bodyguard, more machine than human. Red ❗ hits can’t be parried!' },
+      { id: 'ghost', e: '🕶️', t: 'Ghostline', hp: 220, atk: [11, 15], hits: [2, 4], dodge: 0.4, power: 115, speed: 1.35, prize: 45000, fame: 15, boss: 1, weapon: '⚡', feint: 0.35, combo: 0.3, hacker: 0.35, enrage: 1, noRing: 1, bossFight: 'A rogue netrunner out for revenge. Their 💾 hacks drain your humanity!' },
       { id: 'warden', e: '🤖', t: 'Lockup Guard-Mech', hp: 110, atk: [10, 14], hits: [2, 3], dodge: 0.2, power: 68, speed: 1.15, robot: 1, noRing: 1, weapon: '🔨', feint: 0.1, combo: 0.1 },
       { id: 'patrol', e: '🚨', t: 'The Chrome Patrol', hp: 1, atk: [0, 0], hits: [2, 3], dodge: 1, power: 999, speed: 1.3, noRing: 1, weapon: '⚡', feint: 0.15, combo: 0.2 }
     ];
@@ -10613,7 +10715,7 @@
     function fightPower() {
       var bonus = { arm: 8, legs: 8, exo: 30, chassis: 35, muscle: 20, booster: 4, armor: 10, timeslow: 15, sandy2: 20, sandy3: 26, sandy4: 32, berserk: 10, berserk2: 16, deck1: 6, deck2: 10, deck3: 14, capri: 20,
         eyes: 4, port: 6, heart: 6, wings: 5, magnet: 3, blades: 8, rocket: 6, camo: 4, heart2: 4, reflex: 5, bones: 6, ice: 3 }, p = L.st.health * 0.4 + (L.crew ? 5 : 0);
-      L.implants.forEach(function (id) { p += bonus[id] || 0; });
+      L.implants.forEach(function (id) { p += bonus[id] || (IMP[id] && IMP[id].power) || 0; });
       return Math.round(p);
     }
     function isHard(en) { return en.power > fightPower() * 0.85; }
@@ -10621,7 +10723,7 @@
     function foeOf(x) { return typeof x === 'string' ? ENEMY[x] : x; }
     function fight(id, then) {   // easy fights end right away (like BitLife); hard ones start a battle
       var en = foeOf(id);
-      if (!isHard(en)) return then(chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) });
+      if (!isHard(en) && !en.bossFight) return then(chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) });
       return { battle: en, then: then };
     }
     function hurt(res) { return -Math.min(res.healthLoss || 0, Math.max(0, L.st.health - 5)); }
@@ -10650,6 +10752,14 @@
           var done = doneYet('fight-' + en.id), hard = isHard(en);
           opt(c, en.e, en.t, done ? 'Fought this year ✓' : 'Prize ' + cr(en.prize) + ' · power ' + en.power + ' · ' + (hard ? '⚔️ Battle!' : premium ? odds(winChance(en), 'chance to win') : 'Easy fight'), function () { L.done['fight-' + en.id] = L.age; play(en.e, ringFight(en)); }, done);
         });
+        if (L.age >= 18) {
+          sec(c, '💀 Boss fights');
+          ENEMIES.forEach(function (en) {
+            if (!en.bossFight) return;
+            var done = doneYet('fight-' + en.id);
+            opt(c, en.e, en.t, done ? 'Fought this year ✓' : 'Prize ' + cr(en.prize) + ' · power ' + en.power + ' · ' + en.bossFight, function () { L.done['fight-' + en.id] = L.age; play(en.e, ringFight(en)); }, done);
+          });
+        }
         opt(c, '←', 'Back to activities', '', doSheet);
       });
     }
@@ -10660,11 +10770,39 @@
           fx.money = en.prize; fx.happy = 8; fx.fame = en.fame || 2;
           if (!res.auto) award('brawler');
           if (en.id === 'dragon') award('champ');
+          if (en.id === 'smasher') award('giant');
+          if (en.id === 'ghost') award('firewall');
+          if (en.bossFight) return [fx, '🏆 You beat ' + en.t + '! The whole city is talking about it. You won ' + cr(en.prize) + '!' + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
           return [fx, en.e + ' You beat ' + en.t + ' in the underground ring and won ' + cr(en.prize) + '!' + (res.parries ? ' You landed ' + res.parries + (res.parries === 1 ? ' perfect parry.' : ' perfect parries.') : '')];
         }
         if (res.fled) { fx.happy = -2; return [fx, '🏃 You ran out of the ring before ' + en.t + ' could knock you out.']; }
         fx.happy = -8;
-        return [fx, '😵 ' + en.t + ' knocked you out in the underground ring. The crowd booed.'];
+        return [fx, en.bossFight ? '😵 ' + en.t + ' knocked you out. Train up and try again next year!' : '😵 ' + en.t + ' knocked you out in the underground ring. The crowd booed.'];
+      });
+    }
+    var PSYCHOS = [   // cyberpsychos the Chrome Patrol has to stop
+      { n: 'Razorhand', e: '🤖', weapon: '🗡️', sword: 1, hp: 110, atk: [10, 14], hits: [2, 4], dodge: 0.25, speed: 1.25, feint: 0.25, combo: 0.45 },
+      { n: 'Ironjaw', e: '🦾', weapon: '👊', hp: 150, atk: [13, 18], hits: [1, 3], dodge: 0.1, speed: 1, feint: 0.1, combo: 0.15, robot: 1 },
+      { n: 'Blink', e: '⚡', weapon: '⚡', hp: 95, atk: [9, 12], hits: [3, 4], dodge: 0.5, speed: 1.55, feint: 0.3, combo: 0.3 },
+      { n: 'Hexwire', e: '👾', weapon: '🔌', hp: 105, atk: [10, 13], hits: [2, 3], dodge: 0.3, speed: 1.2, feint: 0.35, combo: 0.2 }
+    ];
+    function psychoFoe() {   // tougher ones show up as you rank up
+      var X = pick(PSYCHOS), lv = L.job && L.job.id === 'patrol' ? L.job.level : 0;
+      return { id: 'psycho', e: X.e, t: 'Cyberpsycho “' + X.n + '”', hp: X.hp + lv * 15, atk: [X.atk[0] + lv, X.atk[1] + lv], hits: X.hits, dodge: X.dodge, power: 62 + lv * 8 + R(-4, 4), speed: X.speed, weapon: X.weapon, sword: X.sword, feint: X.feint, combo: X.combo, robot: X.robot };
+    }
+    function checkPsycho() { if ((L.psychos || 0) >= 5) award('psycho'); }
+    function psychoCall() {
+      var en = psychoFoe();
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) {
+          L.psychos = (L.psychos || 0) + 1; checkPsycho();
+          if (!res.auto) award('brawler');
+          var bonus = R(3000, 8000) * (1 + (L.job ? L.job.level : 0));
+          return [{ money: bonus, perf: 10, fame: 2, happy: 6, health: h }, '🚨 You took down ' + en.t + ' before anyone got hurt! The Chrome Patrol paid you a ' + cr(bonus) + ' bonus.' + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
+        }
+        if (res.fled) return [{ perf: -10, happy: -3, health: h }, '🏃 You backed off from ' + en.t + ' and called for backup. Your captain wasn’t impressed.'];
+        return [{ perf: -8, happy: -6, health: h }, '😵 ' + en.t + ' knocked you down. Your squad had to finish the job.'];
       });
     }
     var B = null, quickFights = false, AC = null;
@@ -10741,6 +10879,7 @@
         if (has('rocket') && !B.usedRocket) list.push('rocket');
         if (has('port')) list.push('hack');
         if (D) list.push('netrun');
+        L.implants.forEach(function (id) { var X = IMP[id]; if (X && X.custom && X.dmg) list.push(id); });   // your own inventions
         if (has('magnet')) list.push('yank');
         if (has('heart') && !B.usedHeart) list.push('heal');
         if (has('wings') && !B.usedWings) list.push('glide');
@@ -10753,7 +10892,7 @@
       }
       box.classList.toggle('many', list.length > 10);
       list.forEach(function (id) {
-        var Q = QH[id], M = Q ? [Q.e, Q.t, ''] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
+        var Q = QH[id], CX = IMP[id] && IMP[id].custom ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, 'Your invention · ' + CX.dmg[0] + '–' + CX.dmg[1] + ' damage'] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
         else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
         if (id === 'netrun') sub = 'RAM ' + B.ram + '/' + B.ramMax;
@@ -10811,6 +10950,8 @@
       if (id === 'glide') { B.usedWings = true; B.glide = true; msgF('🌈 You spread your wings. You’ll glide right past their next attack!'); enemySoon(); return; }
       if (id === 'camo') { B.usedCamo = true; B.glide = true; B.camo = true; msgF('👻 You flicker and vanish! Their next attack will go right through you.'); enemySoon(); return; }
       if (QH[id]) { doHack(QH[id]); return; }
+      var CX = IMP[id] && IMP[id].custom && IMP[id].dmg ? IMP[id] : null, NM = CX ? [CX.e, CX.t] : MOVES[id];
+      if (CX) dmg = Math.round(R(CX.dmg[0], CX.dmg[1]) * Math.max(1, mult * 0.75) * rg);
       if (id === 'float') {   // 🪐 anti-gravity is a free action, like the Sandy
         B.usedFloat = true; B.float = 2; sfx('slow');
         if (spend(heavyCost('float'))) return;
@@ -10831,12 +10972,12 @@
       if (id === 'aim') dmg = R(14, 18);
       if (id === 'hack') { dmg = 4; if (chance(0.6)) { B.stun = true; extra = ' They’re stunned!'; } else extra = ' The stun fizzled.'; }
       if (id === 'yank') { dmg = 3; B.yank = true; extra = ' Their next attack will have fewer hits.'; }
-      var dodge = B.cripple ? 0 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, pull: 0, slam: en.dodge * 0.3, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0 }[id] || 0;
+      var dodge = B.cripple ? 0 : CX ? en.dodge * 0.3 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, pull: 0, slam: en.dodge * 0.3, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0 }[id] || 0;
       if (B.cripple) B.cripple -= 1;
-      if (chance(dodge)) { B.stun = false; B.yank = false; popF('MISS', 'bad'); msgF('💨 ' + en.t + ' dodged your ' + MOVES[id][1].toLowerCase() + '!'); enemySoon(); return; }
-      if (B.float > 0 && ['punch', 'kick', 'smash', 'pull', 'slash', 'cannon'].indexOf(id) >= 0) { dmg = Math.round(dmg * 1.5); extra += ' (🪐 from above!)'; }
+      if (chance(dodge)) { B.stun = false; B.yank = false; popF('MISS', 'bad'); msgF('💨 ' + en.t + ' dodged your ' + NM[1].toLowerCase() + '!'); enemySoon(); return; }
+      if (B.float > 0 && (CX || ['punch', 'kick', 'smash', 'pull', 'slash', 'cannon'].indexOf(id) >= 0)) { dmg = Math.round(dmg * 1.5); extra += ' (🪐 from above!)'; }
       if (B.sandy && st >= 4 && chance(0.25)) { dmg = Math.round(dmg * 1.5); extra += ' 💥 CRIT!'; }   // the Apylee Sandy lands critical hits
-      hitFoe(dmg, MOVES[id][0] + ' ' + { punch: 'POW!', kick: 'WHAM!', slash: 'SHING!', rocket: 'KA-BOOM!', shoot: 'ZAP!', aim: 'Bullseye!', hack: 'Bzzt!', yank: 'Yoink!', smash: 'TITAN SMASH!', cannon: 'BOOOM!', pull: 'GRAVITY PULL!', slam: 'KA-THOOM!' }[id] + ' ' + dmg + ' damage.' + extra);
+      hitFoe(dmg, NM[0] + ' ' + (CX ? 'BAM!' : { punch: 'POW!', kick: 'WHAM!', slash: 'SHING!', rocket: 'KA-BOOM!', shoot: 'ZAP!', aim: 'Bullseye!', hack: 'Bzzt!', yank: 'Yoink!', smash: 'TITAN SMASH!', cannon: 'BOOOM!', pull: 'GRAVITY PULL!', slam: 'KA-THOOM!' }[id]) + ' ' + dmg + ' damage.' + extra);
     }
     function doHack(Q) {   // quickhacks never miss
       var cost = hackCost(Q), en = B.en, up = has('uplink') ? 1.3 : 1, d;
@@ -10879,6 +11020,8 @@
         if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); msgF(icon + ' ' + en.t + ' went down!'); B.timer = setTimeout(function () { endBattle({ win: true }); }, 900); return; }
       }
       if (fm && B.stun) { B.stun = false; msgF('⚡ ' + en.t + ' is stunned and can’t attack!'); B.timer = setTimeout(playerTurn, 1100); return; }
+      var mad = false;
+      if (fm && B.en.enrage && !B.enraged && B.enHP <= B.en.hp / 2) { B.enraged = mad = true; B.en = Object.assign({}, B.en, { speed: B.en.speed * 1.2, combo: Math.min(0.8, (B.en.combo || 0) + 0.25) }); en = B.en; popF('ENRAGED!', 'bad'); }   // bosses get angry at half health
       if (fm && B.sleep) { B.sleep -= 1; msgF('💤 ' + en.t + ' is fast asleep and can’t attack!'); renderF(); B.timer = setTimeout(playerTurn, 1100); return; }
       var blind = fm && B.blind > 0;
       if (blind) B.blind -= 1;
@@ -10888,12 +11031,14 @@
       B.yank = false; B.yank2 = false; B.glideAll = B.glide || B.floatNow; B.camoNow = B.camo; B.mirrorNow = B.mirror; B.glide = false; B.camo = false; B.mirror = false; B.hits = []; B.combo = combo;
       for (var i = 0; i < n; i++) {   // a fake-out winds up at `fake`, then the real hit comes a bit later
         var fk = !combo && !B.wiped && !!en.feint && chance(en.feint), at = t + (fk ? R(500, 750) / en.speed * slow : 0);
-        B.hits.push({ at: at, fake: fk ? t : 0, fshown: false, fglint: false, done: false, glint: false });
+        B.hits.push({ at: at, fake: fk ? t : 0, fshown: false, fglint: false, done: false, glint: false, heavy: fm && !fk && !!en.heavy && chance(en.heavy), hack: fm && !!en.hacker && chance(en.hacker) });
         t = at + (combo ? R(170, 260) : R(450, 800)) / en.speed * slow;
       }
       B.phase = 'enemy';
       if (combo) msgF(B.mode === 'escape' ? '🚨 The Chrome Patrol lunges with a fast COMBO! Tap DODGE quick, once for each grab!' : '⚡ ' + en.t + ' goes for a COMBO: ' + n + ' fast hits! Tap DODGE quick, once for each hit!');
       else msgF(B.mode === 'escape' ? '🚨 The Chrome Patrol lunges at you! Tap DODGE right as they strike.' : '⚠️ ' + en.t + ' attacks (' + n + (n === 1 ? ' hit' : ' hits') + ')' + (blind ? ', but can barely see' : '') + '! Tap DODGE right as each one lands. Perfect timing = PARRY!' + (en.feint ? ' Watch out for fake-outs!' : ''));
+      var tips = (mad ? ' 😡 ' + en.t + ' is ENRAGED: faster, with more combos!' : '') + (B.hits.some(function (x) { return x.heavy; }) ? ' Red ❗ hits can’t be parried, only dodged!' : '') + (B.hits.some(function (x) { return x.hack; }) ? ' 💾 Hacks drain your humanity!' : '');
+      if (tips) msgF($('fMsg').textContent + tips);
       renderF(); buildMoves();
     }
     function slowF() { return B.sandy ? (sandyTier() >= 4 ? 2 : 1.6) : 1; }   // how much the Sandy slows their attacks down
@@ -10916,23 +11061,23 @@
       var d = now - h.at;
       if (d < -w.pre || d > w.post) { B.lock = now + 280; popF('Too early!', 'bad'); return; }
       h.done = true;
-      if (Math.abs(d) <= w.parry) {
+      if (!h.heavy && Math.abs(d) <= w.parry) {
         B.parries += 1; sfx('parry');
         if (B.mode === 'fight') { var cd = Math.round((R(6, 10) + (has('arm') ? 4 : 0) + (has('blades') ? 4 : 0)) * (B.sandy ? [1, 2, 2.5, 3, 3.5][sandyTier()] : 1) * (B.rage ? 1.3 : 1)); B.enHP = Math.max(0, B.enHP - cd);
           if (B.sandy && sandyTier() >= 4 && !L.smasherBody && B.hum < B.humMax) { B.hum += 1; popF('PARRY! −' + cd + ' · +1 🧠', 'great'); }   // Apylee: parries give back humanity
           else popF('PARRY! −' + cd, 'great'); }
         else popF('PARRY!', 'great');
       } else { sfx('dodge'); popF('DODGE!', 'good'); }
-      swing(Math.abs(d) <= w.parry);
+      swing(!h.heavy && Math.abs(d) <= w.parry);
       $('enemy').style.transform = '';
       renderF();
       if (B.mode === 'fight' && B.enHP <= 0) B.hits.forEach(function (x) { x.done = true; });
       afterHit();
     }
-    function takeHit() {
+    function takeHit(h) {
       var en = B.en, f = $('fight'), X = rageOf();
       swing(false);
-      if (B.mode === 'fight' && has('ice') && chance(0.25)) { sfx('parry'); popF('🧊 ICE BLOCK!', 'good'); $('enemy').style.transform = ''; renderF(); return; }
+      if (B.mode === 'fight' && has('ice') && ((h && h.hack) || chance(0.25))) { sfx('parry'); popF(h && h.hack ? '🧊 ICE STOPPED THE HACK!' : '🧊 ICE BLOCK!', 'good'); $('enemy').style.transform = ''; renderF(); return; }
       B.hitsTaken += 1; sfx('hit');
       f.classList.remove('hurt'); void f.offsetWidth; f.classList.add('hurt');
       if (B.mode === 'escape') popF('GRABBED!', 'bad');
@@ -10943,7 +11088,9 @@
         if (has('chassis')) dmg = Math.round(dmg * 0.7);
         if (B.mirrorNow) { B.enHP = Math.max(0, B.enHP - dmg); popF('🪞 BOUNCED −' + dmg, 'great'); if (B.enHP <= 0) B.hits.forEach(function (x) { x.done = true; }); $('enemy').style.transform = ''; renderF(); return; }
         if (B.rage) dmg = Math.round(dmg * (X && X.tier >= 2 ? 0.45 : 0.6));
-        B.hp = Math.max(0, B.hp - dmg); popF('−' + dmg, 'bad');
+        if (h && h.heavy) dmg = Math.round(dmg * 1.6);
+        if (h && h.hack) { dmg = Math.round(dmg * 0.5); if (!L.smasherBody && B.hum > 1) B.hum -= 1; }   // a hack: less damage, but it drains your humanity (never all the way)
+        B.hp = Math.max(0, B.hp - dmg); popF(h && h.hack ? '💾 HACKED! −' + dmg + ' · −1 🧠' : (h && h.heavy ? '💥 −' : '−') + dmg, 'bad');
         if (B.hp <= 0 && has('heart2') && !B.revived) { B.revived = true; B.hp = Math.round(B.max * 0.4); popF('🫀 BACKUP HEART!', 'good'); msgF('🫀 You got knocked down, but your backup heart jump-started you! Keep fighting!'); }
         else if (B.hp <= 0) B.hits.forEach(function (x) { x.done = true; });
       }
@@ -10983,6 +11130,7 @@
           var tt = h.at - now, G = 380 * slowF(), lunge = 280 * slowF();
           if (h.fake && !h.fshown) {   // a fake-out: they wind up… and hold back
             var ft = h.fake - now;
+            gl.textContent = '✦';
             if (ft < -60) { h.fshown = true; popF('👀 FAKE-OUT!', 'bad'); en.style.transform = ''; gl.classList.remove('on'); }
             else {
               if (!h.fglint && ft <= G) { h.fglint = true; sfx('glint'); }
@@ -10991,9 +11139,10 @@
             }
           }
           else if (B.glideAll && tt <= 0) { h.done = true; swing(false); popF(B.floatNow ? '🪐 TOO HIGH!' : B.camoNow ? '👻 VANISHED!' : '🌈 GLIDE!', 'good'); en.style.transform = ''; afterHit(); }
-          else if (tt < -w.post) { h.done = true; takeHit(); afterHit(); }
+          else if (tt < -w.post) { h.done = true; takeHit(h); afterHit(); }
           else {
             if (!h.glint && tt <= G) { h.glint = true; sfx('glint'); }
+            gl.textContent = h.heavy ? '❗' : h.hack ? '💾' : '✦';
             gl.classList.toggle('on', tt <= G && tt > G - 170);
             en.style.transform = tt < lunge ? 'scale(' + (1 + (lunge - Math.max(0, tt)) / lunge * 0.5).toFixed(3) + ')' : '';
           }
@@ -11221,7 +11370,7 @@
           opt(c, '🧬', 'God Mode', 'Change your stats, credits, and more', godSheet);
           opt(c, '⏳', 'Time Machine', 'Go back to an earlier age', timeSheet);
         }
-        if (L && L.alive && hasAch('smasher')) { sec(c, '🏆 Rewards'); smasherOpt(c, menuSheet); }
+        if (L && L.alive && canSmasher()) { sec(c, '🏆 Rewards'); smasherOpt(c, menuSheet); }
         sec(c, 'Game');
         opt(c, '🏆', 'Achievements', ACH.filter(function (a) { return hasAch(a.id); }).length + ' of ' + ACH.length + ' unlocked' + (allAch ? ' (🍀 lucky guess)' : ''), function () { achSheet(menuSheet); });
         opt(c, '🔑', 'Codes & starting over', premiumOwned ? (premium ? 'Premium is on ✓ · turn it off or start over' : 'Premium is off · turn it back on or start over') : 'Secret codes, or start over from scratch', function () { codeSheet(menuSheet); });
@@ -11261,6 +11410,12 @@
         if (!already && L && L.alive) { log('👑 You unlocked Premium with a secret code!'); save(); }
         award('premium');
         outcome('👑', already ? 'You already have Premium! 👑' : 'Premium unlocked! You now have 🧬 God Mode, ⏳ the Time Machine, 😇 a Guardian Angel, and 👑 premium stuff to buy. Find them in the ☰ menu. You still make every choice!', [], refresh);
+        return;
+      }
+      if (CODES[code] === 'allchrome') {
+        if (!L || !L.alive) { outcome('🦾', 'Start a life first, then type this code to get every implant for that life!', [], function () { codeSheet(back); }); return; }
+        var got = giveAllChrome();
+        outcome('🦾', 'CHROME CODE! You got every implant in the game for this life (' + got + ' new ones)! To keep you from a chrome overload, you also got a 🤖 Smasher Body for this life. Switch it off in the ☰ menu if you like living dangerously.', [], refresh);
         return;
       }
       if (CODES[code] === 'allach') {
@@ -11378,7 +11533,7 @@
       if (wasDead && graves.length && graves[0].n === L.first + ' ' + L.last && graves[0].b === L.born) { graves.shift(); saveGraves(); }
       back.log = L.log.slice(0, Math.max(0, L.log.length - ((L.logTotal || 0) - x.total)));
       back.logTotal = x.total;
-      L = back;
+      L = back; regCustom();
       L.alive = true; L.cause = null; L.ribbon = null; L.pending = [];
       if (L.st.health < 15) L.st.health = 15;   // never land back in time with zero health
       snaps = snaps.filter(function (s) { return s.lid === L.lid && s.age < L.age; });
