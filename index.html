@@ -9040,6 +9040,8 @@
       { id: 'hacker', e: '💻', t: 'White-Hat Hacker', pay: 76000, need: { smarts: 70 }, alt: { major: 'code', smarts: 50 } },
       { id: 'netjob', e: '🕸️', t: 'Corp Netrunner', pay: 88000, need: { netrunner: 1, smarts: 50 } },
       { id: 'patrol', e: '🚨', t: 'Chrome Patrol Agent', pay: 95000, need: { health: 60, power: 50 } },
+      { id: 'kexec', e: '💼', t: 'Kumo-Tek Executive', pay: 160000, need: { degree: 1, smarts: 55, style: 45 } },
+      { id: 'enforcer', e: '🤖', t: 'Kumo-Tek Enforcer', pay: 120000, need: { health: 70, power: 80 } },
       { id: 'engineer', e: '🤖', t: 'Robotics Engineer', pay: 92000, need: { major: 'robo' } },
       { id: 'chromedoc', e: '🦾', t: 'Chrome Doctor', pay: 130000, need: { major: 'med', smarts: 60 } },
       { id: 'exec', e: '💼', t: 'Corp Executive', pay: 260000, flat: 1, need: { major: 'biz', smarts: 60, style: 50 } },
@@ -9165,6 +9167,8 @@
       { id: 'giant', e: '🤖', t: 'Bigger They Are', d: 'Beat The Smasher in a boss fight.' },
       { id: 'firewall', e: '🕶️', t: 'Firewall', d: 'Beat Ghostline, the rogue netrunner, in a boss fight.' },
       { id: 'hardcore', e: '🔴', t: 'Hardcore', d: 'Live to 80 in Hard mode.' },
+      { id: 'bigidea', e: '💡', t: 'Big Idea', d: 'Make 100,000 cr or more from one pitch as a Kumo-Tek Executive.' },
+      { id: 'muscle', e: '🏢', t: 'Corporate Muscle', d: 'Stop 5 threats as a Kumo-Tek Enforcer (in one life).' },
       { id: 'sticky', e: '🤫', t: 'Sticky Fingers', d: 'Steal chrome off a cyberpsycho you beat, without getting caught.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
@@ -9453,6 +9457,13 @@
         ['🤫 Keep it (get it installed for free)', function () { return stealChrome('keep'); }],
         ['💰 Sell it to a fixer', function () { return stealChrome('sell'); }],
         ['🧾 Turn it all in', function () { var n = L.loot.n; L.loot = null; return [{ good: 2, perf: 4 }, '🧾 You turned in all the chrome from ' + n + ', like a good agent. Your captain gave you a nod.']; }]] },
+      { id: 'corpalert', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'enforcer'; }, e: '🏢', t: 'KUMO-TEK ALERT! Somebody is attacking the tower, and you’re the enforcer on duty.', c: [
+        ['⚔️ Stop them', function () { return corpThreat(); }],
+        ['📞 Call for backup', [[1, { perf: -4 }, '📞 You called for backup and let the rest of the security team handle it. Your boss sighed.']]]] },
+      { id: 'corpleak', a: [18, 90], w: 4, need: 'job', if: function () { return L.job.id === 'enforcer' || L.job.id === 'kexec'; }, e: '📰', t: 'A reporter found out some of Kumo-Tek’s dirty secrets and is about to tell the whole city. Your boss wants it handled.', c: [
+        ['💳 Offer them corp money to keep quiet', function () { if (chance(0.6)) return [{ perf: 8, good: -3 }, '💳 The reporter took the money and dropped the story. Your boss was pleased. You feel a little gross.']; return [{ perf: -6, good: -1, fame: 2 }, '📰 The reporter said no, and wrote about the bribe too. Oops.']; }],
+        ['🤷 Let them publish it', [[1, { perf: -10, good: 3 }, '🤷 You let the story run. The whole city learned the truth, and your boss was furious.']]],
+        ['📢 Help them expose Kumo-Tek', function () { endJob(); return [{ good: 8, fame: 8, happy: 4 }, '📢 You gave the reporter even MORE proof. The story was huge! Kumo-Tek fired you, but the city thinks you’re a hero.']; }]] },
       { id: 'crewask', a: [16, 35], w: 1, if: function () { return !L.crew; }, e: '🏙️', t: 'A street crew wants you to run with them. They say you’ve got skills.', c: [
         ['Join them', function () { return joinCrew(pick(CREWS).id); }],
         ['No thanks', [[1, { good: 1 }, 'You turned down a street crew.']]]] }
@@ -10178,6 +10189,8 @@
           schoolOpt(c, 'work', '💪', 'Work harder', 'Better performance', function () { return [{ perf: [8, 15], happy: -2 }, '💪 You worked extra hard this year.']; });
           schoolOpt(c, 'slack', '😴', 'Slack off', 'More fun, worse performance', function () { return [{ perf: -10, happy: 5 }, '😴 You took lots of long noodle breaks at work.']; });
           if (L.job.id === 'patrol') { note(c, '🚨 Cyberpsychos taken down: ' + (L.psychos || 0)); opt(c, '🚨', 'Answer a cyberpsycho call', doneYet('psycho') ? 'Done this year ✓' : 'Take down a cyberpsycho before anyone gets hurt', function () { L.done.psycho = L.age; play('🚨', psychoCall()); }, doneYet('psycho')); }
+          if (L.job.id === 'kexec') { note(c, '💡 Your pitches: ' + (L.pitchWins || 0) + ' hits, ' + (L.pitchFails || 0) + ' flops'); opt(c, '💡', 'Pitch an idea to the board', doneYet('pitch') ? 'Pitched this year ✓' : 'Bet your own credits on a big idea. Hits pay big, flops cost you!', pitchSheet, doneYet('pitch')); }
+          if (L.job.id === 'enforcer') { note(c, '🛡️ Threats you stopped: ' + (L.corpWins || 0)); opt(c, '🛡️', 'Handle a threat to Kumo-Tek', doneYet('threat') ? 'Done this year ✓' : 'Stop strike teams, saboteurs, and rogue mechs', function () { L.done.threat = L.age; play('🛡️', corpThreat()); }, doneYet('threat')); }
           if (!J.pt) schoolOpt(c, 'raise', '💸', 'Ask for a raise', premium ? odds(L.job.perf / 120, 'chance of a raise') : 'Works better if you work hard', function () { if (chance(L.job.perf / 120)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, '💸 You asked for a raise and got it! +10% pay.']; } return [{ happy: -2, perf: -2 }, '💸 You asked for a raise. Your boss laughed and walked away.']; });
           if (L.age >= 60 && !J.pt) opt(c, '🏖️', 'Retire', 'Get a pension of ' + cr(salary() * 0.5) + ' a year', function () { confirmBox('🏖️', 'Retire from your job?', 'Yes, retire', function () { L.pension = Math.round(salary() * 0.5); L.retired = true; endJob(); doThing('🏖️', [{ happy: 10 }, '🏖️ You retired! You’ll get a pension of ' + cr(L.pension) + ' a year.']); }); });
           opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
@@ -10846,6 +10859,71 @@
       if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
       L.implants.push(X.id);
       return [Object.assign({ happy: 5 }, X.fx), '🤫 You slipped the ' + X.t + ' from ' + n + ' into your bag and got it installed for free. Nobody noticed!' + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
+    }
+    // ---- 💼 Kumo-Tek Executive: pitch ideas (and bet your own credits on them) ----
+    var IDEAS = ['self-stirring noodle bowls', 'glow-in-the-dark sneakers for robo-dogs', 'a hover-scooter for cats', 'holo-pets that never need batteries', 'toothpaste that tastes like spicy noodles',
+      'smart umbrellas that follow you around', 'mood-changing chrome nail polish', 'a vending machine that tells jokes', 'noise-canceling pillows', 'drone delivery for single socks',
+      'bubble wrap that never runs out', 'a homework robot that only gets it a little wrong', 'neon rain jackets that play music', 'a phone that charges when you dance'];
+    var RISKS = [{ t: 'Safe', e: '🟢', p: 0.7, x: 1.6 }, { t: 'Bold', e: '🟡', p: 0.5, x: 2.6 }, { t: 'Wild', e: '🔴', p: 0.3, x: 5 }];
+    function pitchOdds(K) { return Math.max(0.1, Math.min(0.9, K.p - 0.15 + L.st.smarts / 400 + L.st.style / 800 + (hasDegree('biz') ? 0.08 : 0) + (L.job ? L.job.level * 0.03 : 0))); }
+    function pitchSheet() {
+      var ideas = IDEAS.slice();
+      for (var j = ideas.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)), tmp = ideas[j]; ideas[j] = ideas[k]; ideas[k] = tmp; }
+      ideas = ideas.slice(0, 3);
+      (function show() {
+        sheet('💡 Pitch an idea', function (c) {
+          note(c, 'Pick an idea to pitch to the Kumo-Tek board, then bet some of your own credits on it. Hits pay big, but flops cost you your bet!');
+          ideas.forEach(function (idea, i) {
+            var K = RISKS[i];
+            opt(c, K.e, cap(idea), K.t + ' idea · pays ' + K.x + '× your bet' + (premium ? ' · ' + odds(pitchOdds(K), 'chance it’s a hit') : ''), function () { stakeSheet(idea, K, show); });
+          });
+          opt(c, '←', 'Back to school & work', '', jobSheet);
+        });
+      })();
+    }
+    function stakeSheet(idea, K, back) {
+      sheet('💡 How much will you bet?', function (c) {
+        note(c, 'Your idea: ' + cap(idea) + ' (' + K.e + ' ' + K.t + '). You have ' + cr(L.money) + '.');
+        [5000, 25000, 100000].forEach(function (amt) {
+          opt(c, '💳', 'Bet ' + cr(amt), L.money < amt ? 'Not enough credits' : 'Win ' + cr(Math.round(amt * K.x)) + ', or lose ' + cr(amt), function () { L.done.pitch = L.age; doThing('💡', pitch(idea, K, amt)); }, L.money < amt);
+        });
+        opt(c, '←', 'Pick a different idea', '', back);
+      });
+    }
+    function pitch(idea, K, amt) {
+      if (chance(pitchOdds(K))) {
+        var win = Math.round(amt * K.x);
+        L.pitchWins = (L.pitchWins || 0) + 1;
+        if (win - amt >= 100000) award('bigidea');
+        return [{ money: win - amt, perf: 10, fame: 2, happy: 8 }, '💡 The board LOVED your pitch for ' + idea + '! It was a hit, and your cut was ' + cr(win) + '.'];
+      }
+      L.pitchFails = (L.pitchFails || 0) + 1;
+      var r = [{ money: -amt, perf: -10, happy: -8 }, '💸 Your pitch for ' + idea + ' flopped. Nobody wanted it, and you lost your ' + cr(amt) + ' bet.'];
+      if (K.t === 'Wild' && chance(0.3)) { endJob(); r[1] += ' The board was so mad, they fired you!'; }
+      return r;
+    }
+    // ---- 🤖 Kumo-Tek Enforcer: stop anyone who attacks the corp ----
+    var THREATS = [
+      { n: 'a rival corp strike team', e: '🥷', t: 'Rival Strike Team', hp: 130, atk: [11, 15], hits: [2, 4], dodge: 0.3, speed: 1.25, weapon: '🗡️', sword: 1, feint: 0.3, combo: 0.35 },
+      { n: 'a saboteur netrunner', e: '👾', t: 'Saboteur Netrunner', hp: 100, atk: [9, 12], hits: [2, 3], dodge: 0.35, speed: 1.3, weapon: '🔌', hacker: 0.35, feint: 0.25 },
+      { n: 'a rogue security mech', e: '🛡️', t: 'Rogue Mech', hp: 160, atk: [13, 17], hits: [1, 3], dodge: 0.1, speed: 1, weapon: '🦾', robot: 1, heavy: 0.25 },
+      { n: 'a chrome-crazy mercenary', e: '🦾', t: 'Chrome Merc', hp: 140, atk: [12, 16], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '👊', combo: 0.25 }
+    ];
+    function corpThreat() {
+      var X = pick(THREATS), lv = L.job && L.job.id === 'enforcer' ? L.job.level : 0;
+      var en = Object.assign({}, X, { id: 'threat', hp: X.hp + lv * 20, atk: [X.atk[0] + lv, X.atk[1] + lv], power: 75 + lv * 8 + R(-4, 4) });
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) {
+          L.corpWins = (L.corpWins || 0) + 1;
+          if (L.corpWins >= 5) award('muscle');
+          if (!res.auto) award('brawler');
+          var bonus = R(5000, 12000) * (1 + lv);
+          return [{ money: bonus, perf: 10, fame: 1, health: h }, '🛡️ You stopped ' + en.n + ' at the Kumo-Tek tower. The corp paid you a ' + cr(bonus) + ' bonus.'];
+        }
+        if (res.fled) return [{ perf: -10, happy: -3, health: h }, '🏃 You backed off from ' + en.n + '. Kumo-Tek doesn’t like quitters.'];
+        return [{ perf: -8, happy: -6, health: h }, '😵 ' + cap(en.n) + ' knocked you down and got away. Your boss is NOT happy.'];
+      });
     }
     var B = null, quickFights = false, AC = null;
     function sfx(kind) {
