@@ -779,7 +779,7 @@
   .lf-pop.bad { color: #ff8a98; }
   .lf-hum { font-size: 0.86rem; flex-direction: column; align-items: flex-start; gap: 2px; }
   .lf-toast.low { top: auto; bottom: 16px; }
-  .lf-fmsg { margin: 6px 0; min-height: 2.9em; font-size: 0.95rem; line-height: 1.4; text-align: center; color: #fff; }
+  .lf-fmsg { margin: 6px 0; min-height: 2.9em; flex-shrink: 0; font-size: 0.95rem; line-height: 1.4; text-align: center; color: #fff; }   /* long messages never squish into the moves */
   .lf-moves { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .lf-move { font: inherit; font-weight: 700; font-size: 0.92rem; line-height: 1.25; color: #f5f3ff; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 14px; padding: 11px 8px; cursor: pointer; text-align: center; }
   .lf-move small { display: block; margin-top: 2px; font-weight: 600; font-size: 0.72rem; color: #cfc8ee; }
@@ -8987,7 +8987,7 @@
     function clamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
     function capOf(k) {   // brain implants let Smarts go past 100%, and body implants do the same for Health
       var f = k === 'smarts' ? 'brain' : k === 'health' ? 'vital' : null;
-      return f && L ? 100 + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id][f] || 0); }, 0) : 100;
+      return f && L ? Math.min(160, 100 + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id][f] || 0); }, 0)) : 100;   // never past 160%
     }
     function capStat(k, v) { return Math.max(0, Math.min(capOf(k), Math.round(v))); }
     function val(v) { return Array.isArray(v) ? R(v[0], v[1]) : v; }
@@ -9041,7 +9041,7 @@
       { id: 'netjob', e: '🕸️', t: 'Corp Netrunner', pay: 88000, need: { netrunner: 1, smarts: 50 } },
       { id: 'patrol', e: '🚨', t: 'Chrome Patrol Agent', pay: 95000, need: { health: 60, power: 50 } },
       { id: 'kexec', e: '💼', t: 'Kumo-Tek Executive', pay: 160000, need: { degree: 1, smarts: 55, style: 45 } },
-      { id: 'enforcer', e: '🤖', t: 'Kumo-Tek Enforcer', pay: 120000, need: { health: 70, power: 80 } },
+      { id: 'enforcer', e: '🤖', t: 'Kumo-Tek Enforcer', pay: 160000, need: { health: 70, power: 80 } },
       { id: 'engineer', e: '🤖', t: 'Robotics Engineer', pay: 92000, need: { major: 'robo' } },
       { id: 'chromedoc', e: '🦾', t: 'Chrome Doctor', pay: 130000, need: { major: 'med', smarts: 60 } },
       { id: 'exec', e: '💼', t: 'Corp Executive', pay: 260000, flat: 1, need: { major: 'biz', smarts: 60, style: 50 } },
@@ -9101,8 +9101,19 @@
       { id: 'ramup', e: '🧠', t: 'RAM booster', cost: 18000, min: 0, body: 3, fx: { smarts: 3 }, net: 1, desc: '+3 RAM for your cyberdeck', msg: 'You got a RAM booster. Your cyberdeck holds 3 more RAM!' },
       { id: 'ramregen', e: '♻️', t: 'RAM recycler', cost: 26000, min: 0, body: 3, fx: { smarts: 2 }, net: 1, desc: 'RAM refills twice as fast', msg: 'You got a RAM recycler. Your RAM refills twice as fast in battles!' },
       { id: 'uplink', e: '📶', t: 'Quickhack uplink', cost: 22000, min: 0, body: 2, fx: { smarts: 3 }, net: 1, desc: 'Quickhacks hit 30% harder', msg: 'You got a quickhack uplink. Your hacks hit 30% harder!' },
-      { id: 'ice', e: '🧊', t: 'Self-ICE firewall', cost: 30000, min: 0, body: 3, fx: { health: 3 }, net: 1, desc: 'Sometimes blocks a hit all by itself', msg: 'You got a Self-ICE firewall. Sometimes it blocks enemy hits all by itself!' }
+      { id: 'ice', e: '🧊', t: 'Self-ICE firewall', cost: 30000, min: 0, body: 3, fx: { health: 3 }, net: 1, desc: 'Sometimes blocks a hit all by itself', msg: 'You got a Self-ICE firewall. Sometimes it blocks enemy hits all by itself!' },
+      // ☠️ black-market chrome: ILLEGAL. Stronger than clinic chrome, but it costs more, uses more tolerance, and eats your humanity in battles (hum)
+      { id: 'xarm', e: '💢', t: 'Wrecker Arms', cost: 40000, min: 0, body: 16, illegal: 1, hum: 1, punch: 14, power: 22, fx: { health: 8, style: 4 }, desc: 'Punches hit WAY harder (+14 damage) · +22 power', msg: 'You got Wrecker Arms from a back-alley ripperdoc. One punch can dent a hover-truck!' },
+      { id: 'xblades', e: '🔪', t: 'Razorstorm Blades', cost: 60000, min: 0, body: 12, illegal: 1, hum: 1, dmg: [34, 44], hcost: 1, power: 16, fx: { style: 8 }, desc: 'Razorstorm move: 34–44 damage, hard to dodge, costs 1 humanity a swing', msg: 'You got Razorstorm Blades. They hum when you’re angry. That can’t be good.' },
+      { id: 'xcannon', e: '🔥', t: 'Hellmouth Arm Cannon', cost: 90000, min: 0, body: 18, illegal: 1, hum: 2, dmg: [50, 65], hcost: 2, power: 20, fx: { style: 6 }, desc: 'Hellmouth blast: 50–65 damage, costs 2 humanity a shot', msg: 'You got a Hellmouth Arm Cannon bolted into your arm. It’s VERY illegal. And VERY loud.' },
+      { id: 'xarmor', e: '🧱', t: 'Riot Plating', cost: 55000, min: 0, body: 16, illegal: 1, hum: 1, guard: 0.6, hp: 20, power: 12, vital: 10, fx: { health: 12 }, desc: 'Take 40% less damage · +20 HP in battles · Health can go 10% past 100', msg: 'You got Riot Plating under your skin. Bullets just go “tink”.' },
+      { id: 'xreflex', e: '🌀', t: 'Blackwire Reflexes', cost: 70000, min: 0, body: 8, illegal: 1, hum: 1, power: 10, fx: { health: 4 }, desc: 'Dodging and parrying get WAY easier · +10 power', msg: 'You got Blackwire Reflexes. Flies don’t stand a chance against you anymore.' },
+      { id: 'xheart', e: '🖤', t: 'Black Heart', cost: 80000, min: 0, body: 10, illegal: 1, hum: 1, hp: 30, power: 8, vital: 20, fx: { health: 18 }, desc: '+30 HP in battles · Health can go 20% past 100', msg: 'You got a Black Heart. It beats like a drum machine. Your doctor would NOT approve.' },
+      { id: 'xbrain', e: '🧪', t: 'Bootleg Cortex', cost: 90000, min: 0, body: 9, illegal: 1, hum: 1, brain: 35, fx: { smarts: 20 }, desc: 'Smarts can go up to 35% past 100', msg: 'You got a Bootleg Cortex. You can do math in your sleep now. Literally. It’s kind of annoying.' },
+      { id: 'xmuscle', e: '🐂', t: 'Bull-Grade Muscle', cost: 90000, min: 0, body: 12, illegal: 1, hum: 2, punch: 8, hp: 15, power: 35, fx: { health: 12 }, desc: '+35 power · stronger punches · +15 HP in battles', msg: 'You got Bull-Grade Muscle. You’re as strong as a bull now, and almost as grumpy.' }
     ];
+    var CHROME_PRICE = 3;   // 💸 chrome is pricey: there's always something to save up for
+    IMPLANTS.forEach(function (im) { im.cost = Math.round(im.cost * CHROME_PRICE / 100) * 100; });
     var IMP = byId(IMPLANTS), NET_SET = ['port', 'ramup', 'ramregen', 'uplink', 'ice'], NET_FEE = 8000;
     var HOMES = [
       { id: 'pod', e: '🛏️', t: 'Capsule pod', cost: 18000, joy: 1 },
@@ -9168,8 +9179,10 @@
       { id: 'firewall', e: '🕶️', t: 'Firewall', d: 'Beat Ghostline, the rogue netrunner, in a boss fight.' },
       { id: 'hardcore', e: '🔴', t: 'Hardcore', d: 'Live to 80 in Hard mode.' },
       { id: 'bigidea', e: '💡', t: 'Big Idea', d: 'Make 100,000 cr or more from one pitch as a Kumo-Tek Executive.' },
-      { id: 'muscle', e: '🏢', t: 'Corporate Muscle', d: 'Stop 5 threats as a Kumo-Tek Enforcer (in one life).' },
+      { id: 'muscle', e: '🏢', t: 'Corporate Muscle', d: 'Stop 5 attackers as a Kumo-Tek Enforcer (in one life).' },
       { id: 'sticky', e: '🤫', t: 'Sticky Fingers', d: 'Steal chrome off a cyberpsycho you beat, without getting caught.' },
+      { id: 'closecall', e: '😅', t: 'Close Call', d: 'Win a battle on the very last turn before your military pills wear off.' },
+      { id: 'blackmarket', e: '🕶️', t: 'Off the Books', d: 'Buy illegal chrome on the black market (and get away with it).' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9368,8 +9381,8 @@
       { id: 'wallet', a: [18, 95], w: 2, e: '👛', t: 'You found a wallet with 2,000 cr inside.', c: [
         ['Return it', [[3, { good: 4, money: 200 }, 'You returned a lost wallet. The owner gave you a 200 cr reward!'], [2, { good: 4, happy: 3 }, 'You returned a lost wallet. The owner gave you a big hug.']]],
         ['Keep it', [[4, { money: 2000, good: -4 }, 'You found a wallet with 2,000 cr and kept it.'], [1, { good: -4, happy: -5 }, 'You tried to keep a lost wallet, but its tracker chip led the owner straight to you. Awkward.']]]] },
-      { id: 'implantsale', a: [18, 60], w: 2, if: function () { return !has('eyes'); }, e: '👁️', t: 'The Chrome Clinic is having a sale: cyber-eyes for just 4,200 cr!', c: [
-        ['Get cyber-eyes', function () { if (L.money < 4200) return [{}, 'You wanted cyber-eyes on sale, but you couldn’t afford them.']; L.implants.push('eyes'); return [{ money: -4200, smarts: 4, style: 5, happy: 3 }, 'You got cyber-eyes on sale! You can now read signs from three blocks away.']; }],
+      { id: 'implantsale', a: [18, 60], w: 2, if: function () { return !has('eyes'); }, e: '👁️', t: 'The Chrome Clinic is having a sale: cyber-eyes for just {sale}!', c: [
+        ['Get cyber-eyes', function () { var p = salePrice(); if (L.money < p) return [{}, 'You wanted cyber-eyes on sale, but you couldn’t afford them.']; L.implants.push('eyes'); return [{ money: -p, smarts: 4, style: 5, happy: 3 }, 'You got cyber-eyes on sale! You can now read signs from three blocks away.']; }],
         ['Not interested', [[1, {}, 'You skipped the Chrome Clinic sale.']]]] },
       { id: 'puppy', a: [18, 75], w: 2, if: function () { return !pets().length; }, e: '🐶', t: 'The robo-pet shelter is giving away a robo-puppy.', c: [
         ['Adopt it', function () { var p = addPet('dog'); return [{ happy: 7 }, 'You adopted a robo-puppy and named it ' + p.first + '!']; }],
@@ -9395,8 +9408,8 @@
         ['Grow glowing mushrooms', [[1, { style: 2, happy: 4 }, 'You grew glowing mushrooms in the rooftop garden. They light up the whole roof.']]],
         ['Skip it', [[1, {}, 'You skipped the rooftop garden.']]]] },
       // older
-      { id: 'knees', a: [58, 100], w: 3, once: 1, if: function () { return !has('knees'); }, e: '🦿', t: 'Your knees are creaky. The clinic offers chrome knees for 5,000 cr.', c: [
-        ['Get chrome knees', function () { if (L.money < 5000) return [{}, 'You wanted chrome knees, but you couldn’t afford them.']; L.implants.push('knees'); return [{ money: -5000, health: 10, happy: 4 }, 'You got chrome knees! You can do the robot dance again.']; }],
+      { id: 'knees', a: [58, 100], w: 3, once: 1, if: function () { return !has('knees'); }, e: '🦿', t: 'Your knees are creaky. The clinic offers chrome knees for {kneesP}.', c: [
+        ['Get chrome knees', function () { var p = IMP.knees.cost; if (L.money < p) return [{}, 'You wanted chrome knees, but you couldn’t afford them.']; L.implants.push('knees'); return [{ money: -p, health: 10, happy: 4 }, 'You got chrome knees! You can do the robot dance again.']; }],
         ['Stay natural', [[1, { happy: 1 }, 'You decided to keep your creaky original knees.']]]] },
       { id: 'memoir', a: [60, 105], w: 2, once: 1, e: '📖', t: 'A publisher wants you to write the story of your life.', c: [
         ['Write it', function () { var m = R(1000, 6000) + L.fame * 200; return [{ money: m, fame: 5, smarts: 2 }, 'You wrote your memoir and earned ' + cr(m) + '!']; }],
@@ -9457,8 +9470,8 @@
         ['🤫 Keep it (get it installed for free)', function () { return stealChrome('keep'); }],
         ['💰 Sell it to a fixer', function () { return stealChrome('sell'); }],
         ['🧾 Turn it all in', function () { var n = L.loot.n; L.loot = null; return [{ good: 2, perf: 4 }, '🧾 You turned in all the chrome from ' + n + ', like a good agent. Your captain gave you a nod.']; }]] },
-      { id: 'corpalert', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'enforcer'; }, e: '🏢', t: 'KUMO-TEK ALERT! Somebody is attacking the tower, and you’re the enforcer on duty.', c: [
-        ['⚔️ Stop them', function () { return corpThreat(); }],
+      { id: 'corpalert', a: [18, 90], w: 10, every: 1, need: 'job', if: function () { return L.job.id === 'enforcer'; }, e: '🏢', t: 'KUMO-TEK ALERT! A gang of attackers is storming the tower, and you’re the enforcer on duty. You’ll have to fight them one after another!', c: [
+        ['⚔️ Stop them (2–3 fights in a row)', function () { return corpThreat(); }],
         ['📞 Call for backup', [[1, { perf: -4 }, '📞 You called for backup and let the rest of the security team handle it. Your boss sighed.']]]] },
       { id: 'corpleak', a: [18, 90], w: 4, need: 'job', if: function () { return L.job.id === 'enforcer' || L.job.id === 'kexec'; }, e: '📰', t: 'A reporter found out some of Kumo-Tek’s dirty secrets and is about to tell the whole city. Your boss wants it handled.', c: [
         ['💳 Offer them corp money to keep quiet', function () { if (chance(0.6)) return [{ perf: 8, good: -3 }, '💳 The reporter took the money and dropped the story. Your boss was pleased. You feel a little gross.']; return [{ perf: -6, good: -1, fame: 2 }, '📰 The reporter said no, and wrote about the bribe too. Oops.']; }],
@@ -9565,6 +9578,8 @@
     function byLabel(label) { for (var i = 0; i < L.people.length; i++) if (L.people[i].label === label) return L.people[i]; return null; }
     function avgParentBond() { var ps = parents(); return ps.length ? ps.reduce(function (s, p) { return s + p.bond; }, 0) / ps.length : 50; }
     function has(id) { return L.implants.indexOf(id) >= 0; }
+    function xtra(k) { return L.implants.reduce(function (t, id) { return t + (IMP[id] && IMP[id][k] || 0); }, 0); }   // adds up one power across all your implants
+    function illegalCount() { return L.implants.filter(function (id) { return IMP[id] && IMP[id].illegal; }).length; }
     function chrome() { return Math.min(100, L.implants.reduce(function (s, id) { return s + (IMP[id] ? IMP[id].body : 0); }, 0)); }   // % of your body that's cyberware
     function baseLimit() { return Math.min(95, (L.chromeLimit || 45) + L.implants.reduce(function (s, id) { return s + (IMP[id] && IMP[id].limit || 0); }, 0)) + (hasDegree('bio') ? 5 : 0); }   // a Bio-Hacking degree adds 5
     function limitOf() { return L.smasherBody ? 100 : baseLimit(); }   // your cyberware tolerance
@@ -9855,14 +9870,15 @@
     }
 
     // ---------------- events ----------------
+    function salePrice() { return Math.round(IMP.eyes.cost * 0.7 / 100) * 100; }   // 30% off cyber-eyes
     function ctxFor(ev) {
-      var c = { corp: pick(NH.corps), new: freshName(), loot: L.rides.length ? 'your ' + RIDE[L.rides[0]].t.toLowerCase() : 'your credit chip' };
+      var c = { corp: pick(NH.corps), new: freshName(), sale: cr(salePrice()), kneesP: cr(IMP.knees.cost), loot: L.rides.length ? 'your ' + RIDE[L.rides[0]].t.toLowerCase() : 'your credit chip' };
       if (ev.need === 'friend' && !(c.friend = rand(friends()))) return null;
       if (ev.need === 'partner' && !(c.partner = partner())) return null;
       if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
       if (ev.need === 'job' && !L.job) return null;
       if (ev.need === 'school' && !L.school) return null;
-      if (ev.need === 'loot') { if (!L.loot || !IMP[L.loot.id] || !L.job || L.job.id !== 'patrol') return null; c.psycho = L.loot.n; c.item = IMP[L.loot.id].e + ' ' + IMP[L.loot.id].t; c.odds = premium ? ' 😇 ' + Math.round(lootCatch() * 100) + '% chance of getting caught if you take it.' : ' Taking it is risky!'; }
+      if (ev.need === 'loot') { if (!L.loot || !IMP[L.loot.id] || !L.job || L.job.id !== 'patrol') return null; c.psycho = L.loot.n; c.item = IMP[L.loot.id].e + ' ' + IMP[L.loot.id].t + (IMP[L.loot.id].illegal ? ' ☠️ (illegal black-market chrome: extra strong!)' : ''); c.odds = premium ? ' 😇 ' + Math.round(lootCatch(IMP[L.loot.id]) * 100) + '% chance of getting caught if you take it.' : ' Taking it is risky!'; }
       return c;
     }
     function eligible(ev) {
@@ -10190,7 +10206,7 @@
           schoolOpt(c, 'slack', '😴', 'Slack off', 'More fun, worse performance', function () { return [{ perf: -10, happy: 5 }, '😴 You took lots of long noodle breaks at work.']; });
           if (L.job.id === 'patrol') { note(c, '🚨 Cyberpsychos taken down: ' + (L.psychos || 0)); opt(c, '🚨', 'Answer a cyberpsycho call', doneYet('psycho') ? 'Done this year ✓' : 'Take down a cyberpsycho before anyone gets hurt', function () { L.done.psycho = L.age; play('🚨', psychoCall()); }, doneYet('psycho')); }
           if (L.job.id === 'kexec') { note(c, '💡 Your pitches: ' + (L.pitchWins || 0) + ' hits, ' + (L.pitchFails || 0) + ' flops'); opt(c, '💡', 'Pitch an idea to the board', doneYet('pitch') ? 'Pitched this year ✓' : 'Bet your own credits on a big idea. Hits pay big, flops cost you!', pitchSheet, doneYet('pitch')); }
-          if (L.job.id === 'enforcer') { note(c, '🛡️ Threats you stopped: ' + (L.corpWins || 0)); opt(c, '🛡️', 'Handle a threat to Kumo-Tek', doneYet('threat') ? 'Done this year ✓' : 'Stop strike teams, saboteurs, and rogue mechs', function () { L.done.threat = L.age; play('🛡️', corpThreat()); }, doneYet('threat')); }
+          if (L.job.id === 'enforcer') { note(c, '🛡️ Attackers you stopped: ' + (L.corpWins || 0)); opt(c, '🛡️', 'Handle a threat to Kumo-Tek', doneYet('threat') ? 'Done this year ✓' : 'Fight off 2–3 attackers in a row · ' + cr(15000 * (1 + L.job.level)) + '–' + cr(30000 * (1 + L.job.level)) + ' for each one you stop', function () { L.done.threat = L.age; play('🛡️', corpThreat()); }, doneYet('threat')); }
           if (!J.pt) schoolOpt(c, 'raise', '💸', 'Ask for a raise', premium ? odds(L.job.perf / 120, 'chance of a raise') : 'Works better if you work hard', function () { if (chance(L.job.perf / 120)) { L.job.bonus = (L.job.bonus || 1) * 1.1; return [{ happy: 5 }, '💸 You asked for a raise and got it! +10% pay.']; } return [{ happy: -2, perf: -2 }, '💸 You asked for a raise. Your boss laughed and walked away.']; });
           if (L.age >= 60 && !J.pt) opt(c, '🏖️', 'Retire', 'Get a pension of ' + cr(salary() * 0.5) + ' a year', function () { confirmBox('🏖️', 'Retire from your job?', 'Yes, retire', function () { L.pension = Math.round(salary() * 0.5); L.retired = true; endJob(); doThing('🏖️', [{ happy: 10 }, '🏖️ You retired! You’ll get a pension of ' + cr(L.pension) + ' a year.']); }); });
           opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
@@ -10406,6 +10422,7 @@
         }
         if (L.age >= 16) opt(c, '🥊', 'Underground fight ring', 'Fight for prizes. Tough opponents start a real battle!', ringSheet);
         sec(c, '🦾 Chrome Clinic'); opt(c, '🦾', 'Visit the Chrome Clinic', 'Implants that boost your stats (watch your tolerance!)', clinicSheet);
+        if (L.age >= 14) opt(c, '🕶️', 'Black market', '☠️ Illegal chrome: stronger, but it costs more, uses more tolerance, and eats your humanity', blackSheet);
         if (has('exo')) { var fj = doneYet('float'); opt(c, '🪐', 'Anti-gravity joyride', fj ? 'Done this year ✓' : 'Float over the city in your Titan Exoskeleton', function () { L.done.float = L.age; doThing('🪐', [{ happy: [6, 10], fame: 2 }, pick(['🪐 You switched on your exo’s anti-gravity and floated over the neon rooftops. People pointed and waved!', '🪐 You hovered over the Glow Market with anti-gravity and caught a noodle bowl in midair.', '🪐 You floated to the top of the Kumo-Tek tower using anti-gravity and watched the sunrise.'])]); }, fj); }
       });
     }
@@ -10425,6 +10442,7 @@
           var cd = doneYet('cool');
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
         }
+        if (!sb) { var pl = L.pills || 0, pf = pl > PILL_MAX - 3; opt(c, '💊', 'Military-grade pills (pack of 3)', pf ? 'You have ' + pl + '. That’s all you can carry!' : cr(PILL_PACK) + (L.money < PILL_PACK ? ' · not enough credits' : '') + ' · you have ' + pl + ' · In battles: +4 humanity, but then you have to win within ' + pillTurns() + ' turns or take another, or you go cyberpsycho!', function () { L.pills = pl + 3; doThing('💊', [{ money: -PILL_PACK }, '💊 You bought a pack of 3 military-grade pills (you have ' + L.pills + ' now). In a battle, one gives you back 4 humanity… but then the clock starts: win within ' + pillTurns() + ' turns or take another one, or you’ll go cyberpsycho when they wear off!']); }, pf || L.money < PILL_PACK); }
         sec(c, '🖥️ Operating systems');
         note(c, '⏱️ Sandys (time-slow), 😤 Berserk, and 💻 Cyberdecks for hacking people. You can run one of each, and a better one replaces the one you have.');
         IMPLANTS.forEach(function (im) { if (im.os) implantRow(c, im, ch, lim); });
@@ -10432,7 +10450,7 @@
         note(c, '💻 Quickhacks use RAM, which refills a little every turn. Get all ' + (NET_SET.length + 1) + ' pieces of netrunner gear (including a Black ICE Cyberdeck) and graduate from Netrunner School (in 💼 Job) to unlock 💠 Capri! You have ' + netCount() + ' of ' + (NET_SET.length + 1) + '.' + (L.netrunner ? ' ✅ Netrunner School: done.' : ''));
         IMPLANTS.forEach(function (im) { if (im.net && !im.os) implantRow(c, im, ch, lim); });
         sec(c, '🦾 Body chrome');
-        IMPLANTS.forEach(function (im) { if (!im.os && !im.net) implantRow(c, im, ch, lim); });
+        IMPLANTS.forEach(function (im) { if (!im.os && !im.net && !im.illegal) implantRow(c, im, ch, lim); });
         opt(c, '←', 'Back to activities', '', doSheet);
       });
     }
@@ -10458,13 +10476,44 @@
       L.implants.push(im.id);
       doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), im.e + ' ' + im.msg + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
     }
+    function raidChance() { return Math.max(0.05, Math.min(0.45, 0.14 - L.st.smarts / 1000 + (L.mode === 'hard' ? 0.1 : 0) + (L.job && L.job.id === 'patrol' ? 0.06 : 0))); }   // 🚨 chance the Harbor PD raids the market
+    function blackSheet() {
+      sheet('🕶️ Black market', function (c) {
+        var ch = chrome(), lim = limitOf(), sb = !!L.smasherBody, n = illegalCount();
+        note(c, '☠️ Everything here is ILLEGAL. Black-market chrome is way stronger than clinic chrome, but it costs more, uses up more tolerance, and every piece takes away humanity in battles. ' + (premium ? '😇 ' + Math.round(raidChance() * 100) + '% chance the Harbor PD raids the market while you’re buying.' : 'And the Harbor PD might raid the market while you’re buying!'));
+        note(c, '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance.' + (sb ? ' 🤖 Smasher Body: no humanity limit, so illegal chrome can’t hurt your humanity.' : ' 🧠 Battle humanity: ' + humanityMax() + (n ? ' (your ' + n + ' illegal ' + (n === 1 ? 'implant takes' : 'implants take') + ' away ' + xtra('hum') + ')' : '') + '.'));
+        c.appendChild(barEl(sb ? ch : ch / lim * 100, ch > lim ? 'lo' : ch > 0 && ch >= lim - 5 && !sb ? 'mid' : 'tol'));
+        IMPLANTS.forEach(function (im) { if (im.illegal) blackRow(c, im, ch, lim); });
+        opt(c, '←', 'Back to activities', '', doSheet);
+      });
+    }
+    function blackRow(c, im, ch, lim) {
+      var own = has(im.id), use = ' · uses ' + im.body + ' tolerance';
+      var why = own ? 'Installed ✓' + use : L.money < im.cost ? cr(im.cost) + ' · not enough credits' + use : '';
+      var info = cr(im.cost) + ' · ' + im.desc + (fxText(im.fx) ? ' · ' + fxText(im.fx) : '') + use + (L.smasherBody ? '' : ' · −' + im.hum + ' humanity in battles') + (!L.smasherBody && ch + im.body > lim ? ' · ⚠️ puts you over your tolerance!' : '');
+      opt(c, im.e, '☠️ ' + im.t, why || info, function () { buyBlack(im); }, !!why);
+    }
+    function buyBlack(im) {
+      if (chance(raidChance())) {   // 🚨 busted!
+        var cop = L.job && L.job.id === 'patrol', t = 'The Harbor PD raided the black market right when you were buying the ' + im.t + '! The deal was off.' + (cop ? ' Internal Affairs found out, and you got kicked off the Chrome Patrol.' : '');
+        if (cop) endJob();
+        if (L.age < 18) { doThing('🚨', caught(t)); return; }
+        L.good -= 1;
+        if (chance(0.3)) { doThing('🚨', lockupResult(1, '🚨 ' + t)); return; }
+        var fine = Math.round(im.cost * 0.15 / 100) * 100;
+        doThing('🚨', [{ money: -fine, happy: -8 }, '🚨 ' + t + ' You had to pay a ' + cr(fine) + ' fine.']);
+        return;
+      }
+      L.implants.push(im.id); L.mischief += 1; award('blackmarket');
+      doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), '☠️ ' + im.msg + ' It uses ' + im.body + ' tolerance' + (L.smasherBody ? '.' : ', and ' + im.hum + ' of your battle humanity.') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
+    }
     function craftQ() { return Math.round((0.8 + L.st.smarts / 250) * 100) / 100; }   // your Smarts set how good your inventions are
     function craftGrade(q) { return q >= 1.2 ? 'Masterwork' : q >= 1.05 ? 'Great' : q >= 0.95 ? 'Solid' : 'Prototype'; }
     function regCustom() { ((L && L.custom) || []).forEach(function (X) { IMP[X.id] = X; }); }   // your own inventions
     var WS = { name: '', e: '⚙️', kind: 'weapon', size: 1 };
     var CW_EMOJI = ['⚙️', '🔮', '💎', '🌟', '🔥', '❄️', '⚡', '🐍', '🦂', '🛸'];
     var CW_KIND = { weapon: ['⚔️', 'Battle weapon', null], brain: ['🧠', 'Brain booster', 'smarts'], body: ['❤️', 'Body booster', 'health'], style: ['😎', 'Style mod', 'style'], mood: ['😊', 'Mood chip', 'happy'] };
-    var CW_SIZE = [null, { t: 'Small', body: 3, cost: 5000, boost: 6, cap: 5, dmg: [16, 22] }, { t: 'Medium', body: 6, cost: 15000, boost: 12, cap: 10, dmg: [24, 32] }, { t: 'Large', body: 10, cost: 40000, boost: 20, cap: 15, dmg: [34, 44] }];
+    var CW_SIZE = [null, { t: 'Small', body: 3, cost: 10000, boost: 6, cap: 5, dmg: [16, 22] }, { t: 'Medium', body: 6, cost: 30000, boost: 12, cap: 10, dmg: [24, 32] }, { t: 'Large', body: 10, cost: 80000, boost: 20, cap: 15, dmg: [34, 44] }];
     function workshopSheet() {
       sheet('🛠️ Cyberware Workshop', function (c) {
         var q = craftQ();
@@ -10659,7 +10708,7 @@
     }
     function lockupResult(years, text, fx) {
       var extra = goToLockup(years);
-      return [Object.assign({ happy: -15 }, fx || {}), text + ' 🚔 The judge-bot sentenced you to ' + years + ' years in the Neon Harbor Lockup.' + extra];
+      return [Object.assign({ happy: -15 }, fx || {}), text + ' 🚔 The judge-bot sentenced you to ' + years + (years === 1 ? ' year' : ' years') + ' in the Neon Harbor Lockup.' + extra];
     }
     function goToLockup(years) {
       var t = '';
@@ -10715,7 +10764,7 @@
       aim: ['🎯', 'Aimed shot', 'Can’t be dodged'], slash: ['🗡️', 'Blade slash', 'Hard to dodge'], rocket: ['🚀', 'Pop-rocket', 'Huge damage (once)'],
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
-      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
+      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -10736,7 +10785,7 @@
     function tolBonus(t) { return t >= 90 ? 3 : t >= 75 ? 2 : t >= 60 ? 1 : t < 28 ? -2 : t < 35 ? -1 : 0; }
     function humanityMax() {   // about 9: more with high tolerance; less with low tolerance, too much chrome, or sadness
       var lim = limitOf(), cy = chrome();
-      return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0)));
+      return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0) - xtra('hum')));   // ☠️ illegal chrome eats humanity
     }
     var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3, float: 3, pull: 2 };   // humanity cost for an average body (tolerance 45% or less)
     function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body: free!
@@ -10759,20 +10808,25 @@
     function foeOf(x) { return typeof x === 'string' ? ENEMY[x] : x; }
     function fight(id, then) {   // easy fights end right away (like BitLife); hard ones start a battle
       var en = foeOf(id);
-      if (!isHard(en) && !en.bossFight) return then(chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) });
+      if (!isHard(en) && !en.bossFight && !en.always) return then(chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) });
       return { battle: en, then: then };
     }
     function hurt(res) { return -Math.min(res.healthLoss || 0, Math.max(0, L.st.health - 5)); }
-    function finish(r, res) { return res.overloaded ? overloadAfter(res) : r.then(res); }
+    function finish(r, res) {
+      var rr = res.overloaded ? overloadAfter(res) : r.then(res);
+      if (res.pills && !res.overloaded && rr && rr[1]) rr[1] += res.win ? ' 💊 You took ' + res.pills + (res.pills === 1 ? ' military pill' : ' military pills') + ' and won before they wore off. Phew!' : res.lost ? ' 💊 Your pills wore off while you were knocked out cold, so at least you didn’t go cyberpsycho.' : '';
+      return rr;
+    }
     function play(emoji, r, c) {
       if (r && r.battle) { closeCard(); startBattle(r.battle, r.mode || 'fight', function (res) { doThing(emoji, finish(r, res), c); }); return; }
       doThing(emoji, r, c);
     }
     function overloadAfter(res) {
-      var h = hurt(res);
-      if (res.escaped) { award('untouchable'); return [{ happy: -10, health: h }, '🏃 You dodged the Chrome Patrol and lost them in the back alleys! It took days to feel like yourself again.']; }
+      var h = hurt(res), pre = res.pillCrash ? '💊 Your military pills wore off before the fight was over, and you went cyberpsycho! ' : '';
+      if (res.escaped) { award('untouchable'); return [{ happy: -10, health: h }, pre + '🏃 You dodged the Chrome Patrol and lost them in the back alleys! It took days to feel like yourself again.']; }
       var r = overloadRescue();
       if (h && r[0].health > -100) r[0].health = (r[0].health || 0) + h;
+      if (pre) r[1] = pre + r[1];
       return r;
     }
     function loseLoot() {
@@ -10817,14 +10871,14 @@
       });
     }
     var PSYCHOS = [   // cyberpsychos the Chrome Patrol has to stop
-      { n: 'Razorhand', loot: ['blades', 'reflex', 'arm'], e: '🤖', weapon: '🗡️', sword: 1, hp: 110, atk: [10, 14], hits: [2, 4], dodge: 0.25, speed: 1.25, feint: 0.25, combo: 0.45 },
-      { n: 'Ironjaw', loot: ['armor', 'muscle', 'bones'], e: '🦾', weapon: '👊', hp: 150, atk: [13, 18], hits: [1, 3], dodge: 0.1, speed: 1, feint: 0.1, combo: 0.15, robot: 1 },
-      { n: 'Blink', loot: ['timeslow', 'reflex', 'legs'], e: '⚡', weapon: '⚡', hp: 95, atk: [9, 12], hits: [3, 4], dodge: 0.5, speed: 1.55, feint: 0.3, combo: 0.3 },
-      { n: 'Hexwire', loot: ['deck2', 'port', 'ice'], e: '👾', weapon: '🔌', hp: 105, atk: [10, 13], hits: [2, 3], dodge: 0.3, speed: 1.2, feint: 0.35, combo: 0.2 }
+      { n: 'Razorhand', loot: ['blades', 'reflex', 'arm'], xloot: ['xblades', 'xreflex'], e: '🤖', weapon: '🗡️', sword: 1, hp: 110, atk: [10, 14], hits: [2, 4], dodge: 0.25, speed: 1.25, feint: 0.25, combo: 0.45 },
+      { n: 'Ironjaw', loot: ['armor', 'muscle', 'bones'], xloot: ['xarmor', 'xmuscle', 'xarm'], e: '🦾', weapon: '👊', hp: 150, atk: [13, 18], hits: [1, 3], dodge: 0.1, speed: 1, feint: 0.1, combo: 0.15, robot: 1 },
+      { n: 'Blink', loot: ['timeslow', 'reflex', 'legs'], xloot: ['xreflex', 'xheart'], e: '⚡', weapon: '⚡', hp: 95, atk: [9, 12], hits: [3, 4], dodge: 0.5, speed: 1.55, feint: 0.3, combo: 0.3 },
+      { n: 'Hexwire', loot: ['deck2', 'port', 'ice'], xloot: ['xbrain', 'xcannon'], e: '👾', weapon: '🔌', hp: 105, atk: [10, 13], hits: [2, 3], dodge: 0.3, speed: 1.2, feint: 0.35, combo: 0.2 }
     ];
     function psychoFoe() {   // tougher ones show up as you rank up
       var X = pick(PSYCHOS), lv = L.job && L.job.id === 'patrol' ? L.job.level : 0;
-      return { id: 'psycho', e: X.e, t: 'Cyberpsycho “' + X.n + '”', hp: X.hp + lv * 15, atk: [X.atk[0] + lv, X.atk[1] + lv], hits: X.hits, dodge: X.dodge, power: 62 + lv * 8 + R(-4, 4), speed: X.speed, weapon: X.weapon, sword: X.sword, feint: X.feint, combo: X.combo, robot: X.robot, loot: X.loot };
+      return { id: 'psycho', e: X.e, t: 'Cyberpsycho “' + X.n + '”', hp: X.hp + lv * 15, atk: [X.atk[0] + lv, X.atk[1] + lv], hits: X.hits, dodge: X.dodge, power: 62 + lv * 8 + R(-4, 4), speed: X.speed, weapon: X.weapon, sword: X.sword, feint: X.feint, combo: X.combo, robot: X.robot, loot: X.loot, xloot: X.xloot };
     }
     function checkPsycho() { if ((L.psychos || 0) >= 5) award('psycho'); }
     function psychoCall() {
@@ -10835,6 +10889,8 @@
           L.psychos = (L.psychos || 0) + 1; checkPsycho();
           if (!res.auto) award('brawler');
           var grab = (en.loot || []).filter(function (id) { var I = IMP[id], cur = I && I.os ? osOf(I.os) : null; return I && !has(id) && !(cur && cur.tier >= I.tier); });
+          var xgrab = (en.xloot || []).filter(function (id) { return IMP[id] && !has(id); });
+          if (xgrab.length && (!grab.length || chance(0.4))) grab = xgrab;   // ☠️ sometimes they’re packing illegal chrome
           if (grab.length && L.job && L.job.id === 'patrol') { L.loot = { id: pick(grab), n: en.t }; L.pending.push('psycholoot'); }   // their chrome is up for grabs…
           var bonus = R(3000, 8000) * (1 + (L.job ? L.job.level : 0));
           return [{ money: bonus, perf: 10, fame: 2, happy: 6, health: h }, '🚨 You took down ' + en.t + ' before anyone got hurt! The Chrome Patrol paid you a ' + cr(bonus) + ' bonus.' + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
@@ -10843,11 +10899,11 @@
         return [{ perf: -8, happy: -6, health: h }, '😵 ' + en.t + ' knocked you down. Your squad had to finish the job.'];
       });
     }
-    function lootCatch() { return Math.max(0.12, Math.min(0.7, 0.35 - L.st.smarts / 500 + (L.mode === 'hard' ? 0.1 : 0))); }   // chance Internal Affairs catches you
+    function lootCatch(X) { return Math.max(0.12, Math.min(0.7, 0.35 - L.st.smarts / 500 + (L.mode === 'hard' ? 0.1 : 0) + (X && X.illegal ? 0.1 : 0))); }   // chance Internal Affairs catches you
     function stealChrome(mode) {   // 🤫 pocket a beaten cyberpsycho's chrome: keep it, or sell it to a fixer
       var X = IMP[L.loot.id], n = L.loot.n;
       L.loot = null;
-      if (chance(lootCatch())) {
+      if (chance(lootCatch(X))) {
         var fine = R(5000, 15000);
         L.good -= 3; endJob();
         if (mode === 'sell') return lockupResult(2, '🚨 The fixer ratted you out! Internal Affairs caught you selling the ' + X.t + ' from ' + n + '. You got kicked off the Chrome Patrol and fined ' + cr(fine) + '.', { money: -fine });
@@ -10909,23 +10965,32 @@
       { n: 'a rogue security mech', e: '🛡️', t: 'Rogue Mech', hp: 160, atk: [13, 17], hits: [1, 3], dodge: 0.1, speed: 1, weapon: '🦾', robot: 1, heavy: 0.25 },
       { n: 'a chrome-crazy mercenary', e: '🦾', t: 'Chrome Merc', hp: 140, atk: [12, 16], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '👊', combo: 0.25 }
     ];
-    function corpThreat() {
-      var X = pick(THREATS), lv = L.job && L.job.id === 'enforcer' ? L.job.level : 0;
-      var en = Object.assign({}, X, { id: 'threat', hp: X.hp + lv * 20, atk: [X.atk[0] + lv, X.atk[1] + lv], power: 75 + lv * 8 + R(-4, 4) });
+    function listAnd(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+    function threatPay(lv) { return Math.round(R(15000, 30000) * (1 + lv) * (L.mode === 'hard' ? 0.85 : 1) / 100) * 100; }   // 💰 what each attacker you stop pays
+    function corpThreat() {   // 🛡️ 2–3 attackers storm the tower, one after another (your HP carries over!)
+      var lv = L.job && L.job.id === 'enforcer' ? L.job.level : 0, of = R(2, 3), pool = THREATS.slice(), list = [], pay = [];
+      for (var i = 0; i < of; i++) {
+        var X = pool.splice(R(0, pool.length - 1), 1)[0], k = of === 3 ? 0.7 : 0.85;   // in a gang, each one is a bit weaker than a lone attacker
+        list.push(Object.assign({}, X, { id: 'threat', always: 1, hp: Math.round((X.hp + lv * 20) * k), atk: [X.atk[0] + lv, X.atk[1] + lv], power: 75 + lv * 8 + R(-4, 4), waveN: i + 1, waveOf: of }));
+        pay.push(threatPay(lv));
+      }
+      var en = Object.assign({}, list[0], { waves: list.slice(1) });
       return fight(en, function (res) {
-        var h = hurt(res);
+        var h = hurt(res), beat = res.win ? of : Math.min(of - 1, res.beaten || 0), got = pay.slice(0, beat).reduce(function (t, x) { return t + x; }, 0);
+        var names = list.slice(0, beat).map(function (x) { return x.n; });
+        if (beat) { L.corpWins = (L.corpWins || 0) + beat; if (L.corpWins >= 5) award('muscle'); }
         if (res.win) {
-          L.corpWins = (L.corpWins || 0) + 1;
-          if (L.corpWins >= 5) award('muscle');
           if (!res.auto) award('brawler');
-          var bonus = R(5000, 12000) * (1 + lv);
-          return [{ money: bonus, perf: 10, fame: 1, health: h }, '🛡️ You stopped ' + en.n + ' at the Kumo-Tek tower. The corp paid you a ' + cr(bonus) + ' bonus.'];
+          var sweep = of === 3 ? Math.round(got * 0.25 / 100) * 100 : 0;
+          return [{ money: got + sweep, perf: 10 + of * 2, fame: of - 1, health: h }, '🛡️ You stopped ' + (of === 2 ? 'both' : 'all ' + of) + ' attackers at the Kumo-Tek tower: ' + listAnd(names) + '! The corp paid you ' + cr(got) + (sweep ? ', plus a ' + cr(sweep) + ' bonus for beating all three' : '') + '.' + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
         }
-        if (res.fled) return [{ perf: -10, happy: -3, health: h }, '🏃 You backed off from ' + en.n + '. Kumo-Tek doesn’t like quitters.'];
-        return [{ perf: -8, happy: -6, health: h }, '😵 ' + cap(en.n) + ' knocked you down and got away. Your boss is NOT happy.'];
+        var part = beat ? ' You did stop ' + listAnd(names) + ' first, so the corp still paid you ' + cr(got) + '.' : '';
+        if (res.fled) return [{ money: got, perf: -10, happy: -3, health: h }, '🏃 You backed off from ' + list[beat].n + '. Kumo-Tek doesn’t like quitters.' + part];
+        return [{ money: got, perf: -8, happy: -6, health: h }, '😵 ' + cap(list[beat].n) + ' knocked you down and got away. Your boss is NOT happy.' + part];
       });
     }
-    var B = null, quickFights = false, AC = null;
+    var B = null, quickFights = false, AC = null, PILL_PACK = 9000, PILL_MAX = 9;
+    function pillTurns() { return L.mode === 'hard' ? 4 : 5; }   // 💊 how long military pills last in a battle
     function sfx(kind) {
       try {
         if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
@@ -10944,20 +11009,21 @@
       if (mode === 'escape') return r < 0.5 ? { escaped: true } : { caught: true };
       return r < 0.55 ? { win: true, healthLoss: R(0, 10), parries: R(0, 3) } : r < 0.75 ? { fled: true, healthLoss: R(0, 5) } : { lost: true, healthLoss: R(8, 20) };
     }
+    function hardFoe(en) { return L.mode === 'hard' ? Object.assign({}, en, { hp: Math.round(en.hp * 1.25), atk: [Math.round(en.atk[0] * 1.25), Math.round(en.atk[1] * 1.25)] }) : en; }
     function startBattle(id, mode, done) {
       if (B) return;
       if (quickFights) { done(quickResult(mode)); return; }
       var en = foeOf(id);
-      if (L.mode === 'hard' && mode === 'fight') en = Object.assign({}, en, { hp: Math.round(en.hp * 1.25), atk: [Math.round(en.atk[0] * 1.25), Math.round(en.atk[1] * 1.25)] });   // hard mode: tougher enemies
+      if (mode === 'fight') en = hardFoe(en);   // hard mode: tougher enemies
       var D = deckOf(), ram = D ? D.ram + (has('ramup') ? 3 : 0) : 0, hm = humanityMax();
-      var max = 60 + Math.round(L.st.health * 0.6) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0);
+      var max = 60 + Math.round(L.st.health * 0.6) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0) + xtra('hp');
       B = { en: en, mode: mode, done: done, enHP: en.hp, hp: max, max: max, hum: hm, humMax: hm, sandy: 0, rage: 0, stun: false, glide: false, glideAll: false, camo: false, yank: false,
         ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
         parries: 0, hitsTaken: 0, wave: 0, hits: [], lock: 0, phase: 'wait', over: false, timer: 0 };
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
       if (mode === 'escape') { msgF('🚨 The Chrome Patrol is here! Tap DODGE right as they strike. If they hit you 3 times, they catch you!'); B.timer = setTimeout(enemyTurn, 1600); }
-      else { msgF('⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
+      else { msgF(en.waveOf ? '🚨 ' + en.waveOf + ' attackers are coming, one after another! Wave 1: ' + en.t + '. Your turn: pick a move.' : '⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
       renderF(); buildMoves();
       requestAnimationFrame(tick);
       setTimeout(function () { var f = $('moves').querySelector('button'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) {} } }, 50);
@@ -10969,7 +11035,7 @@
       var fx = [];
       if (B.mode === 'fight') { if (B.blind) fx.push('🙈'); if (B.burn) fx.push('🔥'); if (B.virus) fx.push('🦠'); if (B.cripple) fx.push('🦵'); if (B.sleep) fx.push('💤'); if (B.mirror) fx.push('🪞'); }
       $('enemy').textContent = B.en.e;
-      $('fEnName').textContent = B.en.t;
+      $('fEnName').textContent = B.en.t + (B.en.waveOf && B.mode === 'fight' ? ' · wave ' + B.en.waveN + '/' + B.en.waveOf : '');
       if (B.mode === 'escape') { var left = Math.max(0, 3 - B.hitsTaken); $('fEnHp').textContent = 'Catches you in ' + left + (left === 1 ? ' hit' : ' hits'); $('fEnBar').style.width = (left / 3 * 100) + '%'; }
       else { $('fEnHp').textContent = (fx.length ? fx.join('') + ' ' : '') + B.enHP + ' / ' + B.en.hp + ' HP'; $('fEnBar').style.width = (B.enHP / B.en.hp * 100) + '%'; }
       $('fHp').textContent = B.hp + ' / ' + B.max + ' HP';
@@ -10980,6 +11046,7 @@
       if (B.sandy) on.push('⏱️ Sandy · ' + B.sandy + (B.sandy === 1 ? ' turn left' : ' turns left'));
       if (B.float > 0) on.push('🪐 Floating · ' + B.float + (B.float === 1 ? ' attack' : ' attacks'));
       if (B.rage) on.push('😤 Berserk · ' + B.rage + (B.rage === 1 ? ' turn left' : ' turns left'));
+      if (B.pillT) on.push('💊 Pills · ' + B.pillT + (B.pillT === 1 ? ' turn left!' : ' turns left'));
       $('sandy').textContent = on.join('   ');
       $('ram').textContent = B.ramMax ? '💾 RAM ' + '▰'.repeat(B.ram) + '▱'.repeat(Math.max(0, B.ramMax - B.ram)) + ' ' + B.ram + '/' + B.ramMax + (has('capri') ? ' · 💠 hacks are free' : '') : '';
       $('arena').classList.toggle('slow', !!B.sandy);
@@ -11001,7 +11068,7 @@
         if (has('rocket') && !B.usedRocket) list.push('rocket');
         if (has('port')) list.push('hack');
         if (D) list.push('netrun');
-        L.implants.forEach(function (id) { var X = IMP[id]; if (X && X.custom && X.dmg) list.push(id); });   // your own inventions
+        L.implants.forEach(function (id) { var X = IMP[id]; if (X && (X.custom || X.illegal) && X.dmg) list.push(id); });   // your own inventions, and ☠️ illegal weapons
         if (has('magnet')) list.push('yank');
         if (has('heart') && !B.usedHeart) list.push('heal');
         if (has('wings') && !B.usedWings) list.push('glide');
@@ -11010,16 +11077,19 @@
         if (has('chassis')) list.push('cannon');
         if (rageOf() && !B.rage) list.push('berserk');
         if (hasSandy() && !B.sandy) list.push('sandy');
+        if (L.pills > 0 && !L.smasherBody) list.push('pill');
         list.push('run');
       }
       box.classList.toggle('many', list.length > 10);
       list.forEach(function (id) {
-        var Q = QH[id], CX = IMP[id] && IMP[id].custom ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, 'Your invention · ' + CX.dmg[0] + '–' + CX.dmg[1] + ' damage'] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
+        var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
         else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
         if (id === 'netrun') sub = 'RAM ' + B.ram + '/' + B.ramMax;
+        if (id === 'pill') { sub = '+4 humanity · ' + L.pills + ' left · ' + (B.pillT ? 'resets the clock to ' + pillTurns() + ' turns' : 'then win within ' + pillTurns() + ' turns!'); if (B.hum >= B.humMax && !B.pillT) { off = true; sub = 'Your humanity is full'; } }
+        if (id === 'run' && B.pillT) sub = '⚠️ Your pills are on: run now and you go cyberpsycho!';
         if (heavy) sub = (cost ? '−' + cost + ' humanity' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
-        var b = mk('button', 'lf-move' + (heavy ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
+        var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
         b.appendChild(document.createTextNode(M[0] + ' ' + M[1]));
         if (sub) b.appendChild(mk('small', null, sub));
@@ -11034,10 +11104,14 @@
       overloadInFight();
       return true;
     }
-    function overloadInFight() {
+    function pillCrash(why) {   // 💊 the pills wore off before the fight was over
+      B.pillT = 0; B.pillCrash = true; B.hum = 0;
+      overloadInFight(why || '💊 Your military pills wore off in the middle of the fight… and your mind snapped. CYBERPSYCHOSIS! The Chrome Patrol just showed up. Dodge them to get away!');
+    }
+    function overloadInFight(why) {
       B.overloaded = true; B.mode = 'escape'; B.en = ENEMY.patrol; B.hitsTaken = 0; B.wave = 0; B.phase = 'wait'; B.stun = false; B.menu = null;
-      popF('OVERLOAD!', 'bad'); sfx('ko');
-      msgF('⚠️ HUMANITY ZERO! CHROME OVERLOAD! You lost control… and the Chrome Patrol just showed up. Dodge them to get away!');
+      popF(B.pillCrash ? 'CYBERPSYCHO!' : 'OVERLOAD!', 'bad'); sfx('ko');
+      msgF(why || '⚠️ HUMANITY ZERO! CHROME OVERLOAD! You lost control… and the Chrome Patrol just showed up. Dodge them to get away!');
       renderF(); buildMoves();
       B.timer = setTimeout(enemyTurn, 1800);
     }
@@ -11064,15 +11138,28 @@
         renderF(); buildMoves();
         return;
       }
+      if (id === 'pill') {   // 💊 also a free action: +4 humanity, but now the clock is ticking
+        L.pills -= 1; B.pillsUsed = (B.pillsUsed || 0) + 1;
+        var gain = Math.min(4, B.humMax - B.hum), again = !!B.pillT;
+        B.hum += gain; B.pillT = pillTurns(); sfx('glint');
+        popF('💊 +' + gain + ' 🧠', 'good');
+        msgF('💊 ' + (again ? 'Another pill! The clock starts over: ' : 'Military pill: ') + '+' + gain + ' humanity! Now win within ' + B.pillT + ' turns (or take another pill), or you’ll go cyberpsycho when it wears off.');
+        renderF(); buildMoves();
+        return;
+      }
       if (id === 'run') {
-        if (B.sandy || chance(en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0))) { msgF('🏃 You got away!'); endBattle({ fled: true }); return; }
+        if (B.sandy || chance(en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0))) {
+          if (B.pillT && !L.smasherBody) { pillCrash('🏃 You got away… but you didn’t finish the fight, and your military pills crashed HARD. CYBERPSYCHOSIS! The Chrome Patrol is on you. Dodge them to get away!'); return; }
+          msgF('🏃 You got away!'); endBattle({ fled: true }); return;
+        }
         msgF('🏃 You tried to run, but ' + en.t + ' cut you off!'); enemySoon(); return;
       }
       if (id === 'heal') { B.usedHeart = true; var hl = Math.round(B.max * 0.3); B.hp = Math.min(B.max, B.hp + hl); popF('+' + hl + ' HP', 'good'); msgF('💓 Second wind! You feel way better.'); enemySoon(); return; }
       if (id === 'glide') { B.usedWings = true; B.glide = true; msgF('🌈 You spread your wings. You’ll glide right past their next attack!'); enemySoon(); return; }
       if (id === 'camo') { B.usedCamo = true; B.glide = true; B.camo = true; msgF('👻 You flicker and vanish! Their next attack will go right through you.'); enemySoon(); return; }
       if (QH[id]) { doHack(QH[id]); return; }
-      var CX = IMP[id] && IMP[id].custom && IMP[id].dmg ? IMP[id] : null, NM = CX ? [CX.e, CX.t] : MOVES[id];
+      var CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, NM = CX ? [CX.e, CX.t] : MOVES[id];
+      if (CX && CX.hcost && !L.smasherBody && spend(CX.hcost)) return;   // ☠️ illegal weapons eat your humanity
       if (CX) dmg = Math.round(R(CX.dmg[0], CX.dmg[1]) * Math.max(1, mult * 0.75) * rg);
       if (id === 'float') {   // 🪐 anti-gravity is a free action, like the Sandy
         B.usedFloat = true; B.float = 2; sfx('slow');
@@ -11086,7 +11173,7 @@
       if (id === 'pull') { if (spend(heavyCost('pull'))) return; dmg = Math.round(R(22, 30) * rg); B.yank2 = true; extra = ' Their next attack will have 2 fewer hits.'; }
       if (id === 'cannon') { if (spend(heavyCost('cannon'))) return; dmg = R(55, 70); if (chance(0.4)) { B.stun = true; extra = ' They’re stunned!'; } }
       if (id === 'smash') { if (spend(heavyCost('smash'))) return; dmg = Math.round(R(40, 55) * (B.sandy ? 1.5 : 1) * rg); if (chance(0.5)) { B.stun = true; extra = ' They’re stunned!'; } }
-      if (id === 'punch') dmg = Math.round((R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0)) * mult * rg);
+      if (id === 'punch') dmg = Math.round((R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0) + xtra('punch')) * mult * rg);
       if (id === 'kick') dmg = Math.round(R(16, 22) * mult * rg);
       if (id === 'slash') dmg = Math.round(R(18, 24) * Math.max(1, mult * 0.75) * rg);
       if (id === 'rocket') { B.usedRocket = true; dmg = R(35, 45); }
@@ -11105,7 +11192,7 @@
     function apyleeFlurry(id, CX, NM, rg) {   // ⏱️ with the Apylee Sandy on, light attacks strike 3 times in one turn
       var en = B.en, total = 0, parts = [];
       for (var i = 0; i < 3; i++) {
-        var d = CX ? R(CX.dmg[0], CX.dmg[1]) * 1.2 : { punch: R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0), kick: R(16, 22), slash: R(18, 24), shoot: R(8, 12) + (has('eyes') ? 3 : 0), aim: R(14, 18) }[id];
+        var d = CX ? R(CX.dmg[0], CX.dmg[1]) * 1.2 : { punch: R(10, 14) + (has('arm') ? 6 : 0) + (has('exo') ? 10 : 0) + (has('muscle') ? 4 : 0) + xtra('punch'), kick: R(16, 22), slash: R(18, 24), shoot: R(8, 12) + (has('eyes') ? 3 : 0), aim: R(14, 18) }[id];
         d = Math.round(d * 1.6 * rg * (B.float > 0 ? 1.5 : 1));
         var dodge = B.cripple ? 0 : CX ? en.dodge * 0.3 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, shoot: en.dodge * 0.25, aim: 0 }[id];
         if (chance(dodge)) { parts.push('miss'); continue; }
@@ -11143,7 +11230,7 @@
       var en = B.en;
       B.enHP = Math.max(0, B.enHP - dmg); popF('−' + dmg, 'great'); sfx('hit');
       msgF(text); renderF();
-      if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); B.timer = setTimeout(function () { msgF('💥 ' + en.t + ' is knocked out!'); endBattle({ win: true }); }, 700); return; }
+      if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); B.timer = setTimeout(function () { msgF('💥 ' + en.t + ' is knocked out!'); foeDown(); }, 700); return; }
       enemySoon();
     }
     function enemyTurn() {
@@ -11154,7 +11241,7 @@
         if (B.burn) { B.burn -= 1; bd += Math.round(R(6, 9) * up); }
         if (B.virus) { B.virus -= 1; bd += Math.round(R(9, 12) * up); }
         B.enHP = Math.max(0, B.enHP - bd); popF(icon + ' −' + bd, 'great'); renderF();
-        if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); msgF(icon + ' ' + en.t + ' went down!'); B.timer = setTimeout(function () { endBattle({ win: true }); }, 900); return; }
+        if (B.enHP <= 0) { B.phase = 'wait'; buildMoves(); msgF(icon + ' ' + en.t + ' went down!'); B.timer = setTimeout(foeDown, 900); return; }
       }
       if (fm && B.stun) { B.stun = false; msgF('⚡ ' + en.t + ' is stunned and can’t attack!'); B.timer = setTimeout(playerTurn, 1100); return; }
       var mad = false;
@@ -11179,7 +11266,7 @@
       renderF(); buildMoves();
     }
     function slowF() { return B.sandy ? (sandyTier() >= 4 ? 2 : 1.6) : 1; }   // how much the Sandy slows their attacks down
-    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = has('reflex') ? 1.25 : 1; return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf * (L.mode === 'hard' ? 0.8 : 1) }; }
+    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = (has('reflex') ? 1.25 : 1) * (has('xreflex') ? 1.45 : 1); return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf * (L.mode === 'hard' ? 0.8 : 1) }; }
     function swing(parried) {   // their weapon swings across the arena (swords leave a slash)
       if (!B || !B.en.weapon) return;
       var w = $('weapon'), k = $('streak');
@@ -11223,6 +11310,7 @@
         if (has('armor')) dmg = Math.round(dmg * 0.75);
         if (has('exo')) dmg = Math.round(dmg * 0.85);
         if (has('chassis')) dmg = Math.round(dmg * 0.7);
+        L.implants.forEach(function (id) { var G = IMP[id]; if (G && G.guard) dmg = Math.round(dmg * G.guard); });   // 🧱 Riot Plating
         if (B.mirrorNow) { B.enHP = Math.max(0, B.enHP - dmg); popF('🪞 BOUNCED −' + dmg, 'great'); if (B.enHP <= 0) B.hits.forEach(function (x) { x.done = true; }); $('enemy').style.transform = ''; renderF(); return; }
         if (B.rage) dmg = Math.round(dmg * (X && X.tier >= 2 ? 0.45 : 0.6));
         if (h && h.heavy) dmg = Math.round(dmg * 1.6);
@@ -11245,14 +11333,31 @@
         B.timer = setTimeout(enemyTurn, 1000);
         return;
       }
-      if (B.enHP <= 0) { msgF('💥 ' + B.en.t + ' is knocked out!'); B.timer = setTimeout(function () { endBattle({ win: true }); }, 900); return; }
+      if (B.enHP <= 0) { msgF('💥 ' + B.en.t + ' is knocked out!'); B.timer = setTimeout(foeDown, 900); return; }
       if (B.hp <= 0) { msgF('😵 You got knocked out…'); sfx('ko'); B.timer = setTimeout(function () { endBattle({ lost: true }); }, 900); return; }
       B.timer = setTimeout(playerTurn, 600);
     }
-    function playerTurn() {
+    function foeDown() {   // 💥 they're down! You win… unless another attacker is waiting
       if (!B || B.over) return;
+      B.beaten = (B.beaten || 0) + 1;
+      var nx = B.en.waves;
+      if (!nx || !nx.length) { endBattle({ win: true }); return; }
+      var down = B.en.t, en = hardFoe(Object.assign({}, nx[0], { waves: nx.slice(1) }));
+      B.phase = 'wait'; buildMoves();
+      msgF('💥 ' + down + ' is down! But here comes ' + en.t + '… (wave ' + en.waveN + ' of ' + en.waveOf + ')');
+      B.timer = setTimeout(function () {
+        if (!B || B.over) return;
+        B.en = en; B.enHP = en.hp; B.stun = false; B.blind = 0; B.burn = 0; B.virus = 0; B.cripple = 0; B.sleep = 0; B.enraged = false; B.yank = false; B.yank2 = false;
+        $('enemy').style.transform = ''; popF('WAVE ' + en.waveN + '/' + en.waveOf, 'bad'); sfx('glint');
+        playerTurn('🚨 Wave ' + en.waveN + ' of ' + en.waveOf + ': ' + en.t + '! ');
+      }, 1300);
+    }
+    function playerTurn(pre) {
+      if (!B || B.over) return;
+      if (B.pillT && B.mode === 'fight' && !L.smasherBody) { B.pillT -= 1; if (!B.pillT) { pillCrash(); return; } }   // 💊 the clock is ticking
       B.phase = 'player'; B.menu = null;
-      var t = 'Your turn! Pick a move.';
+      var t = (typeof pre === 'string' ? pre : '') + 'Your turn! Pick a move.';
+      if (B.pillT === 1) t = '💊 Your pills are about to wear off! Win this turn or take another one! ' + t;
       if (B.sandy) { B.sandy -= 1; if (!B.sandy) t = '⏱️ Your Sandy wore off. ' + t; }
       if (B.rage) { B.rage -= 1; if (!B.rage) t = '😤 Your berserk wore off. ' + t; }
       if (B.ramMax && B.ram < B.ramMax) B.ram = Math.min(B.ramMax, B.ram + (has('ramregen') ? 2 : 1));   // RAM refills a little every turn
@@ -11291,7 +11396,8 @@
       if (!B || B.over) return;
       clearTimeout(B.timer);
       B.over = true; B.phase = 'over'; buildMoves();
-      res.parries = B.parries; res.overloaded = !!B.overloaded;
+      res.parries = B.parries; res.overloaded = !!B.overloaded; res.beaten = B.beaten || 0; res.pills = B.pillsUsed || 0; res.pillCrash = !!B.pillCrash;
+      if (res.win && B.pillT === 1) award('closecall');   // 😅 won on the very last turn before the pills wore off
       res.healthLoss = B.mode === 'fight' || B.overloaded ? Math.round((B.max - B.hp) / B.max * 25) : 0;
       if (B.parries >= 5) award('parry');
       if (res.win && B.hacked >= 3) award('breach');
