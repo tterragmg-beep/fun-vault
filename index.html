@@ -10716,7 +10716,7 @@
     function patrolFight() {   // ⚔️ cyberpsycho vs. the Chrome Patrol
       var cop = L.job && L.job.id === 'patrol';
       var list = PATROL_SQUAD.map(function (F, i) { return Object.assign({}, F, { id: 'squad', always: 1, power: 100 + R(-4, 4), waveN: i + 1, waveOf: PATROL_SQUAD.length }); }), boss = list[list.length - 1];
-      var en = Object.assign({}, list[0], { waves: list.slice(1), intro: (cop ? '🚨 Your own Chrome Patrol squad showed up to stop you!' : '🚨 The Chrome Patrol surrounded you in the Glow Market!') + ' You’re too far gone to talk. Fight them: 2 officers, then ' + boss.n + '.' });
+      var en = Object.assign({}, list[0], { psycho: 1, waves: list.slice(1), intro: (cop ? '🚨 Your own Chrome Patrol squad showed up to stop you!' : '🚨 The Chrome Patrol surrounded you in the Glow Market!') + ' You’re too far gone to talk. Fight them: 2 officers, then ' + boss.n + '. 🤖 No humanity limits, and you hit 25% harder!' });
       return fight(en, function (res) {
         var h = hurt(res);
         if (res.win) {
@@ -11095,7 +11095,7 @@
       aim: ['🎯', 'Aimed shot', 'Can’t be dodged'], slash: ['🗡️', 'Blade slash', 'Hard to dodge'], rocket: ['🚀', 'Pop-rocket', 'Huge damage (once)'],
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
-      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
+      smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], psyfight: ['⚔️', 'Fight them', ''], psyrun: ['🏃', 'Run from them', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -11119,8 +11119,8 @@
       return Math.max(2, Math.min(12, 9 + tolBonus(lim) - (cy > lim ? Math.round((cy - lim) / 10) : 0) - (L.st.happy < 30 ? 1 : 0) - (L.mode === 'hard' ? 1 : 0) + (L.meds > 0 ? 1 : 0) - xtra('hum')));   // ☠️ illegal chrome eats humanity
     }
     var HEAVY = { sandy: 8, smash: 4, berserk: 5, cannon: 3, float: 3, pull: 2 };   // humanity cost for an average body (tolerance 45% or less)
-    function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body: free!
-      if (L.smasherBody) return 0;
+    function heavyCost(kind) {   // the better your tolerance, the less heavy chrome costs. Smasher Body (and going cyberpsycho): free!
+      if (L.smasherBody || (B && B.psycho)) return 0;
       var t = limitOf(), m = t <= 45 ? 1 : Math.max(0.125, 1 - (t - 45) / 56), X = rageOf();
       if (kind === 'sandy') m *= [1, 1, 0.75, 0.5, 0.4][sandyTier()];
       if (kind === 'berserk' && X && X.tier >= 2) m *= 0.8;
@@ -11154,9 +11154,15 @@
     }
     function overloadAfter(res) {
       var h = hurt(res), pre = res.pillCrash ? '💊 Your military pills wore off before the fight was over, and you went cyberpsycho! ' : '';
+      if (res.squad === 'win') {
+        var cop = L.job && L.job.id === 'patrol';
+        award('overload'); award('patrolbuster'); if (cop) endJob();
+        return [{ happy: -10, fame: 10, health: h }, pre + '⚔️ You lost control in the middle of a fight, so the Chrome Patrol came for you… and you beat the whole squad, captain and all! You vanished into the back alleys before their backup showed up. It took a few days for your chrome to calm down, and now everyone in Neon Harbor knows your name.' + (cop ? ' (You’re SO fired from the Chrome Patrol.)' : '')];
+      }
       if (res.escaped) { award('untouchable'); return [{ happy: -10, health: h }, pre + '🏃 You dodged the Chrome Patrol and lost them in the back alleys! It took days to feel like yourself again.']; }
       var r = overloadRescue();
       if (h && r[0].health > -100) r[0].health = (r[0].health || 0) + h;
+      if (res.squad === 'lost') r[1] = '😵 The Chrome Patrol knocked you out. ' + r[1];
       if (pre) r[1] = pre + r[1];
       return r;
     }
@@ -11351,6 +11357,7 @@
       B = { en: en, mode: mode, done: done, enHP: en.hp, hp: max, max: max, hum: hm, humMax: hm, sandy: 0, rage: 0, stun: false, glide: false, glideAll: false, camo: false, yank: false,
         ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
         parries: 0, hitsTaken: 0, wave: 0, hits: [], lock: 0, phase: 'wait', over: false, timer: 0 };
+      B.psycho = !!en.psycho;   // 🤖 cyberpsycho fights: no humanity limits, +25% damage
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
       if (mode === 'escape') { msgF('🚨 The Chrome Patrol is here! Tap DODGE right as they strike. If they hit you 3 times, they catch you!'); B.timer = setTimeout(enemyTurn, 1600); }
@@ -11372,7 +11379,7 @@
       $('fHp').textContent = B.hp + ' / ' + B.max + ' HP';
       $('fBar').style.width = (B.hp / B.max * 100) + '%';
       $('fBar').className = B.hp / B.max >= 0.6 ? 'hi' : B.hp / B.max >= 0.3 ? 'mid' : 'lo';
-      $('hum').textContent = L.smasherBody ? '🧠 Humanity: no limit (🤖 Smasher Body)' : '🧠 Humanity ' + '●'.repeat(B.hum) + '○'.repeat(Math.max(0, B.humMax - B.hum)) + ' ' + B.hum + '/' + B.humMax;
+      $('hum').textContent = L.smasherBody ? '🧠 Humanity: no limit (🤖 Smasher Body)' : B.psycho ? '🤖 CYBERPSYCHO: no humanity limits · +25% damage' : '🧠 Humanity ' + '●'.repeat(B.hum) + '○'.repeat(Math.max(0, B.humMax - B.hum)) + ' ' + B.hum + '/' + B.humMax;
       var on = [];
       if (B.sandy) on.push('⏱️ Sandy · ' + B.sandy + (B.sandy === 1 ? ' turn left' : ' turns left'));
       if (B.float > 0) on.push('🪐 Floating · ' + B.float + (B.float === 1 ? ' attack' : ' attacks'));
@@ -11390,7 +11397,8 @@
       box.hidden = !B || B.mode === 'escape' || B.phase === 'enemy' || B.phase === 'over';
       if (box.hidden) return;
       var list, D = deckOf();
-      if (B.menu === 'hack' && D) { list = QHACKS.filter(function (q) { return q.tier <= D.tier; }).map(function (q) { return q.id; }); list.push('back'); }
+      if (B.phase === 'choose') list = ['psyfight', 'psyrun'];   // 🧠 humanity zero: run, or fight?
+      else if (B.menu === 'hack' && D) { list = QHACKS.filter(function (q) { return q.tier <= D.tier; }).map(function (q) { return q.id; }); list.push('back'); }
       else {
         list = ['punch', 'shoot'];
         if (has('legs')) list.push('kick');
@@ -11408,18 +11416,20 @@
         if (has('chassis')) list.push('cannon');
         if (rageOf() && !B.rage) list.push('berserk');
         if (hasSandy() && !B.sandy) list.push('sandy');
-        if (L.pills > 0 && !L.smasherBody) list.push('pill');
+        if (L.pills > 0 && !L.smasherBody && !B.psycho) list.push('pill');
         list.push('run');
       }
       box.classList.toggle('many', list.length > 10);
       list.forEach(function (id) {
-        var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
+        var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody && !B.psycho ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
         else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
         if (id === 'netrun') sub = 'RAM ' + B.ram + '/' + B.ramMax;
         if (id === 'pill') { sub = '+4 humanity · ' + L.pills + ' left · ' + (B.pillT ? 'resets the clock to ' + pillTurns() + ' turns' : 'then win within ' + pillTurns() + ' turns!'); if (B.hum >= B.humMax && !B.pillT) { off = true; sub = 'Your humanity is full'; } }
         if (id === 'run' && B.pillT) sub = '⚠️ Your pills are on: run now and you go cyberpsycho!';
-        if (heavy) sub = (cost ? '−' + cost + ' humanity' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
+        if (id === 'psyfight') { off = false; sub = '3 battles: 2 officers, then their captain. 🤖 No humanity limits, and you hit 25% harder!'; }
+        if (id === 'psyrun') { off = false; sub = 'Dodge them 3 times to get away'; }
+        if (heavy) sub = (cost ? '−' + cost + ' humanity' : B.psycho ? 'Free (cyberpsycho!)' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
         var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
         b.appendChild(document.createTextNode(M[0] + ' ' + M[1]));
@@ -11430,6 +11440,7 @@
       });
     }
     function spend(cost) {
+      if (B.psycho) return false;   // 🤖 already cyberpsycho: nothing left to lose
       B.hum = Math.max(0, B.hum - cost); renderF();
       if (B.hum > 0) return false;
       overloadInFight();
@@ -11437,20 +11448,38 @@
     }
     function pillCrash(why) {   // 💊 the pills wore off before the fight was over
       B.pillT = 0; B.pillCrash = true; B.hum = 0;
-      overloadInFight(why || '💊 Your military pills wore off in the middle of the fight… and your mind snapped. CYBERPSYCHOSIS! The Chrome Patrol just showed up. Dodge them to get away!');
+      overloadInFight(why || '💊 Your military pills wore off in the middle of the fight… and your mind snapped. CYBERPSYCHOSIS! The Chrome Patrol just showed up. Run, or fight them?');
     }
-    function overloadInFight(why) {
-      B.overloaded = true; B.mode = 'escape'; B.en = ENEMY.patrol; B.hitsTaken = 0; B.wave = 0; B.phase = 'wait'; B.stun = false; B.menu = null;
+    function overloadInFight(why) {   // 🧠 humanity zero: the Chrome Patrol shows up. Run, or fight?
+      clearTimeout(B.timer);
+      B.overloaded = true; B.phase = 'choose'; B.stun = false; B.menu = null; B.hits = [];
       popF(B.pillCrash ? 'CYBERPSYCHO!' : 'OVERLOAD!', 'bad'); sfx('ko');
-      msgF(why || '⚠️ HUMANITY ZERO! CHROME OVERLOAD! You lost control… and the Chrome Patrol just showed up. Dodge them to get away!');
+      msgF(why || '⚠️ HUMANITY ZERO! CHROME OVERLOAD! You lost control… and the Chrome Patrol just showed up. Run, or fight them?');
       renderF(); buildMoves();
-      B.timer = setTimeout(enemyTurn, 1800);
+    }
+    function psychoRun() {   // 🏃 dodge them to get away
+      B.mode = 'escape'; B.en = ENEMY.patrol; B.hitsTaken = 0; B.wave = 0; B.phase = 'wait';
+      $('enemy').style.transform = '';
+      msgF('🏃 RUN! Dodge the Chrome Patrol 3 times to get away!');
+      renderF(); buildMoves();
+      B.timer = setTimeout(enemyTurn, 1500);
+    }
+    function psychoFight() {   // ⚔️ take on the whole squad (your HP carries over)
+      var list = PATROL_SQUAD.map(function (F, i) { return Object.assign({}, F, { id: 'squad', power: 100, waveN: i + 1, waveOf: PATROL_SQUAD.length }); });
+      var en = hardFoe(Object.assign({}, list[0], { waves: list.slice(1) }));
+      B.squad = true; B.psycho = true; B.mode = 'fight'; B.en = en; B.enHP = en.hp; B.pillT = 0; B.beaten = 0;
+      B.blind = 0; B.burn = 0; B.virus = 0; B.cripple = 0; B.sleep = 0; B.enraged = false; B.yank = false; B.yank2 = false;
+      $('enemy').style.transform = '';
+      B.phase = 'player';
+      msgF('⚔️ You’re too far gone to stop now. FIGHT! 🤖 No humanity limits, and you hit 25% harder. Wave 1: ' + en.t + '. Your turn!');
+      renderF(); buildMoves();
     }
     function enemySoon() { B.phase = 'wait'; renderF(); buildMoves(); B.timer = setTimeout(enemyTurn, 900); }
     function doMove(id) {
+      if (B && !B.over && B.phase === 'choose') { if (id === 'psyfight') psychoFight(); else if (id === 'psyrun') psychoRun(); return; }
       if (!B || B.over || B.phase !== 'player') return;
       sfx('wake');
-      var en = B.en, st = sandyTier(), mult = B.sandy ? [1, 2, 2.5, 3, 3.5][st] : 1, X = rageOf(), rg = B.rage ? (X && X.tier >= 2 ? 1.9 : 1.6) : 1, dmg = 0, extra = '';
+      var en = B.en, st = sandyTier(), mult = B.sandy ? [1, 2, 2.5, 3, 3.5][st] : 1, X = rageOf(), rg = (B.rage ? (X && X.tier >= 2 ? 1.9 : 1.6) : 1) * (B.psycho ? 1.25 : 1), dmg = 0, extra = '';
       if (id === 'netrun') { B.menu = 'hack'; msgF('💻 Pick a quickhack. You have ' + B.ram + ' RAM' + (has('capri') ? ', and with Capri they’re all free!' : '.')); buildMoves(); return; }
       if (id === 'back') { B.menu = null; msgF('Your turn! Pick a move.'); buildMoves(); return; }
       if (id === 'sandy') {   // free action: it doesn't use up your turn
@@ -11480,7 +11509,7 @@
       }
       if (id === 'run') {
         if (B.sandy || chance(en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0))) {
-          if (B.pillT && !L.smasherBody) { pillCrash('🏃 You got away… but you didn’t finish the fight, and your military pills crashed HARD. CYBERPSYCHOSIS! The Chrome Patrol is on you. Dodge them to get away!'); return; }
+          if (B.pillT && !L.smasherBody) { pillCrash('🏃 You got away… but you didn’t finish the fight, and your military pills crashed HARD. CYBERPSYCHOSIS! The Chrome Patrol is on you. Run, or fight them?'); return; }
           msgF('🏃 You got away!'); endBattle({ fled: true }); return;
         }
         msgF('🏃 You tried to run, but ' + en.t + ' cut you off!'); enemySoon(); return;
@@ -11645,7 +11674,7 @@
         if (B.mirrorNow) { B.enHP = Math.max(0, B.enHP - dmg); popF('🪞 BOUNCED −' + dmg, 'great'); if (B.enHP <= 0) B.hits.forEach(function (x) { x.done = true; }); $('enemy').style.transform = ''; renderF(); return; }
         if (B.rage) dmg = Math.round(dmg * (X && X.tier >= 2 ? 0.45 : 0.6));
         if (h && h.heavy) dmg = Math.round(dmg * 1.6);
-        if (h && h.hack) { dmg = Math.round(dmg * 0.5); if (!L.smasherBody && B.hum > 1) B.hum -= 1; }   // a hack: less damage, but it drains your humanity (never all the way)
+        if (h && h.hack) { dmg = Math.round(dmg * 0.5); if (!L.smasherBody && !B.psycho && B.hum > 1) B.hum -= 1; }   // a hack: less damage, but it drains your humanity (never all the way)
         B.hp = Math.max(0, B.hp - dmg); popF(h && h.hack ? '💾 HACKED! −' + dmg + ' · −1 🧠' : (h && h.heavy ? '💥 −' : '−') + dmg, 'bad');
         if (B.hp <= 0 && has('heart2') && !B.revived) { B.revived = true; B.hp = Math.round(B.max * 0.4); popF('🫀 BACKUP HEART!', 'good'); msgF('🫀 You got knocked down, but your backup heart jump-started you! Keep fighting!'); }
         else if (B.hp <= 0) B.hits.forEach(function (x) { x.done = true; });
@@ -11727,6 +11756,7 @@
       if (!B || B.over) return;
       clearTimeout(B.timer);
       B.over = true; B.phase = 'over'; buildMoves();
+      if (B.squad) { res.squad = res.win ? 'win' : res.fled ? 'fled' : 'lost'; if (res.fled) res.escaped = true; }   // ⚔️ the fight with the Chrome Patrol squad
       res.parries = B.parries; res.overloaded = !!B.overloaded; res.beaten = B.beaten || 0; res.pills = B.pillsUsed || 0; res.pillCrash = !!B.pillCrash;
       if (res.win && B.pillT === 1) award('closecall');   // 😅 won on the very last turn before the pills wore off
       res.healthLoss = B.mode === 'fight' || B.overloaded ? Math.round((B.max - B.hp) / B.max * 25) : 0;
@@ -11743,7 +11773,7 @@
     function abortBattle() {   // leaving the game mid-battle counts as running away (or getting caught)
       if (!B || B.over) return;
       clearTimeout(B.timer);
-      var done = B.done, res = B.mode === 'escape' ? { caught: true, overloaded: !!B.overloaded } : { fled: true };
+      var done = B.done, res = B.mode === 'escape' || B.overloaded ? { caught: true, overloaded: true } : { fled: true };
       B = null; $('fight').hidden = true; document.body.classList.remove('lf-lock');
       done(res);
     }
