@@ -9183,6 +9183,7 @@
       { id: 'sticky', e: '🤫', t: 'Sticky Fingers', d: 'Steal chrome off a cyberpsycho you beat, without getting caught.' },
       { id: 'closecall', e: '😅', t: 'Close Call', d: 'Win a battle on the very last turn before your military pills wear off.' },
       { id: 'blackmarket', e: '🕶️', t: 'Off the Books', d: 'Buy illegal chrome on the black market (and get away with it).' },
+      { id: 'heist', e: '🔓', t: 'Vault Breaker', d: 'Steal Capri or a Titan Exoskeleton in a Kumo-Tek raid.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9602,6 +9603,7 @@
     function netAll() { return netCount() === NET_SET.length + 1; }
     function giveCapri() {   // the 💠 Capri achievement gives you Capri
       award('capri');
+      if (has('capri')) { log('💠 You earned the Capri achievement! (You already have Capri.)'); save(); return; }
       var old = deckOf();
       if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
       L.implants.push('capri');
@@ -10422,6 +10424,7 @@
         }
         if (L.age >= 16) opt(c, '🥊', 'Underground fight ring', 'Fight for prizes. Tough opponents start a real battle!', ringSheet);
         sec(c, '🦾 Chrome Clinic'); opt(c, '🦾', 'Visit the Chrome Clinic', 'Implants that boost your stats (watch your tolerance!)', clinicSheet);
+        if (L.age >= 16) opt(c, '🏢', 'Raid Kumo-Tek', 'Steal 💠 Capri or a 🦾 Titan Exoskeleton from the Kumo-Tek tower', raidSheet);
         if (L.age >= 14) opt(c, '🕶️', 'Black market', '☠️ Illegal chrome: stronger, but it costs more, uses more tolerance, and eats your humanity', blackSheet);
         if (has('exo')) { var fj = doneYet('float'); opt(c, '🪐', 'Anti-gravity joyride', fj ? 'Done this year ✓' : 'Float over the city in your Titan Exoskeleton', function () { L.done.float = L.age; doThing('🪐', [{ happy: [6, 10], fame: 2 }, pick(['🪐 You switched on your exo’s anti-gravity and floated over the neon rooftops. People pointed and waved!', '🪐 You hovered over the Glow Market with anti-gravity and caught a noodle bowl in midair.', '🪐 You floated to the top of the Kumo-Tek tower using anti-gravity and watched the sunrise.'])]); }, fj); }
       });
@@ -10458,10 +10461,10 @@
       if (im.hide || (im.prem && !premium)) return;
       var cur = im.os ? osOf(im.os) : null;
       if (cur && cur.tier > im.tier) return;   // you already run something better
-      if (im.ach && !hasAch(im.ach)) {
+      if (im.ach && !hasAch(im.ach) && !has(im.id)) {
         var lock = mk('div', 'lf-opt lf-info'); lock.appendChild(mk('i', null, '🔒'));
         var lt = mk('span'); lt.appendChild(mk('b', null, im.t));
-        lt.appendChild(mk('small', null, im.ach === 'capri' ? 'Locked. Get the 💠 Capri achievement to unlock it (see 🏆 Achievements).' : 'Locked. Unlock it with a secret achievement (see 🏆 Achievements).'));
+        lt.appendChild(mk('small', null, im.ach === 'capri' ? 'Locked. Get the 💠 Capri achievement, or steal her in a 🏢 Kumo-Tek raid (in Activities)!' : im.id === 'exo' ? 'Locked. Unlock it with a secret achievement, or steal one in a 🏢 Kumo-Tek raid (in Activities)!' : 'Locked. Unlock it with a secret achievement (see 🏆 Achievements).'));
         lock.appendChild(lt); c.appendChild(lock); return;
       }
       var own = has(im.id), up = cur && !own ? cur : null, more = im.body - (up ? up.body : 0);
@@ -10475,6 +10478,61 @@
       if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
       L.implants.push(im.id);
       doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), im.e + ' ' + im.msg + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
+    }
+    var RAID = {   // 🏢 what Kumo-Tek keeps locked up in its tower, and who guards it
+      capri: { where: 'the netrunner vault', foes: [
+        { n: 'a Kumo-Tek guard squad', e: '💂', t: 'Kumo-Tek Guards', hp: 110, atk: [11, 15], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '🔫', feint: 0.15, combo: 0.2 },
+        { n: 'a Kumo-Tek netrunner', e: '👾', t: 'Kumo-Tek Netrunner', hp: 100, atk: [10, 13], hits: [2, 3], dodge: 0.35, speed: 1.3, weapon: '🔌', hacker: 0.4, feint: 0.25 },
+        { n: 'the Black ICE Warden', e: '🧊', t: 'Black ICE Warden', hp: 200, atk: [13, 17], hits: [2, 4], dodge: 0.3, speed: 1.3, weapon: '⚡', hacker: 0.45, feint: 0.3, combo: 0.3, enrage: 1, boss: 1 }] },
+      exo: { where: 'the armory', foes: [
+        { n: 'a Kumo-Tek guard squad', e: '💂', t: 'Kumo-Tek Guards', hp: 110, atk: [11, 15], hits: [2, 3], dodge: 0.2, speed: 1.15, weapon: '🔫', feint: 0.15, combo: 0.2 },
+        { n: 'a Kumo-Tek heavy trooper', e: '🪖', t: 'Heavy Trooper', hp: 150, atk: [13, 17], hits: [1, 3], dodge: 0.1, speed: 1, weapon: '🔨', heavy: 0.25, combo: 0.15 },
+        { n: 'the Armory Mech', e: '🤖', t: 'Armory Mech', hp: 240, atk: [15, 20], hits: [2, 4], dodge: 0.1, speed: 1.1, weapon: '🦾', robot: 1, heavy: 0.35, combo: 0.25, enrage: 1, boss: 1 }] }
+    };
+    function kumoJob() { return !!L.job && (L.job.id === 'kexec' || L.job.id === 'enforcer'); }
+    function sneakChance(k) {   // 🤫 smarts, optical camo, a Sandy, a good cyberdeck (for the vault), and knowing the building all help
+      var D = deckOf();
+      return Math.max(0.1, Math.min(0.8, 0.2 + L.st.smarts / 400 + (has('camo') ? 0.2 : 0) + (hasSandy() ? 0.1 : 0) + (k === 'capri' && D ? D.tier * 0.06 : 0) + (k === 'exo' && has('legs') ? 0.05 : 0) + (kumoJob() ? 0.15 : 0) - (L.mode === 'hard' ? 0.1 : 0)));
+    }
+    function raidSheet() {
+      sheet('🏢 Raid Kumo-Tek', function (c) {
+        var done = doneYet('raid');
+        note(c, '🏢 Kumo-Tek keeps its best tech locked up in its tower. Sneak in quietly, or fight your way through 2 security squads and a boss. Lose, and you’re going to the Lockup!' + (kumoJob() ? ' 🪪 You work there, so you know your way around (easier to sneak in).' : '') + (done ? ' You already raided them this year.' : ''));
+        ['capri', 'exo'].forEach(function (k) {
+          var Rd = RAID[k], X = IMP[k], boss = Rd.foes[Rd.foes.length - 1];
+          sec(c, X.e + ' ' + X.t);
+          if (has(k)) { infoRow(c, '✅', k === 'capri' ? 'You already have Capri' : 'You already have a Titan Exoskeleton', ''); return; }
+          opt(c, '🤫', 'Sneak into ' + Rd.where, done ? 'Raided this year ✓' : (premium ? odds(sneakChance(k), 'chance to sneak in') : 'Quiet, but risky') + ' · if they spot you, you’ll have to fight!', function () { play('🤫', raid(k, 'sneak')); }, done);
+          opt(c, '⚔️', 'Fight your way to ' + Rd.where, done ? 'Raided this year ✓' : '3 battles in a row: 2 security squads, then ' + boss.n, function () { play('⚔️', raid(k, 'loud')); }, done);
+        });
+        opt(c, '←', 'Back to activities', '', doSheet);
+      });
+    }
+    function raid(k, how) {   // 🏢 break into the Kumo-Tek tower for Capri or a Titan Exoskeleton
+      var Rd = RAID[k], what = k === 'capri' ? 'Capri' : 'a Titan Exoskeleton';
+      L.done.raid = L.age;
+      if (how === 'sneak' && chance(sneakChance(k))) return heist(k, '🤫 You slipped past every camera and guard-bot, cracked ' + Rd.where + ', and walked out with ' + what + '!');
+      var list = Rd.foes.map(function (F, i) { return Object.assign({}, F, { id: 'raid', always: 1, power: 95 + R(-4, 4), waveN: i + 1, waveOf: Rd.foes.length }); }), boss = list[list.length - 1];
+      var en = Object.assign({}, list[0], { waves: list.slice(1), intro: (how === 'sneak' ? '🚨 ALARM! A guard-bot spotted you sneaking in!' : '⚔️ You kicked in the doors of the Kumo-Tek tower!') + ' Fight your way to ' + Rd.where + ': 2 security squads, then ' + boss.n + '.' });
+      return fight(en, function (res) {
+        var h = hurt(res);
+        if (res.win) {
+          var r = heist(k, '⚔️ You fought through ' + listAnd(list.slice(0, -1).map(function (x) { return x.n; })) + ', beat ' + boss.n + ', and grabbed ' + what + '!');
+          r[0].health = (r[0].health || 0) + h;
+          if (!res.auto) award('brawler');
+          if (kumoJob()) { endJob(); r[1] += ' Kumo-Tek saw you on the cameras, so you’re fired. (Worth it!)'; }
+          return r;
+        }
+        if (res.fled) return [{ happy: -6, health: h }, '🏃 You escaped the Kumo-Tek tower empty-handed. ' + (k === 'capri' ? 'Capri is still locked up in the vault.' : 'The Titan Exoskeleton is still locked up in the armory.')];
+        return lockupResult(2, '🚨 Kumo-Tek security caught you in the tower!', { health: h });
+      });
+    }
+    function heist(k, t) {   // 🔓 you got it!
+      var X = IMP[k], old = X.os ? osOf(X.os) : null;
+      if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
+      L.implants.push(k); L.mischief += 1; award('heist');
+      var hi = k === 'capri' ? ' 💠 Capri booted up and said: “Hi! I’m Capri. Let’s hack something!” Every quickhack is free now.' : ' 🦾 You strapped in, and the Titan Exoskeleton roared to life. Anti-gravity, here you come!';
+      return [Object.assign({ happy: 12, fame: 5 }, X.fx), t + hi + (old ? ' (She replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
     }
     function raidChance() { return Math.max(0.05, Math.min(0.45, 0.14 - L.st.smarts / 1000 + (L.mode === 'hard' ? 0.1 : 0) + (L.job && L.job.id === 'patrol' ? 0.06 : 0))); }   // 🚨 chance the Harbor PD raids the market
     function blackSheet() {
@@ -11023,7 +11081,7 @@
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
       if (mode === 'escape') { msgF('🚨 The Chrome Patrol is here! Tap DODGE right as they strike. If they hit you 3 times, they catch you!'); B.timer = setTimeout(enemyTurn, 1600); }
-      else { msgF(en.waveOf ? '🚨 ' + en.waveOf + ' attackers are coming, one after another! Wave 1: ' + en.t + '. Your turn: pick a move.' : '⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
+      else { msgF(en.intro ? en.intro + ' Wave 1: ' + en.t + '. Your turn!' : en.waveOf ? '🚨 ' + en.waveOf + ' attackers are coming, one after another! Wave 1: ' + en.t + '. Your turn: pick a move.' : '⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
       renderF(); buildMoves();
       requestAnimationFrame(tick);
       setTimeout(function () { var f = $('moves').querySelector('button'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) {} } }, 50);
@@ -11801,7 +11859,7 @@
           '🥊 Easy fights are over fast, but tough ones start a real battle. Pick moves on your turn. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back). Some enemies fake you out: they wind up, then wait. Don’t fall for it! Others go for a ⚡ COMBO: several hits super fast, so tap once for each. Most implant moves are free, but heavy chrome like your Sandy (time-slow) and Berserk costs humanity. Hit zero humanity and the Chrome Patrol shows up!',
           '🎚️ When you start a life, pick a difficulty: 🤖 Smasher (easy, once you have The Smasher), 🟢 Normal, or 🔴 Hard (lower tolerance, tougher fights, less pay, more risk).',
           '🧬 Every life gets its own cyberware tolerance (high tolerance is rare). Every implant takes up some of it, and if you go over, you could have a chrome overload. The higher your tolerance, the less humanity heavy chrome like your Sandy costs.',
-          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only it can run.',
+          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only she can run. Earn her with the Capri achievement, or steal her in a 🏢 Kumo-Tek raid!',
           '💀 From age 16, you can attack friends and partners. If you win, they’re gone for good, and if the cops catch you, you go to the Lockup.',
           'Keep your bars up! If your health hits zero, your life ends. When you die, you get a ribbon, and if you have kids, you can keep playing as one of them.'
         ].forEach(function (t) { note(c, t); });
