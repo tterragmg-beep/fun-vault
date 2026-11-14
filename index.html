@@ -10442,6 +10442,7 @@
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
         }
         if (!sb) { var pl = L.pills || 0, pf = pl > PILL_MAX - 3; opt(c, '💊', 'Military-grade pills (pack of 3)', pf ? 'You have ' + pl + '. That’s all you can carry!' : cr(PILL_PACK) + (L.money < PILL_PACK ? ' · not enough credits' : '') + ' · you have ' + pl + ' · In battles: +4 humanity, but then you have to win within ' + pillTurns() + ' turns or take another, or you go cyberpsycho!', function () { L.pills = pl + 3; doThing('💊', [{ money: -PILL_PACK }, '💊 You bought a pack of 3 military-grade pills (you have ' + L.pills + ' now). In a battle, one gives you back 4 humanity… but then the clock starts: win within ' + pillTurns() + ' turns or take another one, or you’ll go cyberpsycho when they wear off!']); }, pf || L.money < PILL_PACK); }
+        if (L.implants.length) opt(c, '🔧', 'Remove chrome', 'Take out implants you don’t want · frees up tolerance', removeSheet);
         sec(c, '🖥️ Operating systems');
         note(c, '⏱️ Sandys (time-slow), 😤 Berserk, and 💻 Cyberdecks for hacking people. You can run one of each, and a better one replaces the one you have.');
         IMPLANTS.forEach(function (im) { if (im.os) implantRow(c, im, ch, lim); });
@@ -10565,6 +10566,36 @@
       L.implants.push(im.id); L.mischief += 1; award('blackmarket');
       doThing(im.e, [Object.assign({ money: -im.cost }, im.fx), '☠️ ' + im.msg + ' It uses ' + im.body + ' tolerance' + (L.smasherBody ? '.' : ', and ' + im.hum + ' of your battle humanity.') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')]);
     }
+    function chromeRefund(X) { return X.raid || X.illegal || L.allChrome ? 0 : Math.round((X.cost || 0) * 0.25 / 100) * 100; }   // 💰 the clinic buys back normal chrome for 25%
+    function loseText(X) { return Object.keys(X.fx || {}).filter(function (k) { return STAT[k] && k !== 'happy' && X.fx[k] > 0; }).map(function (k) { return STAT[k][0] + ' ' + X.fx[k] + ' ' + STAT[k][1]; }).join(' and '); }
+    function removeSheet() {   // 🔧 take chrome out
+      sheet('🔧 Remove chrome', function (c) {
+        note(c, '🔧 The ripperdoc can take out any implant. You lose what it gave you, but it frees up tolerance. The clinic buys back normal chrome for 25% of its price. 🧬 You’re using ' + chrome() + ' of your ' + limitOf() + ' tolerance.');
+        if (!L.implants.length) note(c, 'You don’t have any chrome to take out.');
+        L.implants.forEach(function (id) {
+          var X = IMP[id]; if (!X) return;
+          var back = chromeRefund(X);
+          opt(c, X.e, X.t, (back ? 'Get ' + cr(back) + ' back' : X.raid ? 'Stolen from Kumo-Tek: no money back' : X.illegal ? 'Illegal: no money back' : 'No money back') + (X.limit ? ' · ⚠️ your tolerance drops by ' + X.limit : ' · frees ' + X.body + ' tolerance'), function () { removeAsk(id); });
+        });
+        opt(c, '←', 'Back to the Chrome Clinic', '', clinicSheet);
+      });
+    }
+    function removeAsk(id) {   // ✋ are you sure?
+      var X = IMP[id], back = chromeRefund(X), lose = loseText(X);
+      sheet('🔧 Remove ' + X.t + '?', function (c) {
+        note(c, X.e + ' ' + X.t + ': ' + X.desc + '. ' + (lose ? 'You’ll lose ' + lose + '. ' : '') + (X.limit ? '⚠️ Your tolerance will go down by ' + X.limit + '. ' : '') + (X.raid ? '⚠️ The only way to get ' + (id === 'capri' ? 'her' : 'it') + ' back is another 🏢 Kumo-Tek raid! ' : '') + (back ? 'The clinic will pay you ' + cr(back) + ' for it.' : X.illegal ? 'The clinic won’t pay for illegal chrome, but they’ll take it out.' : ''));
+        opt(c, '🔧', 'Yes, take it out', back ? 'You get ' + cr(back) : 'Free', function () { doThing('🔧', removeChrome(id)); });
+        opt(c, '←', 'No, keep it', '', removeSheet);
+      });
+    }
+    function removeChrome(id) {   // 🔧 the ripperdoc takes it out, and you lose what it gave you
+      var X = IMP[id], back = chromeRefund(X), fx = {}, was = chrome() > limitOf();
+      L.implants.splice(L.implants.indexOf(id), 1);
+      Object.keys(X.fx || {}).forEach(function (k) { if (k !== 'happy' && X.fx[k] > 0) fx[k] = -X.fx[k]; });
+      if (back) fx.money = back;
+      L.st.smarts = capStat('smarts', L.st.smarts); L.st.health = capStat('health', L.st.health);   // brain and body boosters set how far past 100 you can go
+      return [fx, '🔧 The ripperdoc took out your ' + X.e + ' ' + X.t + '.' + (back ? ' The clinic paid you ' + cr(back) + ' for it.' : X.illegal ? ' They wouldn’t pay for illegal chrome.' : X.raid ? ' You’ll have to raid Kumo-Tek to get ' + (id === 'capri' ? 'her' : 'it') + ' back.' : '') + ' You’re using ' + chrome() + ' of your ' + limitOf() + ' tolerance now.' + (was && chrome() <= limitOf() ? ' ✅ You’re back under your tolerance!' : '')];
+    }
     function craftQ() { return Math.round((0.8 + L.st.smarts / 250) * 100) / 100; }   // your Smarts set how good your inventions are
     function craftGrade(q) { return q >= 1.2 ? 'Masterwork' : q >= 1.05 ? 'Great' : q >= 0.95 ? 'Solid' : 'Prototype'; }
     function regCustom() { ((L && L.custom) || []).forEach(function (X) { IMP[X.id] = X; }); }   // your own inventions
@@ -10620,6 +10651,7 @@
     }
     function canSmasher() { return hasAch('smasher') || !!(L && L.chromeCode); }
     function giveAllChrome() {   // the "crome" code: every implant (the best of each OS) for this life only
+      L.allChrome = 1;   // free chrome: the clinic won't pay you for taking it out
       var best = {}, add = [];
       IMPLANTS.forEach(function (im) { if (im.os && (!best[im.os] || im.tier > best[im.os].tier)) best[im.os] = im; });
       IMPLANTS.forEach(function (im) {
