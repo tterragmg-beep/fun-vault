@@ -10433,6 +10433,7 @@
         note(c, sb ? '🧬 Smasher Body: your tolerance is MAX, so your cyberware (' + ch + ') can’t overload you. No glitches, and heavy chrome costs 0 humanity!'
           : '🧬 Your cyberware uses ' + ch + ' of your ' + lim + ' tolerance (' + tolName(lim) + (hasDegree('bio') ? ', +5 from your Bio-Hacking degree' : '') + '). Every implant takes up some. ' + (L.meds > 0 ? '💊 You have ' + L.meds + (L.meds === 1 ? ' dose' : ' doses') + ' of neuro-blockers. ' : '') + (ch > lim ? '⚠️ You’re OVER your tolerance! A chrome overload could happen any year.' : ch >= lim - 5 && ch > 0 ? 'You’re almost full. Careful!' : 'Go over your tolerance and you could have a chrome overload!'));
         c.appendChild(barEl(sb ? ch : ch / lim * 100, ch > lim ? 'lo' : ch > 0 && ch >= lim - 5 && !sb ? 'mid' : 'tol'));
+        opt(c, '🔧', 'Remove or sell chrome', L.implants.length ? 'Take out implants you don’t want · the clinic buys back normal chrome for 25%' : 'You don’t have any chrome to remove yet', removeSheet, !L.implants.length);   // right at the top, so it’s easy to find
         if (!sb) note(c, '🧠 In battles you have ' + humanityMax() + ' humanity. Heavy chrome uses it up, and the better your tolerance, the less it costs. For you, the Sandy costs ' + heavyCost('sandy') + '. Hit zero and the Chrome Patrol shows up!' + (ch > 0 ? ' 😢 The sadder you are, the more likely a chrome overload is.' : ''));
         if (canSmasher()) smasherOpt(c, clinicSheet);
         if (hasDegree('robo')) opt(c, '🛠️', 'Cyberware Workshop', 'Invent and build your own implant', workshopSheet);
@@ -10444,7 +10445,6 @@
           opt(c, '🧊', 'Chrome cooldown treatment', cd ? 'Done this year ✓' : cr(2000) + ' · lowers your overload risk this year', function () { L.done.cool = L.age; doThing('🧊', [{ money: -2000, happy: 2 }, '🧊 You got a chrome cooldown treatment. Your implants feel nice and chill.']); }, cd || L.money < 2000);
         }
         if (!sb) { var pl = L.pills || 0, pf = pl > PILL_MAX - 3; opt(c, '💊', 'Military-grade pills (pack of 3)', pf ? 'You have ' + pl + '. That’s all you can carry!' : cr(PILL_PACK) + (L.money < PILL_PACK ? ' · not enough credits' : '') + ' · you have ' + pl + ' · In battles: +4 humanity, but then you have to win within ' + pillTurns() + ' turns or take another, or you go cyberpsycho!', function () { L.pills = pl + 3; doThing('💊', [{ money: -PILL_PACK }, '💊 You bought a pack of 3 military-grade pills (you have ' + L.pills + ' now). In a battle, one gives you back 4 humanity… but then the clock starts: win within ' + pillTurns() + ' turns or take another one, or you’ll go cyberpsycho when they wear off!']); }, pf || L.money < PILL_PACK); }
-        if (L.implants.length) opt(c, '🔧', 'Remove chrome', 'Take out implants you don’t want · frees up tolerance', removeSheet);
         sec(c, '🖥️ Operating systems');
         note(c, '⏱️ Sandys (time-slow), 😤 Berserk, and 💻 Cyberdecks for hacking people. You can run one of each, and a better one replaces the one you have.');
         IMPLANTS.forEach(function (im) { if (im.os) implantRow(c, im, ch, lim); });
@@ -10593,7 +10593,7 @@
     function chromeRefund(X) { return X.raid || X.illegal || L.allChrome ? 0 : Math.round((X.cost || 0) * 0.25 / 100) * 100; }   // 💰 the clinic buys back normal chrome for 25%
     function loseText(X) { return Object.keys(X.fx || {}).filter(function (k) { return STAT[k] && k !== 'happy' && X.fx[k] > 0; }).map(function (k) { return STAT[k][0] + ' ' + X.fx[k] + ' ' + STAT[k][1]; }).join(' and '); }
     function removeSheet() {   // 🔧 take chrome out
-      sheet('🔧 Remove chrome', function (c) {
+      sheet('🔧 Remove or sell chrome', function (c) {
         note(c, '🔧 The ripperdoc can take out any implant. You lose what it gave you, but it frees up tolerance. The clinic buys back normal chrome for 25% of its price. 🧬 You’re using ' + chrome() + ' of your ' + limitOf() + ' tolerance.');
         if (!L.implants.length) note(c, 'You don’t have any chrome to take out.');
         L.implants.forEach(function (id) {
