@@ -9164,6 +9164,7 @@
       { id: 'psycho', e: '🚨', t: 'Psycho Squad', d: 'Stop 5 cyberpsychos as a Chrome Patrol agent (in one life).' },
       { id: 'giant', e: '🤖', t: 'Bigger They Are', d: 'Beat The Smasher in a boss fight.' },
       { id: 'firewall', e: '🕶️', t: 'Firewall', d: 'Beat Ghostline, the rogue netrunner, in a boss fight.' },
+      { id: 'sticky', e: '🤫', t: 'Sticky Fingers', d: 'Steal chrome off a cyberpsycho you beat, without getting caught.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9447,6 +9448,10 @@
         ['⚔️ Take them down', function () { return psychoCall(); }],
         ['🗣️ Try to talk them down', function () { if (chance(0.2 + L.st.smarts / 250)) { L.psychos = (L.psychos || 0) + 1; checkPsycho(); return [{ good: 3, perf: 8, happy: 6, fame: 2 }, '🗣️ You talked the cyberpsycho down, slow and calm. Nobody got hurt, and they’re getting help now.']; } var r = psychoCall(); if (r.battle) r.intro = 'They didn’t listen!'; return r; }],
         ['📞 Wait for backup', [[1, { perf: -4 }, '📞 You waited for backup, and the rest of your squad handled the cyberpsycho. Your captain sighed.']]]] },
+      { id: 'psycholoot', forced: 1, need: 'loot', e: '🦾', t: 'You beat {psycho}! Your squad isn’t looking, and their chrome is just lying there: {item}.{odds}', c: [
+        ['🤫 Keep it (get it installed for free)', function () { return stealChrome('keep'); }],
+        ['💰 Sell it to a fixer', function () { return stealChrome('sell'); }],
+        ['🧾 Turn it all in', function () { var n = L.loot.n; L.loot = null; return [{ good: 2, perf: 4 }, '🧾 You turned in all the chrome from ' + n + ', like a good agent. Your captain gave you a nod.']; }]] },
       { id: 'crewask', a: [16, 35], w: 1, if: function () { return !L.crew; }, e: '🏙️', t: 'A street crew wants you to run with them. They say you’ve got skills.', c: [
         ['Join them', function () { return joinCrew(pick(CREWS).id); }],
         ['No thanks', [[1, { good: 1 }, 'You turned down a street crew.']]]] }
@@ -9844,6 +9849,7 @@
       if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
       if (ev.need === 'job' && !L.job) return null;
       if (ev.need === 'school' && !L.school) return null;
+      if (ev.need === 'loot') { if (!L.loot || !IMP[L.loot.id] || !L.job || L.job.id !== 'patrol') return null; c.psycho = L.loot.n; c.item = IMP[L.loot.id].e + ' ' + IMP[L.loot.id].t; c.odds = premium ? ' 😇 ' + Math.round(lootCatch() * 100) + '% chance of getting caught if you take it.' : ' Taking it is risky!'; }
       return c;
     }
     function eligible(ev) {
@@ -10781,14 +10787,14 @@
       });
     }
     var PSYCHOS = [   // cyberpsychos the Chrome Patrol has to stop
-      { n: 'Razorhand', e: '🤖', weapon: '🗡️', sword: 1, hp: 110, atk: [10, 14], hits: [2, 4], dodge: 0.25, speed: 1.25, feint: 0.25, combo: 0.45 },
-      { n: 'Ironjaw', e: '🦾', weapon: '👊', hp: 150, atk: [13, 18], hits: [1, 3], dodge: 0.1, speed: 1, feint: 0.1, combo: 0.15, robot: 1 },
-      { n: 'Blink', e: '⚡', weapon: '⚡', hp: 95, atk: [9, 12], hits: [3, 4], dodge: 0.5, speed: 1.55, feint: 0.3, combo: 0.3 },
-      { n: 'Hexwire', e: '👾', weapon: '🔌', hp: 105, atk: [10, 13], hits: [2, 3], dodge: 0.3, speed: 1.2, feint: 0.35, combo: 0.2 }
+      { n: 'Razorhand', loot: ['blades', 'reflex', 'arm'], e: '🤖', weapon: '🗡️', sword: 1, hp: 110, atk: [10, 14], hits: [2, 4], dodge: 0.25, speed: 1.25, feint: 0.25, combo: 0.45 },
+      { n: 'Ironjaw', loot: ['armor', 'muscle', 'bones'], e: '🦾', weapon: '👊', hp: 150, atk: [13, 18], hits: [1, 3], dodge: 0.1, speed: 1, feint: 0.1, combo: 0.15, robot: 1 },
+      { n: 'Blink', loot: ['timeslow', 'reflex', 'legs'], e: '⚡', weapon: '⚡', hp: 95, atk: [9, 12], hits: [3, 4], dodge: 0.5, speed: 1.55, feint: 0.3, combo: 0.3 },
+      { n: 'Hexwire', loot: ['deck2', 'port', 'ice'], e: '👾', weapon: '🔌', hp: 105, atk: [10, 13], hits: [2, 3], dodge: 0.3, speed: 1.2, feint: 0.35, combo: 0.2 }
     ];
     function psychoFoe() {   // tougher ones show up as you rank up
       var X = pick(PSYCHOS), lv = L.job && L.job.id === 'patrol' ? L.job.level : 0;
-      return { id: 'psycho', e: X.e, t: 'Cyberpsycho “' + X.n + '”', hp: X.hp + lv * 15, atk: [X.atk[0] + lv, X.atk[1] + lv], hits: X.hits, dodge: X.dodge, power: 62 + lv * 8 + R(-4, 4), speed: X.speed, weapon: X.weapon, sword: X.sword, feint: X.feint, combo: X.combo, robot: X.robot };
+      return { id: 'psycho', e: X.e, t: 'Cyberpsycho “' + X.n + '”', hp: X.hp + lv * 15, atk: [X.atk[0] + lv, X.atk[1] + lv], hits: X.hits, dodge: X.dodge, power: 62 + lv * 8 + R(-4, 4), speed: X.speed, weapon: X.weapon, sword: X.sword, feint: X.feint, combo: X.combo, robot: X.robot, loot: X.loot };
     }
     function checkPsycho() { if ((L.psychos || 0) >= 5) award('psycho'); }
     function psychoCall() {
@@ -10798,12 +10804,31 @@
         if (res.win) {
           L.psychos = (L.psychos || 0) + 1; checkPsycho();
           if (!res.auto) award('brawler');
+          var grab = (en.loot || []).filter(function (id) { var I = IMP[id], cur = I && I.os ? osOf(I.os) : null; return I && !has(id) && !(cur && cur.tier >= I.tier); });
+          if (grab.length && L.job && L.job.id === 'patrol') { L.loot = { id: pick(grab), n: en.t }; L.pending.push('psycholoot'); }   // their chrome is up for grabs…
           var bonus = R(3000, 8000) * (1 + (L.job ? L.job.level : 0));
           return [{ money: bonus, perf: 10, fame: 2, happy: 6, health: h }, '🚨 You took down ' + en.t + ' before anyone got hurt! The Chrome Patrol paid you a ' + cr(bonus) + ' bonus.' + (res.parries ? ' (' + res.parries + (res.parries === 1 ? ' perfect parry)' : ' perfect parries)') : '')];
         }
         if (res.fled) return [{ perf: -10, happy: -3, health: h }, '🏃 You backed off from ' + en.t + ' and called for backup. Your captain wasn’t impressed.'];
         return [{ perf: -8, happy: -6, health: h }, '😵 ' + en.t + ' knocked you down. Your squad had to finish the job.'];
       });
+    }
+    function lootCatch() { return Math.max(0.12, Math.min(0.6, 0.35 - L.st.smarts / 500)); }   // chance Internal Affairs catches you
+    function stealChrome(mode) {   // 🤫 pocket a beaten cyberpsycho's chrome: keep it, or sell it to a fixer
+      var X = IMP[L.loot.id], n = L.loot.n;
+      L.loot = null;
+      if (chance(lootCatch())) {
+        var fine = R(5000, 15000);
+        L.good -= 3; endJob();
+        if (mode === 'sell') return lockupResult(2, '🚨 The fixer ratted you out! Internal Affairs caught you selling the ' + X.t + ' from ' + n + '. You got kicked off the Chrome Patrol and fined ' + cr(fine) + '.', { money: -fine });
+        return [{ money: -fine, happy: -12 }, '🚨 Internal Affairs caught you with the stolen ' + X.t + ' from ' + n + '! They took it back, fined you ' + cr(fine) + ', and kicked you off the Chrome Patrol.'];
+      }
+      L.good -= 1; L.mischief += 1; award('sticky');
+      if (mode === 'sell') { var v = Math.round(X.cost * 0.6); return [{ money: v, happy: 4 }, '💰 You sold the ' + X.t + ' from ' + n + ' to a fixer for ' + cr(v) + '. Nobody noticed.']; }
+      var old = X.os ? osOf(X.os) : null;
+      if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
+      L.implants.push(X.id);
+      return [Object.assign({ happy: 5 }, X.fx), '🤫 You slipped the ' + X.t + ' from ' + n + ' into your bag and got it installed for free. Nobody noticed!' + (old ? ' (It replaced your ' + old.t + '.)' : '') + (chrome() > limitOf() ? ' ⚠️ You’re over your cyberware tolerance now…' : '')];
     }
     var B = null, quickFights = false, AC = null;
     function sfx(kind) {
