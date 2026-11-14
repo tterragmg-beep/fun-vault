@@ -9084,7 +9084,7 @@
       { id: 'camo', e: '👻', t: 'Optical camo skin', cost: 40000, min: 0, body: 4, fx: { style: 5 }, desc: 'Vanish from an attack, once per battle', msg: 'You got optical camo. You can turn invisible for a few seconds. Hide-and-seek will never be the same.' },
       { id: 'heart2', e: '🫀', t: 'Backup heart', cost: 45000, min: 0, body: 5, fx: { health: 8 }, vital: 5, desc: 'Jump-starts you once if you get knocked out in a battle · Health can go 5% past 100', msg: 'You got a backup heart. If you ever get knocked out in a battle, it jump-starts you!' },
       { id: 'chassis', e: '🤖', t: 'Smasher Chassis', cost: 250000, min: 0, body: 40, fx: { health: 30, style: 10, happy: 5 }, ach: 'smasher', vital: 15, desc: 'A full-borg body: tons more HP, takes less damage, a Smasher cannon move · Health can go 15% past 100', msg: 'You got a Smasher Chassis. Most of you is chrome now: huge, armored, and LOUD.' },
-      { id: 'exo', e: '🦾', t: 'Titan Exoskeleton', cost: 120000, min: 0, body: 25, fx: { health: 25, style: 12, happy: 8 }, desc: 'Titan smash, 🪐 Anti-gravity, 🌌 Gravity pull, and ☄️ Gravity slam moves', msg: 'You strapped into a Titan Exoskeleton. You can lift a hover-bus with one hand!', ach: 'legend' },
+      { id: 'exo', e: '🦾', t: 'Titan Exoskeleton', cost: 120000, min: 0, body: 25, fx: { health: 25, style: 12, happy: 8 }, desc: 'Titan smash, 🪐 Anti-gravity, 🌌 Gravity pull, and ☄️ Gravity slam moves', msg: 'You strapped into a Titan Exoskeleton. You can lift a hover-bus with one hand!', raid: 1 },
       // 🖥️ operating systems: ⏱️ Sandys (time-slow), 😤 Berserk, 💻 Cyberdecks. One of each; a better one replaces the old one.
       { id: 'timeslow', e: '⏱️', t: 'Starter Sandy', cost: 40000, min: 0, body: 4, fx: { health: 4, style: 6 }, os: 'sandy', tier: 1, desc: 'Slows time for 33 turns in battles', msg: 'You got a Starter Sandy, a time-slow reflex chip. Whenever you want, the whole world slows down around you. Whoa.' },
       { id: 'sandy2', e: '⏱️', t: 'Hummingbird Sandy', cost: 95000, min: 0, body: 5, fx: { health: 5, style: 8 }, os: 'sandy', tier: 2, desc: 'Costs less humanity, hits harder', msg: 'You installed the Hummingbird Sandy. It costs less humanity now, and you hit even harder while it’s on!' },
@@ -9095,7 +9095,7 @@
       { id: 'deck1', e: '💻', t: 'Starter Cyberdeck', cost: 12000, min: 0, body: 4, fx: { smarts: 4 }, os: 'deck', tier: 1, ram: 4, net: 1, desc: 'Hack people in battles · 4 RAM · 2 quickhacks', msg: 'You got a Starter Cyberdeck. Now you can hack people! In battles, quickhacks use RAM, which refills a little every turn.' },
       { id: 'deck2', e: '💻', t: 'Ghostwire Cyberdeck', cost: 45000, min: 0, body: 5, fx: { smarts: 6 }, os: 'deck', tier: 2, ram: 7, net: 1, desc: '7 RAM · 4 quickhacks', msg: 'You got a Ghostwire Cyberdeck. More RAM and more quickhacks!' },
       { id: 'deck3', e: '💻', t: 'Black ICE Cyberdeck', cost: 140000, min: 0, body: 6, fx: { smarts: 8 }, os: 'deck', tier: 3, ram: 10, net: 1, desc: '10 RAM · all 7 quickhacks', msg: 'You got a Black ICE Cyberdeck, a pro netrunner’s deck. You can run every quickhack now!' },
-      { id: 'capri', e: '💠', t: 'Capri', cost: 0, min: 0, body: 6, fx: { smarts: 12, style: 6 }, os: 'deck', tier: 4, ram: 14, net: 1, brain: 15, ach: 'capri', desc: 'The legendary cyberdeck · 14 RAM · every quickhack is FREE · 6 quickhacks only Capri can run', msg: 'You installed Capri, the legendary cyberdeck. Every quickhack is free now: no RAM needed!' },
+      { id: 'capri', e: '💠', t: 'Capri', cost: 0, min: 0, body: 6, fx: { smarts: 12, style: 6 }, os: 'deck', tier: 4, ram: 14, net: 1, brain: 15, raid: 1, desc: 'The legendary cyberdeck · 14 RAM · every quickhack is FREE · 6 quickhacks only Capri can run', msg: 'You installed Capri, the legendary cyberdeck. Every quickhack is free now: no RAM needed!' },
       // 🕸️ netrunner gear
       { id: 'port', e: '🔌', t: 'Neural hacking port', cost: 7000, min: 0, body: 2, fx: { smarts: 3 }, net: 1, desc: 'Jack-in stun move', msg: 'You got a neural hacking port. Swiping data shards just got way easier!' },
       { id: 'ramup', e: '🧠', t: 'RAM booster', cost: 18000, min: 0, body: 3, fx: { smarts: 3 }, net: 1, desc: '+3 RAM for your cyberdeck', msg: 'You got a RAM booster. Your cyberdeck holds 3 more RAM!' },
@@ -9172,7 +9172,7 @@
       { id: 'champ', e: '🐉', t: 'Ring Champion', d: 'Beat The Neon Dragon in the underground ring.' },
       { id: 'netgrad', e: '🕸️', t: 'Certified Netrunner', d: 'Graduate from Netrunner School (in 💼 Job, from age 16).' },
       { id: 'breach', e: '💻', t: 'Breach Protocol', d: 'Use 3 quickhacks in one battle and win it.' },
-      { id: 'capri', e: '💠', t: 'Capri', d: 'Install every piece of netrunner gear (with a Black ICE Cyberdeck) and graduate from Netrunner School.', reward: 'Gives you 💠 Capri, the legendary cyberdeck: every quickhack is free, plus 6 quickhacks only Capri can run!' },
+      { id: 'capri', e: '💠', t: 'Capri', d: 'Install every piece of netrunner gear (with a Black ICE Cyberdeck) and graduate from Netrunner School.', reward: 'Makes it way easier to sneak into the Kumo-Tek netrunner vault and steal 💠 Capri (+15%).' },
       { id: 'breakout', e: '🔓', t: 'Great Escape', d: 'Break out of the Neon Harbor Lockup.' },
       { id: 'psycho', e: '🚨', t: 'Psycho Squad', d: 'Stop 5 cyberpsychos as a Chrome Patrol agent (in one life).' },
       { id: 'giant', e: '🤖', t: 'Bigger They Are', d: 'Beat The Smasher in a boss fight.' },
@@ -9188,7 +9188,7 @@
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
       { id: 'dynasty', e: '🧬', t: 'Dynasty', d: 'Play as your grandkid (generation 3).' },
-      { id: 'legend', e: '💔', t: 'Nothing Left to Lose', d: 'Before you turn 18, lose your parents or run away from home, then join a street crew. (Try the Street Kid start!)', reward: 'Unlocks the 🦾 Titan Exoskeleton at the Chrome Clinic.', secret: 1 },
+      { id: 'legend', e: '💔', t: 'Nothing Left to Lose', d: 'Before you turn 18, lose your parents or run away from home, then join a street crew. (Try the Street Kid start!)', reward: 'Makes it way easier to sneak into the Kumo-Tek armory and steal a 🦾 Titan Exoskeleton (+15%).', secret: 1 },
       { id: 'exo', e: '🤖', t: 'Walking Tank', d: 'Wear the Titan Exoskeleton.' },
       { id: 'premium', e: '👑', t: 'Code Breaker', d: 'Unlock premium with a secret code.' },
       { id: 'smasher', e: '🤖', t: 'The Smasher', d: 'Become 96% cyberware or more (96 tolerance used)… or find the secret code.', reward: 'Unlocks 🤖 Smasher Body (MAX cyberware tolerance with no drawbacks: turn it on in the ☰ menu or the Chrome Clinic) and the 🤖 Smasher Chassis at the Chrome Clinic.', secret: 1 }
@@ -9601,14 +9601,9 @@
     function rageOf() { return osOf('berserk'); }
     function netCount() { var X = deckOf(); return NET_SET.filter(has).length + (X && X.tier >= 3 ? 1 : 0); }
     function netAll() { return netCount() === NET_SET.length + 1; }
-    function giveCapri() {   // the 💠 Capri achievement gives you Capri
+    function giveCapri() {   // the 💠 Capri achievement: you're a real netrunner now (but Capri herself has to be stolen from Kumo-Tek)
       award('capri');
-      if (has('capri')) { log('💠 You earned the Capri achievement! (You already have Capri.)'); save(); return; }
-      var old = deckOf();
-      if (old) L.implants.splice(L.implants.indexOf(old.id), 1);
-      L.implants.push('capri');
-      Object.keys(IMP.capri.fx).forEach(function (k) { L.st[k] = capStat(k, L.st[k] + IMP.capri.fx[k]); });
-      log('💠 You got Capri, the legendary cyberdeck!' + (old ? ' It replaced your ' + old.t + '.' : '') + ' With Capri, every quickhack is free.');
+      log('💠 You earned the Capri achievement! You’re a real netrunner now, so sneaking into the Kumo-Tek netrunner vault to steal Capri just got way easier.');
       save();
     }
     function overloadP(cooled) {
@@ -10450,7 +10445,7 @@
         note(c, '⏱️ Sandys (time-slow), 😤 Berserk, and 💻 Cyberdecks for hacking people. You can run one of each, and a better one replaces the one you have.');
         IMPLANTS.forEach(function (im) { if (im.os) implantRow(c, im, ch, lim); });
         sec(c, '🕸️ Netrunner gear');
-        note(c, '💻 Quickhacks use RAM, which refills a little every turn. Get all ' + (NET_SET.length + 1) + ' pieces of netrunner gear (including a Black ICE Cyberdeck) and graduate from Netrunner School (in 💼 Job) to unlock 💠 Capri! You have ' + netCount() + ' of ' + (NET_SET.length + 1) + '.' + (L.netrunner ? ' ✅ Netrunner School: done.' : ''));
+        note(c, '💻 Quickhacks use RAM, which refills a little every turn. Get all ' + (NET_SET.length + 1) + ' pieces of netrunner gear (including a Black ICE Cyberdeck) and graduate from Netrunner School (in 💼 Job) to earn the 💠 Capri achievement, which makes stealing Capri from Kumo-Tek way easier! You have ' + netCount() + ' of ' + (NET_SET.length + 1) + '.' + (L.netrunner ? ' ✅ Netrunner School: done.' : ''));
         IMPLANTS.forEach(function (im) { if (im.net && !im.os) implantRow(c, im, ch, lim); });
         sec(c, '🦾 Body chrome');
         IMPLANTS.forEach(function (im) { if (!im.os && !im.net && !im.illegal) implantRow(c, im, ch, lim); });
@@ -10459,12 +10454,16 @@
     }
     function implantRow(c, im, ch, lim) {
       if (im.hide || (im.prem && !premium)) return;
+      if (im.raid) {   // 🏢 not for sale: the only way to get Capri or a Titan Exoskeleton is to steal one from Kumo-Tek
+        infoRow(c, has(im.id) ? '✅' : '🔒', im.e + ' ' + im.t, has(im.id) ? 'Installed ✓ · uses ' + im.body + ' tolerance' : 'Not for sale! ' + (im.id === 'capri' ? 'Steal her' : 'Steal it') + ' in a 🏢 Kumo-Tek raid (in Activities). ' + im.desc);
+        return;
+      }
       var cur = im.os ? osOf(im.os) : null;
       if (cur && cur.tier > im.tier) return;   // you already run something better
       if (im.ach && !hasAch(im.ach) && !has(im.id)) {
         var lock = mk('div', 'lf-opt lf-info'); lock.appendChild(mk('i', null, '🔒'));
         var lt = mk('span'); lt.appendChild(mk('b', null, im.t));
-        lt.appendChild(mk('small', null, im.ach === 'capri' ? 'Locked. Get the 💠 Capri achievement, or steal her in a 🏢 Kumo-Tek raid (in Activities)!' : im.id === 'exo' ? 'Locked. Unlock it with a secret achievement, or steal one in a 🏢 Kumo-Tek raid (in Activities)!' : 'Locked. Unlock it with a secret achievement (see 🏆 Achievements).'));
+        lt.appendChild(mk('small', null, 'Locked. Unlock it with a secret achievement (see 🏆 Achievements).'));
         lock.appendChild(lt); c.appendChild(lock); return;
       }
       var own = has(im.id), up = cur && !own ? cur : null, more = im.body - (up ? up.body : 0);
@@ -10492,12 +10491,12 @@
     function kumoJob() { return !!L.job && (L.job.id === 'kexec' || L.job.id === 'enforcer'); }
     function sneakChance(k) {   // 🤫 smarts, optical camo, a Sandy, a good cyberdeck (for the vault), and knowing the building all help
       var D = deckOf();
-      return Math.max(0.1, Math.min(0.8, 0.2 + L.st.smarts / 400 + (has('camo') ? 0.2 : 0) + (hasSandy() ? 0.1 : 0) + (k === 'capri' && D ? D.tier * 0.06 : 0) + (k === 'exo' && has('legs') ? 0.05 : 0) + (kumoJob() ? 0.15 : 0) - (L.mode === 'hard' ? 0.1 : 0)));
+      return Math.max(0.1, Math.min(0.8, 0.2 + L.st.smarts / 400 + (has('camo') ? 0.2 : 0) + (hasSandy() ? 0.1 : 0) + (k === 'capri' && D ? D.tier * 0.06 : 0) + (k === 'exo' && has('legs') ? 0.05 : 0) + (kumoJob() ? 0.15 : 0) + (k === 'capri' && hasAch('capri') ? 0.15 : 0) + (k === 'exo' && hasAch('legend') ? 0.15 : 0) - (L.mode === 'hard' ? 0.1 : 0)));   // 🏆 the right achievement helps too
     }
     function raidSheet() {
       sheet('🏢 Raid Kumo-Tek', function (c) {
         var done = doneYet('raid');
-        note(c, '🏢 Kumo-Tek keeps its best tech locked up in its tower. Sneak in quietly, or fight your way through 2 security squads and a boss. Lose, and you’re going to the Lockup!' + (kumoJob() ? ' 🪪 You work there, so you know your way around (easier to sneak in).' : '') + (done ? ' You already raided them this year.' : ''));
+        note(c, '🏢 Kumo-Tek keeps its best tech locked up in its tower. Sneak in quietly, or fight your way through 2 security squads and a boss. Lose, and you’re going to the Lockup!' + (kumoJob() ? ' 🪪 You work there, so you know your way around (easier to sneak in).' : '') + ' This is the ONLY way to get Capri or a Titan Exoskeleton. The Chrome Clinic doesn’t sell them.' + (done ? ' You already raided them this year.' : ''));
         ['capri', 'exo'].forEach(function (k) {
           var Rd = RAID[k], X = IMP[k], boss = Rd.foes[Rd.foes.length - 1];
           sec(c, X.e + ' ' + X.t);
@@ -11702,7 +11701,7 @@
         if (allAchOwned) opt(c, '🍀', 'All achievements: ' + (allAch ? 'ON ✓' : 'OFF'), allAch ? 'Tap to go back to the achievements you really earned' : 'Tap to unlock every achievement again (no code needed)', function () { setAllAch(!allAch, back); });
         if (premiumOwned) opt(c, '👑', 'Premium: ' + (premium ? 'ON ✓' : 'OFF'), premium ? 'Tap to turn off God Mode, the Time Machine, the Guardian Angel, and premium stuff' : 'Tap to turn premium back on (no code needed)', function () { setPremium(!premium, back); });
         opt(c, '🔄', 'Start over from scratch', 'Erase premium, achievements, codes, rewards, and past lives, then replay with no benefits', function () {
-          confirmBox('🔄', 'Start over from scratch? This erases premium, every achievement and its rewards (like the Titan Exoskeleton, Smasher Body, and Capri), your past lives, and your current life. You can’t undo it!', 'Yes, erase everything', wipeAll);
+          confirmBox('🔄', 'Start over from scratch? This erases premium, every achievement and its rewards (like the Smasher Body and the Smasher Chassis), your past lives, and your current life. You can’t undo it!', 'Yes, erase everything', wipeAll);
         });
         if (back) opt(c, '←', 'Back', '', back);
       });
@@ -11731,7 +11730,7 @@
         allAch = true; allAchOwned = true;
         try { localStorage.setItem(LKEY, '1'); } catch (e) {}
         if (!was && L && L.alive) { log('🍀 You typed a lucky code and unlocked every achievement!'); save(); }
-        outcome('🍀', was ? 'Lucky guess is already on! 🍀' : 'Lucky guess! 🍀 Every achievement is unlocked, with all its rewards (like the Titan Exoskeleton, Smasher Body, the Smasher Chassis, and Capri). You can turn it off in 🔑 Codes anytime.', [], refresh);
+        outcome('🍀', was ? 'Lucky guess is already on! 🍀' : 'Lucky guess! 🍀 Every achievement is unlocked, with all its rewards (like the Smasher Body and the Smasher Chassis). You can turn it off in 🔑 Codes anytime.', [], refresh);
         return;
       }
       if (CODES[code] === 'smasher') {
@@ -11859,7 +11858,7 @@
           '🥊 Easy fights are over fast, but tough ones start a real battle. Pick moves on your turn. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back). Some enemies fake you out: they wind up, then wait. Don’t fall for it! Others go for a ⚡ COMBO: several hits super fast, so tap once for each. Most implant moves are free, but heavy chrome like your Sandy (time-slow) and Berserk costs humanity. Hit zero humanity and the Chrome Patrol shows up!',
           '🎚️ When you start a life, pick a difficulty: 🤖 Smasher (easy, once you have The Smasher), 🟢 Normal, or 🔴 Hard (lower tolerance, tougher fights, less pay, more risk).',
           '🧬 Every life gets its own cyberware tolerance (high tolerance is rare). Every implant takes up some of it, and if you go over, you could have a chrome overload. The higher your tolerance, the less humanity heavy chrome like your Sandy costs.',
-          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only she can run. Earn her with the Capri achievement, or steal her in a 🏢 Kumo-Tek raid!',
+          '💻 Netrunners hack people! Get a cyberdeck at the Chrome Clinic and use quickhacks in battles. Quickhacks cost RAM, which refills a little every turn. Netrunner School is in 💼 Job. 💠 Capri runs every quickhack for free, plus 6 that only she can run. The only way to get her is to steal her in a 🏢 Kumo-Tek raid (in Activities)!',
           '💀 From age 16, you can attack friends and partners. If you win, they’re gone for good, and if the cops catch you, you go to the Lockup.',
           'Keep your bars up! If your health hits zero, your life ends. When you die, you get a ribbon, and if you have kids, you can keep playing as one of them.'
         ].forEach(function (t) { note(c, t); });
