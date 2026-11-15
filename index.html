@@ -9455,6 +9455,14 @@
       art: { e: '🎨', t: 'Bright Lights Art Scholarship' },
       top: { e: '🎓', t: 'Top of the Class Scholarship' }
     };
+    var BIZTYPES = [   // 🏢 businesses you can start with a 📊 Business degree
+      { id: 'noodle', e: '🍜', t: 'Noodle Bar', brand: 'Noodles', unit: 'bowls', cost: 25000, sales: 5000, per: 4, cap: 400000, stat: 'style', grow: 'Open another noodle bar', grew: 'You opened a brand-new noodle bar across town!', ideas: ['spicy rainbow ramen', 'glow-in-the-dark dumplings', 'self-stirring noodle cups', 'bubble-tea noodles'] },
+      { id: 'sneaker', e: '👟', t: 'Sneaker Brand', brand: 'Kicks', unit: 'pairs of sneakers', cost: 100000, sales: 2000, per: 20, cap: 150000, stat: 'style', grow: 'Open a sneaker megastore', grew: 'You opened a giant sneaker megastore downtown!', ideas: ['hover-sneakers', 'sneakers that change color', 'light-up moon boots', 'self-tying high-tops'] },
+      { id: 'toys', e: '🧸', t: 'Robo-Toy Company', brand: 'Robo-Toys', unit: 'toys', cost: 250000, sales: 3000, per: 25, cap: 300000, stat: 'smarts', grow: 'Build a bigger toy factory', grew: 'You built a huge new toy factory run by friendly robots!', ideas: ['a robo-dino that helps with homework', 'pocket-sized drones', 'a talking teddy-bot', 'a build-your-own-robot kit'] },
+      { id: 'games', e: '🎮', t: 'Game Studio', brand: 'Games', unit: 'games', cost: 500000, sales: 6000, per: 30, cap: 600000, stat: 'smarts', grow: 'Hire more game makers', grew: 'You hired a whole new team of game makers!', ideas: ['a giant robot battle game', 'a space racing game', 'a cozy farming game on Mars', 'a spooky ghost-hunting game'] },
+      { id: 'cars', e: '🚗', t: 'Hover-Car Company', brand: 'Hover-Cars', unit: 'hover-cars', cost: 2000000, sales: 150, per: 2500, cap: 20000, stat: 'smarts', grow: 'Build a bigger hover-car factory', grew: 'You built a gigantic hover-car factory!', ideas: ['a flying minivan', 'a hover-car that parks itself', 'a solar-powered sky-scooter', 'a hover-car with a built-in pool'] }
+    ];
+    var BIZT = byId(BIZTYPES);
     var CREWMATES = ['Vex', 'Pixel', 'Rook', 'Jinx', 'Moxie', 'Tank', 'Zip', 'Echo', 'Nova', 'Bolt'];
     var GANGS = [   // 🛡️ rival gangs that want your turf
       { id: 'rats', e: '🐀', short: 'Rust Rats', name: 'the Rust Rats', w: '🔧', boss: 'the Rat King', bt: 'Rat King', be: '🐀' },
@@ -9510,6 +9518,9 @@
       { id: 'moon', e: '🌙', t: 'Moonshot', d: 'Fill your crew’s Moon fund and take everyone to the Moon.' },
       { id: 'fullride', e: '🎓', t: 'Full Ride', d: 'Go to university for free with a full scholarship.' },
       { id: 'whizkid', e: '🧒', t: 'Whiz Kid', d: 'Finish school early and get a full-time job before you turn 16.' },
+      { id: 'founder', e: '🏪', t: 'Founder', d: 'Start your own business.' },
+      { id: 'bigbiz', e: '📈', t: 'Big Business', d: 'Make 1,000,000 cr in one year from your businesses.' },
+      { id: 'tycoon', e: '🏭', t: 'Tycoon', d: 'Own all 5 kinds of business at once.' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -9790,6 +9801,16 @@
       { id: 'crewinvite', forced: 1, e: '🏙️', t: 'A street crew has been looking out for you. Their leader, {new}, says: “You’ve got nobody left. Run with us, and we’ll be your family.”', c: [
         ['Join the crew', function (c) { return joinCrew(pick(CREWS).id, c.new); }],
         ['Stay on your own', [[1, { happy: -2, good: 1 }, 'You told the street crew you’d rather stay on your own.']]]] },
+      { id: 'bizviral', a: [10, 95], w: 4, every: 2, need: 'biz', e: '📱', t: 'A super-famous holo-streamer just showed off {bizname} to millions of fans!', c: [
+        ['📦 Make more, fast!', function (c) { return withBiz(c, function (bz) { bz.sales = Math.min(bizCap(bz), Math.round(bz.sales * 1.3)); return [{ fame: 3, happy: 6 }, '📦 Your workers made extra all night, and ' + bz.name + ' sold out everywhere! Sales +30%.']; }); }],
+        ['🎁 Send them a thank-you gift', function (c) { return withBiz(c, function (bz) { bz.hype = Math.min(100, bz.hype + 40); return [{ fame: 2, happy: 4 }, '🎁 You sent the streamer a giant gift basket, and they showed it off on stream too! Hype +40.']; }); }]] },
+      { id: 'bizcopy', a: [10, 95], w: 3, every: 3, need: 'biz', e: '🕵️', t: 'A rival company copied the best-selling product from {bizname}!', c: [
+        ['⚖️ Take them to court (10,000 cr)', function (c) { if (L.money < 10000) return [{ happy: -3 }, '⚖️ You couldn’t afford a lawyer-bot, so the copycats kept selling.']; if (chance(0.6)) { var m = R(20000, 80000); return [{ money: m - 10000, happy: 6 }, '⚖️ You won in court! The copycats had to pay you ' + cr(m) + '.']; } return [{ money: -10000, happy: -4 }, '⚖️ You lost in court. The judge-bot said their copy had one extra button.']; }],
+        ['💡 Make something even better', function (c) { return withBiz(c, function (bz) { bz.hype = Math.min(100, bz.hype + 25); return [{ smarts: 1, happy: 3 }, '💡 You made an even better version, and ' + bz.name + ' fans loved it. Hype +25.']; }); }],
+        ['🤷 Ignore it', function (c) { return withBiz(c, function (bz) { bz.sales = Math.round(bz.sales * 0.85); return [{ happy: -2 }, '🤷 You ignored the copycats, and ' + bz.name + ' lost some sales. (−15%)']; }); }]] },
+      { id: 'bizbuyout', a: [10, 95], w: 2, every: 5, need: 'biz', e: '🏢', t: 'Kumo-Tek wants to buy {bizname} for {offer}!', c: [
+        ['💰 Sell it!', function (c) { return withBiz(c, function (bz) { sellBiz(bz); return [{ money: c.offerV, happy: 8 }, '💰 You sold ' + bz.name + ' to Kumo-Tek for ' + cr(c.offerV) + '!']; }); }],
+        ['🙅 No way, it’s mine!', [[1, { happy: 3 }, '🙅 You told Kumo-Tek your business is NOT for sale.']]]] },
       { id: 'crewrescue', a: [14, 90], w: 3, every: 3, need: 'crew', e: '🆘', t: 'Corp security grabbed your crewmate {mate} and threw them in the back of an armored van! Your crew needs you.', c: [
         ['⚔️ Break them out (2 fights)', function (c) { return rescueFight(c.mate); }],
         ['💳 Pay a fixer to get them out (5,000 cr)', function (c) { if (L.money < 5000) return [{ happy: -3, rep: -3 }, '💳 You didn’t have enough credits for the fixer. ' + c.mate + ' got out on their own a week later.']; return [{ money: -5000, happy: 4, rep: 8 }, '💳 You paid a fixer ' + cr(5000) + ', and ' + c.mate + ' was back at the hideout by dinner. Your crew owes you one.']; }],
@@ -10193,6 +10214,7 @@
       var w = L.money;
       L.homes.forEach(function (h) { w += HOME[h].cost * 0.9; });
       L.rides.forEach(function (r) { w += RIDE[r].cost * 0.6; });
+      (L.biz || []).forEach(function (bz) { w += bizValue(bz); });
       return Math.round(w);
     }
     function jobTitle(j) {
@@ -10262,6 +10284,7 @@
       if (L.school) parts.push('Student at ' + NH.schools[L.school.kind]);
       else if (L.uni) parts.push(MAJORS[L.uni.major][1] + ' student');
       if (L.job) parts.push(jobTitle());
+      if (L.biz && L.biz.length) parts.push(L.biz.length > 1 ? 'Owns ' + L.biz.length + ' businesses' : 'Owner of ' + L.biz[0].name);
       if (!parts.length) parts.push(L.retired ? 'Retired' : grownUp() ? 'Unemployed' : 'Kid');
       return parts.join(' · ');
     }
@@ -10335,6 +10358,7 @@
       if (ev.need === 'schoolkid' && !(c.kid = rand(kids().filter(function (k) { return k.age >= 5 && k.age <= 17; })))) return null;
       if (ev.need === 'job' && !L.job) return null;
       if (ev.need === 'school' && !L.school) return null;
+      if (ev.need === 'biz') { if (!bizList().length) return null; var bz0 = pick(L.biz); c.bid = bz0.id; c.bizname = bz0.name; c.offerV = Math.round(bizValue(bz0) * 1.5); c.offer = cr(c.offerV); }
       if (ev.need === 'crew') { if (!L.crew || L.jail) return null; var gg = pick(GANGS); c.gid = gg.id; c.gang = gg.name; c.Gang = cap(gg.name); c.gboss = gg.boss; c.Gboss = cap(gg.boss); c.mate = pick(CREWMATES); }
       if (ev.need === 'loot') { if (!L.loot || !IMP[L.loot.id] || !L.job || L.job.id !== 'patrol') return null; c.psycho = L.loot.n; c.item = IMP[L.loot.id].e + ' ' + IMP[L.loot.id].t + (IMP[L.loot.id].illegal ? ' ☠️ (illegal black-market chrome: extra strong!)' : ''); c.odds = premium ? ' 😇 ' + Math.round(lootCatch(IMP[L.loot.id]) * 100) + '% chance of getting caught if you take it.' : ' Taking it is risky!'; }
       return c;
@@ -10428,6 +10452,7 @@
         else if (L.job.perf <= 20 && chance(0.4)) { log('📉 You got fired from your job as a ' + jobTitle() + '. Oops.'); endJob(); s.happy = clamp(s.happy - 10); }
       }
       if (L.retired) L.money += L.pension;
+      if (L.biz && L.biz.length) bizYear();   // 🏢
       // how you feel this year
       var joy = 0;
       L.homes.forEach(function (h) { joy += HOME[h].joy; });
@@ -10635,6 +10660,93 @@
     function fxText(fx) { return Object.keys(fx).filter(function (k) { return STAT[k]; }).map(function (k) { return STAT[k][0] + ' +' + fx[k]; }).join(' '); }
 
     // ---- 💼 school and work ----
+    // ---- 🏢 your own businesses (a 📊 Business degree unlocks them) ----
+    function bizList() { return L.biz || (L.biz = []); }
+    function bizOf(id) { return bizList().filter(function (x) { return x.id === id; })[0]; }
+    function withBiz(c, fn) { var bz = bizOf(c.bid); return bz ? fn(bz) : [{}, '🏢 Never mind: that business is gone now.']; }
+    function numTxt(n) { return Math.round(n).toLocaleString('en-US'); }
+    function fameMult() { return 1 + L.fame / 25; }   // ⭐ fame 0 → ×1, fame 100 → ×5
+    function bizCap(bz) { return Math.round(BIZT[bz.type].cap * Math.pow(1.5, bz.level - 1)); }
+    function bizProfit(bz) { return Math.round(bz.sales * BIZT[bz.type].per * fameMult() * (L.mode === 'hard' ? 0.85 : 1)); }
+    function bizValue(bz) { return Math.round(bizProfit(bz) * 4 + BIZT[bz.type].cost * 0.5 * bz.level); }
+    function adCost(BT) { return Math.max(2000, Math.round(BT.cost * 0.1)); }
+    function launchCost(BT) { return Math.round(BT.cost * 0.2); }
+    function expandCost(bz) { return BIZT[bz.type].cost * Math.pow(2, bz.level); }
+    function launchChance(bz) { return Math.min(0.85, 0.4 + (L.st[BIZT[bz.type].stat] - 50) / 200 + (bz.level - 1) * 0.05); }
+    function sellBiz(bz) { L.biz = bizList().filter(function (x) { return x !== bz; }); }
+    function bizSec(c) {
+      var list = bizList(), can = hasDegree('biz');
+      if (!list.length && !can) { if (grownUp() && !L.school) note(c, '🔒 Get a 📊 Business degree at university and you can start your own businesses!'); return; }
+      sec(c, '🏢 Your businesses');
+      if (!list.length) note(c, '📊 You have a Business degree, so you can start your own company! The more you sell and the more ⭐ famous you are, the more money it makes.');
+      list.forEach(function (bz) { var BT = BIZT[bz.type]; opt(c, BT.e, bz.name, numTxt(bz.sales) + ' ' + BT.unit + ' a year · ' + cr(bizProfit(bz)) + ' profit a year', function () { bizSheet(bz.id); }); });
+      if (can && list.length < BIZTYPES.length) opt(c, '➕', 'Start a new business', 'Noodles, sneakers, robo-toys, video games or hover-cars', newBizSheet);
+    }
+    function newBizSheet() {
+      sheet('➕ Start a business', function (c) {
+        note(c, '💡 Every year your business sells stuff. Your profit = sales × your ⭐ fame bonus (×' + fameMult().toFixed(1) + ' right now). Bigger businesses cost more to start, but they can make WAY more.');
+        BIZTYPES.forEach(function (BT) {
+          if (bizOf(BT.id)) return;
+          opt(c, BT.e, BT.t, cr(BT.cost) + ' to start' + (L.money < BT.cost ? ' · not enough credits' : ' · about ' + cr(BT.sales * BT.per * fameMult()) + ' a year at first'), function () { startBiz(BT); }, L.money < BT.cost);
+        });
+        opt(c, '←', 'Back to school & work', '', jobSheet);
+      });
+    }
+    function startBiz(BT) {
+      if (L.money < BT.cost || bizOf(BT.id)) return;
+      var bz = { id: BT.id, type: BT.id, name: L.first + '’s ' + BT.brand, sales: BT.sales, hype: 40, level: 1, years: 0, best: 0 };
+      bizList().push(bz); award('founder');
+      if (bizList().length >= BIZTYPES.length) award('tycoon');
+      doThing(BT.e, [{ money: -BT.cost, happy: 10, fame: 1 }, BT.e + ' You started ' + bz.name + '! You’ll sell about ' + numTxt(bz.sales) + ' ' + BT.unit + ' this year. Run ads and launch new products to sell even more.']);
+    }
+    function bizSheet(id) {
+      var bz = bizOf(id); if (!bz) { jobSheet(); return; }
+      var BT = BIZT[bz.type];
+      sheet(BT.e + ' ' + bz.name, function (c) {
+        note(c, '📈 Sales: ' + numTxt(bz.sales) + ' ' + BT.unit + ' a year. Right now, the most you could sell is ' + numTxt(bizCap(bz)) + '.');
+        c.appendChild(barEl(bz.sales / bizCap(bz) * 100));
+        note(c, '🔥 Hype: ' + bz.hype + '/100. Hype makes your sales grow, but it fades every year.');
+        c.appendChild(barEl(bz.hype, 'tol'));
+        note(c, '⭐ Fame bonus: ×' + fameMult().toFixed(1) + ' · 🏬 Size: level ' + bz.level + ' of 4 · 💰 Profit: ' + cr(bizProfit(bz)) + ' a year' + (bz.best ? ' (best year: ' + cr(bz.best) + ')' : ''));
+        sec(c, '📋 Run your business');
+        oneYear(c, 'bad-' + id, '📣', 'Run an ad campaign', cr(adCost(BT)) + (L.money < adCost(BT) ? ' · not enough credits' : ' · +35 hype, and you get a little more famous'), function () { return bizAds(bz); }, L.money < adCost(BT));
+        oneYear(c, 'bnew-' + id, '🧪', 'Launch a new product', cr(launchCost(BT)) + (L.money < launchCost(BT) ? ' · not enough credits' : ' · a hit sells a LOT more, a flop kills the hype') + (premium ? ' · ' + odds(launchChance(bz), 'chance of a hit') : ''), function () { return bizLaunch(bz); }, L.money < launchCost(BT));
+        if (bz.level < 4) oneYear(c, 'bexp-' + id, '🏬', BT.grow, cr(expandCost(bz)) + (L.money < expandCost(bz) ? ' · not enough credits' : ' · more people can buy from you (+50% max sales)'), function () { return bizExpand(bz); }, L.money < expandCost(bz));
+        opt(c, '💸', 'Sell ' + bz.name, 'Get ' + cr(bizValue(bz)) + ' for it', function () { confirmBox('💸', 'Sell ' + bz.name + ' for ' + cr(bizValue(bz)) + '?', 'Yes, sell it', function () { var v = bizValue(bz); sellBiz(bz); doThing('💸', [{ money: v, happy: 4 }, '💸 You sold ' + bz.name + ' for ' + cr(v) + '!']); }); });
+        opt(c, '←', 'Back to school & work', '', jobSheet);
+      });
+    }
+    function bizAds(bz) {
+      var BT = BIZT[bz.type]; bz.hype = Math.min(100, bz.hype + 35);
+      return [{ money: -adCost(BT), fame: 1 }, '📣 ' + pick(['You put giant holo-billboards over the sky-highway', 'A sky-blimp flew over the city with your logo on it', 'You made a jingle so catchy that the whole city is humming it', 'You hired a famous holo-star to show off your stuff']) + '. Hype for ' + bz.name + ' is way up!'];
+    }
+    function bizLaunch(bz) {
+      var BT = BIZT[bz.type], thing = pick(BT.ideas);
+      if (chance(launchChance(bz))) {
+        bz.hype = Math.min(100, bz.hype + 60); bz.sales = Math.min(bizCap(bz), Math.round(bz.sales * 1.2));
+        return [{ money: -launchCost(BT), fame: 3, happy: 8 }, '🧪 ' + bz.name + ' launched ' + thing + ', and it’s a HIT! Sales +20%.'];
+      }
+      bz.hype = Math.max(0, bz.hype - 15);
+      return [{ money: -launchCost(BT), happy: -4 }, '🧪 ' + bz.name + ' launched ' + thing + ', but almost nobody bought it. Flop!'];
+    }
+    function bizExpand(bz) {
+      var BT = BIZT[bz.type], cost = expandCost(bz);
+      bz.level += 1; bz.sales = Math.min(bizCap(bz), Math.round(bz.sales * 1.25));
+      return [{ money: -cost, happy: 6, fame: 2 }, '🏬 ' + BT.grew + ' ' + bz.name + ' is now level ' + bz.level + ' of 4, so even more people can buy from you.'];
+    }
+    function bizYear() {   // 🏢 a year of business: sales go up or down, then you collect the profit
+      var total = 0;
+      L.biz.forEach(function (bz) {
+        var BT = BIZT[bz.type], cap = bizCap(bz), g = (bz.hype - 25) / 250 + R(-4, 6) / 100 + (L.st[BT.stat] - 50) / 1000;
+        if (g > 0) g *= 1 - bz.sales / cap;   // it’s harder to grow when almost everyone already buys from you
+        bz.sales = Math.round(Math.max(BT.sales * 0.5, Math.min(cap, bz.sales * (1 + g))));
+        bz.hype = Math.round(bz.hype * 0.6); bz.years += 1;
+        var p = bizProfit(bz); total += p; bz.best = Math.max(bz.best || 0, p);
+      });
+      L.money += total;
+      if (total >= 1000000) award('bigbiz');
+      log('🏢 Your ' + (L.biz.length > 1 ? L.biz.length + ' businesses' : 'business') + ' made ' + cr(total) + ' this year.');
+    }
     function jobSheet() {
       sheet('💼 School & work', function (c) {
         if (L.age < 5) { note(c, 'You’re too little for school. Age up!'); return; }
@@ -10673,6 +10785,7 @@
           opt(c, '🚪', 'Quit your job', '', function () { confirmBox('🚪', 'Quit your job as a ' + jobTitle() + '?', 'Yes, quit', function () { var t = jobTitle(); endJob(); doThing('🚪', [{ happy: 2 }, '🚪 You quit your job as a ' + t + '.']); }); });
         }
         if (L.retired) note(c, '🏖️ You’re retired! Your pension is ' + cr(L.pension) + ' a year.');
+        bizSec(c);
         if (!L.school && !L.uni && grownUp()) {
           sec(c, '🏛️ Universities');
           var dg = degrees();
