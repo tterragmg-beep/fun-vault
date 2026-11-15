@@ -9466,7 +9466,8 @@
       { id: 'sneaker', e: '👟', t: 'Sneaker Brand', brand: 'Kicks', unit: 'pairs of sneakers', cost: 100000, sales: 2000, per: 20, stat: 'style', grow: 'Open a sneaker megastore', grew: 'You opened a giant sneaker megastore downtown!', ideas: ['hover-sneakers', 'sneakers that change color', 'light-up moon boots', 'self-tying high-tops'] },
       { id: 'toys', e: '🧸', t: 'Robo-Toy Company', brand: 'Robo-Toys', unit: 'toys', cost: 250000, sales: 3000, per: 25, stat: 'smarts', grow: 'Build a bigger toy factory', grew: 'You built a huge new toy factory run by friendly robots!', ideas: ['a robo-dino that helps with homework', 'pocket-sized drones', 'a talking teddy-bot', 'a build-your-own-robot kit'] },
       { id: 'games', e: '🎮', t: 'Game Studio', brand: 'Games', unit: 'games', cost: 500000, sales: 6000, per: 30, stat: 'smarts', grow: 'Hire more game makers', grew: 'You hired a whole new team of game makers!', ideas: ['a giant robot battle game', 'a space racing game', 'a cozy farming game on Mars', 'a spooky ghost-hunting game'] },
-      { id: 'cars', e: '🚗', t: 'Hover-Car Company', brand: 'Hover-Cars', unit: 'hover-cars', cost: 2000000, sales: 150, per: 2500, stat: 'smarts', grow: 'Build a bigger hover-car factory', grew: 'You built a gigantic hover-car factory!', ideas: ['a flying minivan', 'a hover-car that parks itself', 'a solar-powered sky-scooter', 'a hover-car with a built-in pool'] }
+      { id: 'cars', e: '🚗', t: 'Hover-Car Company', brand: 'Hover-Cars', unit: 'hover-cars', cost: 2000000, sales: 150, per: 2500, stat: 'smarts', grow: 'Build a bigger hover-car factory', grew: 'You built a gigantic hover-car factory!', ideas: ['a flying minivan', 'a hover-car that parks itself', 'a solar-powered sky-scooter', 'a hover-car with a built-in pool'] },
+      { id: 'chrome', e: '🦾', t: 'Cyberware Company', brand: 'Cyberware', unit: 'implants', cost: 3000000, sales: 500, per: 5000, stat: 'smarts', need: 'robo', boost: 0.1, best: 1, grow: 'Build a bigger chrome factory', grew: 'You built a shiny new cyberware factory full of robot builders!', ideas: ['glow-in-the-dark cyber-eyes', 'rocket boots that plug into your legs', 'a robot arm that flips pancakes', 'super-hearing cyber-ears', 'a brain chip that remembers everyone’s birthday'] }
     ];
     var BIZT = byId(BIZTYPES);
     var CREWMATES = ['Vex', 'Pixel', 'Rook', 'Jinx', 'Moxie', 'Tank', 'Zip', 'Echo', 'Nova', 'Bolt'];
@@ -9528,6 +9529,7 @@
       { id: 'founder', e: '🏪', t: 'Founder', d: 'Start your own business.' },
       { id: 'bigbiz', e: '📈', t: 'Big Business', d: 'Make 1,000,000 cr in one year from your businesses.' },
       { id: 'tycoon', e: '🏭', t: 'Tycoon', d: 'Own all 5 kinds of business at once.' },
+      { id: 'chromeco', e: '🦾', t: 'Chrome Empire', d: 'Start a cyberware company (you need Business AND Cyber-Engineering degrees).' },
       { id: 'mayor', e: '🏛️', t: 'Running the City', d: 'Become Mayor of Neon Harbor.' },
       { id: 'star', e: '🎤', t: 'Superstar', d: 'Reach 100 fame.' },
       { id: 'century', e: '🧓', t: 'Century Club', d: 'Live to 100.' },
@@ -10688,26 +10690,28 @@
       if (!list.length) note(c, '📊 You have a Business degree, so you can start your own company! The more you sell and the more ⭐ famous you are, the more money it makes.');
       if (list.length > 1) note(c, '💰 All together, your ' + list.length + ' businesses make ' + cr(list.reduce(function (t, bz) { return t + bizProfit(bz); }, 0)) + ' a year.');
       list.forEach(function (bz) { var BT = BIZT[bz.type]; opt(c, BT.e, bz.name, numTxt(bz.sales) + ' ' + BT.unit + ' a year · ' + cr(bizProfit(bz)) + ' profit a year', function () { bizSheet(bz.id); }); });
-      if (can) opt(c, '➕', 'Start a new business', 'No limit! Noodles, sneakers, robo-toys, video games or hover-cars', newBizSheet);
+      if (can) opt(c, '➕', 'Start a new business', 'No limit! Noodles, sneakers, robo-toys, video games, hover-cars, or 🦾 cyberware', newBizSheet);
     }
     function newBizSheet() {
       sheet('➕ Start a business', function (c) {
         note(c, '💡 Every year your business sells stuff. Your profit = sales × your ⭐ fame bonus (×' + fameMult().toFixed(1) + ' right now). Bigger businesses cost more to start, but they can make WAY more.');
         BIZTYPES.forEach(function (BT) {
-          var own = bizList().filter(function (x) { return x.type === BT.id; }).length;
-          opt(c, BT.e, BT.t, (own ? 'You have ' + own + ' · ' : '') + cr(BT.cost) + ' to start' + (L.money < BT.cost ? ' · not enough credits' : ' · about ' + cr(BT.sales * BT.per * fameMult()) + ' a year at first'), function () { startBiz(BT); }, L.money < BT.cost);
+          var own = bizList().filter(function (x) { return x.type === BT.id; }).length, locked = BT.need && !hasDegree(BT.need);
+          if (BT.best) sec(c, '⭐ The best business');
+          opt(c, BT.e, BT.t, locked ? 'Needs a ' + MAJORS[BT.need][0] + ' ' + MAJORS[BT.need][1] + ' degree too (plus ' + cr(BT.cost) + ')' : (own ? 'You have ' + own + ' · ' : '') + cr(BT.cost) + ' to start' + (L.money < BT.cost ? ' · not enough credits' : ' · about ' + cr(BT.sales * BT.per * fameMult()) + ' a year at first') + (BT.boost ? ' · grows ' + BT.boost * 100 + '% faster every year!' : ''), function () { startBiz(BT); }, locked || L.money < BT.cost);
         });
         opt(c, '←', 'Back to school & work', '', jobSheet);
       });
     }
     function startBiz(BT) {
-      if (L.money < BT.cost) return;
+      if (L.money < BT.cost || (BT.need && !hasDegree(BT.need))) return;
       var k = 1, nm = function (n) { return L.first + '’s ' + BT.brand + (n > 1 ? ' ' + n : ''); };
       while (bizList().some(function (x) { return x.name === nm(k); })) k += 1;   // Jules’s Noodles, Jules’s Noodles 2…
       L.bizN = (L.bizN || 0) + 1;
       var bz = { id: BT.id + '-' + L.bizN, type: BT.id, name: nm(k), sales: BT.sales, hype: 40, level: 1, years: 0, best: 0 };
       bizList().push(bz); award('founder');
-      if (BIZTYPES.every(function (T) { return bizList().some(function (x) { return x.type === T.id; }); })) award('tycoon');
+      if (BIZTYPES.every(function (T) { return T.need || bizList().some(function (x) { return x.type === T.id; }); })) award('tycoon');   // the 5 regular kinds
+      if (BT.id === 'chrome') award('chromeco');
       doThing(BT.e, [{ money: -BT.cost, happy: 10, fame: 1 }, BT.e + ' You started ' + bz.name + '! You’ll sell about ' + numTxt(bz.sales) + ' ' + BT.unit + ' this year. Run ads and launch new products to sell even more.']);
     }
     function bizSheet(id) {
@@ -10715,6 +10719,7 @@
       var BT = BIZT[bz.type];
       sheet(BT.e + ' ' + bz.name, function (c) {
         note(c, '📈 Sales: ' + numTxt(bz.sales) + ' ' + BT.unit + ' a year. There’s no limit: keep the hype up and your sales can grow forever!');
+        if (BT.boost) note(c, '⭐ The best business: it grows ' + BT.boost * 100 + '% faster every year than any other kind!');
         note(c, '🔥 Hype: ' + bz.hype + '/100. Hype makes your sales grow, but it fades every year.');
         c.appendChild(barEl(bz.hype, 'tol'));
         note(c, '⭐ Fame bonus: ×' + fameMult().toFixed(1) + ' · 🏬 Size: level ' + bz.level + ' · 💰 Profit: ' + cr(bizProfit(bz)) + ' a year' + (bz.best ? ' (best year: ' + cr(bz.best) + ')' : ''));
@@ -10747,7 +10752,7 @@
     function bizYear() {   // 🏢 a year of business: sales go up or down, then you collect the profit
       var total = 0;
       L.biz.forEach(function (bz) {
-        var BT = BIZT[bz.type], g = (bz.hype - 25) / 250 + R(-4, 6) / 100 + (L.st[BT.stat] - 50) / 1000;
+        var BT = BIZT[bz.type], g = (bz.hype - 25) / 250 + R(-4, 6) / 100 + (L.st[BT.stat] - 50) / 1000 + (BT.boost || 0);
         bz.sales = Math.round(Math.max(BT.sales * 0.5, bz.sales * (1 + g)));   // no cap: keep the hype up and it grows forever
         bz.hype = Math.round(bz.hype * 0.6); bz.years += 1;
         var p = bizProfit(bz); total += p; bz.best = Math.max(bz.best || 0, p);
