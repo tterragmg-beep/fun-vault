@@ -1054,6 +1054,7 @@
   .fp-ach b { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; }
   .fp-ach small { color: var(--muted); font-size: 0.72rem; line-height: 1.25; }
 
+  .lf-give-hint { min-height: 1.3em; margin: 6px 2px 0; color: var(--bad); font-size: 0.85rem; }
 </style>
 </head>
 <body>
@@ -11288,13 +11289,13 @@
     function ageUp() {
       if (!L || !L.alive || L.pending.length || !$('ov').hidden || B) return;
       snapshot();
-      runRoutine();   // 🔁 your yearly routine happens before the year ends
       L.age += 1;
       push({ a: L.age, h: 1 });
       var before = L.log.length;
       yearTick();
       var cause = deathCause();
       if (cause) { die(cause); return; }
+      runRoutine();   // 🔁 your yearly routine happens first thing in the new year
       L.pending = L.pending.concat(pickEvents());
       if (L.log.length === before && !L.pending.length && chance(0.5)) log(pick(QUIET));
       save(); render();
@@ -11469,6 +11470,8 @@
         note(c, '🔥 Hype: ' + bz.hype + '/100. Hype makes your sales grow, but it fades every year.');
         c.appendChild(barEl(bz.hype, 'tol'));
         note(c, '⭐ Fame bonus: ×' + fameMult().toFixed(1) + ' · 🏬 Size: level ' + bz.level + ' · 💰 Profit: ' + cr(bizProfit(bz)) + ' a year' + (bz.best ? ' (best year: ' + cr(bz.best) + ')' : ''));
+        var auto = [['ads', '📣 ads'], ['launch', '🧪 new products'], ['expand', '🏬 building bigger']].filter(function (x) { return AUTO[x[0]]; }).map(function (x) { return x[1]; });
+        if (auto.length) note(c, '🔁 Your yearly routine does ' + listAnd(auto) + ' for this business every year, all by itself.');
         sec(c, '📋 Run your business');
         oneYear(c, 'bad-' + id, '📣', 'Run an ad campaign', cr(adCost(BT)) + (L.money < adCost(BT) ? ' · not enough credits' : ' · +35 hype, and you get a little more famous'), function () { return bizAds(bz); }, L.money < adCost(BT));
         oneYear(c, 'bnew-' + id, '🧪', 'Launch a new product', cr(launchCost(BT)) + (L.money < launchCost(BT) ? ' · not enough credits' : ' · a hit sells a LOT more, a flop kills the hype') + (premium ? ' · ' + odds(launchChance(bz), 'chance of a hit') : ''), function () { return bizLaunch(bz); }, L.money < launchCost(BT));
@@ -11728,7 +11731,8 @@
         { id: 'humtrain', g: '🦾 Chrome', e: '🧘', t: 'Humanity training', s: '+1 humanity in battles', cost: HUM_COST, ok: function () { return !L.smasherBody && (L.humBonus || 0) < HUM_MAX; }, run: humTrain },
         { id: 'cool', g: '🦾 Chrome', e: '🧊', t: 'Chrome cooldown treatment', s: 'Lower chrome overload risk', cost: 2000, ok: function () { return !L.smasherBody && chrome() > 0; }, run: coolTreat },
         { id: 'ads', g: '🏢 Your businesses', e: '📣', t: 'Run ads for every business', s: 'More hype for all of them', ok: function () { return bizList().length > 0; }, biz: 'ads' },
-        { id: 'launch', g: '🏢 Your businesses', e: '🧪', t: 'Launch a new product at every business', s: 'Hits sell a LOT more, flops kill the hype', ok: function () { return bizList().length > 0; }, biz: 'launch' }
+        { id: 'launch', g: '🏢 Your businesses', e: '🧪', t: 'Launch a new product at every business', s: 'Hits sell a LOT more, flops kill the hype', ok: function () { return bizList().length > 0; }, biz: 'launch' },
+        { id: 'expand', g: '🏢 Your businesses', e: '🏬', t: 'Build every business bigger', s: 'More stores and bigger factories: +50% sales each time, but it costs twice as much every time', ok: function () { return bizList().length > 0; }, biz: 'expand' }
       );
       return ROUT;
     }
@@ -11741,13 +11745,13 @@
         if (!AUTO[R.id] || !R.ok()) return;
         if (R.biz) {
           bizList().slice().forEach(function (bz) {
-            var BT = BIZT[bz.type], key = (R.biz === 'ads' ? 'bad-' : 'bnew-') + bz.id, cost = R.biz === 'ads' ? adCost(BT) : launchCost(BT);
+            var BT = BIZT[bz.type], key = { ads: 'bad-', launch: 'bnew-', expand: 'bexp-' }[R.biz] + bz.id, cost = R.biz === 'ads' ? adCost(BT) : R.biz === 'launch' ? launchCost(BT) : expandCost(bz);
             if (doneYet(key)) return;
             if (L.money < cost) { did.push(R.e + ' ' + bz.name + ': not enough credits'); return; }
             L.done[key] = L.age;
-            var rb = R.biz === 'ads' ? bizAds(bz) : bizLaunch(bz);
+            var rb = R.biz === 'ads' ? bizAds(bz) : R.biz === 'launch' ? bizLaunch(bz) : bizExpand(bz);
             applyFx(rb[0], {});
-            did.push(R.e + ' ' + bz.name + (R.biz === 'ads' ? ' ads' : rb[1].indexOf('HIT') >= 0 ? ': a HIT!' : ': flop'));
+            did.push(R.e + ' ' + bz.name + (R.biz === 'ads' ? ' ads' : R.biz === 'expand' ? ' → level ' + bz.level : rb[1].indexOf('HIT') >= 0 ? ': a HIT!' : ': flop'));
           });
           return;
         }
@@ -11765,7 +11769,7 @@
     function autoSheet(keepY, focusId) {
       sheet('🔁 Yearly routine', function (c) {
         var n = autoCount();
-        note(c, '🔁 Pick things to do automatically every year. When you tap Age up, anything on your list that you haven’t done yet that year gets done for you. ' + (n ? 'You have ' + n + ' turned on.' : 'Nothing is turned on yet.') + ' Things that don’t fit your life right now (like work stuff when you don’t have a job) just wait until they do.');
+        note(c, '🔁 Pick things to do automatically every year. Every time you tap Age up, the new year starts with everything on your list done for you (it shows as “Done this year ✓”). ' + (n ? 'You have ' + n + ' turned on.' : 'Nothing is turned on yet.') + ' Things that don’t fit your life right now (like work stuff when you don’t have a job) just wait until they do.');
         var g = '';
         routine().forEach(function (R) {
           if (R.g !== g) { g = R.g; sec(c, g); }
@@ -12236,6 +12240,7 @@
         } else if (p.rel === 'partner' || p.rel === 'spouse') {
           A('time', '🌃', 'Date night', cr(150), function () { return [{ money: -150, happy: [4, 8], bond: { p: [8, 14] } }, '🌃 ' + line('partner')]; }, L.money < 150);
           A('gift', '🎁', 'Give a gift', cr(100), gift, L.money < 100);
+          opt(c, '💰', 'Give money', L.money < 1 ? 'You don’t have any credits to give' : 'Any amount you want, as often as you want', function () { giveSheet(p); }, L.money < 1);
           if (p.rel === 'partner') {
             var ready = p.bond >= 60 && p.since < L.age && L.money >= 3000;
             A('propose', '💍', 'Propose', ready ? 'Ring: ' + cr(3000) + (premium ? ' · ' + odds(p.bond / 100 + 0.1, 'chance of a yes') : '') : 'Needs: relationship 60%+, dating 1+ year, and ' + cr(3000) + ' for a ring', function () {
@@ -12249,6 +12254,7 @@
         } else {
           A('time', '💬', p.rel === 'friend' ? 'Hang out' : 'Spend time together', 'Get closer', function () { return [{ happy: [1, 4], bond: { p: [4, 10] } }, line(p.rel === 'kid' && p.age < 3 ? 'baby' : p.rel)]; });
           if (L.age >= 8) A('gift', '🎁', 'Give a gift', cr(100), gift, L.money < 100);
+          if (L.age >= 8) opt(c, '💰', 'Give money', L.money < 1 ? 'You don’t have any credits to give' : 'Any amount you want, as often as you want' + (p.rel === 'kid' && (p.cash || 0) > 0 ? ' · you’ve given ' + p.first + ' ' + cr(p.cash) : ''), function () { giveSheet(p); }, L.money < 1);
           if (p.rel === 'parent' && L.age >= 5) A('money', '💰', 'Ask for money', premium ? odds(moneyChance(p), 'chance of a yes') : 'They might say yes!', function () {
             if (!chance(moneyChance(p))) return [{ bond: { p: -3 } }, '💰 You asked ' + who(p) + ' for money. They said: “Money doesn’t grow on robot-trees!”'];
             var amt = (L.age < 18 ? R(10, 60) : R(200, 1500)) * (L.tier + 1);
@@ -12265,6 +12271,37 @@
         if (canAttack(p)) attackOpt(c, p);
         opt(c, '←', 'Back to people', '', peopleSheet);
       });
+    }
+    function giveSheet(p) {   // 💰 give someone any amount
+      sheet('💰 Give ' + p.first + ' money', function (c) {
+        note(c, 'You have ' + cr(L.money) + '. Give ' + who(p) + ' as much as you want, as many times as you want.' + (p.rel === 'kid' ? ' 🧬 If you play as ' + p.first + ' after you die, they keep every credit you gave them!' : ''));
+        sec(c, '💸 Pick an amount');
+        [100, 1000, 10000, 100000, 1e6, 1e9, 1e12, 1e15, 1e18].forEach(function (a) { if (a <= L.money) opt(c, '💸', cr(a), '', function () { give(p, a); }); });
+        if (L.money >= 2) opt(c, '🌗', 'Half of your money', cr(Math.floor(L.money / 2)), function () { give(p, Math.floor(L.money / 2)); });
+        opt(c, '💰', 'ALL of your money', cr(L.money), function () { confirmBox('💰', 'Give ' + who(p) + ' ALL ' + cr(L.money) + '? You’ll have 0 cr left.', 'Yes, give it all', function () { give(p, L.money); }); });
+        sec(c, '⌨️ Or type any amount');
+        var f = mk('form', 'lf-codeform'), inp = mk('input'), b = mk('button', 'btn', 'Give');
+        inp.id = 'lf-giveAmt'; inp.type = 'text'; inp.inputMode = 'numeric'; inp.maxLength = 22; inp.placeholder = 'Like 5000000';
+        inp.setAttribute('autocomplete', 'off'); inp.setAttribute('aria-label', 'How many credits to give');
+        b.type = 'submit';
+        f.appendChild(inp); f.appendChild(b);
+        var hint = mk('p', 'lf-give-hint', ''); hint.setAttribute('role', 'status');
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var a = Math.floor(Number(String(inp.value).replace(/[^0-9.]/g, '')));
+          if (!(a >= 1)) { hint.textContent = 'Type a number of credits, like 5000000.'; return; }
+          if (a > L.money) { hint.textContent = 'You only have ' + cr(L.money) + '.'; return; }
+          give(p, a);
+        });
+        c.appendChild(f); c.appendChild(hint);
+        opt(c, '←', 'Back to ' + p.first, '', function () { personSheet(p); });
+      });
+    }
+    function give(p, a) {
+      a = Math.floor(Math.min(a, L.money)); if (!(a >= 1)) return;
+      p.cash = (p.cash || 0) + a;   // 🧬 your kid keeps it if you play as them later
+      var bump = a >= 1e9 ? 20 : a >= 1e6 ? 15 : a >= 10000 ? 10 : a >= 1000 ? 6 : 3;
+      doThing('💰', [{ money: -a, happy: 3, bond: { p: bump } }, '💰 You gave ' + who(p) + ' ' + cr(a) + '!' + (a >= 1e9 ? ' They fainted, woke up, and hugged you for ten minutes.' : a >= 1e6 ? ' They screamed so loud the neighbors called the hover-cops.' : ' They were really happy!')], { p: p });
     }
     function makeFriend() {
       if (chance(0.2)) return [{ happy: -1 }, '🤝 You tried to make a new friend, but it didn’t click this time.'];
@@ -13294,13 +13331,15 @@
       var old = L, k = null;
       old.people.forEach(function (p) { if (p.id === kidId) k = p; });
       if (!k || !k.alive) return;
-      var worth = Math.max(0, netWorth()), mate = old.people.filter(function (p) { return p.alive && (p.rel === 'spouse' || p.rel === 'partner'); })[0];
+      var bizWorth = (old.biz || []).reduce(function (t, bz) { return t + bizValue(bz); }, 0);   // 🏢 the businesses themselves go to your kid
+      var worth = Math.max(0, netWorth() - bizWorth), mate = old.people.filter(function (p) { return p.alive && (p.rel === 'spouse' || p.rel === 'partner'); })[0];
       L = blank(k.first, k.last || old.last, old.district);
       L.mode = old.mode || 'normal';   // your kid keeps your difficulty
       if (L.mode === 'hard') L.chromeLimit = Math.max(20, L.chromeLimit - 10);
       if (L.mode === 'easy' && hasAch('smasher')) L.smasherBody = true;
-      L.gen = (old.gen || 1) + 1; L.age = k.age; L.born = old.born + old.age - k.age; L.money = worth;
-      L.tier = Math.min(2, old.tier + (worth >= 500000 ? 1 : 0));
+      L.gen = (old.gen || 1) + 1; L.age = k.age; L.born = old.born + old.age - k.age; L.money = worth + (k.cash || 0);   // 💰 plus everything your parent gave you
+      L.tier = Math.min(2, old.tier + (worth + bizWorth >= 500000 ? 1 : 0));
+      L.biz = (old.biz || []).map(function (bz) { return Object.assign({}, bz); }); L.bizN = old.bizN || 0;
       L.st.smarts = clamp((old.st.smarts + R(10, 90)) / 2); L.st.style = clamp((old.st.style + R(10, 90)) / 2);
       var me = addPerson('parent', old.age, old.first, old.last); me.alive = false; me.bond = k.bond;
       if (mate) { var pp = addPerson('parent', mate.age, mate.first, mate.last); pp.bond = R(60, 90); pp.job = mate.job; }
@@ -13311,6 +13350,8 @@
       push({ a: L.age, h: 1 });
       log('🧬 You are ' + L.first + ' ' + L.last + ', the child of ' + old.first + ' ' + old.last + '. Generation ' + L.gen + ' begins!');
       if (worth > 0) log('💰 You inherited ' + cr(worth) + '.');
+      if (k.cash > 0) log('💸 You also kept the ' + cr(k.cash) + ' your parent gave you while they were alive.');
+      if (L.biz.length) log('🏢 You inherited the family business' + (L.biz.length > 1 ? 'es (' + L.biz.length + ')' : '') + ': ' + listAnd(L.biz.map(function (bz) { return bz.name; })) + '! Find ' + (L.biz.length > 1 ? 'them' : 'it') + ' in 💼 Job. (Your ⭐ fame bonus starts over, so get famous to make even more.)');
       log(tolLine());
       save(); view('life'); render();
     }
