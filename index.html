@@ -12300,8 +12300,13 @@
     function give(p, a) {
       a = Math.floor(Math.min(a, L.money)); if (!(a >= 1)) return;
       p.cash = (p.cash || 0) + a;   // 🧬 your kid keeps it if you play as them later
-      var bump = a >= 1e9 ? 20 : a >= 1e6 ? 15 : a >= 10000 ? 10 : a >= 1000 ? 6 : 3;
-      doThing('💰', [{ money: -a, happy: 3, bond: { p: bump } }, '💰 You gave ' + who(p) + ' ' + cr(a) + '!' + (a >= 1e9 ? ' They fainted, woke up, and hugged you for ten minutes.' : a >= 1e6 ? ' They screamed so loud the neighbors called the hover-cops.' : ' They were really happy!')], { p: p });
+      var bump = a >= 1e12 ? 40 : a >= 1e9 ? 20 : a >= 1e6 ? 15 : a >= 10000 ? 10 : a >= 1000 ? 6 : 3;
+      var wow = a >= 1e18 ? ' They hugged you for a WHOLE YEAR, renamed Neon Harbor after you, and built a statue of you so tall it pokes out of the clouds. The whole city is talking about you!'   // 🤗 bigger gifts, bigger hugs
+        : a >= 1e15 ? ' They hugged you for a whole week, then built a giant golden statue of you downtown!'
+        : a >= 1e12 ? ' They hugged you for a whole day and named their robot dog after you!'
+        : a >= 1e9 ? ' They fainted, woke up, and hugged you for ten minutes.'
+        : a >= 1e6 ? ' They screamed so loud the neighbors called the hover-cops.' : ' They were really happy!';
+      doThing('💰', [{ money: -a, happy: a >= 1e12 ? 10 : 3, fame: a >= 1e18 ? 10 : a >= 1e15 ? 5 : 0, bond: { p: bump } }, '💰 You gave ' + who(p) + ' ' + cr(a) + '!' + wow], { p: p });
     }
     function makeFriend() {
       if (chance(0.2)) return [{ happy: -1 }, '🤝 You tried to make a new friend, but it didn’t click this time.'];
