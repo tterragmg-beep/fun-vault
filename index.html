@@ -11476,17 +11476,51 @@
         oneYear(c, 'bad-' + id, '📣', 'Run an ad campaign', cr(adCost(BT)) + (L.money < adCost(BT) ? ' · not enough credits' : ' · +35 hype, and you get a little more famous'), function () { return bizAds(bz); }, L.money < adCost(BT));
         oneYear(c, 'bnew-' + id, '🧪', 'Launch a new product', cr(launchCost(BT)) + (L.money < launchCost(BT) ? ' · not enough credits' : ' · a hit sells a LOT more, a flop kills the hype') + (premium ? ' · ' + odds(launchChance(bz), 'chance of a hit') : ''), function () { return bizLaunch(bz); }, L.money < launchCost(BT));
         oneYear(c, 'bexp-' + id, '🏬', BT.grow, cr(expandCost(bz)) + (L.money < expandCost(bz) ? ' · not enough credits' : ' · +50% sales right away'), function () { return bizExpand(bz); }, L.money < expandCost(bz));
+        var np = (bz.products || []).length;
+        opt(c, '🛍️', 'Buy your own products', np ? np + (np === 1 ? ' product' : ' products') + ' · you get the owner price' : 'Launch a new product first', function () { productSheet(id); }, !np);
         opt(c, '💸', 'Sell ' + bz.name, 'Get ' + cr(bizValue(bz)) + ' for it', function () { confirmBox('💸', 'Sell ' + bz.name + ' for ' + cr(bizValue(bz)) + '?', 'Yes, sell it', function () { var v = bizValue(bz); sellBiz(bz); doThing('💸', [{ money: v, happy: 4 }, '💸 You sold ' + bz.name + ' for ' + cr(v) + '!']); }); });
         opt(c, '←', 'Back to school & work', '', jobSheet);
       });
+    }
+    var PROD = {   // 🛍️ what your own products do for you
+      noodle: { eat: 1, sub: 'eat a bowl: +happy (buy as many as you want)', fx: function () { return { happy: [4, 8], health: [0, 2] }; }, say: function (n, b) { return '🍜 You slurped a big bowl of ' + n + ' at ' + b + '. Owner’s privilege: extra noodles!'; } },
+      sneaker: { sub: '+style', fx: function () { return { style: [5, 10], happy: 3 }; }, say: function (n) { return '👟 You got a pair of ' + n + '. Everyone keeps asking where you got them!'; } },
+      toys: { sub: '+happy', fx: function () { return { happy: [6, 12] }; }, say: function (n) { return '🧸 You got ' + n + ' and played with it all weekend.'; } },
+      games: { sub: '+happy, +smarts', fx: function () { return { happy: [6, 12], smarts: 1 }; }, say: function (n) { return '🎮 You got ' + n + ' and beat the whole thing in one night.'; } },
+      cars: { sub: '+style, +happy', fx: function () { return { style: [6, 12], happy: 8 }; }, say: function (n) { return '🚗 You got ' + n + ' and took it for a spin over the city!'; } },
+      chrome: { sub: '+style, +happy', fx: function () { return { style: [5, 10], happy: 6 }; }, say: function (n) { return '🦾 You tried out ' + n + '. Everyone at the Glow Market wanted a turn!'; } }
+    };
+    function prodName(t) { t = t.replace(/^(a|an) /, ''); return t.charAt(0).toUpperCase() + t.slice(1); }
+    function prodPrice(bz) { return BIZT[bz.type].per * 2; }
+    function ownsProd(bz, pr) { return (L.made || []).some(function (m) { return m.t === pr.t && m.type === bz.type; }); }
+    function productSheet(id) {
+      var bz = bizOf(id); if (!bz) { jobSheet(); return; }
+      var BT = BIZT[bz.type], X = PROD[bz.type], price = prodPrice(bz);
+      sheet('🛍️ ' + bz.name, function (c) {
+        note(c, '🛍️ Everything ' + bz.name + ' has launched. You get the owner price: ' + cr(price) + ' each!' + (X.eat ? ' Noodles are for eating, so buy them again and again.' : ' The things you buy are yours to keep (see 🏠 Stuff).'));
+        (bz.products || []).forEach(function (pr) {
+          var owned = !X.eat && ownsProd(bz, pr);
+          opt(c, BT.e, prodName(pr.t) + (pr.hit ? ' ⭐' : ' (flop!)'), owned ? 'You own this ✓' : cr(price) + (L.money < price ? ' · not enough credits' : ' · ' + X.sub), function () { buyProduct(bz, pr); }, owned || L.money < price);
+        });
+        opt(c, '←', 'Back to ' + bz.name, '', function () { bizSheet(bz.id); });
+      });
+    }
+    function buyProduct(bz, pr) {
+      var X = PROD[bz.type], price = prodPrice(bz), n = prodName(pr.t);
+      if (L.money < price || (!X.eat && ownsProd(bz, pr))) return;
+      if (!X.eat) (L.made || (L.made = [])).push({ t: pr.t, type: bz.type, biz: bz.name });
+      var fx = X.fx(); fx.money = -price;
+      doThing(BIZT[bz.type].e, [fx, X.say(n, bz.name) + (pr.hit ? '' : ' (It flopped in stores, so you own one of the only ones ever sold!)')]);
     }
     function bizAds(bz) {
       var BT = BIZT[bz.type]; bz.hype = Math.min(100, bz.hype + 35);
       return [{ money: -adCost(BT), fame: 1 }, '📣 ' + pick(['You put giant holo-billboards over the sky-highway', 'A sky-blimp flew over the city with your logo on it', 'You made a jingle so catchy that the whole city is humming it', 'You hired a famous holo-star to show off your stuff']) + '. Hype for ' + bz.name + ' is way up!'];
     }
     function bizLaunch(bz) {
-      var BT = BIZT[bz.type], thing = pick(BT.ideas);
+      var BT = BIZT[bz.type], thing = pick(BT.ideas), list = bz.products || (bz.products = []), ex = list.filter(function (x) { return x.t === thing; })[0];
+      if (!ex) { ex = { t: thing, hit: 0, y: L.age }; list.push(ex); }   // 🛍️ you can buy it now
       if (chance(launchChance(bz))) {
+        ex.hit = 1;
         bz.hype = Math.min(100, bz.hype + 60); bz.sales = Math.round(bz.sales * 1.2);
         return [{ money: -launchCost(BT), fame: 3, happy: 8 }, '🧪 ' + bz.name + ' launched ' + thing + ', and it’s a HIT! Sales +20%.'];
       }
@@ -11828,6 +11862,7 @@
           L.homes.forEach(function (id) { var H = HOME[id]; opt(c, H.e, H.t, 'Sell for ' + cr(H.cost * 0.9), function () { sell('home', id); }); });
           L.rides.forEach(function (id) { var X = RIDE[id]; opt(c, X.e, X.t, 'Sell for ' + cr(X.cost * 0.6), function () { sell('ride', id); }); });
         }
+        if (L.made && L.made.length) note(c, '🏭 Made by your companies: ' + listAnd(L.made.map(function (m) { return BIZT[m.type].e + ' ' + prodName(m.t); })));
         if (L.implants.length) note(c, '🦾 Implants: ' + L.implants.map(function (id) { return IMP[id] ? IMP[id].t : id; }).join(', '));
         if (L.jail) { note(c, '🔒 You can’t buy anything while you’re in the Lockup.'); return; }
         if (L.age < 8) { note(c, 'You’re too young to buy things. Your parents buy you everything!'); return; }
