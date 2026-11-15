@@ -1016,7 +1016,8 @@
   .fp-team b { font-family: var(--font-mono); font-size: 1.5rem; letter-spacing: 0; margin: 0 4px; font-variant-numeric: tabular-nums; }
   .fp-team.us b { color: #6ab0ff; }
   .fp-team.them b { color: #ff7a7a; }
-  .fp-clock { font-family: var(--font-mono); font-size: 0.95rem; color: #ffd34d; white-space: nowrap; }
+  .fp-clock { font-family: var(--font-mono); font-size: 0.95rem; color: #ffd34d; white-space: nowrap; transition: color 0.2s, text-shadow 0.2s; }
+  .fp-clock.slow { color: #9cc2ff; text-shadow: 0 0 8px rgba(120, 170, 255, 0.75); }
   .fp-line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 0.9rem; }
   .fp-pts b { font-family: var(--font-mono); color: var(--accent); font-variant-numeric: tabular-nums; }
   .fp-combo { font-family: var(--font-display); font-weight: 700; color: var(--op); }
@@ -1054,7 +1055,6 @@
   .fp-ach b { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; }
   .fp-ach small { color: var(--muted); font-size: 0.72rem; line-height: 1.25; }
 
-  .lf-give-hint { min-height: 1.3em; margin: 6px 2px 0; color: var(--bad); font-size: 0.85rem; }
 </style>
 </head>
 <body>
@@ -1209,6 +1209,9 @@
         <p>Sneak fouls on the other basketball team while the ref isn’t looking. Earn sneak points to bribe the ref and buy sneaky tricks. Get caught 3 times and you foul out!</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
+
+
+
 
 
 
@@ -2063,6 +2066,7 @@
       <ul class="fp-how">
         <li>🏀 Drag on the court to move your player: the 😈 with the ⭐.</li>
         <li>🤫 Get close to someone on the red team, then tap a foul button. Riskier fouls are worth more points.</li>
+        <li>🐢 When you get close to someone, time goes into slow-mo for everyone but you: the players, the ref and even the clock. Perfect for sneaky fouls!</li>
         <li>👀 The yellow cone is where the ref is looking. If he sees a foul, it’s a strike on you. 3 strikes and you foul out!</li>
         <li>❗ Watch for the ❗ over the ref: he’s about to look somewhere else, maybe right at you.</li>
         <li>😠 Don’t foul the same player too much. When they get a ❗, one more foul and they’ll tell the ref.</li>
@@ -14281,6 +14285,7 @@
   (function () {
     var KEY = 'funvault-foul-v1', AKEY = 'funvault-foul-ach-v1';
     var W = 400, H = 340, QUARTER = 60, QUARTERS = 4, MAXSTRIKES = 3, NOTICE = 3;
+    var SLOW_NEAR = 48, SLOW_FAR = 85, SLOWEST = 0.4;   // 🐢 slow-mo starts 85px from someone and is full at 48px: the world runs at 40% speed (you don't!)
     var HOOP = { x: 182, y: 52 }, SNACK = { x: 392, y: 16 }, COURT = { x0: 12, x1: 352, y0: 12, y1: 332 };
     var FOULS = [   // 🤫 sneaky (cartoon) fouls: riskier ones are worth more
       { id: 'tug', e: '👕', t: 'Jersey tug', pts: 10, sus: 1, range: 46 },
@@ -14302,6 +14307,7 @@
       { id: 'first', e: '🤫', t: 'Sneaky Start', d: 'Pull off your first sneaky foul.' },
       { id: 'carrier', e: '🏀', t: 'Pickpocket', d: 'Foul the player with the ball and make them drop it.' },
       { id: 'combo', e: '🔥', t: 'Combo Master', d: 'Do 8 sneaky fouls in a row without getting caught.' },
+      { id: 'slowmo', e: '🐢', t: 'Slow-Mo Hero', d: 'Do 3 sneaky fouls in a row without leaving slow-mo.' },
       { id: 'laces', e: '🪢', t: 'Shoelace Ninja', d: 'Tie 3 pairs of shoelaces in one game.' },
       { id: 'banana', e: '🍌', t: 'Slippery', d: 'Trip someone with a banana peel.' },
       { id: 'bribe', e: '💸', t: 'Money Talks', d: 'Bribe the ref.' },
@@ -14313,6 +14319,7 @@
     var THEM = ['😎', '😤', '🤨', '😏', '🙂'], US = ['🙂', '😄', '😃', '🤗'];
 
     var G = null, rec = load(KEY) || { games: 0, wins: 0, best: 0 }, achs = load(AKEY) || {};
+    var fresh = [], lastSay = { t: '', k: '' };   // 🏆 achievements earned during this action ride along with its messages
     function load(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
     function save() { try { localStorage.setItem(KEY, JSON.stringify(rec)); localStorage.setItem(AKEY, JSON.stringify(achs)); } catch (e) { /* private mode */ } }
     function rnd(a, b) { return a + Math.random() * (b - a); }
@@ -14320,12 +14327,13 @@
     function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
     function angDiff(a, b) { var d = a - b; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; }
     function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
-    function award(id) { if (achs[id]) return; achs[id] = 1; save(); var A = ACH.filter(function (a) { return a.id === id; })[0]; if (A) say('🏆 Achievement: ' + A.e + ' ' + A.t + '!', 'good'); drawAchs(); }
+    function award(id) { if (achs[id]) return; achs[id] = 1; save(); var A = ACH.filter(function (a) { return a.id === id; })[0]; if (A) { fresh.push(A.e + ' ' + A.t); say(lastSay.t, lastSay.k); } drawAchs(); }
 
     // ---- model ----
     function spot() { return { x: rnd(40, 330), y: rnd(70, 240) }; }
     function newGame() {
       G = { q: 1, time: QUARTER, us: 0, them: 0, pts: 0, earned: 0, strikes: 0, caught: 0, combo: 0, bestCombo: 0, laces: 0, bribes: 0, bananas: 0, shoes: 0, glasses: 0, hands: 0,
+        slow: 0, slowFouls: 0, slowSeen: 0, trail: [], tt: 0,
         you: { x: 180, y: 290, tx: 180, ty: 290 }, opp: [], mates: [], pops: [], tie: null, over: false, phase: 'play',
         ball: { st: 'held', c: 0, hold: rnd(1.2, 2.4), shot: rnd(6, 9) },
         ref: { x: 378, y: 200, a: Math.PI, mode: 'ball', t: rnd(2.5, 4), sx: 180, sy: 200 } };
@@ -14353,11 +14361,22 @@
       return best;
     }
     function canFoul(f) { return G && G.phase === 'play' && !G.tie && !(f.item && G.bananas < 1) && !!targetFor(f); }
+    function slowMo() {   // 🐢 0 = normal speed, 1 = full slow-mo (you're right next to someone on the red team)
+      var d = 1e9; G.opp.forEach(function (o) { d = Math.min(d, dist(o, G.you)); });
+      var k = clamp((SLOW_FAR - d) / (SLOW_FAR - SLOW_NEAR), 0, 1);
+      return k * k * (3 - 2 * k);   // eases in and out smoothly
+    }
 
-    function say(t, kind) { var m = $('msg'); if (!m) return; m.textContent = t; m.className = 'fp-msg' + (kind ? ' ' + kind : ''); }
+    function say(t, kind) {
+      lastSay = { t: t, k: kind || '' };
+      var m = $('msg'); if (!m) return;
+      m.textContent = t + (fresh.length ? (t ? ' ' : '') + '🏆 Achievement: ' + fresh.join(' and ') + '!' : '');
+      m.className = 'fp-msg' + (kind ? ' ' + kind : fresh.length ? ' good' : '');
+    }
     function pop(x, y, t, c) { G.pops.push({ x: x, y: y, t: t, c: c || '#fff', life: 1.1 }); }
 
     function foul(id) {   // 🤫 try a foul
+      fresh = [];
       var f = FOUL[id]; if (!canFoul(f)) return false;
       var o = targetFor(f);
       if (f.hold) { G.tie = { o: o, f: f, t: G.hands ? 0.6 : f.hold, full: G.hands ? 0.6 : f.hold }; say('🪢 Tying their shoelaces… stay close and hope the ref doesn’t look!'); return true; }
@@ -14385,14 +14404,15 @@
       if (f.id === 'laces') { G.laces += 1; o.trip = 0.7; if (G.laces >= 3) award('laces'); }
       else if (f.stun) o.stun = Math.max(o.stun, f.stun);
       if (f.id === 'banana') award('banana');
-      var msg = f.e + ' Sneaky ' + f.t.toLowerCase() + '! +' + pts + (mult > 1 ? ' (combo ×' + mult.toFixed(2).replace(/0$/, '') + ')' : '');
+      if (slowMo() > 0.5) { G.slowFouls += 1; if (G.slowFouls >= 3) award('slowmo'); }   // 🐢 fouls in one slow-mo
+      var msg = f.e + ' ' + (/^Sneaky /.test(f.t) ? f.t : 'Sneaky ' + f.t.toLowerCase()) + '! +' + pts + (mult > 1 ? ' (combo ×' + mult.toFixed(2).replace(/0$/, '') + ')' : '');
       if (carrier && (f.stun || f.id === 'banana')) { turnover(o); msg += ' They dropped the ball!'; }
       else if (carrier && f.id !== 'laces') msg += ' (double points on the ball carrier!)';
       say(msg + note, 'good');
       return true;
     }
     function caught(why) {
-      G.strikes += 1; G.caught += 1; G.combo = 0; G.tie = null;
+      G.strikes += 1; G.caught += 1; G.combo = 0; G.slowFouls = 0; G.tie = null;
       var ft = Math.random() < 0.7 ? 2 : 1; G.them += ft;
       if (G.ref.mode !== 'alert') { G.ref.mode = 'alert'; G.ref.t = 1.5; }
       pop(G.you.x, G.you.y - 30, 'TWEET!', '#ff6b6b');
@@ -14404,6 +14424,7 @@
       award('carrier');
     }
     function trick(id) {
+      fresh = [];
       if (!G || G.phase !== 'play') return false;
       if (id === 'bribe') {
         var c = bribeCost(); if (G.pts < c) return false;
@@ -14429,8 +14450,13 @@
     }
 
     // ---- simulation ----
-    function step(dt) {
+    function step(rdt) {   // rdt = real seconds. 🐢 Close to the red team, the world (and the clock) slows down, but you don't!
+      fresh = [];
       if (!G || G.phase !== 'play') return;
+      G.slow = slowMo();
+      var dt = rdt * (1 - (1 - SLOWEST) * G.slow);   // world time
+      if (G.slow < 0.2) G.slowFouls = 0;
+      else if (G.slow > 0.6 && !G.slowSeen) { G.slowSeen = 1; say('🐢 Slow-mo! When you’re close to someone, time slows down for everyone but you.'); }
       G.time -= dt;
       var R = G.ref;
       // the ref walks along the sideline, following the ball
@@ -14452,18 +14478,19 @@
       else if (R.mode === 'scan') ta = Math.atan2(R.sy - R.y, R.sx - R.x);
       else ta = Math.atan2(bp.y - R.y, bp.x - R.x);
       var s = turnSpd() * dt; R.a += clamp(angDiff(ta, R.a), -s, s);
-      // you
+      // you: always full speed, even in slow-mo
       var Y = G.you;
       if (!G.tie) {
-        var sp = 150 * (G.shoes ? 1.35 : 1) * dt, dx = Y.tx - Y.x, dy = Y.ty - Y.y, d = Math.hypot(dx, dy);
+        var sp = 150 * (G.shoes ? 1.35 : 1) * rdt, dx = Y.tx - Y.x, dy = Y.ty - Y.y, d = Math.hypot(dx, dy);
         if (d > 1) { Y.x += dx / d * Math.min(sp, d); Y.y += dy / d * Math.min(sp, d); }
         Y.x = clamp(Y.x, COURT.x0 + 14, COURT.x1 - 14); Y.y = clamp(Y.y, COURT.y0 + 40, COURT.y1 - 14);
       } else {   // 🪢 tying shoelaces
         var T = G.tie;
         if (dist(T.o, Y) > T.f.range + 12) { G.tie = null; say('🤷 They walked away before you finished tying their shoelaces.'); }
         else if (inCone((T.o.x + Y.x) / 2, (T.o.y + Y.y) / 2)) caught('🗣️ TWEET! The ref caught you tying shoelaces!');
-        else { T.t -= dt; if (T.t <= 0) { G.tie = null; land(T.f, T.o); } }
+        else { T.t -= rdt; if (T.t <= 0) { G.tie = null; land(T.f, T.o); } }
       }
+      G.tt += rdt; if (G.tt >= 0.04) { G.tt = 0; G.trail.push({ x: Y.x, y: Y.y }); if (G.trail.length > 6) G.trail.shift(); }   // 👻 your slow-mo afterimages
       // the other team
       G.opp.forEach(function (o) {
         o.sus = Math.max(0, o.sus - 0.35 * dt);
@@ -14518,7 +14545,7 @@
       G.phase = 'shop'; showView('shop'); drawShop();
     }
     function nextQuarter() {
-      G.q += 1; G.time = QUARTER; G.phase = 'play'; G.combo = 0;
+      G.q += 1; G.time = QUARTER; G.phase = 'play'; G.combo = 0; G.slowFouls = 0;
       G.ref.mode = 'ball'; G.ref.t = rnd(2, 4);
       G.opp.forEach(function (o) { o.sus = 0; o.stun = 0; o.trip = 0; });
       G.ball = { st: 'held', c: Math.floor(Math.random() * 5), hold: rnd(1.2, 2.4), shot: rnd(6, 9) };
@@ -14532,14 +14559,14 @@
       rec.best = Math.max(rec.best, G.earned); save();
       $('overE').textContent = how === 'out' ? '🟥' : won ? '🏆' : G.us === G.them ? '🤝' : '😩';
       $('overT').textContent = how === 'out' ? 'You fouled out!' : won ? 'You won ' + G.us + '–' + G.them + '!' : G.us === G.them ? 'It’s a tie, ' + G.us + '–' + G.them + '!' : 'You lost ' + G.us + '–' + G.them + '.';
-      $('overS').textContent = (how === 'out' ? 'The ref caught you 3 times in quarter ' + G.q + '. ' : '') + 'You earned ' + fmt(G.earned) + ' sneak points with a best combo of ×' + G.bestCombo + '. Best ever: ' + fmt(rec.best) + '.';
+      $('overS').textContent = (how === 'out' ? 'The ref caught you 3 times in quarter ' + G.q + '. ' : '') + 'You earned ' + fmt(G.earned) + ' sneak points with a best combo of ×' + G.bestCombo + '. Best ever: ' + fmt(rec.best) + '.' + (fresh.length ? ' 🏆 New: ' + fresh.join(', ') + '!' : '');
       showView('over'); drawStats();
     }
 
     // ---- drawing ----
     var cv, ctx, dpr = 1, raf = 0, last = 0, active = false, ready = false, keys = {}, uiT = 0;
     function $(id) { return document.getElementById('fp-' + id); }
-    function sizeCanvas() { dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    function sizeCanvas() { dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.lineJoin = 'round'; }   // round joins: no spiky outlines on letters like W and M
     function emoji(t, x, y, size) { ctx.font = size + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(t, x, y); }
     function drawCourt() {
       ctx.fillStyle = '#c98a4b'; ctx.fillRect(0, 0, W, H);
@@ -14581,7 +14608,9 @@
     }
     function draw() {
       if (!G) return;
-      drawCourt(); drawCone();
+      drawCourt();
+      if (G.phase === 'play' && G.slow > 0.01) drawSlowTint(G.slow);
+      drawCone();
       var tgt = null; FOULS.some(function (f) { if (!f.item || G.bananas) { tgt = targetFor(f); return !!tgt; } return false; });
       G.mates.forEach(function (m) { person(m.x, m.y, '#3b82f6', m.face); });
       G.opp.forEach(function (o) {
@@ -14590,12 +14619,30 @@
         var mark = o.stun > 0 ? '💫' : o.sus >= 2.2 ? '❗' : o.sus >= 1.3 ? '❓' : '';
         if (mark) emoji(mark, o.x, o.y - 24, 14);
       });
-      var Y = G.you;
-      person(Y.x, Y.y, '#3b82f6', '😈', '#ffd34d'); emoji('⭐', Y.x + 12, Y.y - 12, 11);
-      if (G.tie) { ctx.strokeStyle = '#ffd34d'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(Y.x, Y.y, 21, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * (1 - G.tie.t / G.tie.full)); ctx.stroke(); }
       if (G.ball.st !== 'reset') { var b = ballPos(); emoji('🏀', b.x, b.y, 14); }
       drawRef();
+      var Y = G.you, k = G.phase === 'play' ? G.slow : 0;
+      if (k > 0.05) G.trail.forEach(function (p, i) {   // 👻 afterimages: you’re zooming while everyone else is slooow
+        ctx.globalAlpha = k * 0.45 * (i + 1) / G.trail.length; ctx.fillStyle = '#7fb2ff';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 15, 0, 2 * Math.PI); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      person(Y.x, Y.y, '#3b82f6', '😈', '#ffd34d'); emoji('⭐', Y.x + 12, Y.y - 12, 11);
+      if (G.tie) { ctx.strokeStyle = '#ffd34d'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(Y.x, Y.y, 21, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * (1 - G.tie.t / G.tie.full)); ctx.stroke(); }
       G.pops.forEach(function (p) { ctx.globalAlpha = Math.max(0, Math.min(1, p.life)); ctx.fillStyle = p.c; ctx.font = '800 15px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 3; ctx.strokeText(p.t, p.x, p.y); ctx.fillText(p.t, p.x, p.y); ctx.globalAlpha = 1; });
+      if (k > 0.01) drawSlowBars(k);
+    }
+    function drawSlowTint(k) {   // 🐢 the floor turns a cool slow-mo blue
+      ctx.fillStyle = 'rgba(40,70,190,' + (0.3 * k).toFixed(3) + ')'; ctx.fillRect(0, 0, W, H);
+    }
+    function drawSlowBars(k) {   // 🎬 movie-style bars and a SLOW-MO sign
+      var bh = 10 * k;
+      ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillRect(0, 0, W, bh); ctx.fillRect(0, H - bh, W, bh);
+      ctx.globalAlpha = Math.min(1, k * 1.4);
+      ctx.font = '800 13px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.strokeStyle = 'rgba(10,20,60,0.85)'; ctx.lineWidth = 4; ctx.strokeText('🐢 SLOW-MO', 18, 28);
+      ctx.fillStyle = '#cfe0ff'; ctx.fillText('🐢 SLOW-MO', 18, 28);
+      ctx.globalAlpha = 1;
     }
 
     // ---- the page around the court ----
@@ -14604,6 +14651,7 @@
       if (!G) return;
       $('us').textContent = G.us; $('them').textContent = G.them;
       var s = Math.max(0, Math.ceil(G.time)); $('clock').textContent = 'Q' + G.q + ' · ' + Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2);
+      $('clock').classList.toggle('slow', G.phase === 'play' && G.slow > 0.5);   // 🐢 the clock glows blue in slow-mo
       $('pts').textContent = fmt(G.pts);
       $('combo').textContent = G.combo > 1 ? '🔥 Combo ×' + G.combo : '';
       $('strikes').textContent = '🟥'.repeat(G.strikes) + '⬜'.repeat(Math.max(0, MAXSTRIKES - G.strikes));
@@ -14690,7 +14738,7 @@
       else showView(G.phase === 'shop' ? 'shop' : 'game');
       raf = requestAnimationFrame(frame);
     }
-    function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; keys = {}; }
+    function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; keys = {}; fresh = []; }
     window.registerHook('foul', enter, leave);
   })();
 
