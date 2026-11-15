@@ -10637,7 +10637,7 @@
       districts: [
         { name: 'a tiny farming village', tier: 0, blurb: 'Sheep, wheat fields, and one very grumpy rooster.' },
         { name: 'the slums of the Royal Capital', tier: 0, blurb: 'Crooked alleys, loot shops, and kids who are really good at running.' },
-        { name: 'a village near a noble’s mansion', tier: 1, blurb: 'Quiet woods, a little school, and maids who come to town to buy groceries.' },
+        { name: 'a village near a noble’s mansion', tier: 1, blurb: 'Quiet woods, a little chapel, and maids who come to town to buy groceries.' },
         { name: 'Watergate City', tier: 1, blurb: 'A city of canals and floodgates, where everybody sings.' },
         { name: 'the Royal Capital', tier: 1, blurb: 'Busy markets, land dragon carriages, and the castle on the hill.' },
         { name: 'the Noble Quarter', tier: 2, blurb: 'Huge mansions, fancy gardens, and servants everywhere.' }
@@ -10672,7 +10672,7 @@
       if (L && L.world === 'rezero') degrees().forEach(function (d) { L.mastered = L.mastered || []; if (TUT[d.major] && L.mastered.indexOf(d.major) < 0) L.mastered.push(d.major); });
     }
     var RZTX = [   // shared game text, said the Re:Zero way
-      [/Back to school & work/g, 'Back to tutors & work'], [/Neon Harbor Lockup/g, 'Royal Dungeon'], [/Lockup Guard-Mech/g, 'Dungeon Guard'], [/the Lockup/g, 'the dungeon'], [/Lockup/g, 'Dungeon'],
+      [/Back to school & work/g, 'Back to tutors & work'], [/No school or jobs in here!/g, 'No lessons or jobs in here!'], [/Neon Harbor Lockup/g, 'Royal Dungeon'], [/Lockup Guard-Mech/g, 'Dungeon Guard'], [/the Lockup/g, 'the dungeon'], [/Lockup/g, 'Dungeon'],
       [/not enough credits/g, 'not enough gold'], [/\bcredits\b/g, 'gold'], [/\bCredits\b/g, 'Gold'], [/credit chip/g, 'coin purse'], [/\bcredit\b/g, 'gold coin'], [/(\d) cr\b/g, '$1 gold'],
       [/The judge-bot/g, 'The judge'], [/the judge-bot/g, 'the judge'], [/A youth officer-bot/g, 'A town guard'], [/warden-bot/g, 'warden'], [/city cops/g, 'city guards'], [/hover-cops/g, 'royal guards'], [/\bcops\b/g, 'guards'], [/robot dog/g, 'land dragon'],
       [/scrubbing robot graffiti/g, 'scrubbing the castle stairs'], [/lemons and robots/g, 'lemons and soap'], [/capsule pod/g, 'little cottage'], [/robot-trees/g, 'trees'],
@@ -10710,7 +10710,7 @@
       { id: 'cold', e: '❄️', t: 'Cold Resistance', w: 4, meh: 1, d: 'Winter can’t touch you. You’re unbeatable at snowball fights.', birth: { health: 4, happy: 2 } },
       { id: 'sleep', e: '😴', t: 'Good Sleep', w: 4, meh: 1, d: 'You fall asleep in two seconds, anywhere, and you feel a little happier every year.', birth: { happy: 6 } },
       { id: 'saint', e: '🗡️', t: 'the Sword Saint', d: 'The best sword skills in the world: +120 fight power and a Sword Saint strike in battles.', birth: { health: 10 }, power: 120, rein: 1 },
-      { id: 'phoenix', e: '🔥', t: 'the Phoenix', d: 'If you die, you come back to life (once), and it can save you in a battle too.', birth: { health: 5 }, rein: 1 }
+      { id: 'phoenix', e: '🔥', t: 'the Phoenix', d: 'If you die, you come back to life. Reinhard’s divine protections can never be lost, so the Phoenix brings you back EVERY time: you can’t die!', birth: { health: 5 }, rein: 1 }
     ];
     var DP = byId(DPS), REIN = ['saint', 'phoenix', 'wind', 'beasts', 'earthsp', 'sorcery', 'song', 'arrow', 'first', 'water', 'spirits', 'strength', 'health', 'night', 'swift', 'clothing', 'sky', 'rain', 'mist', 'cloud', 'lake', 'salt', 'judge'];   // Reinhard has them ALL
     function rollDP() { return pickWeighted(DPS.filter(function (x) { return !x.rein; }), function (x) { return x.w || 2; }).id; }
@@ -10766,10 +10766,11 @@
       save(); render();
       outcome('💜', '“I love you…” ↩️ RETURN BY DEATH! You’re back at age ' + L.age + ', right before the year you died (' + why + '). This time, you know what’s coming!', []);
     }
-    function phoenix(cause) {   // 🔥 the Divine Protection of the Phoenix: come back to life, once
-      L.phoenixUsed = true; L.st.health = Math.max(L.st.health, 60); L.ill = null; L.doom = null;
-      var t = '🔥 You died (' + cause + ')… but then flames swirled all around you, and the Divine Protection of the Phoenix brought you back to life!';
-      log(t); award('rzphoenix'); save(); render();
+    function phoenix(cause) {   // 🔥 the Divine Protection of the Phoenix. Reinhard's can never be lost, so it comes back every time!
+      L.phoenixUsed = true; L.phoenixN = (L.phoenixN || 0) + 1; L.st.health = Math.max(L.st.health, 60); L.ill = null; L.doom = null;
+      var t = L.phoenixN === 1 ? '🔥 You died (' + cause + ')… but then flames swirled all around you, and the Divine Protection of the Phoenix brought you back to life!' + (L.reinhard ? ' Reinhard’s divine protections can never be lost, so the Phoenix will bring you back EVERY time. You can’t die!' : '')
+        : '🔥 You died (' + cause + ')… and the Phoenix brought you back AGAIN! That’s ' + L.phoenixN + ' times now. You just can’t die!';
+      log(t); award('rzphoenix'); if (L.phoenixN >= 3) award('rzimmortal'); save(); render();
       outcome('🔥', t, ['❤️ Back to ' + L.st.health]);
     }
 
@@ -10962,7 +10963,7 @@
         schoolOpt(c, 'tstudy', '📖', 'Study extra hard', 'Get smarter' + (cur.id === 'magic' ? ' (and maybe learn a spell)' : cur.id === 'sword' ? ' and stronger' : ''), rzStudy);
         schoolOpt(c, 'tskip', '😴', 'Skip a lesson', 'More fun, but your tutor won’t be happy', function () { return [{ happy: [4, 7], smarts: -1 }, pick(['😴 You skipped your lesson and went fishing instead. ' + L.tutorName + ' sighed VERY loudly.', '😴 You hid in the hayloft during your lesson. ' + L.tutorName + ' found you anyway.'])]; });
         opt(c, '🚪', 'Stop your lessons', 'You keep your progress, so you can come back anytime', function () { var t = cur.t; L.tutor = null; doThing('🚪', [{}, '🚪 You stopped your ' + t + ' lessons for now. You can pick them back up anytime.']); });
-      } else note(c, 'There are no schools in the kingdom, so people learn from tutors! ' + (L.age < 18 ? 'Your family pays for your lessons until you’re 18.' : 'Tutors charge a fee every year.') + ' Master a subject to unlock new jobs.');
+      } else note(c, 'In the kingdom, people learn from tutors! ' + (L.age < 18 ? 'Your family pays for your lessons until you’re 18.' : 'Tutors charge a fee every year.') + ' Master a subject to unlock new jobs.');
       if (done.length) note(c, '🎓 You mastered: ' + done.map(function (id) { return TUT[id].e + ' ' + TUT[id].t; }).join(', '));
       if (L.club && HOBBY[L.club]) note(c, '🎨 Your hobby: ' + HOBBY[L.club] + ' (it gives you a little boost every year).');
       RZ_TUTORS.forEach(function (T) {
@@ -11132,7 +11133,7 @@
         ['Jump out of the way', function () { return hasDP('arrow') || chance(0.75) ? [{ happy: 2 }, 'You jumped out of the way just in time!' + (hasDP('arrow') ? ' (It missed you by a mile. Divine Protection of Arrow Evasion!)' : '')] : [{ health: -8 }, 'You jumped, but the land dragon’s tail still bonked you. Ouch!']; }],
         ['Try to calm it down', function () { return hasDP('beasts') ? [{ happy: 8, fame: 2, good: 2 }, 'You held out your hand, and the land dragon stopped and licked your face. Everyone cheered! (Divine Protection of Soul Language!)'] : chance(0.35) ? [{ happy: 6, fame: 1, good: 1 }, 'You calmed the land dragon down. The owner gave you a big hug.'] : [{ health: -10, happy: -2 }, 'You tried to calm the land dragon down, and it knocked you into a hay cart.']; }]] },
       { id: 'rzplay', a: [6, 12], w: 2, auto: function () { return [{ happy: 3, style: 1 }, '🎭 You played a tree in the village play about the legendary Sword Saint. You were the best tree.']; } },
-      { id: 'rzclub', a: [7, 12], w: 6, once: 1, e: '🎨', t: 'No school means lots of free time! What’s your favorite hobby?', c: [
+      { id: 'rzclub', a: [7, 12], w: 6, once: 1, e: '🎨', t: 'You have lots of free time between your lessons! What’s your favorite hobby?', c: [
         ['✨ Magic', function () { L.club = 'hacker'; return [{ smarts: 2, happy: 3 }, '✨ You love practicing magic. You made a teacup float (for one whole second).']; }],
         ['🦎 Dragon riding', function () { L.club = 'drone'; return [{ happy: 5 }, '🦎 You love riding land dragons. Your favorite one is named Pebbles.']; }],
         ['🎨 Painting', function () { L.club = 'art'; return [{ style: 3, happy: 2 }, '🎨 You love painting. You painted the castle at sunset.']; }],
@@ -11214,6 +11215,7 @@
       { id: 'rzrbd', e: '↩️', t: 'Return by Death', d: 'Die, then come back with Return by Death.' },
       { id: 'rzloop', e: '🔁', t: 'Stuck in a Loop', d: 'Return by Death 5 times in one life.' },
       { id: 'rzphoenix', e: '🔥', t: 'Rise Again', d: 'Come back to life with the Divine Protection of the Phoenix.' },
+      { id: 'rzimmortal', e: '♾️', t: 'Can’t Stop the Phoenix', d: 'Get brought back to life by the Phoenix 3 times. (Only Reinhard’s divine protections can do that!)' },
       { id: 'rzspirit', e: '🧚', t: 'Spirit Arts', d: 'Make a contract with a spirit.' },
       { id: 'rzcult', e: '😈', t: 'Cult Buster', d: 'Beat a Witch Cult Archbishop.' },
       { id: 'rzwhale', e: '🐋', t: 'Whale Hunter', d: 'Defeat the White Whale.' },
@@ -11230,12 +11232,12 @@
     var RZ_RIBBONS = { tycoon: ['💰', 'Gold Tycoon', 'You ended up with over 10 million gold.'], short: ['🌠', 'Shooting Star', 'Your life was short but bright.'], normal: ['🌱', 'Just Living', 'A normal life in a not-so-normal kingdom.'] };
     function rzHow() {
       return ['Tap ＋ Age to live one year. Things happen every year, and you choose what to do.',
-        '✨ Half of all people are born with a divine protection, but not all of them are useful! You might get 🌬️ Wind Reading (nobody can fool you) or 👁️ First Sight… or 🧂 Salt Reasoning (you can tell salt from sugar by looking. That’s it.). And 1 in 1000 are born with ALL of Reinhard’s divine protections, like 🗡️ the Sword Saint and 🔥 the Phoenix!',
+        '✨ Half of all people are born with a divine protection, but not all of them are useful! You might get 🌬️ Wind Reading (nobody can fool you) or 👁️ First Sight… or 🧂 Salt Reasoning (you can tell salt from sugar by looking. That’s it.). And 1 in 1000 are born with ALL of Reinhard’s divine protections, like 🗡️ the Sword Saint and 🔥 the Phoenix! His divine protections can never be lost, so the Phoenix keeps bringing him back: he can’t die!',
         '🌀 Everyone has ONE magic element: 🔥 Fire, 💧 Water, 🪨 Earth or 🌪️ Air. 🌑 Dark and ☀️ Light are rare, and two elements is super rare. You can only use magic of your own element. Practice magic, or get a magic tutor, to learn stronger spells.',
         '💔 Careful: magic strains your gate (it heals a little every year). If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
         '🧚 Make contracts with spirits in ⚡ Do. Little spirits fight with you in battles, and they don’t use your gate. A super strong great spirit is rare, and it scares all the little spirits away!',
         '💜 0.5% of people are Satella’s crush, so they get ↩️ Return by Death: when you die, you can wake up again at the start of that year. Just don’t try to tell anyone about it…',
-        '📚 There are no schools in the kingdom, so you learn from tutors (in 💼 Job): reading, math, noble manners, magic, swordsmanship, music, healing magic, and business. Master a subject to unlock jobs, from Bakery Helper all the way up to 👑 Ruler of Lugunica (win the Royal Selection!). Master 📊 Business to start your own businesses.',
+        '📚 In the kingdom, you learn from tutors (in 💼 Job): reading, math, noble manners, magic, swordsmanship, music, healing magic, and business. Master a subject to unlock jobs, from Bakery Helper all the way up to 👑 Ruler of Lugunica (win the Royal Selection!). Master 📊 Business to start your own businesses.',
         '🏠 Stuff: pets, ponies, land dragons, and homes.',
         '❤️ People: your family, friends, partner, and kids. Spend time with them so they stay close.',
         '⚡ Do: activities, magic, spirits, mischief, and adventure: spar with knights, hunt mabeasts, fight the Witch Cult, and even hunt the White Whale!',
@@ -11789,7 +11791,7 @@
         if (p.rel === 'kid' && p.age === 18) log('🎓 Your kid ' + p.first + ' turned 18 and moved into their own capsule pod.');
       });
       // school
-      if (a === 5 && isRZ()) log('📚 There are no schools in the kingdom, so kids learn from tutors. Pick one in 💼 Job!');
+      if (a === 5 && isRZ()) log('📚 You’re old enough for a tutor now! Pick one in 💼 Job to learn reading, magic, sword fighting, and more.');
       else if (a === 5) { L.school = { kind: 'primary', grade: clamp(45 + (s.smarts - 50) / 2 + R(-8, 8)) }; log('🎒 You started at ' + NH.schools.primary + '!'); }
       else if (L.school && L.school.kind === 'primary' && a + (L.ahead || 0) >= 12) { L.school.kind = 'high'; log('🏫 You started at ' + NH.schools.high + '!'); }
       else if (L.school && a > 5) {
@@ -11904,7 +11906,7 @@
     }
     function die(cause) {
       closeCard();
-      if (hasDP('phoenix') && !L.phoenixUsed && L.alive) { phoenix(cause); return; }   // 🔥 the Phoenix brings you back, once
+      if (hasDP('phoenix') && (L.reinhard || !L.phoenixUsed) && L.alive) { phoenix(cause); return; }   // 🔥 the Phoenix brings you back (Reinhard's: every time)
       if (L.job) endJob();
       L.alive = false; L.cause = cause; L.pending = [];
       log('🕯️ You passed away at age ' + L.age + '. Cause: ' + cause + '.');
@@ -12193,7 +12195,7 @@
           schoolOpt(c, 'study', '📖', 'Study harder', 'Better grades, more smarts', doStudy);
           schoolOpt(c, 'teacher', wz('🤖', '🧑‍🏫'), wz('Ask the teacher-bot for help', 'Ask your teacher for help'), 'A little boost', doTeacher);
           schoolOpt(c, 'skip', '😎', 'Skip class', 'More fun, worse grades', function () { return chance(0.3) ? [{ grade: -8, happy: 2, bond: { parents: -5 } }, '😬 You skipped class and the school messaged your parents.'] : [{ grade: -8, happy: 5 }, wz('😎 You skipped class and went to the arcade.', '😎 You skipped class and went to watch the knights train.')]; });
-          opt(c, '🧮', 'Take a skip-a-grade test', 'Get 3 ' + gradeName(gradeNow()) + ' math questions right to skip ahead · no limit, but the math gets harder as you skip' + (L.ahead ? ' (you’ve skipped ' + L.ahead + ' so far)' : ''), skipTest);   // no limits at all
+          if (!isRZ()) opt(c, '🧮', 'Take a skip-a-grade test', 'Get 3 ' + gradeName(gradeNow()) + ' math questions right to skip ahead · no limit, but the math gets harder as you skip' + (L.ahead ? ' (you’ve skipped ' + L.ahead + ' so far)' : ''), skipTest);   // no limits at all
           if (L.school.kind === 'high') opt(c, '🏅', 'Scholarships', schSub(), scholarSheet);
         }
         if (L.uni) {
@@ -12315,6 +12317,7 @@
       ask();
     }
     function skipTest() {   // 🧮 three questions: get all three right to skip a grade
+      if (isRZ()) return;   // no grades to skip in the kingdom
       mathQuiz(3, 0, 'Skip-a-grade test (' + gradeName(gradeNow()) + ' math)', function (right) {
         if (right === 3) {
           L.ahead = (L.ahead || 0) + 1;
@@ -13776,7 +13779,7 @@
         if (h && h.hack) { dmg = Math.round(dmg * 0.5); if (!L.smasherBody && !B.psycho && B.hum > 1) B.hum -= 1; }   // a hack: less damage, but it drains your humanity (never all the way)
         B.hp = Math.max(0, B.hp - dmg); popF(h && h.hack ? '💾 HACKED! −' + dmg + ' · −1 🧠' : (h && h.heavy ? '💥 −' : '−') + dmg, 'bad');
         if (B.hp <= 0 && has('heart2') && !B.revived) { B.revived = true; B.hp = Math.round(B.max * 0.4); popF('🫀 BACKUP HEART!', 'good'); msgF('🫀 You got knocked down, but your backup heart jump-started you! Keep fighting!'); }
-        else if (B.hp <= 0 && hasDP('phoenix') && !B.revived) { B.revived = true; B.hp = Math.round(B.max * 0.6); popF('🔥 PHOENIX!', 'good'); msgF('🔥 You got knocked down, but the Divine Protection of the Phoenix wrapped you in flames and you got right back up!'); }
+        else if (B.hp <= 0 && hasDP('phoenix') && (L.reinhard || !B.revived)) { B.revived = true; B.hp = Math.round(B.max * 0.6); popF('🔥 PHOENIX!', 'good'); msgF('🔥 You got knocked down, but the Divine Protection of the Phoenix wrapped you in flames and you got right back up!'); }
         else if (B.hp <= 0) B.hits.forEach(function (x) { x.done = true; });
       }
       $('enemy').style.transform = '';
