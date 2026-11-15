@@ -12794,7 +12794,7 @@
     function removeAsk(id) {   // ✋ are you sure?
       var X = IMP[id], back = chromeRefund(X), lose = loseText(X);
       sheet('🔧 Remove ' + X.t + '?', function (c) {
-        note(c, X.e + ' ' + X.t + ': ' + X.desc + '. ' + (lose ? 'You’ll lose ' + lose + '. ' : '') + (X.limit ? '⚠️ Your tolerance will go down by ' + X.limit + '. ' : '') + (X.raid ? '⚠️ The only way to get ' + (id === 'capri' ? 'her' : 'it') + ' back is another 🏢 Kumo-Tek raid! ' : '') + (back ? 'The clinic will pay you ' + cr(back) + ' for it.' : X.illegal ? 'The clinic won’t pay for illegal chrome, but they’ll take it out.' : ''));
+        note(c, X.e + ' ' + X.t + (X.desc ? ': ' + X.desc : '') + '. ' + (lose ? 'You’ll lose ' + lose + '. ' : '') + (X.limit ? '⚠️ Your tolerance will go down by ' + X.limit + '. ' : '') + (X.raid ? '⚠️ The only way to get ' + (id === 'capri' ? 'her' : 'it') + ' back is another 🏢 Kumo-Tek raid! ' : '') + (back ? 'The clinic will pay you ' + cr(back) + ' for it.' : X.illegal ? 'The clinic won’t pay for illegal chrome, but they’ll take it out.' : ''));
         opt(c, '🔧', 'Yes, take it out', back ? 'You get ' + cr(back) : 'Free', function () { doThing('🔧', removeChrome(id)); });
         opt(c, '←', 'No, keep it', '', removeSheet);
       });
