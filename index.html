@@ -1002,6 +1002,58 @@
     .rg-spin, .rg-part.burning, .rg-part.burning .rg-flames, .rg-cat { animation: none; }
     .rg-puffs i { animation: none; opacity: .8; }
   }
+  /* ---- Foul Play ---- */
+  .fp { padding-bottom: 60px; }
+  .fp [hidden] { display: none !important; }
+  .fp .panel { padding: 18px 16px; margin-top: 14px; }
+  .fp-intro { margin: 0 0 14px; }
+  .fp-how { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; line-height: 1.4; }
+  .fp-note { color: var(--muted); font-size: 0.82rem; line-height: 1.4; margin: 12px 0 0; }
+  .fp-best { margin: 10px 0 0; text-align: center; }
+  .fp-hud { display: grid; gap: 4px; margin-bottom: 6px; }
+  .fp-board { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 14px; background: #10141c; color: #f3f6fb; border: 1px solid #2a3446; font-family: var(--font-display); font-weight: 700; }
+  .fp-team { font-size: 0.82rem; letter-spacing: 1px; white-space: nowrap; }
+  .fp-team b { font-family: var(--font-mono); font-size: 1.5rem; letter-spacing: 0; margin: 0 4px; font-variant-numeric: tabular-nums; }
+  .fp-team.us b { color: #6ab0ff; }
+  .fp-team.them b { color: #ff7a7a; }
+  .fp-clock { font-family: var(--font-mono); font-size: 0.95rem; color: #ffd34d; white-space: nowrap; }
+  .fp-line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 0.9rem; }
+  .fp-pts b { font-family: var(--font-mono); color: var(--accent); font-variant-numeric: tabular-nums; }
+  .fp-combo { font-family: var(--font-display); font-weight: 700; color: var(--op); }
+  .fp-strikes { margin-left: auto; letter-spacing: 2px; font-size: 0.9rem; }
+  .fp-courtWrap { position: relative; max-width: 440px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.3); border: 2px solid #3a2a1c; }
+  .fp-court { display: block; width: 100%; height: auto; aspect-ratio: 400 / 340; touch-action: none; -webkit-user-select: none; user-select: none; cursor: crosshair; }
+  .fp-msg { min-height: 2.7em; margin: 6px 2px; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
+  .fp-msg.good { color: var(--fg); }
+  .fp-msg.bad { color: var(--bad); font-weight: 700; }
+  .fp-pad { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .fp-fouls, .fp-tricks { display: contents; }
+  .fp-foul, .fp-trick { display: grid; justify-items: center; gap: 1px; padding: 6px 2px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; touch-action: manipulation; min-height: 56px; }
+  .fp-foul > span, .fp-trick > span { font-size: 1.2rem; line-height: 1.1; }
+  .fp-foul b, .fp-trick b { font-family: var(--font-display); font-weight: 600; font-size: 0.76rem; line-height: 1.15; text-align: center; }
+  .fp-foul small, .fp-trick small { font-family: var(--font-mono); font-size: 0.66rem; white-space: nowrap; color: var(--accent); text-align: center; }
+  .fp-foul:not(:disabled) { border-color: color-mix(in srgb, var(--c1) 60%, var(--line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c1) 35%, transparent) inset; }
+  .fp-foul:disabled, .fp-trick:disabled { opacity: 0.45; cursor: default; }
+  .fp-foul:focus-visible, .fp-trick:focus-visible, .fp-item:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .fp-trick { background: color-mix(in srgb, var(--accent) 10%, var(--panel)); }
+  .fp-list { display: grid; gap: 8px; margin: 12px 0; }
+  .fp-item { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); font: inherit; cursor: pointer; }
+  .fp-item:disabled { opacity: 0.5; cursor: default; }
+  .fp-itemE { font-size: 1.5rem; flex: none; }
+  .fp-itemT { flex: 1; min-width: 0; display: grid; }
+  .fp-itemT b { font-family: var(--font-display); font-weight: 600; }
+  .fp-itemT small { color: var(--muted); font-size: 0.8rem; }
+  .fp-itemC { font-family: var(--font-mono); font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .fp-over { text-align: center; }
+  .fp-overE { font-size: 3rem; }
+  .fp-overT { font-family: var(--font-display); margin: 6px 0; }
+  .fp-achs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px; }
+  .fp-ach { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--line); opacity: 0.6; }
+  .fp-ach.got { opacity: 1; border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+  .fp-ach > span { grid-row: span 2; font-size: 1.3rem; }
+  .fp-ach b { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; }
+  .fp-ach small { color: var(--muted); font-size: 0.72rem; line-height: 1.25; }
+
 </style>
 </head>
 <body>
@@ -1149,6 +1201,16 @@
         <p>Run a computer that earns money every second. Overclock the CPU, add graphics cards, and keep it all cool. Manage it wrong and it catches fire!</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
+
+      <button class="card" style="--hue: var(--c7);" data-goto="foul">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5v19M5.3 5.3c3.2 3 3.2 10.4 0 13.4M18.7 5.3c-3.2 3-3.2 10.4 0 13.4"/></svg></span>
+        <h2>Foul Play</h2>
+        <p>Sneak fouls on the other basketball team while the ref isn’t looking. Earn sneak points to bribe the ref and buy sneaky tricks. Get caught 3 times and you foul out!</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+
+
 
 
 
@@ -1988,6 +2050,67 @@
       <div class="rg-alertTxt" id="rg-alertTxt"></div>
       <div class="rg-fireBar" id="rg-fireMeter" hidden><span id="rg-fireBar"></span></div>
       <button class="rg-alertBtn" id="rg-alertBtn" type="button" hidden></button>
+    </div>
+  </section>
+
+  <!-- ================= FOUL PLAY ================= -->
+  <section id="foul" class="screen fp">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Foul Play</span></div>
+
+    <div class="panel fp-intro" id="fp-intro">
+      <div class="bs-kicker">How to play</div>
+      <ul class="fp-how">
+        <li>🏀 Drag on the court to move your player: the 😈 with the ⭐.</li>
+        <li>🤫 Get close to someone on the red team, then tap a foul button. Riskier fouls are worth more points.</li>
+        <li>👀 The yellow cone is where the ref is looking. If he sees a foul, it’s a strike on you. 3 strikes and you foul out!</li>
+        <li>❗ Watch for the ❗ over the ref: he’s about to look somewhere else, maybe right at you.</li>
+        <li>😠 Don’t foul the same player too much. When they get a ❗, one more foul and they’ll tell the ref.</li>
+        <li>🏀 Foul the player with the ball for double points. Make them drop it and your team scores!</li>
+        <li>💸 Spend your sneak points to bribe the ref, distract him with a hot dog, or buy sneaky stuff between quarters.</li>
+      </ul>
+      <p class="fp-note">It’s a silly cartoon game. In real basketball, play fair! 🙂</p>
+      <button class="btn" id="fp-start" type="button">Tip off! 🏀</button>
+      <p class="ch-sub fp-best" id="fp-best"></p>
+    </div>
+
+    <div id="fp-game" hidden>
+      <div class="fp-hud">
+        <div class="fp-board">
+          <span class="fp-team us">YOU <b id="fp-us">0</b></span>
+          <span class="fp-clock" id="fp-clock">Q1 · 1:00</span>
+          <span class="fp-team them"><b id="fp-them">0</b> THEM</span>
+        </div>
+        <div class="fp-line"><span class="fp-pts">🤫 <b id="fp-pts">0</b> sneak points</span><span class="fp-combo" id="fp-combo"></span><span class="fp-strikes" id="fp-strikes" role="img" aria-label="0 of 3 strikes">⬜⬜⬜</span></div>
+      </div>
+      <div class="fp-courtWrap"><canvas id="fp-court" class="fp-court" width="400" height="340" role="img" aria-label="Basketball court. Your player is the devil face with a star. The red team has the ball. The striped ref on the right side watches inside the yellow cone."></canvas></div>
+      <p class="fp-msg" id="fp-msg" role="status" aria-live="polite"></p>
+      <div class="fp-pad">
+        <div class="fp-fouls" id="fp-fouls" aria-label="Fouls"></div>
+        <div class="fp-tricks">
+          <button class="fp-trick" id="fp-bribe" type="button" aria-label="Bribe the ref so he looks away for 6 seconds"><span aria-hidden="true">💸</span><b>Bribe ref</b><small></small></button>
+          <button class="fp-trick" id="fp-snack" type="button" aria-label="Hot dog distraction: the ref looks at the snack stand for 3 seconds, 50 points"><span aria-hidden="true">🌭</span><b>Hot dog</b><small>50 · 3s</small></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel fp-shop" id="fp-shop" hidden>
+      <div class="bs-kicker" id="fp-shopTitle">🛒 End of the quarter</div>
+      <p class="ch-sub fp-shopScore" id="fp-shopScore"></p>
+      <div class="fp-list" id="fp-shopList"></div>
+      <button class="btn" id="fp-next" type="button">Next quarter →</button>
+    </div>
+
+    <div class="panel fp-over" id="fp-over" hidden>
+      <div class="fp-overE" id="fp-overE" aria-hidden="true">🏆</div>
+      <h2 class="fp-overT" id="fp-overT"></h2>
+      <p class="ch-sub" id="fp-overS"></p>
+      <button class="btn" id="fp-again" type="button">Play again 🏀</button>
+    </div>
+
+    <div class="panel fp-more">
+      <div class="bs-kicker">🏆 Achievements <span id="fp-achN"></span></div>
+      <div class="fp-achs" id="fp-achs"></div>
+      <div class="bs-stats" id="fp-stats"></div>
     </div>
   </section>
 
@@ -5728,7 +5851,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig','foul'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -13985,6 +14108,422 @@
     }
     function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; if (race) { race = null; lastRace = null; say('🏁 You left in the middle of a race, so you forfeited it.', 'warn'); } save(); }
     window.registerHook('rig', enter, leave);
+  })();
+  // ============ Foul Play: sneak fouls on the other team while the ref isn't looking ============
+  (function () {
+    var KEY = 'funvault-foul-v1', AKEY = 'funvault-foul-ach-v1';
+    var W = 400, H = 340, QUARTER = 60, QUARTERS = 4, MAXSTRIKES = 3, NOTICE = 3;
+    var HOOP = { x: 182, y: 52 }, SNACK = { x: 392, y: 16 }, COURT = { x0: 12, x1: 352, y0: 12, y1: 332 };
+    var FOULS = [   // 🤫 sneaky (cartoon) fouls: riskier ones are worth more
+      { id: 'tug', e: '👕', t: 'Jersey tug', pts: 10, sus: 1, range: 46 },
+      { id: 'toe', e: '🦶', t: 'Toe stomp', pts: 20, sus: 1.2, range: 40, stun: 0.8 },
+      { id: 'tickle', e: '🤭', t: 'Tickle attack', s: 'Tickle', pts: 25, sus: 1, range: 46, stun: 1 },
+      { id: 'shove', e: '🤚', t: 'Sneaky shove', s: 'Shove', pts: 35, sus: 1.6, range: 44, stun: 1.2 },
+      { id: 'laces', e: '🪢', t: 'Tie shoelaces', s: 'Shoelaces', pts: 60, sus: 2, range: 40, hold: 1.2 },
+      { id: 'banana', e: '🍌', t: 'Banana peel', s: 'Banana', pts: 80, sus: 2, range: 60, item: 1, stun: 2 }
+    ];
+    var FOUL = {}; FOULS.forEach(function (f) { FOUL[f.id] = f; });
+    var SHOP = [   // 🛒 between quarters
+      { id: 'forget', e: '🧾', t: 'Pay the ref to forget a foul', d: 'Takes away one strike', cost: 200 },
+      { id: 'shoes', e: '👟', t: 'Sneaky sneakers', d: 'Move 35% faster', cost: 150, once: 1 },
+      { id: 'bananas', e: '🍌', t: 'Banana peels ×2', d: 'For the 80-point banana foul', cost: 80 },
+      { id: 'glasses', e: '🕶️', t: 'Foggy glasses for the ref', d: 'He sees 30% less of the court', cost: 220, once: 1 },
+      { id: 'hands', e: '🧤', t: 'Quick hands', d: 'Tie shoelaces way faster', cost: 180, once: 1 }
+    ];
+    var ACH = [
+      { id: 'first', e: '🤫', t: 'Sneaky Start', d: 'Pull off your first sneaky foul.' },
+      { id: 'carrier', e: '🏀', t: 'Pickpocket', d: 'Foul the player with the ball and make them drop it.' },
+      { id: 'combo', e: '🔥', t: 'Combo Master', d: 'Do 8 sneaky fouls in a row without getting caught.' },
+      { id: 'laces', e: '🪢', t: 'Shoelace Ninja', d: 'Tie 3 pairs of shoelaces in one game.' },
+      { id: 'banana', e: '🍌', t: 'Slippery', d: 'Trip someone with a banana peel.' },
+      { id: 'bribe', e: '💸', t: 'Money Talks', d: 'Bribe the ref.' },
+      { id: 'clean', e: '😇', t: 'Squeaky Clean', d: 'Play all 4 quarters without getting caught once.' },
+      { id: 'win', e: '🏆', t: 'Winner', d: 'Win a game.' },
+      { id: 'legend', e: '🦹', t: 'Sneak Legend', d: 'Earn 2,000 sneak points in one game.' },
+      { id: 'out', e: '🟥', t: 'Fouled Out', d: 'Get caught 3 times. Oops!' }
+    ];
+    var THEM = ['😎', '😤', '🤨', '😏', '🙂'], US = ['🙂', '😄', '😃', '🤗'];
+
+    var G = null, rec = load(KEY) || { games: 0, wins: 0, best: 0 }, achs = load(AKEY) || {};
+    function load(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(rec)); localStorage.setItem(AKEY, JSON.stringify(achs)); } catch (e) { /* private mode */ } }
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+    function angDiff(a, b) { var d = a - b; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; }
+    function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+    function award(id) { if (achs[id]) return; achs[id] = 1; save(); var A = ACH.filter(function (a) { return a.id === id; })[0]; if (A) say('🏆 Achievement: ' + A.e + ' ' + A.t + '!', 'good'); drawAchs(); }
+
+    // ---- model ----
+    function spot() { return { x: rnd(40, 330), y: rnd(70, 240) }; }
+    function newGame() {
+      G = { q: 1, time: QUARTER, us: 0, them: 0, pts: 0, earned: 0, strikes: 0, caught: 0, combo: 0, bestCombo: 0, laces: 0, bribes: 0, bananas: 0, shoes: 0, glasses: 0, hands: 0,
+        you: { x: 180, y: 290, tx: 180, ty: 290 }, opp: [], mates: [], pops: [], tie: null, over: false, phase: 'play',
+        ball: { st: 'held', c: 0, hold: rnd(1.2, 2.4), shot: rnd(6, 9) },
+        ref: { x: 378, y: 200, a: Math.PI, mode: 'ball', t: rnd(2.5, 4), sx: 180, sy: 200 } };
+      for (var i = 0; i < 5; i++) { var p = spot(); G.opp.push({ x: p.x, y: p.y, tx: p.x, ty: p.y, wt: rnd(0.5, 2), stun: 0, trip: 0, sus: 0, face: THEM[i], spd: rnd(55, 75) }); }
+      for (var j = 0; j < 4; j++) G.mates.push({ x: G.opp[j + 1].x, y: G.opp[j + 1].y + 30, face: US[j], guard: j + 1 });
+      rec.games += 1; save();
+    }
+    function coneHalf() { return (0.55 + 0.05 * (G.q - 1)) * (G.glasses ? 0.7 : 1); }
+    function coneR() { return 280 + 15 * (G.q - 1); }
+    function turnSpd() { return 2.6 + 0.4 * (G.q - 1); }
+    function ballPos() {
+      var b = G.ball;
+      if (b.st === 'held') { var o = G.opp[b.c]; return { x: o.x + 11, y: o.y - 9 }; }
+      return { x: b.x, y: b.y };
+    }
+    function refBusy() { return G.ref.mode === 'bribed'; }
+    function inCone(x, y) {   // 👀 is this spot inside the ref's vision cone?
+      var R = G.ref, dx = x - R.x, dy = y - R.y, d = Math.hypot(dx, dy);
+      if (R.mode === 'bribed' || R.mode === 'snack') return false;   // he's looking away, off the court
+      return d <= coneR() && Math.abs(angDiff(Math.atan2(dy, dx), R.a)) <= coneHalf();
+    }
+    function targetFor(f) {   // the closest player on the other team in reach
+      var best = null, bd = 1e9;
+      G.opp.forEach(function (o) { var d = dist(o, G.you); if (d <= f.range && d < bd) { bd = d; best = o; } });
+      return best;
+    }
+    function canFoul(f) { return G && G.phase === 'play' && !G.tie && !(f.item && G.bananas < 1) && !!targetFor(f); }
+
+    function say(t, kind) { var m = $('msg'); if (!m) return; m.textContent = t; m.className = 'fp-msg' + (kind ? ' ' + kind : ''); }
+    function pop(x, y, t, c) { G.pops.push({ x: x, y: y, t: t, c: c || '#fff', life: 1.1 }); }
+
+    function foul(id) {   // 🤫 try a foul
+      var f = FOUL[id]; if (!canFoul(f)) return false;
+      var o = targetFor(f);
+      if (f.hold) { G.tie = { o: o, f: f, t: G.hands ? 0.6 : f.hold, full: G.hands ? 0.6 : f.hold }; say('🪢 Tying their shoelaces… stay close and hope the ref doesn’t look!'); return true; }
+      if (f.item) G.bananas -= 1;
+      return land(f, o);
+    }
+    function land(f, o) {
+      var mx = (o.x + G.you.x) / 2, my = (o.y + G.you.y) / 2;
+      if (inCone(mx, my)) { caught('🗣️ TWEET! The ref saw your ' + f.t.toLowerCase() + '!'); return false; }
+      o.sus += f.sus;
+      var note = '';
+      if (o.sus >= NOTICE) {   // 😠 they noticed and tell the ref
+        o.sus = 0;
+        if (refBusy()) { note = ' 😠 They told the ref, but he’s too busy counting his money. 💰'; pop(o.x, o.y - 30, '😠', '#fff'); }
+        else { G.ref.mode = 'alert'; G.ref.t = 1.5; caught('😠 “REF! They keep fouling me!” The player noticed and told on you!'); return false; }
+      }
+      var carrier = G.ball.st === 'held' && G.opp[G.ball.c] === o;
+      G.combo += 1; G.bestCombo = Math.max(G.bestCombo, G.combo);
+      var mult = 1 + 0.25 * Math.min(G.combo - 1, 8), pts = Math.round(f.pts * (carrier ? 2 : 1) * mult);
+      G.pts += pts; G.earned += pts;
+      pop(o.x, o.y - 26, '+' + pts, '#ffd34d');
+      award('first');
+      if (G.combo >= 8) award('combo');
+      if (G.earned >= 2000) award('legend');
+      if (f.id === 'laces') { G.laces += 1; o.trip = 0.7; if (G.laces >= 3) award('laces'); }
+      else if (f.stun) o.stun = Math.max(o.stun, f.stun);
+      if (f.id === 'banana') award('banana');
+      var msg = f.e + ' Sneaky ' + f.t.toLowerCase() + '! +' + pts + (mult > 1 ? ' (combo ×' + mult.toFixed(2).replace(/0$/, '') + ')' : '');
+      if (carrier && (f.stun || f.id === 'banana')) { turnover(o); msg += ' They dropped the ball!'; }
+      else if (carrier && f.id !== 'laces') msg += ' (double points on the ball carrier!)';
+      say(msg + note, 'good');
+      return true;
+    }
+    function caught(why) {
+      G.strikes += 1; G.caught += 1; G.combo = 0; G.tie = null;
+      var ft = Math.random() < 0.7 ? 2 : 1; G.them += ft;
+      if (G.ref.mode !== 'alert') { G.ref.mode = 'alert'; G.ref.t = 1.5; }
+      pop(G.you.x, G.you.y - 30, 'TWEET!', '#ff6b6b');
+      say(why + ' Foul on you, and they made ' + ft + ' free throw' + (ft > 1 ? 's' : '') + '. (Strike ' + G.strikes + ' of ' + MAXSTRIKES + ')', 'bad');
+      if (G.strikes >= MAXSTRIKES) { award('out'); end('out'); }
+    }
+    function turnover(o) {   // 🏀 they drop it, your team grabs it and scores
+      var p = ballPos(); G.ball = { st: 'steal', x: p.x, y: p.y, fx: p.x, fy: p.y, t: 0, dur: 0.9 };
+      award('carrier');
+    }
+    function trick(id) {
+      if (!G || G.phase !== 'play') return false;
+      if (id === 'bribe') {
+        var c = bribeCost(); if (G.pts < c) return false;
+        G.pts -= c; G.bribes += 1; G.ref.mode = 'bribed'; G.ref.t = 6; award('bribe');
+        say('💸 You slipped the ref ' + fmt(c) + ' points. He’s counting his money and NOT watching for 6 seconds!', 'good'); return true;
+      }
+      if (id === 'snack') {
+        if (G.pts < 50) return false;
+        G.pts -= 50; G.ref.mode = 'snack'; G.ref.t = 3;
+        say('🌭 A hot dog flew past the ref’s face! He’s staring at the snack stand for 3 seconds.', 'good'); return true;
+      }
+      return false;
+    }
+    function bribeCost() { return 120 + 60 * G.bribes; }
+    function buy(id) {
+      var it = SHOP.filter(function (s) { return s.id === id; })[0];
+      if (!G || G.phase !== 'shop' || !it || G.pts < it.cost || (it.once && G[id]) || (id === 'forget' && !G.strikes)) return false;
+      G.pts -= it.cost;
+      if (id === 'forget') G.strikes -= 1;
+      else if (id === 'bananas') G.bananas += 2;
+      else G[id] = 1;
+      drawShop(); return true;
+    }
+
+    // ---- simulation ----
+    function step(dt) {
+      if (!G || G.phase !== 'play') return;
+      G.time -= dt;
+      var R = G.ref;
+      // the ref walks along the sideline, following the ball
+      var bp = ballPos();
+      R.y += clamp(bp.y - R.y, -45 * dt, 45 * dt); R.y = clamp(R.y, 70, 300);
+      R.t -= dt;
+      if (R.t <= 0) {
+        if (R.mode === 'ball') { R.mode = 'warn'; R.t = 0.45; }
+        else if (R.mode === 'warn') {   // 👀 a sneaky glance: sometimes right at you
+          var atYou = Math.random() < 0.4 + 0.05 * G.q, p = atYou ? G.you : spot();
+          R.mode = 'scan'; R.sx = p.x; R.sy = p.y; R.t = rnd(1, 2);
+        }
+        else { R.mode = 'ball'; R.t = rnd(2.5, 5) / (1 + 0.15 * (G.q - 1)); }
+      }
+      var ta;
+      if (R.mode === 'bribed') ta = 0;
+      else if (R.mode === 'snack') ta = Math.atan2(SNACK.y - R.y, SNACK.x - R.x);
+      else if (R.mode === 'alert') ta = Math.atan2(G.you.y - R.y, G.you.x - R.x);
+      else if (R.mode === 'scan') ta = Math.atan2(R.sy - R.y, R.sx - R.x);
+      else ta = Math.atan2(bp.y - R.y, bp.x - R.x);
+      var s = turnSpd() * dt; R.a += clamp(angDiff(ta, R.a), -s, s);
+      // you
+      var Y = G.you;
+      if (!G.tie) {
+        var sp = 150 * (G.shoes ? 1.35 : 1) * dt, dx = Y.tx - Y.x, dy = Y.ty - Y.y, d = Math.hypot(dx, dy);
+        if (d > 1) { Y.x += dx / d * Math.min(sp, d); Y.y += dy / d * Math.min(sp, d); }
+        Y.x = clamp(Y.x, COURT.x0 + 14, COURT.x1 - 14); Y.y = clamp(Y.y, COURT.y0 + 40, COURT.y1 - 14);
+      } else {   // 🪢 tying shoelaces
+        var T = G.tie;
+        if (dist(T.o, Y) > T.f.range + 12) { G.tie = null; say('🤷 They walked away before you finished tying their shoelaces.'); }
+        else if (inCone((T.o.x + Y.x) / 2, (T.o.y + Y.y) / 2)) caught('🗣️ TWEET! The ref caught you tying shoelaces!');
+        else { T.t -= dt; if (T.t <= 0) { G.tie = null; land(T.f, T.o); } }
+      }
+      // the other team
+      G.opp.forEach(function (o) {
+        o.sus = Math.max(0, o.sus - 0.35 * dt);
+        if (o.trip > 0) { o.trip -= dt; if (o.trip <= 0) { o.stun = 2; pop(o.x, o.y - 26, '💫', '#fff'); if (G.ball.st === 'held' && G.opp[G.ball.c] === o) turnover(o); } }
+        if (o.stun > 0) { o.stun -= dt; return; }
+        if (G.tie && G.tie.o === o) return;   // 🪢 they stand still while you tie their shoelaces
+        o.wt -= dt;
+        if (o.wt <= 0 || Math.hypot(o.tx - o.x, o.ty - o.y) < 6) { var p = spot(); o.tx = p.x; o.ty = p.y; o.wt = rnd(1.5, 3.5); }
+        var ddx = o.tx - o.x, ddy = o.ty - o.y, dd = Math.hypot(ddx, ddy) || 1, v = o.spd * dt;
+        o.x += ddx / dd * Math.min(v, dd); o.y += ddy / dd * Math.min(v, dd);
+      });
+      G.mates.forEach(function (m) { var o = G.opp[m.guard], gx = o.x + 6, gy = o.y + 28, mdx = gx - m.x, mdy = gy - m.y, md = Math.hypot(mdx, mdy) || 1, mv = 70 * dt; m.x += mdx / md * Math.min(mv, md); m.y += mdy / md * Math.min(mv, md); });
+      // the ball
+      var B = G.ball;
+      if (B.st === 'held') {
+        var cr = G.opp[B.c];
+        if (cr.stun <= 0) { B.hold -= dt; B.shot -= dt; }
+        if (B.shot <= 0) { var p0 = ballPos(); G.ball = { st: 'shot', x: p0.x, y: p0.y, fx: p0.x, fy: p0.y, t: 0, dur: 0.8, made: Math.random() < 0.55 }; }
+        else if (B.hold <= 0) {
+          var to = (B.c + 1 + Math.floor(Math.random() * 4)) % 5, p1 = ballPos();
+          G.ball = { st: 'pass', x: p1.x, y: p1.y, fx: p1.x, fy: p1.y, t: 0, dur: 0.35, to: to, shot: B.shot };
+        }
+      } else if (B.st === 'pass') {
+        B.t += dt; var r = G.opp[B.to], k = Math.min(1, B.t / B.dur);
+        B.x = B.fx + (r.x + 11 - B.fx) * k; B.y = B.fy + (r.y - 9 - B.fy) * k;
+        if (k >= 1) G.ball = { st: 'held', c: B.to, hold: rnd(1.2, 2.4), shot: B.shot };
+      } else if (B.st === 'shot') {
+        B.t += dt; var k2 = Math.min(1, B.t / B.dur);
+        B.x = B.fx + (HOOP.x - B.fx) * k2; B.y = B.fy + (HOOP.y - B.fy) * k2 - Math.sin(k2 * Math.PI) * 60;
+        if (k2 >= 1) {
+          if (B.made) { G.them += 2; pop(HOOP.x, HOOP.y + 20, '+2 them', '#ff9f9f'); }
+          else pop(HOOP.x, HOOP.y + 20, 'Miss!', '#9fd4ff');
+          if (Math.random() < 0.45) { G.us += 2; say((B.made ? '😩 They scored. ' : '🧱 They missed! ') + 'Then your team ran down the court and scored! 🏀'); }
+          else say(B.made ? '😩 They scored a basket.' : '🧱 They missed the shot!');
+          G.ball = { st: 'reset', t: 0.8, x: HOOP.x, y: HOOP.y };
+        }
+      } else if (B.st === 'steal') {
+        B.t += dt; var k3 = Math.min(1, B.t / B.dur);
+        B.x = B.fx + (200 - B.fx) * k3; B.y = B.fy + (H + 20 - B.fy) * k3;
+        if (k3 >= 1) { G.us += 2; pop(200, H - 40, '+2 us!', '#5ad1a0'); G.ball = { st: 'reset', t: 0.8, x: 200, y: H }; }
+      } else if (B.st === 'reset') {
+        B.t -= dt;
+        if (B.t <= 0) G.ball = { st: 'held', c: Math.floor(Math.random() * 5), hold: rnd(1.2, 2.4), shot: rnd(6, 9) };
+      }
+      G.pops.forEach(function (p) { p.life -= dt; p.y -= 30 * dt; });
+      G.pops = G.pops.filter(function (p) { return p.life > 0; });
+      if (G.time <= 0 && G.phase === 'play') endQuarter();
+    }
+    function endQuarter() {
+      G.time = 0; G.tie = null;
+      if (G.q >= QUARTERS) { end('done'); return; }
+      G.phase = 'shop'; showView('shop'); drawShop();
+    }
+    function nextQuarter() {
+      G.q += 1; G.time = QUARTER; G.phase = 'play'; G.combo = 0;
+      G.ref.mode = 'ball'; G.ref.t = rnd(2, 4);
+      G.opp.forEach(function (o) { o.sus = 0; o.stun = 0; o.trip = 0; });
+      G.ball = { st: 'held', c: Math.floor(Math.random() * 5), hold: rnd(1.2, 2.4), shot: rnd(6, 9) };
+      showView('game'); say('🏀 Quarter ' + G.q + '! The ref is getting sharper…');
+    }
+    function end(how) {
+      G.phase = 'over'; G.over = true; G.tie = null;
+      var won = how === 'done' && G.us > G.them;
+      if (how === 'done' && !G.caught) award('clean');
+      if (won) { award('win'); rec.wins += 1; }
+      rec.best = Math.max(rec.best, G.earned); save();
+      $('overE').textContent = how === 'out' ? '🟥' : won ? '🏆' : G.us === G.them ? '🤝' : '😩';
+      $('overT').textContent = how === 'out' ? 'You fouled out!' : won ? 'You won ' + G.us + '–' + G.them + '!' : G.us === G.them ? 'It’s a tie, ' + G.us + '–' + G.them + '!' : 'You lost ' + G.us + '–' + G.them + '.';
+      $('overS').textContent = (how === 'out' ? 'The ref caught you 3 times in quarter ' + G.q + '. ' : '') + 'You earned ' + fmt(G.earned) + ' sneak points with a best combo of ×' + G.bestCombo + '. Best ever: ' + fmt(rec.best) + '.';
+      showView('over'); drawStats();
+    }
+
+    // ---- drawing ----
+    var cv, ctx, dpr = 1, raf = 0, last = 0, active = false, ready = false, keys = {}, uiT = 0;
+    function $(id) { return document.getElementById('fp-' + id); }
+    function sizeCanvas() { dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    function emoji(t, x, y, size) { ctx.font = size + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(t, x, y); }
+    function drawCourt() {
+      ctx.fillStyle = '#c98a4b'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = 'rgba(0,0,0,0.06)'; for (var i = 0; i < W; i += 24) ctx.fillRect(i, 0, 1, H);
+      ctx.fillStyle = '#3a2a1c'; ctx.fillRect(COURT.x1 + 6, 0, W - COURT.x1 - 6, H);   // the sideline where the ref walks
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2.5;
+      ctx.strokeRect(COURT.x0, COURT.y0, COURT.x1 - COURT.x0, COURT.y1 - COURT.y0);
+      ctx.fillStyle = 'rgba(180,40,40,0.28)'; ctx.fillRect(HOOP.x - 48, COURT.y0, 96, 110);   // the paint
+      ctx.strokeRect(HOOP.x - 48, COURT.y0, 96, 110);
+      ctx.beginPath(); ctx.arc(HOOP.x, COURT.y0 + 110, 36, 0, Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.arc(HOOP.x, HOOP.y - 8, 128, 0.08 * Math.PI, 0.92 * Math.PI); ctx.stroke();   // 3-point line
+      ctx.beginPath(); ctx.arc(HOOP.x, COURT.y1, 40, Math.PI, 2 * Math.PI); ctx.stroke();   // half-court circle
+      ctx.fillStyle = '#fff'; ctx.fillRect(HOOP.x - 30, 26, 60, 5);   // backboard
+      ctx.strokeStyle = '#ff7a1a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(HOOP.x, HOOP.y - 8, 12, 0, 2 * Math.PI); ctx.stroke();
+      emoji('🌭', SNACK.x - 6, SNACK.y + 4, 18);
+    }
+    function drawCone() {
+      var R = G.ref, h = coneHalf(), r = coneR(), off = R.mode === 'bribed' || R.mode === 'snack';
+      var g = ctx.createRadialGradient(R.x, R.y, 10, R.x, R.y, r);
+      g.addColorStop(0, off ? 'rgba(255,230,120,0.18)' : R.mode === 'alert' ? 'rgba(255,90,90,0.5)' : 'rgba(255,230,90,0.42)');
+      g.addColorStop(1, 'rgba(255,230,90,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(R.x, R.y); ctx.arc(R.x, R.y, r, R.a - h, R.a + h); ctx.closePath(); ctx.fill();
+    }
+    function person(x, y, fill, face, ring) {
+      ctx.beginPath(); ctx.arc(x, y, 15, 0, 2 * Math.PI); ctx.fillStyle = fill; ctx.fill();
+      if (ring) { ctx.lineWidth = 3; ctx.strokeStyle = ring; ctx.stroke(); }
+      emoji(face, x, y + 1, 17);
+    }
+    function drawRef() {
+      var R = G.ref;
+      ctx.save(); ctx.beginPath(); ctx.arc(R.x, R.y, 15, 0, 2 * Math.PI); ctx.clip();   // 🦓 a striped ref shirt
+      ctx.fillStyle = '#f5f5f5'; ctx.fillRect(R.x - 16, R.y - 16, 32, 32);
+      ctx.fillStyle = '#111'; for (var i = -15; i < 16; i += 6) ctx.fillRect(R.x + i, R.y - 16, 3, 32);
+      ctx.restore();
+      emoji(R.mode === 'bribed' ? '🤑' : R.mode === 'alert' ? '😠' : '😐', R.x, R.y + 1, 15);
+      var tag = R.mode === 'bribed' ? '💰' : R.mode === 'snack' ? '🌭' : R.mode === 'warn' ? '❗' : R.mode === 'alert' ? '📣' : '';
+      if (tag) emoji(tag, R.x, R.y - 26, 16);
+      ctx.fillStyle = '#fff'; ctx.font = '700 9px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.fillText('REF', R.x, R.y + 24);
+    }
+    function draw() {
+      if (!G) return;
+      drawCourt(); drawCone();
+      var tgt = null; FOULS.some(function (f) { if (!f.item || G.bananas) { tgt = targetFor(f); return !!tgt; } return false; });
+      G.mates.forEach(function (m) { person(m.x, m.y, '#3b82f6', m.face); });
+      G.opp.forEach(function (o) {
+        person(o.x, o.y, '#e5484d', o.stun > 0 ? '😵' : o.face, o === tgt ? 'rgba(255,255,255,0.95)' : null);
+        if (o.trip > 0) emoji('🪢', o.x + 12, o.y + 13, 12);
+        var mark = o.stun > 0 ? '💫' : o.sus >= 2.2 ? '❗' : o.sus >= 1.3 ? '❓' : '';
+        if (mark) emoji(mark, o.x, o.y - 24, 14);
+      });
+      var Y = G.you;
+      person(Y.x, Y.y, '#3b82f6', '😈', '#ffd34d'); emoji('⭐', Y.x + 12, Y.y - 12, 11);
+      if (G.tie) { ctx.strokeStyle = '#ffd34d'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(Y.x, Y.y, 21, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI * (1 - G.tie.t / G.tie.full)); ctx.stroke(); }
+      if (G.ball.st !== 'reset') { var b = ballPos(); emoji('🏀', b.x, b.y, 14); }
+      drawRef();
+      G.pops.forEach(function (p) { ctx.globalAlpha = Math.max(0, Math.min(1, p.life)); ctx.fillStyle = p.c; ctx.font = '800 15px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 3; ctx.strokeText(p.t, p.x, p.y); ctx.fillText(p.t, p.x, p.y); ctx.globalAlpha = 1; });
+    }
+
+    // ---- the page around the court ----
+    function showView(v) { $('intro').hidden = v !== 'intro'; $('game').hidden = v !== 'game'; $('shop').hidden = v !== 'shop'; $('over').hidden = v !== 'over'; }
+    function hud() {
+      if (!G) return;
+      $('us').textContent = G.us; $('them').textContent = G.them;
+      var s = Math.max(0, Math.ceil(G.time)); $('clock').textContent = 'Q' + G.q + ' · ' + Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2);
+      $('pts').textContent = fmt(G.pts);
+      $('combo').textContent = G.combo > 1 ? '🔥 Combo ×' + G.combo : '';
+      $('strikes').textContent = '🟥'.repeat(G.strikes) + '⬜'.repeat(Math.max(0, MAXSTRIKES - G.strikes));
+      $('strikes').setAttribute('aria-label', G.strikes + ' of ' + MAXSTRIKES + ' strikes');
+      Array.prototype.forEach.call($('fouls').children, function (b) {
+        var f = FOUL[b.dataset.id]; b.disabled = !canFoul(f);
+        if (f.item) b.querySelector('small').textContent = '+' + f.pts + ' · 🍌×' + G.bananas;
+      });
+      var bb = $('bribe'), sn = $('snack');
+      bb.disabled = G.phase !== 'play' || G.pts < bribeCost() || G.ref.mode === 'bribed'; bb.querySelector('small').textContent = fmt(bribeCost()) + ' · 6s';
+      sn.disabled = G.phase !== 'play' || G.pts < 50 || G.ref.mode === 'snack' || G.ref.mode === 'bribed';
+    }
+    function drawShop() {
+      if (!G) return;
+      $('shopTitle').textContent = '🛒 End of quarter ' + G.q + ' of ' + QUARTERS;
+      $('shopScore').textContent = 'Score: You ' + G.us + ' – ' + G.them + ' Them · 🤫 ' + fmt(G.pts) + ' sneak points to spend · Strikes: ' + G.strikes + ' of ' + MAXSTRIKES;
+      var L = $('shopList'); L.innerHTML = '';
+      SHOP.forEach(function (it) {
+        var have = it.once && G[it.id], b = document.createElement('button');
+        b.type = 'button'; b.className = 'fp-item'; b.dataset.id = it.id;
+        b.innerHTML = '<span class="fp-itemE" aria-hidden="true"></span><span class="fp-itemT"><b></b><small></small></span><span class="fp-itemC"></span>';
+        b.querySelector('.fp-itemE').textContent = it.e;
+        b.querySelector('b').textContent = it.t;
+        b.querySelector('small').textContent = it.id === 'forget' && !G.strikes ? 'You don’t have any strikes' : it.id === 'bananas' && G.bananas ? it.d + ' · you have ' + G.bananas : it.d;
+        b.querySelector('.fp-itemC').textContent = have ? 'Got it ✓' : fmt(it.cost);
+        b.disabled = !!have || G.pts < it.cost || (it.id === 'forget' && !G.strikes);
+        b.addEventListener('click', function () { buy(it.id); });
+        L.appendChild(b);
+      });
+      $('next').textContent = 'Start quarter ' + (G.q + 1) + ' →';
+    }
+    function drawAchs() {
+      var box = $('achs'); if (!box) return; box.innerHTML = '';
+      var n = 0;
+      ACH.forEach(function (a) { var got = !!achs[a.id]; if (got) n++; var d = document.createElement('div'); d.className = 'fp-ach' + (got ? ' got' : ''); d.title = a.d; d.innerHTML = '<span aria-hidden="true"></span><b></b><small></small>'; d.firstChild.textContent = got ? a.e : '🔒'; d.querySelector('b').textContent = a.t; d.querySelector('small').textContent = a.d; box.appendChild(d); });
+      $('achN').textContent = n + ' / ' + ACH.length;
+    }
+    function drawStats() { $('stats').textContent = '🏀 Games: ' + rec.games + ' · 🏆 Wins: ' + rec.wins + ' · 🤫 Best: ' + fmt(rec.best) + ' sneak points'; $('best').textContent = rec.best ? 'Your best game: ' + fmt(rec.best) + ' sneak points.' : ''; }
+
+    function frame(now) {
+      if (!active) return;
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0; last = now;
+      if (G && G.phase === 'play' && !testHold) {
+        var kx = (keys.ArrowRight || keys.d ? 1 : 0) - (keys.ArrowLeft || keys.a ? 1 : 0), ky = (keys.ArrowDown || keys.s ? 1 : 0) - (keys.ArrowUp || keys.w ? 1 : 0);
+        if (kx || ky) { G.you.tx = G.you.x + kx * 40; G.you.ty = G.you.y + ky * 40; }
+        step(dt);
+      }
+      draw();
+      uiT += dt; if (uiT > 0.1) { uiT = 0; hud(); }
+      raf = requestAnimationFrame(frame);
+    }
+    var testHold = false;
+    function aim(e) {
+      if (!G || G.phase !== 'play') return;
+      var r = cv.getBoundingClientRect();
+      G.you.tx = (e.clientX - r.left) * W / r.width; G.you.ty = (e.clientY - r.top) * H / r.height;
+    }
+    function wire() {
+      if (ready) return; ready = true;
+      cv = $('court'); ctx = cv.getContext('2d'); sizeCanvas();
+      var F = $('fouls');
+      FOULS.forEach(function (f) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'fp-foul'; b.dataset.id = f.id;
+        b.innerHTML = '<span aria-hidden="true"></span><b></b><small></small>';
+        b.firstChild.textContent = f.e; b.querySelector('b').textContent = f.s || f.t; b.setAttribute('aria-label', f.t + ', ' + f.pts + ' points'); b.querySelector('small').textContent = '+' + f.pts + (f.hold ? ' · slow' : '');
+        b.addEventListener('click', function () { foul(f.id); hud(); });
+        F.appendChild(b);
+      });
+      $('bribe').addEventListener('click', function () { trick('bribe'); hud(); });
+      $('snack').addEventListener('click', function () { trick('snack'); hud(); });
+      cv.addEventListener('pointerdown', function (e) { aim(e); try { cv.setPointerCapture(e.pointerId); } catch (x) { /* fine */ } });
+      cv.addEventListener('pointermove', function (e) { if (e.buttons || e.pointerType !== 'mouse') aim(e); });
+      document.addEventListener('keydown', function (e) { if (!active || !G || G.phase !== 'play') return; if (/^Arrow/.test(e.key) || /^[wasd]$/.test(e.key)) { keys[e.key] = 1; e.preventDefault(); } var n = '123456'.indexOf(e.key); if (n >= 0) foul(FOULS[n].id); });
+      document.addEventListener('keyup', function (e) { delete keys[e.key]; });
+      $('start').addEventListener('click', function () { newGame(); showView('game'); say('🏀 Tip-off! Sneak up on the red team and foul them when the ref’s cone isn’t on you.'); hud(); });
+      $('again').addEventListener('click', function () { newGame(); showView('game'); say('🏀 New game! The ref has forgotten all about you… for now.'); hud(); });
+      $('next').addEventListener('click', nextQuarter);
+      window.addEventListener('resize', function () { if (active) sizeCanvas(); });
+      document.addEventListener('visibilitychange', function () { last = 0; });
+    }
+    function enter() {
+      wire(); drawAchs(); drawStats(); active = true; last = 0;
+      if (!G || G.over) { G = null; showView('intro'); }
+      else showView(G.phase === 'shop' ? 'shop' : 'game');
+      raf = requestAnimationFrame(frame);
+    }
+    function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; keys = {}; }
+    window.registerHook('foul', enter, leave);
   })();
 
 </script>
