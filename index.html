@@ -9476,6 +9476,7 @@
       { id: 'married', e: '💍', t: 'Happily Married', d: 'Get married.' },
       { id: 'parent', e: '🍼', t: 'Parent', d: 'Have or adopt a kid.' },
       { id: 'million', e: '💰', t: 'Millionaire', d: 'Have 1,000,000 credits at once.' },
+      { id: 'billion', e: '💎', t: 'Billionaire', d: 'Have 1,000,000,000 credits at once.' },
       { id: 'chrome5', e: '🦿', t: 'Chrome Head', d: 'Have 5 chrome implants at once.' },
       { id: 'overload', e: '⚠️', t: 'Back From the Edge', d: 'Survive a chrome overload.' },
       { id: 'swiper', e: '🕵️', t: 'Shard Swiper', d: 'Swipe 10 data shards (across all your lives).' },
@@ -10159,6 +10160,7 @@
     function checkAch() {
       if (!L || !L.alive) return;
       if (L.money >= 1000000) award('million');
+      if (L.money >= 1000000000) award('billion');   // 💎
       if (L.implants.filter(function (id) { return IMP[id] && IMP[id].body > 0; }).length >= 5) award('chrome5');
       if (chrome() >= 96) award('smasher');
       if (L.fame >= 100) award('star');
