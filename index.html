@@ -2010,6 +2010,10 @@
 
   // ============ shared data ============
   var POOL = [
+      // --- 🧠 questions you added (they always show up in the Big Brain Quiz) ---
+      { s: "The first “trees” on Earth were giant mushrooms.", real: true, pin: 1,
+        exp: "Real — about 400 million years ago, before real trees existed, mushroom-like giants called Prototaxites grew up to 8 meters (26 feet) tall. They were the biggest living things on land! (A new study says they might have been a totally different, extinct kind of life instead of fungi.)",
+        troll: "False — mushrooms have always been tiny, and trees came first." },
       // --- science & myths ---
       { s: "The Great Wall of China is visible from the Moon with the naked eye.", real: false,
         exp: "Myth — astronauts have confirmed you can't see it from the Moon.",
@@ -5176,7 +5180,8 @@
     };
     function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
     function newGame() {
-      var picked = shuffle(POOL.slice()).slice(0, PER_GAME);
+      var pinned = p === 'h' ? POOL.filter(function (q) { return q.pin; }) : [];   // 🧠 questions you added are always in the Big Brain Quiz (and only there)
+      var picked = shuffle(pinned.concat(shuffle(POOL.filter(function (q) { return !q.pin; })).slice(0, PER_GAME - pinned.length)));
       qs = picked.map(function (q) {
         var rigged = Math.random() < RIG_CHANCE;
         var accepted = rigged ? !q.real : q.real;
