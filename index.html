@@ -10913,14 +10913,14 @@
     RZ_JOBS.forEach(function (j) { JOB[j.id] = j; });
     MAJORS.magic = ['🔮', 'Magic']; MAJORS.sword = ['⚔️', 'Swordsmanship']; MAJORS.heal = ['🩺', 'Healing Magic']; MAJORS.bard = ['🎵', 'Music'];
     var RZ_TUTORS = [   // 📚 no schools in the kingdom: you learn from tutors (one at a time, and you keep your progress if you switch)
-      { id: 'read', e: '📖', t: 'Reading & Writing', min: 5, years: 2, fee: 1000, stat: 'smarts', who: 'a patient old scholar', d: 'learn the kingdom’s letters', done: 'Now you can read every sign in the Royal Capital!' },
-      { id: 'math', e: '🧮', t: 'Math', min: 6, years: 2, fee: 1000, stat: 'smarts', who: 'a merchant who counts REALLY fast', d: 'get smarter', done: 'Nobody can cheat you at the market now.' },
-      { id: 'manners', e: '🎩', t: 'Noble Manners', min: 6, years: 2, fee: 3000, stat: 'style', who: 'a very strict noble lady', d: 'get classier', done: 'You can bow, curtsy, and use all nine forks at a noble’s dinner.' },
-      { id: 'magic', e: '🔮', t: 'Magic', min: 8, years: 4, fee: 6000, stat: 'smarts', major: 'magic', who: 'a grumpy court mage with a very tall hat', d: 'learn spells · for Court Mage jobs', done: 'Now you can be a 🔮 Court Mage, and your spells hit harder.' },
-      { id: 'sword', e: '⚔️', t: 'Swordsmanship', min: 8, years: 4, fee: 8000, stat: 'health', major: 'sword', who: 'a retired knight with a huge gray mustache', d: '+fight power · for Royal Knight jobs', done: 'Now your sword hits harder, and the Royal Knights want you!' },
-      { id: 'bard', e: '🎵', t: 'Music', min: 6, years: 4, fee: 5000, stat: 'style', major: 'bard', who: 'a famous bard from Watergate City', d: 'for Bard jobs', done: 'Now you can sing your way to fame as a 🎵 Bard.' },
-      { id: 'heal', e: '🩺', t: 'Healing Magic', min: 12, years: 4, fee: 7000, stat: 'smarts', major: 'heal', who: 'a gentle healer with glowing hands', d: 'for Healer jobs', done: 'Now you can work as a 🩺 Healer.' },
-      { id: 'biz', e: '📊', t: 'Business', min: 12, years: 4, fee: 6000, stat: 'smarts', major: 'biz', who: 'a rich traveling merchant', d: 'start your own businesses', done: 'Now you can start your own businesses in 💼 Job!' }
+      { id: 'read', e: '📖', t: 'Reading & Writing', min: 5, years: 1, fee: 1000, stat: 'smarts', who: 'a patient old scholar', d: 'learn the kingdom’s letters', done: 'Now you can read every sign in the Royal Capital!' },
+      { id: 'math', e: '🧮', t: 'Math', min: 6, years: 1, fee: 1000, stat: 'smarts', who: 'a merchant who counts REALLY fast', d: 'get smarter', done: 'Nobody can cheat you at the market now.' },
+      { id: 'manners', e: '🎩', t: 'Noble Manners', min: 6, years: 1, fee: 3000, stat: 'style', who: 'a very strict noble lady', d: 'get classier', done: 'You can bow, curtsy, and use all nine forks at a noble’s dinner.' },
+      { id: 'magic', e: '🔮', t: 'Magic', min: 8, years: 2, fee: 6000, stat: 'smarts', major: 'magic', who: 'a grumpy court mage with a very tall hat', d: 'learn spells · for Court Mage jobs', done: 'Now you can be a 🔮 Court Mage, and your spells hit harder.' },
+      { id: 'sword', e: '⚔️', t: 'Swordsmanship', min: 8, years: 2, fee: 8000, stat: 'health', major: 'sword', who: 'a retired knight with a huge gray mustache', d: '+fight power · for Royal Knight jobs', done: 'Now your sword hits harder, and the Royal Knights want you!' },
+      { id: 'bard', e: '🎵', t: 'Music', min: 6, years: 2, fee: 5000, stat: 'style', major: 'bard', who: 'a famous bard from Watergate City', d: 'for Bard jobs', done: 'Now you can sing your way to fame as a 🎵 Bard.' },
+      { id: 'heal', e: '🩺', t: 'Healing Magic', min: 12, years: 2, fee: 7000, stat: 'smarts', major: 'heal', who: 'a gentle healer with glowing hands', d: 'for Healer jobs', done: 'Now you can work as a 🩺 Healer.' },
+      { id: 'biz', e: '📊', t: 'Business', min: 12, years: 2, fee: 6000, stat: 'smarts', major: 'biz', who: 'a rich traveling merchant', d: 'start your own businesses', done: 'Now you can start your own businesses in 💼 Job!' }
     ];
     var TUT = byId(RZ_TUTORS), TUTOR_NAMES = ['Master Albrecht', 'Old Greta', 'Sir Bertram', 'Madame Odette', 'Master Felk', 'Lady Hildegard', 'Professor Quill', 'Old Man Tobias'];
     var HOBBY = { hacker: '✨ Magic', drone: '🦎 Dragon riding', art: '🎨 Painting', dance: '⚔️ Sword practice' };
@@ -10969,7 +10969,7 @@
       RZ_TUTORS.forEach(function (T) {
         if ((cur && cur.id === T.id) || done.indexOf(T.id) >= 0) return;
         var y = (L.tutorY || {})[T.id] || 0, fee = tutorFee(T), young = L.age < T.min, broke = fee && L.money < fee;
-        opt(c, T.e, T.t + ' tutor', young ? 'Age ' + T.min + '+' : (fee ? cr(fee) + ' a year' : 'Free (your family pays)') + ' · ' + T.years + ' years · ' + T.d + (y ? ' · ' + y + ' of ' + T.years + ' years done' : '') + (broke ? ' · not enough gold' : ''), function () { hireTutor(T); }, young || broke);
+        opt(c, T.e, T.t + ' tutor', young ? 'Age ' + T.min + '+' : (fee ? cr(fee) + ' a year' : 'Free (your family pays)') + ' · ' + T.years + (T.years === 1 ? ' year' : ' years') + ' · ' + T.d + (y ? ' · ' + y + ' of ' + T.years + ' years done' : '') + (broke ? ' · not enough gold' : ''), function () { hireTutor(T); }, young || broke);
       });
     }
     var RZ_HOMES = [
