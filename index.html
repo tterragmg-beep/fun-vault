@@ -1345,6 +1345,7 @@
 
 
 
+
     </div>
   </section>
 
@@ -16437,7 +16438,9 @@
       } catch (e) { worker = false; }
     }
     function runHere(j) {   // no worker (some browsers block them): think on the main thread instead
-      setTimeout(function () { AI = AI || FVChessEngine(17); AI.play(j.moves, j.fen); var r = null; try { r = AI.think(j.opts); } catch (e) {} j.cb(r); }, 40);
+      var o = {}; for (var k in j.opts) o[k] = j.opts[k];
+      if (o.time > 1500) o.time = 1500;   // don't freeze the screen for long
+      setTimeout(function () { AI = AI || FVChessEngine(17); AI.play(j.moves, j.fen); var r = null; try { r = AI.think(o); } catch (e) {} j.cb(r); }, 40);
     }
     function ask(opts, cb) {   // think about the position on the board
       var j = { moves: game.moves.slice(), fen: game.fen || null, opts: opts, cb: cb };
