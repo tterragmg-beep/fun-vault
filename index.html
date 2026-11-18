@@ -1058,6 +1058,116 @@
 
   .lf-dp { margin: 8px 2px 0; font-size: 0.82rem; line-height: 1.4; color: var(--muted); }
   .lf-heir.lf-rbd { background: linear-gradient(135deg, #5b2a9e, #c04fd6); }
+  /* ---- Chess ---- */
+  .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
+  .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
+  .chs-head .bs-kicker { grid-column: 1 / -1; }
+  .chs-rating { font-family: var(--font-display); font-weight: 700; font-size: 2.2rem; line-height: 1; }
+  .chs-rating small { font-size: 0.9rem; color: var(--muted); font-weight: 600; margin-left: 6px; }
+  .chs-sub { color: var(--muted); font-size: 0.88rem; margin: 4px 0 0; }
+  .chs-big { font-size: 2.6rem; }
+  .chs-opts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chs-pill { font: 600 0.8rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; cursor: pointer; }
+  .chs-pill.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, var(--panel-2)); }
+  .chs-cont { margin-top: 14px; }
+  .chs-friend { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 14px; text-align: left; padding: 14px 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); color: inherit; font: inherit; cursor: pointer; }
+  .chs-friend b { font-family: var(--font-display); font-size: 1.02rem; display: block; }
+  .chs-friend small { color: var(--muted); font-size: 0.82rem; }
+  .chs-tier { display: flex; align-items: baseline; justify-content: space-between; margin: 20px 2px 8px; }
+  .chs-tier h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 0; }
+  .chs-tier small { color: var(--muted); font-size: 0.8rem; }
+  .chs-bots { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+  .chs-botc { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 12px 6px 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; color: inherit; font: inherit; cursor: pointer; transition: transform 0.12s ease, border-color 0.12s ease; }
+  .chs-botc:hover, .chs-botc:focus-visible { transform: translateY(-2px); border-color: var(--hue, var(--accent)); outline: none; }
+  .chs-botc b { font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; text-align: center; line-height: 1.15; }
+  .chs-botc small { color: var(--muted); font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+  .chs-botc.match { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .chs-tag { position: absolute; top: 6px; right: 7px; font-size: 0.8rem; }
+  .chs-tagm { position: absolute; top: -9px; left: 50%; transform: translateX(-50%); white-space: nowrap; font: 700 0.64rem var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; color: #10151c; background: var(--accent); border-radius: 999px; padding: 2px 7px; }
+  .chs-av { width: 54px; height: 54px; flex: none; display: grid; place-items: center; font-size: 30px; line-height: 1; border-radius: 50%; background: color-mix(in srgb, var(--hue, var(--accent)) 24%, transparent); border: 2px solid color-mix(in srgb, var(--hue, var(--accent)) 55%, transparent); }
+
+  .chs-pl { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 4px 2px; }
+  .chs-pl .chs-av { width: 42px; height: 42px; font-size: 23px; }
+  .chs-pl-info { min-width: 0; flex: none; }
+  .chs-pl-n { font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; line-height: 1.15; white-space: nowrap; }
+  .chs-pl-n small { color: var(--muted); font-weight: 600; font-size: 0.78rem; margin-left: 4px; }
+  .chs-capt { display: flex; align-items: center; min-height: 18px; flex-wrap: wrap; }
+  .chs-capt svg { width: 17px; height: 17px; margin-right: -4px; }
+  .chs-adv { margin-left: 8px; font-size: 0.76rem; color: var(--muted); font-weight: 700; }
+  .chs-say { flex: 1; min-width: 0; position: relative; margin-left: 4px; font-size: 0.84rem; line-height: 1.3; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 7px 10px; opacity: 0; transform: translateY(4px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  .chs-say.on { opacity: 1; transform: none; }
+  .chs-say::before { content: ''; position: absolute; left: -6px; top: 50%; width: 10px; height: 10px; background: var(--panel); border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); transform: translateY(-50%) rotate(45deg); }
+  .chs-think { display: inline-flex; gap: 3px; margin-left: 6px; vertical-align: middle; }
+  .chs-think i { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: chsdot 1s infinite ease-in-out; }
+  .chs-think i:nth-child(2) { animation-delay: 0.15s; } .chs-think i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes chsdot { 0%, 100% { opacity: 0.25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+
+  .chs-board { --chs-l: #f0d9b5; --chs-d: #b58863; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); width: 100%; max-width: 560px; margin: 0 auto; border-radius: 10px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; box-shadow: 0 12px 30px rgba(0,0,0,0.35); cursor: pointer; }
+  .chs-board.t-ocean { --chs-l: #dfe9f3; --chs-d: #7b98b8; }
+  .chs-board.t-mint { --chs-l: #e8f1df; --chs-d: #82a46e; }
+  .chs-board.t-candy { --chs-l: #fbe6f0; --chs-d: #d58ab3; }
+  .chs-board.t-night { --chs-l: #a7b1c2; --chs-d: #4f596d; }
+  .chs-sq { position: relative; width: 100%; min-width: 0; aspect-ratio: 1 / 1; }
+  .chs-sq.l { background: var(--chs-l); }
+  .chs-sq.d { background: var(--chs-d); }
+  .chs-sq.last::before, .chs-sq.sel::before, .chs-sq.hint::before, .chs-sq.chk::before { content: ''; position: absolute; inset: 0; }
+  .chs-sq.last::before { background: rgba(255, 221, 51, 0.38); }
+  .chs-sq.sel::before { background: rgba(255, 221, 51, 0.62); }
+  .chs-sq.hint::before { background: rgba(56, 189, 248, 0.72); box-shadow: inset 0 0 0 3px rgba(8, 105, 160, 0.95); animation: chspulse 0.9s ease-in-out infinite alternate; }
+  .chs-sq.chk::before { background: radial-gradient(circle, rgba(255, 45, 45, 0.95) 0%, rgba(255, 45, 45, 0.55) 40%, rgba(255, 45, 45, 0) 75%); }
+  @keyframes chspulse { from { opacity: 0.45; } to { opacity: 1; } }
+  .chs-sq.dot::after { content: ''; position: absolute; left: 50%; top: 50%; width: 30%; height: 30%; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(25, 30, 40, 0.3); z-index: 2; }
+  .chs-sq.cap::after { content: ''; position: absolute; inset: 3%; border-radius: 50%; border: 0.32em solid rgba(25, 30, 40, 0.3); z-index: 2; }
+  .chs-p { position: absolute; inset: 0; z-index: 1; pointer-events: none; will-change: transform; }
+  .chs-p svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.28)); }
+  .chs-p.lift { opacity: 0.25; }
+  .chs-ghost { position: fixed; z-index: 70; pointer-events: none; transform: translate(-50%, -58%) scale(1.18); }
+  .chs-ghost svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.35)); }
+  .chs-co { position: absolute; z-index: 3; font: 800 clamp(8px, 2.4vw, 11px)/1 var(--font-body); pointer-events: none; }
+  .chs-co.f { right: 3px; bottom: 2px; }
+  .chs-co.r { left: 3px; top: 3px; }
+  .chs-sq.l .chs-co { color: var(--chs-d); }
+  .chs-sq.d .chs-co { color: var(--chs-l); }
+
+  .chs-status { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; margin: 6px 0 0; min-height: 1.4em; }
+  .chs-status.win { color: var(--accent-2); } .chs-status.lose { color: var(--bad); }
+  .chs-after { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .chs-after .btn { flex: 1; min-width: 140px; }
+  .chs-tools { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 12px; }
+  .chs-tool { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px 7px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); color: inherit; font: 700 0.72rem var(--font-body); cursor: pointer; transition: transform 0.1s ease; }
+  .chs-tool span { font-size: 1.15rem; line-height: 1.2; }
+  .chs-tool:active { transform: scale(0.95); }
+  .chs-tool:disabled { opacity: 0.38; cursor: default; transform: none; }
+  .chs-tool.busy span { animation: chspulse 0.5s ease-in-out infinite alternate; }
+  .chs-moves { margin-top: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; max-height: 118px; overflow-y: auto; font: 500 0.86rem/1.8 var(--font-mono); }
+  .chs-moves:empty::before { content: 'Moves will show up here.'; color: var(--muted); font-family: var(--font-body); }
+  .chs-mv { display: inline-block; margin-right: 8px; white-space: nowrap; }
+  .chs-mv i { font-style: normal; color: var(--muted); margin-right: 3px; }
+  .chs-mv b { font-weight: 500; padding: 0 3px; border-radius: 5px; }
+  .chs-mv b.now { background: color-mix(in srgb, var(--accent) 34%, transparent); }
+
+  .chs-ov { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 16px; background: rgba(5, 8, 14, 0.6); animation: fadein 0.18s ease; }
+  .chs-card { width: 100%; max-width: 420px; max-height: calc(100vh - 32px); overflow-y: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 22px 20px 20px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); text-align: center; }
+  .chs-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; margin: 10px 0 4px; }
+  .chs-card p { color: var(--muted); margin: 6px 0; line-height: 1.45; }
+  .chs-card .chs-av { margin: 0 auto; width: 76px; height: 76px; font-size: 42px; }
+  .chs-card .btn { margin-top: 12px; }
+  .chs-elo { display: inline-block; font: 700 0.8rem var(--font-display); color: #10151c; background: var(--hue, var(--accent)); border-radius: 999px; padding: 3px 10px; }
+  .chs-quote { font-style: italic; color: var(--fg) !important; }
+  .chs-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
+  .chs-seg button { font: 700 0.86rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 4px; cursor: pointer; }
+  .chs-seg button.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, var(--panel-2)); }
+  .chs-rec { display: flex; justify-content: center; gap: 14px; margin-top: 8px; font-size: 0.86rem; color: var(--muted); }
+  .chs-rec b { color: var(--fg); }
+  .chs-promo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .chs-promo button { aspect-ratio: 1 / 1; border-radius: 14px; background: var(--panel-2); border: 1px solid var(--line); cursor: pointer; padding: 6px; }
+  .chs-promo button:hover, .chs-promo button:focus-visible { border-color: var(--accent); outline: none; }
+  .chs-promo svg { width: 100%; height: 100%; display: block; }
+  .chs-delta { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--fg); margin-top: 10px; }
+  .chs-delta .up { color: var(--accent-2); } .chs-delta .down { color: var(--bad); }
+  .chs-row { display: flex; gap: 8px; }
+  .chs-row .btn { flex: 1; }
+  /* ---- end Chess ---- */
 </style>
 </head>
 <body>
@@ -1212,6 +1322,18 @@
         <p>Sneak fouls on the other basketball team while the ref isn’t looking. Earn sneak points to bribe the ref and buy sneaky tricks. Get caught 3 times and you foul out!</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
+
+      <button class="card" style="--hue: var(--c2);" data-goto="chess">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21h12"/><path d="M8 21c0-3.2 1-5.6 3-7.6-1.4.4-2.8.3-3.8-.5-.8-.7-.8-1.7-.2-2.5L10.2 6l.6-2.6 2 1.9c3.1.8 5.2 3.7 5.2 7.6V21"/><circle cx="11.6" cy="8.6" r=".5" fill="currentColor"/></svg></span>
+        <h2>Chess</h2>
+        <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). Beat them all to become a legend, or play a friend on the same phone.</p>
+        <span class="play">Play <span class="arrow">→</span></span>
+      </button>
+
+
+
+
+
 
 
 
@@ -2120,6 +2242,35 @@
       <div class="fp-achs" id="fp-achs"></div>
       <div class="bs-stats" id="fp-stats"></div>
     </div>
+  </section>
+
+  <!-- ================= CHESS ================= -->
+  <section id="chess" class="screen chs">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Chess</span></div>
+
+    <div id="chs-menu"></div>
+
+    <div id="chs-game" hidden>
+      <div class="chs-pl chs-pl-top" id="chs-top"></div>
+      <div class="chs-board" id="chs-board" role="grid" aria-label="Chess board"></div>
+      <div class="chs-pl chs-pl-bot" id="chs-bot"></div>
+      <p class="chs-status" id="chs-status" aria-live="polite"></p>
+      <div class="chs-after" id="chs-after" hidden>
+        <button class="btn slim" id="chs-rematch" type="button">🔁 Play again</button>
+        <button class="btn slim ghost" id="chs-pick" type="button">🤖 Pick a bot</button>
+      </div>
+      <div class="chs-tools" id="chs-tools">
+        <button class="chs-tool" id="chs-hint" type="button"><span>💡</span>Hint</button>
+        <button class="chs-tool" id="chs-undo" type="button"><span>↩️</span>Undo</button>
+        <button class="chs-tool" id="chs-flip" type="button"><span>🔄</span>Flip</button>
+        <button class="chs-tool" id="chs-draw" type="button"><span>🤝</span>Draw</button>
+        <button class="chs-tool" id="chs-resign" type="button"><span>🏳️</span>Resign</button>
+        <button class="chs-tool" id="chs-menuBtn" type="button"><span>🤖</span>Bots</button>
+      </div>
+      <div class="chs-moves" id="chs-moves" aria-label="Moves"></div>
+    </div>
+
+    <div class="chs-ov" id="chs-ov" hidden><div class="chs-card" id="chs-card" role="dialog" aria-modal="true"></div></div>
   </section>
 
   <!-- ================= SPEED TYPER ================= -->
@@ -5859,7 +6010,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig','foul'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig','foul','chess'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -15477,6 +15628,1263 @@
     function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; keys = {}; fresh = []; }
     window.registerHook('foul', enter, leave);
   })();
+  // ============ Chess: play 24 bots from 100 to 3200 Elo, or a friend on the same phone ============
+  (function () {
+  // ============ Chess: the rules + the bot brain (self-contained, so it can also run inside a Web Worker) ============
+  function FVChessEngine(ttBits) {   // ttBits: how much memory the bot gets (2^ttBits remembered positions)
+    'use strict';
+    var P = 1, N = 2, B = 3, R = 4, Q = 5, K = 6, WHITE = 0, BLACK = 8, OFF = 32;
+    var MATE = 30000, INF = 32000, MAXPLY = 64, MAXH = 8192;
+    var START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    var KN = [21, 19, 12, 8, -21, -19, -12, -8], KG = [10, -10, 1, -1, 11, 9, -11, -9], BD = [11, 9, -11, -9], RD = [10, -10, 1, -1];
+
+    // ---- the position (a 10x12 "mailbox" board: a1 = 21, h1 = 28, a8 = 91, h8 = 98) ----
+    var board = new Int8Array(120), side = WHITE, castle = 0, ep = 0, half = 0, moveNo = 1, hp = 0;
+    var kingSq = [25, 95], hashLo = 0, hashHi = 0;
+    var uMove = new Int32Array(MAXH), uCap = new Int8Array(MAXH), uCastle = new Int8Array(MAXH), uEp = new Int8Array(MAXH);
+    var uHalf = new Int16Array(MAXH), uLo = new Int32Array(MAXH), uHi = new Int32Array(MAXH);
+
+    // ---- Zobrist keys (two 32-bit halves), from a fixed seed so every copy of the engine agrees ----
+    var seed = 0x2545f491;
+    function rnd32() { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return seed | 0; }
+    var zLo = new Int32Array(16 * 120), zHi = new Int32Array(16 * 120), zCastLo = new Int32Array(16), zCastHi = new Int32Array(16);
+    var zEpLo = new Int32Array(120), zEpHi = new Int32Array(120), zSideLo, zSideHi, i;
+    for (i = 0; i < 16 * 120; i++) { zLo[i] = rnd32(); zHi[i] = rnd32(); }
+    for (i = 0; i < 16; i++) { zCastLo[i] = rnd32(); zCastHi[i] = rnd32(); }
+    for (i = 0; i < 120; i++) { zEpLo[i] = rnd32(); zEpHi[i] = rnd32(); }
+    zSideLo = rnd32(); zSideHi = rnd32();
+    var cMask = new Int8Array(120);   // castling rights that survive a move from/to each square
+    for (i = 0; i < 120; i++) cMask[i] = 15;
+    cMask[21] = 13; cMask[28] = 14; cMask[25] = 12; cMask[91] = 7; cMask[98] = 11; cMask[95] = 3;
+
+    function sqOf(f, r) { return 21 + f + r * 10; }
+    function fileOf(s) { return (s % 10) - 1; }
+    function rankOf(s) { return ((s / 10) | 0) - 2; }
+    function sqName(s) { return 'abcdefgh'.charAt(fileOf(s)) + (rankOf(s) + 1); }
+    function parseSq(t) { return sqOf(t.charCodeAt(0) - 97, t.charCodeAt(1) - 49); }
+
+    function computeHash() {
+      hashLo = 0; hashHi = 0;
+      for (var s = 21; s <= 98; s++) { var pc = board[s]; if (pc && pc !== OFF) { hashLo ^= zLo[pc * 120 + s]; hashHi ^= zHi[pc * 120 + s]; } }
+      if (side === BLACK) { hashLo ^= zSideLo; hashHi ^= zSideHi; }
+      hashLo ^= zCastLo[castle]; hashHi ^= zCastHi[castle];
+      if (ep) { hashLo ^= zEpLo[ep]; hashHi ^= zEpHi[ep]; }
+    }
+    function loadFEN(fen) {
+      var parts = String(fen || START).trim().split(/\s+/), rows = parts[0].split('/'), s, r, f, c, k;
+      for (s = 0; s < 120; s++) board[s] = OFF;
+      for (r = 0; r < 8; r++) for (f = 0; f < 8; f++) board[sqOf(f, r)] = 0;
+      for (r = 0; r < 8; r++) {
+        f = 0;
+        for (k = 0; k < rows[r].length; k++) {
+          c = rows[r].charAt(k);
+          if (c >= '1' && c <= '8') { f += +c; continue; }
+          var t = 'pnbrqk'.indexOf(c.toLowerCase()) + 1, col = c === c.toLowerCase() ? BLACK : WHITE;
+          s = sqOf(f, 7 - r); board[s] = col | t; if (t === K) kingSq[col >> 3] = s; f++;
+        }
+      }
+      side = parts[1] === 'b' ? BLACK : WHITE;
+      castle = 0; c = parts[2] || '-';
+      if (c.indexOf('K') >= 0) castle |= 1; if (c.indexOf('Q') >= 0) castle |= 2; if (c.indexOf('k') >= 0) castle |= 4; if (c.indexOf('q') >= 0) castle |= 8;
+      ep = parts[3] && parts[3] !== '-' ? parseSq(parts[3]) : 0;
+      half = parseInt(parts[4], 10) || 0; moveNo = parseInt(parts[5], 10) || 1; hp = 0;
+      computeHash();
+    }
+    function getFEN() {
+      var out = '', r, f, e, pc;
+      for (r = 7; r >= 0; r--) {
+        e = 0;
+        for (f = 0; f < 8; f++) {
+          pc = board[sqOf(f, r)];
+          if (!pc) { e++; continue; }
+          if (e) { out += e; e = 0; }
+          var ch = 'pnbrqk'.charAt((pc & 7) - 1); out += pc & 8 ? ch : ch.toUpperCase();
+        }
+        if (e) out += e; if (r) out += '/';
+      }
+      var cs = (castle & 1 ? 'K' : '') + (castle & 2 ? 'Q' : '') + (castle & 4 ? 'k' : '') + (castle & 8 ? 'q' : '');
+      return out + ' ' + (side ? 'b' : 'w') + ' ' + (cs || '-') + ' ' + (ep ? sqName(ep) : '-') + ' ' + half + ' ' + moveNo;
+    }
+
+    // ---- attacks and moves ----
+    function attacked(s, by) {
+      if (by === WHITE) { if (board[s - 9] === 1 || board[s - 11] === 1) return true; }
+      else if (board[s + 9] === 9 || board[s + 11] === 9) return true;
+      var kn = by | N, kg = by | K, bq = by | B, rq = by | R, qq = by | Q, j, d, t, x;
+      for (j = 0; j < 8; j++) { if (board[s + KN[j]] === kn || board[s + KG[j]] === kg) return true; }
+      for (j = 0; j < 4; j++) {
+        d = BD[j]; t = s + d; while (board[t] === 0) t += d; x = board[t]; if (x === bq || x === qq) return true;
+        d = RD[j]; t = s + d; while (board[t] === 0) t += d; x = board[t]; if (x === rq || x === qq) return true;
+      }
+      return false;
+    }
+    function inCheck() { return attacked(kingSq[side >> 3], side ^ 8); }
+    function addPawn(buf, n, from, to, fl, caps) {
+      var rk = rankOf(to);
+      if (rk === 7 || rk === 0) {
+        buf[n++] = from | (to << 7) | (Q << 14) | (fl << 17);
+        if (!caps) { buf[n++] = from | (to << 7) | (N << 14) | (fl << 17); buf[n++] = from | (to << 7) | (R << 14) | (fl << 17); buf[n++] = from | (to << 7) | (B << 14) | (fl << 17); }
+      } else buf[n++] = from | (to << 7) | (fl << 17);
+      return n;
+    }
+    // pseudo-legal moves (caps = only captures and queen promotions, for the quiet-position search)
+    function gen(buf, caps) {
+      var n = 0, us = side, them = side ^ 8, s, pc, t, j, d, to, x;
+      var fwd = us === WHITE ? 10 : -10, start = us === WHITE ? 1 : 6;
+      for (s = 21; s <= 98; s++) {
+        pc = board[s];
+        if (!pc || pc === OFF || (pc & 8) !== us) continue;
+        t = pc & 7;
+        if (t === P) {
+          to = s + fwd;
+          x = board[to - 1]; if (x && x !== OFF && (x & 8) === them) n = addPawn(buf, n, s, to - 1, 0, caps); else if (ep && to - 1 === ep) buf[n++] = s | (ep << 7) | (2 << 17);
+          x = board[to + 1]; if (x && x !== OFF && (x & 8) === them) n = addPawn(buf, n, s, to + 1, 0, caps); else if (ep && to + 1 === ep) buf[n++] = s | (ep << 7) | (2 << 17);
+          if (!board[to]) {
+            var pr = rankOf(to) === 7 || rankOf(to) === 0;
+            if (pr) n = addPawn(buf, n, s, to, 0, caps);
+            else if (!caps) {
+              buf[n++] = s | (to << 7);
+              if (rankOf(s) === start && !board[to + fwd]) buf[n++] = s | ((to + fwd) << 7) | (1 << 17);
+            }
+          }
+        } else if (t === N || t === K) {
+          var offs = t === N ? KN : KG;
+          for (j = 0; j < 8; j++) {
+            to = s + offs[j]; x = board[to];
+            if (x === OFF) continue;
+            if (!x) { if (!caps) buf[n++] = s | (to << 7); }
+            else if ((x & 8) === them) buf[n++] = s | (to << 7);
+          }
+          if (t === K && !caps) {
+            if (us === WHITE && s === 25) {
+              if ((castle & 1) && !board[26] && !board[27] && board[28] === 4 && !attacked(25, BLACK) && !attacked(26, BLACK) && !attacked(27, BLACK)) buf[n++] = 25 | (27 << 7) | (4 << 17);
+              if ((castle & 2) && !board[24] && !board[23] && !board[22] && board[21] === 4 && !attacked(25, BLACK) && !attacked(24, BLACK) && !attacked(23, BLACK)) buf[n++] = 25 | (23 << 7) | (4 << 17);
+            } else if (us === BLACK && s === 95) {
+              if ((castle & 4) && !board[96] && !board[97] && board[98] === 12 && !attacked(95, WHITE) && !attacked(96, WHITE) && !attacked(97, WHITE)) buf[n++] = 95 | (97 << 7) | (4 << 17);
+              if ((castle & 8) && !board[94] && !board[93] && !board[92] && board[91] === 12 && !attacked(95, WHITE) && !attacked(94, WHITE) && !attacked(93, WHITE)) buf[n++] = 95 | (93 << 7) | (4 << 17);
+            }
+          }
+        } else {
+          var j0 = t === B ? 4 : 0, j1 = t === R ? 4 : 8;
+          for (j = j0; j < j1; j++) {
+            d = KG[j]; to = s + d;
+            while (board[to] === 0) { if (!caps) buf[n++] = s | (to << 7); to += d; }
+            x = board[to]; if (x !== OFF && (x & 8) === them) buf[n++] = s | (to << 7);
+          }
+        }
+      }
+      return n;
+    }
+    // KG = [N, S, E, W, NE, NW, SW, SE]: rooks use 0-3, bishops 4-7, queens all 8
+
+    function make(m) {
+      var from = m & 127, to = (m >> 7) & 127, pr = (m >> 14) & 7, fl = m >>> 17, us = side;
+      var pc = board[from], cap = board[to];
+      uMove[hp] = m; uCastle[hp] = castle; uEp[hp] = ep; uHalf[hp] = half; uLo[hp] = hashLo; uHi[hp] = hashHi;
+      hashLo ^= zCastLo[castle]; hashHi ^= zCastHi[castle];
+      if (ep) { hashLo ^= zEpLo[ep]; hashHi ^= zEpHi[ep]; }
+      if (fl & 2) {
+        var cs = to + (us === WHITE ? -10 : 10);
+        cap = board[cs]; board[cs] = 0; hashLo ^= zLo[cap * 120 + cs]; hashHi ^= zHi[cap * 120 + cs];
+      } else if (cap) { hashLo ^= zLo[cap * 120 + to]; hashHi ^= zHi[cap * 120 + to]; }
+      uCap[hp] = cap;
+      var np = pr ? (us | pr) : pc;
+      board[from] = 0; board[to] = np;
+      hashLo ^= zLo[pc * 120 + from] ^ zLo[np * 120 + to]; hashHi ^= zHi[pc * 120 + from] ^ zHi[np * 120 + to];
+      if (fl & 4) {
+        var rf = to > from ? from + 3 : from - 4, rt = to > from ? from + 1 : from - 1, rk = board[rf];
+        board[rf] = 0; board[rt] = rk;
+        hashLo ^= zLo[rk * 120 + rf] ^ zLo[rk * 120 + rt]; hashHi ^= zHi[rk * 120 + rf] ^ zHi[rk * 120 + rt];
+      }
+      if ((pc & 7) === K) kingSq[us >> 3] = to;
+      castle &= cMask[from] & cMask[to];
+      ep = (fl & 1) ? (from + to) >> 1 : 0;
+      half = ((pc & 7) === P || cap) ? 0 : half + 1;
+      if (us === BLACK) moveNo++;
+      side = us ^ 8;
+      hashLo ^= zSideLo ^ zCastLo[castle]; hashHi ^= zSideHi ^ zCastHi[castle];
+      if (ep) { hashLo ^= zEpLo[ep]; hashHi ^= zEpHi[ep]; }
+      hp++;
+    }
+    function unmake() {
+      hp--;
+      var m = uMove[hp], from = m & 127, to = (m >> 7) & 127, pr = (m >> 14) & 7, fl = m >>> 17;
+      side ^= 8; var us = side;
+      if (us === BLACK) moveNo--;
+      var pc = pr ? (us | P) : board[to];
+      board[from] = pc;
+      if (fl & 2) { board[to] = 0; board[to + (us === WHITE ? -10 : 10)] = uCap[hp]; } else board[to] = uCap[hp];
+      if (fl & 4) { var rf = to > from ? from + 3 : from - 4, rt = to > from ? from + 1 : from - 1; board[rf] = board[rt]; board[rt] = 0; }
+      if ((pc & 7) === K) kingSq[us >> 3] = from;
+      castle = uCastle[hp]; ep = uEp[hp]; half = uHalf[hp]; hashLo = uLo[hp]; hashHi = uHi[hp];
+    }
+    function makeNull() {
+      uMove[hp] = 0; uCastle[hp] = castle; uEp[hp] = ep; uHalf[hp] = half; uLo[hp] = hashLo; uHi[hp] = hashHi; uCap[hp] = 0;
+      if (ep) { hashLo ^= zEpLo[ep]; hashHi ^= zEpHi[ep]; ep = 0; }
+      side ^= 8; hashLo ^= zSideLo; hashHi ^= zSideHi; half = 0; hp++;
+    }
+    function unmakeNull() { hp--; side ^= 8; castle = uCastle[hp]; ep = uEp[hp]; half = uHalf[hp]; hashLo = uLo[hp]; hashHi = uHi[hp]; }
+
+    var tmpBuf = new Int32Array(256);
+    function legalMoves() {
+      var n = gen(tmpBuf, false), out = [], us = side, j;
+      for (j = 0; j < n; j++) { var m = tmpBuf[j]; make(m); if (!attacked(kingSq[us >> 3], side)) out.push(m); unmake(); }
+      return out;
+    }
+    function perft(d) {
+      if (d === 0) return 1;
+      var buf = new Int32Array(256), n = gen(buf, false), us = side, c = 0, j;
+      for (j = 0; j < n; j++) { make(buf[j]); if (!attacked(kingSq[us >> 3], side)) c += d === 1 ? 1 : perft(d - 1); unmake(); }
+      return c;
+    }
+
+    // ---- draws ----
+    function repeats(twice) {   // has this position happened before (since the last capture or pawn move)?
+      var c = 0, lo = Math.max(0, hp - half);
+      for (var j = hp - 2; j >= lo; j -= 2) if (uLo[j] === hashLo && uHi[j] === hashHi) { c++; if (!twice || c >= 2) return c; }
+      return c;
+    }
+    function insufficient() {
+      var minors = 0, bishops = [], s, pc, t;
+      for (s = 21; s <= 98; s++) {
+        pc = board[s]; if (!pc || pc === OFF) continue; t = pc & 7;
+        if (t === P || t === R || t === Q) return false;
+        if (t === N || t === B) { minors++; if (t === B) bishops.push((fileOf(s) + rankOf(s)) & 1); }
+      }
+      if (minors <= 1) return true;
+      return minors === 2 && bishops.length === 2 && bishops[0] === bishops[1];   // bishops on the same color
+    }
+
+    // ---- notation ----
+    function moveUci(m) { var pr = (m >> 14) & 7; return sqName(m & 127) + sqName((m >> 7) & 127) + (pr ? 'nbrq'.charAt(pr - 2) : ''); }
+    function findUci(u) {
+      var lm = legalMoves(), from = parseSq(u.slice(0, 2)), to = parseSq(u.slice(2, 4)), pr = u.length > 4 ? 'nbrq'.indexOf(u.charAt(4)) + 2 : 0;
+      for (var j = 0; j < lm.length; j++) {
+        var m = lm[j], mp = (m >> 14) & 7;
+        if ((m & 127) === from && ((m >> 7) & 127) === to && (mp === pr || (!pr && mp === Q))) return m;
+      }
+      return 0;
+    }
+    function san(m, lm) {
+      lm = lm || legalMoves();
+      var from = m & 127, to = (m >> 7) & 127, pr = (m >> 14) & 7, fl = m >>> 17, pc = board[from], t = pc & 7, s;
+      if (fl & 4) s = to > from ? 'O-O' : 'O-O-O';
+      else {
+        var cap = board[to] || (fl & 2);
+        if (t === P) s = (cap ? 'abcdefgh'.charAt(fileOf(from)) + 'x' : '') + sqName(to) + (pr ? '=' + 'NBRQ'.charAt(pr - 2) : '');
+        else {
+          s = 'NBRQK'.charAt(t - 2);
+          var amb = false, sf = false, sr = false;
+          for (var j = 0; j < lm.length; j++) {
+            var o = lm[j], of = o & 127;
+            if (o !== m && ((o >> 7) & 127) === to && board[of] === pc) { amb = true; if (fileOf(of) === fileOf(from)) sf = true; if (rankOf(of) === rankOf(from)) sr = true; }
+          }
+          if (amb) s += !sf ? 'abcdefgh'.charAt(fileOf(from)) : !sr ? String(rankOf(from) + 1) : sqName(from);
+          s += (cap ? 'x' : '') + sqName(to);
+        }
+      }
+      make(m);
+      if (inCheck()) s += legalMoves().length ? '+' : '#';
+      unmake();
+      return s;
+    }
+    function status() {   // '' while the game goes on
+      var lm = legalMoves();
+      if (!lm.length) return inCheck() ? 'checkmate' : 'stalemate';
+      if (insufficient()) return 'material';
+      if (half >= 100) return 'fifty';
+      if (repeats(true) >= 2) return 'repetition';
+      return '';
+    }
+
+    // ---- evaluation (centipawns, from the side to move) ----
+    var MGV = [0, 85, 320, 340, 480, 970, 0], EGV = [0, 105, 290, 310, 520, 950, 0], PHASE = [0, 0, 1, 1, 2, 4, 0];
+    // piece-square tables from White's side, rank 8 first (like looking at the board)
+    var PST_MG = [null,
+      [0, 0, 0, 0, 0, 0, 0, 0, 50, 55, 55, 60, 60, 55, 55, 50, 15, 20, 28, 38, 38, 28, 20, 15, 4, 8, 14, 28, 28, 14, 8, 4,
+        0, 0, 8, 24, 24, 8, 0, 0, 4, -2, -6, 6, 6, -6, -2, 4, 4, 8, 8, -18, -18, 8, 8, 4, 0, 0, 0, 0, 0, 0, 0, 0],
+      [-55, -40, -30, -28, -28, -30, -40, -55, -38, -18, 0, 6, 6, 0, -18, -38, -28, 6, 14, 18, 18, 14, 6, -28, -26, 4, 18, 24, 24, 18, 4, -26,
+        -28, 2, 16, 22, 22, 16, 2, -28, -30, 4, 12, 14, 14, 12, 4, -30, -40, -20, 0, 4, 4, 0, -20, -40, -52, -36, -28, -26, -26, -28, -36, -52],
+      [-20, -10, -10, -10, -10, -10, -10, -20, -10, 2, 0, 0, 0, 0, 2, -10, -10, 4, 6, 10, 10, 6, 4, -10, -10, 6, 8, 12, 12, 8, 6, -10,
+        -10, 2, 12, 12, 12, 12, 2, -10, -10, 10, 10, 10, 10, 10, 10, -10, -10, 8, 2, 2, 2, 2, 8, -10, -20, -10, -14, -10, -10, -14, -10, -20],
+      [4, 6, 6, 8, 8, 6, 6, 4, 14, 18, 18, 18, 18, 18, 18, 14, -4, 0, 2, 4, 4, 2, 0, -4, -6, 0, 0, 2, 2, 0, 0, -6,
+        -6, 0, 0, 2, 2, 0, 0, -6, -6, 0, 0, 2, 2, 0, 0, -6, -8, -2, 0, 2, 2, 0, -2, -8, -4, -2, 2, 8, 8, 4, -2, -4],
+      [-20, -10, -8, -4, -4, -8, -10, -20, -10, -4, 0, 0, 0, 0, -4, -10, -8, 0, 4, 4, 4, 4, 0, -8, -4, 0, 4, 6, 6, 4, 0, -4,
+        -4, 0, 4, 6, 6, 4, 0, -4, -8, 2, 4, 4, 4, 4, 0, -8, -10, 0, 2, 0, 0, 0, -2, -10, -20, -12, -8, -2, -6, -10, -12, -20],
+      [-40, -46, -46, -54, -54, -46, -46, -40, -36, -42, -42, -50, -50, -42, -42, -36, -32, -40, -40, -48, -48, -40, -40, -32, -30, -36, -38, -44, -44, -38, -36, -30,
+        -24, -30, -32, -40, -40, -32, -30, -24, -14, -20, -22, -26, -26, -22, -20, -14, 12, 10, -6, -14, -14, -6, 10, 12, 18, 30, 12, -6, 0, -8, 32, 20]];
+    var PST_EG = [null,
+      [0, 0, 0, 0, 0, 0, 0, 0, 80, 80, 78, 76, 76, 78, 80, 80, 48, 48, 44, 40, 40, 44, 48, 48, 24, 24, 20, 18, 18, 20, 24, 24,
+        10, 10, 8, 6, 6, 8, 10, 10, 2, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [-40, -30, -20, -16, -16, -20, -30, -40, -28, -12, -4, 0, 0, -4, -12, -28, -18, -2, 8, 12, 12, 8, -2, -18, -16, 2, 12, 16, 16, 12, 2, -16,
+        -16, 2, 12, 16, 16, 12, 2, -16, -18, -2, 6, 10, 10, 6, -2, -18, -28, -12, -4, 0, 0, -4, -12, -28, -40, -30, -22, -18, -18, -22, -30, -40],
+      [-14, -10, -8, -6, -6, -8, -10, -14, -10, -2, 0, 2, 2, 0, -2, -10, -8, 0, 4, 6, 6, 4, 0, -8, -6, 2, 6, 8, 8, 6, 2, -6,
+        -6, 2, 6, 8, 8, 6, 2, -6, -8, 0, 4, 6, 6, 4, 0, -8, -10, -2, 0, 2, 2, 0, -2, -10, -14, -10, -8, -6, -6, -8, -10, -14],
+      [8, 8, 8, 8, 8, 8, 8, 8, 12, 12, 12, 12, 12, 12, 12, 12, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2,
+        0, 0, 0, 0, 0, 0, 0, 0, -2, -2, -2, -2, -2, -2, -2, -2, -4, -4, -4, -4, -4, -4, -4, -4, -6, -4, -2, 0, 0, -2, -4, -6],
+      [-16, -10, -6, -4, -4, -6, -10, -16, -10, -2, 2, 4, 4, 2, -2, -10, -6, 2, 8, 10, 10, 8, 2, -6, -4, 4, 10, 14, 14, 10, 4, -4,
+        -4, 4, 10, 14, 14, 10, 4, -4, -6, 2, 8, 10, 10, 8, 2, -6, -10, -2, 2, 4, 4, 2, -2, -10, -16, -10, -6, -4, -4, -6, -10, -16],
+      [-50, -36, -26, -20, -20, -26, -36, -50, -28, -14, -4, 4, 4, -4, -14, -28, -22, -4, 16, 24, 24, 16, -4, -22, -20, -2, 24, 34, 34, 24, -2, -20,
+        -20, -4, 22, 32, 32, 22, -4, -20, -22, -8, 12, 18, 18, 12, -8, -22, -30, -20, -6, 0, 0, -6, -20, -30, -50, -36, -28, -24, -24, -28, -36, -50]];
+    var tMg = new Int16Array(16 * 120), tEg = new Int16Array(16 * 120);
+    (function () {
+      for (var t = 1; t <= 6; t++) for (var r = 0; r < 8; r++) for (var f = 0; f < 8; f++) {
+        var s = sqOf(f, r);
+        tMg[t * 120 + s] = MGV[t] + PST_MG[t][(7 - r) * 8 + f]; tEg[t * 120 + s] = EGV[t] + PST_EG[t][(7 - r) * 8 + f];
+        tMg[(8 | t) * 120 + s] = MGV[t] + PST_MG[t][r * 8 + f]; tEg[(8 | t) * 120 + s] = EGV[t] + PST_EG[t][r * 8 + f];
+      }
+    })();
+    var PASS_MG = [0, 0, 4, 10, 20, 34, 56, 0], PASS_EG = [0, 6, 12, 24, 42, 70, 110, 0];
+    var wPawnMin = new Int8Array(10), wPawnMax = new Int8Array(10), bPawnMin = new Int8Array(10), bPawnMax = new Int8Array(10);
+    var wPawnN = new Int8Array(10), bPawnN = new Int8Array(10), pieceList = new Int8Array(32);
+    function centerDist(s) { var f = fileOf(s), r = rankOf(s); return Math.max(3 - f, f - 4) + Math.max(3 - r, r - 4); }
+    function evaluate() {
+      var mg = 0, eg = 0, phase = 0, s, pc, t, f, r, j, np = 0, wb = 0, bb = 0, wMat = 0, bMat = 0, wPawns = 0, bPawns = 0;
+      for (j = 0; j < 10; j++) { wPawnMin[j] = 9; wPawnMax[j] = -1; bPawnMin[j] = 9; bPawnMax[j] = -1; wPawnN[j] = 0; bPawnN[j] = 0; }
+      for (s = 21; s <= 98; s++) {
+        pc = board[s]; if (!pc || pc === OFF) continue;
+        t = pc & 7; phase += PHASE[t];
+        if (pc & 8) { mg -= tMg[pc * 120 + s]; eg -= tEg[pc * 120 + s]; bMat += MGV[t]; } else { mg += tMg[pc * 120 + s]; eg += tEg[pc * 120 + s]; wMat += MGV[t]; }
+        if (t === P) {
+          f = fileOf(s) + 1; r = rankOf(s);
+          if (pc & 8) { bPawns++; bPawnN[f]++; if (r < bPawnMin[f]) bPawnMin[f] = r; if (r > bPawnMax[f]) bPawnMax[f] = r; }
+          else { wPawns++; wPawnN[f]++; if (r < wPawnMin[f]) wPawnMin[f] = r; if (r > wPawnMax[f]) wPawnMax[f] = r; }
+        } else if (t !== K) { pieceList[np++] = s; if (t === B) { if (pc & 8) bb++; else wb++; } }
+      }
+      if (wb >= 2) { mg += 30; eg += 50; }
+      if (bb >= 2) { mg -= 30; eg -= 50; }
+      // pawns: doubled, isolated, passed
+      for (f = 1; f <= 8; f++) {
+        if (wPawnN[f]) {
+          if (wPawnN[f] > 1) { mg -= 10 * (wPawnN[f] - 1); eg -= 22 * (wPawnN[f] - 1); }
+          if (!wPawnN[f - 1] && !wPawnN[f + 1]) { mg -= 12 * wPawnN[f]; eg -= 16 * wPawnN[f]; }
+          r = wPawnMax[f];
+          if (bPawnMax[f - 1] <= r && bPawnMax[f] <= r && bPawnMax[f + 1] <= r) { mg += PASS_MG[r]; eg += PASS_EG[r]; }
+        }
+        if (bPawnN[f]) {
+          if (bPawnN[f] > 1) { mg += 10 * (bPawnN[f] - 1); eg += 22 * (bPawnN[f] - 1); }
+          if (!bPawnN[f - 1] && !bPawnN[f + 1]) { mg += 12 * bPawnN[f]; eg += 16 * bPawnN[f]; }
+          r = bPawnMin[f];
+          if (wPawnMin[f - 1] >= r && wPawnMin[f] >= r && wPawnMin[f + 1] >= r) { mg -= PASS_MG[7 - r]; eg -= PASS_EG[7 - r]; }
+        }
+      }
+      // pieces: mobility, rooks on open files
+      for (j = 0; j < np; j++) {
+        s = pieceList[j]; pc = board[s]; t = pc & 7;
+        var us = pc & 8, them = us ^ 8, mob = 0, k, d, to, x, sg = us ? -1 : 1;
+        if (t === N) {
+          for (k = 0; k < 8; k++) { x = board[s + KN[k]]; if (x !== OFF && (!x || (x & 8) === them)) mob++; }
+          mg += sg * 4 * (mob - 4); eg += sg * 4 * (mob - 4);
+        } else {
+          var k0 = t === R ? 0 : 4, k1 = t === R ? 4 : 8; if (t === Q) k0 = 0;
+          for (k = k0; k < k1; k++) { d = KG[k]; to = s + d; while (board[to] === 0) { mob++; to += d; } x = board[to]; if (x !== OFF && (x & 8) === them) mob++; }
+          if (t === B) { mg += sg * 5 * (mob - 6); eg += sg * 5 * (mob - 6); }
+          else if (t === R) {
+            mg += sg * 2 * (mob - 7); eg += sg * 4 * (mob - 7);
+            f = fileOf(s) + 1;
+            var own = us ? bPawnN[f] : wPawnN[f], opp = us ? wPawnN[f] : bPawnN[f];
+            if (!own) { mg += sg * (opp ? 12 : 26); eg += sg * (opp ? 6 : 12); }
+          } else { mg += sg * (mob - 13); eg += sg * 2 * (mob - 13); }
+        }
+      }
+      // king shelter (only matters with lots of pieces left)
+      for (j = 0; j < 2; j++) {
+        var ks = kingSq[j], kf = fileOf(ks) + 1, kr = rankOf(ks), sgn = j ? -1 : 1, shelter = 0, back = j ? kr >= 6 : kr <= 1;
+        if (back && (kf <= 3 || kf >= 6)) {
+          for (f = kf - 1; f <= kf + 1; f++) {
+            if (f < 1 || f > 8) continue;
+            if (j) { var bp = bPawnMax[f]; if (bp === kr - 1) shelter += 12; else if (bp === kr - 2) shelter += 6; else shelter -= 12; if (!bPawnN[f]) shelter -= 8; }
+            else { var wp = wPawnMin[f]; if (wp === kr + 1) shelter += 12; else if (wp === kr + 2) shelter += 6; else shelter -= 12; if (!wPawnN[f]) shelter -= 8; }
+          }
+        } else if (!back) shelter -= 20;
+        mg += sgn * shelter;
+      }
+      if (phase > 24) phase = 24;
+      var score = ((mg * phase + eg * (24 - phase)) / 24) | 0;
+      // endgames: help the winning side corner the lone king; drawish material counts for less
+      var diff = wMat - bMat;
+      if (!bPawns && bMat <= 340 && diff >= 400) score += 10 * centerDist(kingSq[1]) + 4 * (14 - dist(kingSq[0], kingSq[1]));
+      else if (!wPawns && wMat <= 340 && -diff >= 400) score -= 10 * centerDist(kingSq[0]) + 4 * (14 - dist(kingSq[0], kingSq[1]));
+      if (score > 0 && !wPawns && diff < 400) score = (score / 4) | 0;
+      else if (score < 0 && !bPawns && -diff < 400) score = (score / 4) | 0;
+      return (side === WHITE ? score : -score) + 10;
+    }
+    function dist(a, b) { return Math.abs(fileOf(a) - fileOf(b)) + Math.abs(rankOf(a) - rankOf(b)); }
+
+    // ---- search: iterative deepening alpha-beta with a transposition table ----
+    var TTN = 1 << (ttBits || 19), TTM = TTN - 1;
+    var ttHi = new Int32Array(TTN), ttMove = new Int32Array(TTN), ttScore = new Int16Array(TTN), ttDepth = new Int8Array(TTN), ttFlag = new Int8Array(TTN);
+    var killers = new Int32Array(MAXPLY * 2 + 4), hist = new Int32Array(16 * 120);
+    var mvBuf = [], scBuf = [];
+    for (i = 0; i <= MAXPLY + 2; i++) { mvBuf.push(new Int32Array(256)); scBuf.push(new Int32Array(256)); }
+    var nodes = 0, stopAt = 0, nodeLimit = 0, stopped = false, rootBest = 0, useQS = true, selDepth = 0;
+    var VAL = [0, 1, 3, 3, 5, 9, 20];
+    function now() { return Date.now(); }
+    function ttProbe() { var x = hashLo & TTM; return ttHi[x] === hashHi && ttFlag[x] ? x : -1; }
+    function ttStore(depth, flag, score, move, ply) {
+      var x = hashLo & TTM, same = ttHi[x] === hashHi && ttFlag[x];
+      if (score > MATE - 200) score += ply; else if (score < -MATE + 200) score -= ply;
+      if (same && ttDepth[x] > depth && flag !== 1) return;
+      ttMove[x] = move || (same ? ttMove[x] : 0); ttHi[x] = hashHi; ttScore[x] = score; ttDepth[x] = depth; ttFlag[x] = flag;
+    }
+    function orderMoves(buf, sc, n, ttm, ply) {
+      var k1 = killers[ply * 2], k2 = killers[ply * 2 + 1];
+      for (var j = 0; j < n; j++) {
+        var m = buf[j], to = (m >> 7) & 127, cap = board[to], pr = (m >> 14) & 7;
+        if (m === ttm) sc[j] = 2000000;
+        else if (cap || (m >>> 17) & 2) sc[j] = 1000000 + VAL[cap ? cap & 7 : 1] * 100 - VAL[board[m & 127] & 7] + (pr === Q ? 5000 : 0);
+        else if (pr === Q) sc[j] = 950000;
+        else if (m === k1) sc[j] = 900000;
+        else if (m === k2) sc[j] = 890000;
+        else sc[j] = hist[board[m & 127] * 120 + to];
+      }
+    }
+    function pickNext(buf, sc, n, j) {
+      var b = j, bs = sc[j];
+      for (var k = j + 1; k < n; k++) if (sc[k] > bs) { bs = sc[k]; b = k; }
+      if (b !== j) { var t = buf[j]; buf[j] = buf[b]; buf[b] = t; t = sc[j]; sc[j] = sc[b]; sc[b] = t; }
+      return buf[j];
+    }
+    function checkTime() { if ((stopAt && now() >= stopAt) || (nodeLimit && nodes >= nodeLimit)) stopped = true; }
+    function quiesce(alpha, beta, ply) {
+      nodes++; if ((nodes & 1023) === 0) checkTime(); if (stopped) return 0;
+      if (ply > selDepth) selDepth = ply;
+      var stand = evaluate();
+      if (!useQS || ply >= MAXPLY) return stand;
+      if (stand >= beta) return stand;
+      if (stand > alpha) alpha = stand;
+      var buf = mvBuf[ply], sc = scBuf[ply], n = gen(buf, true), us = side, best = stand;
+      orderMoves(buf, sc, n, 0, ply);
+      for (var j = 0; j < n; j++) {
+        var m = pickNext(buf, sc, n, j), cap = board[(m >> 7) & 127], pr = (m >> 14) & 7;
+        if (!pr && stand + (cap ? MGV[cap & 7] : 100) + 200 < alpha) continue;   // can't possibly help
+        make(m);
+        if (attacked(kingSq[us >> 3], side)) { unmake(); continue; }
+        var s = -quiesce(-beta, -alpha, ply + 1);
+        unmake();
+        if (stopped) return 0;
+        if (s > best) { best = s; if (s > alpha) { alpha = s; if (s >= beta) return s; } }
+      }
+      return best;
+    }
+    function hasPieces(us) { for (var s = 21; s <= 98; s++) { var pc = board[s]; if (pc && pc !== OFF && (pc & 8) === us && (pc & 7) !== P && (pc & 7) !== K) return true; } return false; }
+    function negamax(depth, alpha, beta, ply, canNull) {
+      if (ply >= MAXPLY) return evaluate();
+      var check = inCheck();
+      if (check) depth++;
+      if (depth <= 0) return quiesce(alpha, beta, ply);
+      nodes++; if ((nodes & 1023) === 0) checkTime(); if (stopped) return 0;
+      if (ply > selDepth) selDepth = ply;
+      if (ply > 0) {
+        if (half >= 100 || repeats(false) || insufficient()) return 0;
+        var ma = MATE - ply; if (ma < beta) { beta = ma; if (alpha >= ma) return ma; }   // a faster mate is impossible
+      }
+      var ttm = 0, x = ttProbe(), pv = beta - alpha > 1;
+      if (x >= 0) {
+        ttm = ttMove[x];
+        if (ttDepth[x] >= depth && ply > 0) {
+          var ts = ttScore[x]; if (ts > MATE - 200) ts -= ply; else if (ts < -MATE + 200) ts += ply;
+          var fl = ttFlag[x];
+          if (fl === 1 || (fl === 2 && ts >= beta) || (fl === 3 && ts <= alpha)) { if (!pv || fl === 1) return ts; }
+        }
+      }
+      var us = side;
+      if (canNull && !check && !pv && depth >= 3 && ply > 0 && hasPieces(us) && evaluate() >= beta) {
+        makeNull();
+        var ns = -negamax(depth - 1 - (depth > 6 ? 3 : 2), -beta, -beta + 1, ply + 1, false);
+        unmakeNull();
+        if (stopped) return 0;
+        if (ns >= beta) return ns > MATE - 200 ? beta : ns;
+      }
+      var buf = mvBuf[ply], sc = scBuf[ply], n = gen(buf, false), legal = 0, best = -INF, bestMove = 0, a0 = alpha;
+      orderMoves(buf, sc, n, ttm, ply);
+      for (var j = 0; j < n; j++) {
+        var m = pickNext(buf, sc, n, j), to = (m >> 7) & 127, quiet = !board[to] && !((m >>> 17) & 2) && !((m >> 14) & 7);
+        make(m);
+        if (attacked(kingSq[us >> 3], side)) { unmake(); continue; }
+        legal++;
+        var s;
+        if (legal === 1) s = -negamax(depth - 1, -beta, -alpha, ply + 1, true);
+        else {
+          var red = 0;
+          if (depth >= 3 && legal > 3 && quiet && !check && m !== killers[ply * 2] && m !== killers[ply * 2 + 1] && !inCheck()) red = legal > 10 ? 2 : 1;
+          s = -negamax(depth - 1 - red, -alpha - 1, -alpha, ply + 1, true);
+          if (s > alpha && red) s = -negamax(depth - 1, -alpha - 1, -alpha, ply + 1, true);
+          if (s > alpha && s < beta) s = -negamax(depth - 1, -beta, -alpha, ply + 1, true);
+        }
+        unmake();
+        if (stopped) return 0;
+        if (s > best) {
+          best = s; bestMove = m;
+          if (ply === 0) rootBest = m;
+          if (s > alpha) {
+            alpha = s;
+            if (s >= beta) {
+              if (quiet) {
+                if (killers[ply * 2] !== m) { killers[ply * 2 + 1] = killers[ply * 2]; killers[ply * 2] = m; }
+                var hi = board[m & 127] * 120 + to; hist[hi] += depth * depth; if (hist[hi] > 800000) for (var h = 0; h < hist.length; h++) hist[h] >>= 1;
+              }
+              break;
+            }
+          }
+        }
+      }
+      if (!legal) return check ? -MATE + ply : 0;
+      ttStore(depth, best >= beta ? 2 : best > a0 ? 1 : 3, best, bestMove, ply);
+      return best;
+    }
+    // every legal move with its own score (for bots that make human-sized mistakes)
+    function scoreAll(depth) {
+      var lm = legalMoves(), out = [];
+      for (var j = 0; j < lm.length; j++) {
+        make(lm[j]);
+        var s = depth <= 1 ? -quiesce(-INF, INF, 1) : -negamax(depth - 1, -INF, INF, 1, true);
+        unmake();
+        if (stopped) break;
+        out.push([lm[j], s]);
+      }
+      return out;
+    }
+    function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+    // o: { depth, time, nodes, noise, random, greed, qs }
+    function think(o) {
+      o = o || {};
+      var t0 = now(), lm = legalMoves();
+      nodes = 0; stopped = false; selDepth = 0; rootBest = 0; useQS = o.qs !== false;
+      stopAt = o.time ? t0 + o.time : 0; nodeLimit = o.nodes || 0;
+      for (var j = 0; j < killers.length; j++) killers[j] = 0;
+      for (j = 0; j < hist.length; j++) hist[j] >>= 2;
+      if (!lm.length) return null;
+      var res = { move: 0, score: 0, depth: 0 };
+      if (lm.length === 1) { res.move = lm[0]; res.score = evaluate(); }
+      else if (o.random && Math.random() < o.random) { res.move = lm[(Math.random() * lm.length) | 0]; res.score = 0; res.depth = 0; res.random = true; }
+      else if (o.noise || o.greed || o.qs === false) {
+        var all = scoreAll(o.depth || 1), bs = -INF * 2, bm = all.length ? all[0][0] : lm[0], raw = 0;
+        for (j = 0; j < all.length; j++) {
+          var m = all[j][0], s = all[j][1];
+          if (o.greed && (board[(m >> 7) & 127] || ((m >>> 17) & 2))) s += o.greed;
+          if (o.noise && Math.abs(s) < MATE - 200) s += gauss() * o.noise;
+          if (s > bs) { bs = s; bm = m; raw = all[j][1]; }
+        }
+        res.move = bm; res.score = raw; res.depth = o.depth || 1;
+      } else {
+        var maxD = o.depth || 64, best = lm[0], bestScore = 0;
+        for (var d = 1; d <= maxD; d++) {
+          rootBest = 0;
+          var s2 = negamax(d, -INF, INF, 0, false);
+          if (stopped) { if (rootBest && d > 1) best = rootBest; break; }
+          if (rootBest) best = rootBest; bestScore = s2; res.depth = d;
+          if (Math.abs(s2) > MATE - 200 && d >= 4) break;
+          if (stopAt && now() - t0 > (stopAt - t0) * 0.5) break;   // the next depth won't finish in time
+        }
+        res.move = best; res.score = bestScore;
+      }
+      res.nodes = nodes; res.ms = now() - t0; res.uci = moveUci(res.move); res.san = san(res.move, lm);
+      return res;
+    }
+    function mateIn(score) { return Math.abs(score) > MATE - 200 ? Math.ceil((MATE - Math.abs(score)) / 2) * (score > 0 ? 1 : -1) : 0; }
+
+    // ---- what the board looks like (for drawing) ----
+    function pieces() {   // 64 entries, a8 first: '' or 'wP', 'bQ', ...
+      var out = [], r, f, pc;
+      for (r = 7; r >= 0; r--) for (f = 0; f < 8; f++) { pc = board[sqOf(f, r)]; out.push(pc ? (pc & 8 ? 'b' : 'w') + 'PNBRQK'.charAt((pc & 7) - 1) : ''); }
+      return out;
+    }
+    function material() {   // captured pieces are worked out by the UI; this is the total for each side (P1 N3 B3 R5 Q9)
+      var w = 0, b = 0;
+      for (var s = 21; s <= 98; s++) { var pc = board[s]; if (pc && pc !== OFF) { if (pc & 8) b += VAL[pc & 7] % 20; else w += VAL[pc & 7] % 20; } }
+      return { w: w, b: b };
+    }
+    function info(m) { return { from: sqName(m & 127), to: sqName((m >> 7) & 127), promo: (m >> 14) & 7 ? 'nbrq'.charAt(((m >> 14) & 7) - 2) : '', castle: !!((m >>> 17) & 4), ep: !!((m >>> 17) & 2), capture: !!(board[(m >> 7) & 127] || ((m >>> 17) & 2)), piece: 'PNBRQK'.charAt((board[m & 127] & 7) - 1) }; }
+
+    loadFEN(START);
+    return {
+      START: START, MATE: MATE,
+      load: loadFEN, fen: getFEN,
+      reset: function () { loadFEN(START); },
+      // play a list of moves (UCI) from a FEN; returns how many worked
+      play: function (moves, fen) { loadFEN(fen || START); for (var j = 0; j < moves.length; j++) { var m = findUci(moves[j]); if (!m) return j; make(m); } return moves.length; },
+      move: function (u) { var m = findUci(u); if (!m) return null; var lm = legalMoves(), x = info(m); x.san = san(m, lm); x.uci = moveUci(m); make(m); return x; },
+      undo: function () { if (hp > 0) unmake(); },
+      moves: function () { var lm = legalMoves(); return lm.map(function (m) { var x = info(m); x.uci = moveUci(m); return x; }); },
+      sanOf: function (u) { var m = findUci(u); return m ? san(m) : null; },
+      turn: function () { return side === WHITE ? 'w' : 'b'; },
+      inCheck: inCheck, status: status, pieces: pieces, material: material,
+      kingSquare: function (c) { return sqName(kingSq[c === 'b' ? 1 : 0]); },
+      ply: function () { return hp; },
+      perft: perft,
+      evaluate: function () { return evaluate(); },
+      think: function (o) { var r = think(o); if (r) r.mate = mateIn(r.score); return r; },
+      clearMemory: function () { ttFlag.fill(0); hist.fill(0); }
+    };
+  }
+
+    // ---- 🤖 the bots: from "just hatched" to "final boss" ----
+    // s = how they think: random = chance of a totally random move, depth = how many moves ahead, qs = finish trades in their head,
+    // noise = how wobbly their judgment is, greed = how much they love grabbing pieces, time = thinking time (ms) for the strong ones
+    var CHESS_BOTS = [
+      { id: 'peep', e: '🐣', n: 'Peep', elo: 100, hue: '#ffd34d', d: 'Just hatched. Thinks the horsey can hop anywhere it wants.',
+        hi: 'Peep peep! Is the horsey my friend?', win: 'PEEP! I won?! I won!!', lose: 'Peep… good game! You’re really good!',
+        s: { random: 0.8, depth: 1, qs: false, noise: 300 } },
+      { id: 'shelly', e: '🐌', n: 'Shelly', elo: 200, hue: '#a3e635', d: 'Slow and steady. Very slow. Very steady.',
+        hi: 'Hiii… let’s… play…', win: 'Slow… and steady… wins… the race!', lose: 'Too… fast… for me…',
+        s: { random: 0.62, depth: 1, qs: false, noise: 300 } },
+      { id: 'biscuit', e: '🐶', n: 'Biscuit', elo: 300, hue: '#e4a64a', d: 'Chases every piece it sees. Can’t resist a capture. Woof!',
+        hi: 'Woof! Throw me a piece!', win: 'Who’s a good boy? ME! I won!', lose: 'Woof… you’re a good player.',
+        s: { random: 0.58, depth: 1, qs: false, noise: 260, greed: 180 } },
+      { id: 'beepbop', e: '🤖', n: 'Beep-Bop', elo: 400, hue: '#4db6ff', d: 'A little robot that’s still learning the rules. Beep!',
+        hi: 'BEEP. CHESS MODE: ON.', win: 'VICTORY.EXE HAS STARTED.', lose: 'ERROR 404: WIN NOT FOUND. GOOD GAME.',
+        s: { random: 0.34, depth: 1, qs: false, noise: 200 } },
+      { id: 'whiskers', e: '🐱', n: 'Whiskers', elo: 500, hue: '#f472b6', d: 'Plays whatever looks shiny. Might knock your pieces off the table.',
+        hi: 'Meow. Your pawns look tasty.', win: 'Purr-fect.', lose: 'Hiss! Fine. You win this time.',
+        s: { random: 0.22, depth: 1, qs: false, noise: 160 } },
+      { id: 'waddles', e: '🦆', n: 'Waddles', elo: 600, hue: '#3cc7c0', d: 'Knows all the rules. Mostly. Quack.',
+        hi: 'Quack! Ready when you are.', win: 'QUACK QUACK! I won!', lose: 'Quack… good one!',
+        s: { random: 0.16, depth: 2, qs: false, noise: 150 } },
+      { id: 'hopper', e: '🐸', n: 'Hopper', elo: 700, hue: '#39c98a', d: 'Jumps at every chance to attack. Ribbit!',
+        hi: 'Ribbit! Let’s hop to it.', win: 'Ribbit-tastic!', lose: 'You out-hopped me!',
+        s: { random: 0.1, depth: 2, qs: false, noise: 120, greed: 60 } },
+      { id: 'pebble', e: '🐧', n: 'Pebble', elo: 800, hue: '#7c6cff', d: 'Stays cool under pressure. Slides right into the endgame.',
+        hi: 'Brrr. It’s chess time.', win: 'Cool, cool, cool. I win.', lose: 'Brr… that was ice cold. Nice!',
+        s: { random: 0.07, depth: 2, noise: 110 } },
+      { id: 'rusty', e: '🦊', n: 'Rusty', elo: 900, hue: '#ff7a59', d: 'A sneaky fox. Watch out for forks!',
+        hi: 'Heh heh. Watch your knights.', win: 'Outfoxed you!', lose: 'Clever! Too clever for a fox.',
+        s: { random: 0.05, depth: 2, noise: 90 } },
+      { id: 'bamboo', e: '🐼', n: 'Bamboo', elo: 1000, hue: '#93a1b5', d: 'Calm and steady. Takes a snack break every few moves.', book: 0.4,
+        hi: '*munch munch* Your move.', win: '*happy munching* Good game!', lose: 'Wow. I need more bamboo to think.',
+        s: { random: 0.03, depth: 2, noise: 70 } },
+      { id: 'bandit', e: '🦝', n: 'Bandit', elo: 1100, hue: '#5d6676', d: 'Steals any pawn you leave lying around.', book: 0.5,
+        hi: 'Leave anything unguarded? It’s mine now.', win: 'Stolen! The win is mine!', lose: 'Caught red-pawned. You win!',
+        s: { random: 0.02, depth: 3, noise: 70, greed: 50 } },
+      { id: 'merlina', e: '🧙', n: 'Merlina', elo: 1200, hue: '#7c6cff', d: 'A wizard who knows a few tricks… and a few traps.', book: 0.6,
+        hi: 'Abracadabra… your move.', win: 'Just as my crystal ball said!', lose: 'Your magic is stronger than mine!',
+        s: { random: 0.01, depth: 3, noise: 55 } },
+      { id: 'hoot', e: '🦉', n: 'Professor Hoot', elo: 1300, hue: '#e4a64a', d: 'Read every chess book in the library. Twice.', book: 0.8,
+        hi: 'Hoo! Let us begin, student.', win: 'Class dismissed. Hoo hoo!', lose: 'Hoo! The student has become the teacher!',
+        s: { depth: 3, noise: 45 } },
+      { id: 'grizzly', e: '🐻', n: 'Grizzly', elo: 1400, hue: '#b5761c', d: 'Big, strong, and always coming for your king.', book: 1, resign: true,
+        hi: 'RAWR. I’m coming for your king.', win: 'RAWRRR! Bear hug for the winner: me!', lose: 'Grr… you’re one tough cub.',
+        s: { depth: 3, noise: 35 } },
+      { id: 'luna', e: '🐺', n: 'Luna', elo: 1500, hue: '#4db6ff', d: 'Hunts at night. Very patient. Waits for you to slip.', book: 1, resign: true,
+        hi: 'Awooo… the hunt begins.', win: 'The pack wins tonight.', lose: 'Awoo… you’re the alpha now.',
+        s: { depth: 4, noise: 32 } },
+      { id: 'ember', e: '🐉', n: 'Ember', elo: 1600, hue: '#ff5d73', d: 'A young dragon with fiery attacks.', book: 1, resign: true,
+        hi: 'I’ll burn right through your defense!', win: 'ROOOAR! Fire wins!', lose: 'My flames… went out. Well played!',
+        s: { depth: 4, noise: 24 } },
+      { id: 'shadow', e: '🥷', n: 'Shadow', elo: 1800, hue: '#5d6676', d: 'Silent and quick. You won’t see the trap coming.', book: 1, resign: true,
+        hi: '…', win: '…You never saw it coming.', lose: '…Respect.',
+        s: { time: 350, depth: 5 } },
+      { id: 'rookula', e: '🧛', n: 'Count Rookula', elo: 2000, hue: '#d63f8c', d: 'Has been playing chess in his castle for 500 years.', book: 1, resign: true,
+        hi: 'Good evening. Shall we play… a little game?', win: 'Mwah ha ha! The night is mine!', lose: 'Bah! Beaten before sunrise!',
+        s: { time: 500, depth: 6 } },
+      { id: 'vera', e: '👑', n: 'Queen Vera', elo: 2200, hue: '#ffd34d', d: 'Rules the board with an iron crown.', book: 1, resign: true,
+        hi: 'Bow before your queen.', win: 'Long live the queen!', lose: 'I… surrender my crown. Impressive.',
+        s: { time: 800, depth: 8 } },
+      { id: 'cortex', e: '🧠', n: 'Cortex', elo: 2400, hue: '#f472b6', d: 'A giant brain that thinks 10 moves ahead.', book: 1, resign: true,
+        hi: 'Calculating… calculating… ready.', win: 'As calculated.', lose: 'Error in my calculations. You are brilliant.',
+        s: { time: 1200 } },
+      { id: 'xylo', e: '👽', n: 'Xylo', elo: 2600, hue: '#a3e635', d: 'Learned chess from a satellite. Plays out-of-this-world moves.', book: 1, resign: true,
+        hi: 'Greetings, Earthling. Prepare for chess.', win: 'Earth chess: conquered.', lose: 'Earthling… you are worthy.',
+        s: { time: 1800 } },
+      { id: 'magma', e: '🌋', n: 'Magma', elo: 2800, hue: '#ff7a59', d: 'Hot, unstoppable, and never cools down.', book: 1, resign: true,
+        hi: 'Feel the heat.', win: 'Melted.', lose: 'You… cooled me down. Wow.',
+        s: { time: 2500 } },
+      { id: 'void', e: '🌌', n: 'The Void', elo: 3000, hue: '#7c6cff', d: 'Nobody has ever beaten it. Can you?', book: 1, resign: true,
+        hi: 'I have been waiting for you.', win: 'Everything returns to the Void.', lose: 'Impossible… you have beaten the Void!',
+        s: { time: 3500 } },
+      { id: 'infinity', e: '♾️', n: 'Infinity', elo: 3200, hue: '#3cc7c0', d: 'The final boss. It thinks forever (well, 5 seconds).', book: 1, resign: true,
+        hi: 'I have seen every game. Including this one.', win: 'Inevitable.', lose: 'This… was not in any of my calculations. You are a legend.',
+        s: { time: 5000 } }
+    ];
+    // a little opening book, so the stronger bots start like real players (moves in "from-to" form)
+    var CHESS_BOOK = [
+      'e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4 g8f6 e1g1 f8e7 f1e1 b7b5 a4b3 d7d6 c2c3 e8g8',
+      'e2e4 e7e5 g1f3 b8c6 f1b5 g8f6 e1g1 f6e4 d2d4 e4d6 b5c6 d7c6 d4e5 d6f5',
+      'e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d3 d7d6 e1g1 e8g8',
+      'e2e4 e7e5 g1f3 b8c6 f1c4 g8f6 d2d3 f8e7 e1g1 e8g8 f1e1 d7d6',
+      'e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 b2b4 c5b4 c2c3 b4a5 d2d4',
+      'e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f3d4 g8f6 d4c6 b7c6 e4e5 d8e7',
+      'e2e4 e7e5 g1f3 g8f6 f3e5 d7d6 e5f3 f6e4 d2d4 d6d5 f1d3 b8c6',
+      'e2e4 e7e5 b1c3 g8f6 g1f3 b8c6 f1b5 f8b4 e1g1 e8g8',
+      'e2e4 e7e5 f2f4 e5f4 g1f3 g7g5 h2h4 g5g4 f3e5',
+      'e2e4 e7e5 g1f3 d7d6 d2d4 g8f6 b1c3 b8d7 f1c4 f8e7',
+      'e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4 g8f6 b1c3 a7a6 c1e3 e7e5 d4b3 c8e6',
+      'e2e4 c7c5 g1f3 b8c6 d2d4 c5d4 f3d4 g8f6 b1c3 e7e5 d4b5 d7d6 c1g5 a7a6 b5a3 b7b5',
+      'e2e4 c7c5 g1f3 e7e6 d2d4 c5d4 f3d4 b8c6 b1c3 d8c7 f1e2 a7a6',
+      'e2e4 c7c5 b1c3 b8c6 g2g3 g7g6 f1g2 f8g7 d2d3 d7d6',
+      'e2e4 c7c5 c2c3 g8f6 e4e5 f6d5 d2d4 c5d4 g1f3 b8c6',
+      'e2e4 e7e6 d2d4 d7d5 b1c3 g8f6 c1g5 f8e7 e4e5 f6d7 g5e7 d8e7',
+      'e2e4 e7e6 d2d4 d7d5 e4e5 c7c5 c2c3 b8c6 g1f3 d8b6 a2a3',
+      'e2e4 e7e6 d2d4 d7d5 b1d2 c7c5 e4d5 e6d5 g1f3 b8c6',
+      'e2e4 c7c6 d2d4 d7d5 b1c3 d5e4 c3e4 c8f5 e4g3 f5g6 h2h4 h7h6',
+      'e2e4 c7c6 d2d4 d7d5 e4e5 c8f5 g1f3 e7e6 f1e2 c6c5',
+      'e2e4 d7d5 e4d5 d8d5 b1c3 d5a5 d2d4 g8f6 g1f3 c8f5',
+      'e2e4 g7g6 d2d4 f8g7 b1c3 d7d6 g1f3 g8f6',
+      'e2e4 d7d6 d2d4 g8f6 b1c3 g7g6 f2f4 f8g7 g1f3 e8g8',
+      'd2d4 d7d5 c2c4 e7e6 b1c3 g8f6 c1g5 f8e7 e2e3 e8g8 g1f3 h7h6',
+      'd2d4 d7d5 c2c4 c7c6 g1f3 g8f6 b1c3 d5c4 a2a4 c8f5',
+      'd2d4 d7d5 c2c4 d5c4 g1f3 g8f6 e2e3 e7e6 f1c4 c7c5 e1g1 a7a6',
+      'd2d4 g8f6 c2c4 e7e6 b1c3 f8b4 e2e3 e8g8 f1d3 d7d5 g1f3 c7c5',
+      'd2d4 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 g1f3 e8g8 f1e2 e7e5',
+      'd2d4 g8f6 c2c4 e7e6 g1f3 b7b6 g2g3 c8b7 f1g2 f8e7 e1g1 e8g8',
+      'd2d4 g8f6 c2c4 c7c5 d4d5 e7e6 b1c3 e6d5 c4d5 d7d6 e2e4 g7g6',
+      'd2d4 g8f6 c2c4 g7g6 b1c3 d7d5 c4d5 f6d5 e2e4 d5c3 b2c3 f8g7',
+      'd2d4 f7f5 g2g3 g8f6 f1g2 e7e6 g1f3 f8e7 e1g1 e8g8',
+      'd2d4 d7d5 g1f3 g8f6 c1f4 e7e6 e2e3 c7c5 c2c3 b8c6',
+      'd2d4 g8f6 c1f4 d7d5 e2e3 c7c5 c2c3 b8c6 b1d2 e7e6',
+      'c2c4 e7e5 b1c3 g8f6 g1f3 b8c6 g2g3 d7d5 c4d5 f6d5',
+      'c2c4 g8f6 b1c3 e7e6 e2e4 d7d5 e4e5 d5d4',
+      'c2c4 c7c5 g1f3 g8f6 b1c3 b8c6 g2g3 g7g6 f1g2 f8g7',
+      'g1f3 d7d5 g2g3 g8f6 f1g2 e7e6 e1g1 f8e7 d2d3 e8g8',
+      'g1f3 g8f6 c2c4 g7g6 b1c3 f8g7 e2e4 d7d6 d2d4 e8g8',
+      'b2b3 e7e5 c1b2 b8c6 e2e3 g8f6'
+    ].map(function (l) { return l.split(' '); });
+
+    // ---- ♟️ the game screen ----
+    var KEY = 'funvault-chess-v1';
+    var root = document.getElementById('chess');
+    if (!root || !window.registerHook) return;
+    function $(id) { return document.getElementById('chs-' + id); }
+    function mk(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+    function pick(a) { return a[(Math.random() * a.length) | 0]; }
+    var BOT = {}; CHESS_BOTS.forEach(function (b) { BOT[b.id] = b; });
+    var TIERS = [
+      { t: 'Beginner', e: '🐣', hi: 650, d: 'Just learning' }, { t: 'Casual', e: '🙂', hi: 1150, d: 'Knows the basics' },
+      { t: 'Club', e: '🏅', hi: 1700, d: 'Pretty good!' }, { t: 'Expert', e: '🔥', hi: 2300, d: 'Really tough' },
+      { t: 'Master', e: '🏆', hi: 2900, d: 'Super strong' }, { t: 'Legend', e: '🌌', hi: 1e9, d: 'Good luck…' }];
+    var THEMES = [['wood', '🪵 Wood'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night']];
+    var SAY = {
+      cap: ['Yoink!', 'Mine now!', 'Thanks for that!', 'Snack time!', 'Got one!'],
+      lost: ['Hey! I needed that!', 'Ouch!', 'Oops…', 'Nooo!', 'I meant to do that. Totally.'],
+      check: ['Check!', 'Watch your king!', 'Check! 😏'],
+      checked: ['Eek!', 'Uh-oh…', 'Yikes!'],
+      nodraw: ['No thanks! I want to keep playing.', 'A draw? Nope, not yet!', 'Hmm… no. Let’s keep going!'],
+      yesdraw: ['Okay, a draw it is. Good game!', 'Deal! It’s a draw.']
+    };
+    var COUNT = { P: 8, N: 2, B: 2, R: 2, Q: 1 }, WORTH = { P: 1, N: 3, B: 3, R: 5, Q: 9 };
+
+    // ---- saved stuff ----
+    function fix(s) {
+      s = s && typeof s === 'object' ? s : {};
+      s.rating = +s.rating || 400; s.games = +s.games || 0; s.rec = s.rec || {};
+      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true;
+      return s;
+    }
+    function load() { try { return fix(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return fix(null); } }
+    function save() { S.cur = game; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+    var S = load(), G = null, game = null;
+    var orient = 'w', sel = null, targets = [], last = null, hint = null, thinking = false, hintBusy = false, token = 0, down = null, ghost = null;
+    var chat = { text: '', t: 0 };
+
+    // ---- the pieces (drawn with SVG, so they look the same on every phone) ----
+    var SHAPES = {
+      P: '<path d="M34 80C35 64 40 54 46 50h8c6 4 11 14 12 30z"/><rect x="37" y="45" width="26" height="8" rx="4"/><circle cx="50" cy="31" r="14"/>',
+      R: '<path d="M34 36h32l3 36H31z"/><path d="M28 16h12v8h6v-8h8v8h6v-8h12v20H28z"/><rect x="30" y="33" width="40" height="8" rx="3"/><rect x="27" y="68" width="46" height="9" rx="3"/>',
+      N: '<path d="M32 80l2-16c-4-3-11-5-14-11-1-4 1-8 3-10 5-8 11-16 17-21l3-11 5 9c14 4 22 20 22 36l-2 24z"/>',
+      B: '<path d="M40 50c-2 12-6 20-10 30h40c-4-10-8-18-10-30z"/><rect x="36" y="45" width="28" height="8" rx="4"/><path d="M50 14c12 8 16 20 9 32H41c-7-12-3-24 9-32z"/><circle cx="50" cy="11" r="5"/>',
+      Q: '<path d="M35 60h30l5 20H30z"/><path d="M22 30l12 24 4-30 8 26 4-32 4 32 8-26 4 30 12-24-8 30H30z"/><rect x="30" y="56" width="40" height="8" rx="4"/><circle cx="22" cy="28" r="4.5"/><circle cx="38" cy="21" r="4.5"/><circle cx="50" cy="14" r="4.5"/><circle cx="62" cy="21" r="4.5"/><circle cx="78" cy="28" r="4.5"/>',
+      K: '<path d="M36 62h28l5 18H31z"/><path d="M30 44c-4-12 8-18 20-10 12-8 24-2 20 10-2 6-5 10-7 14H37c-2-4-5-8-7-14z"/><rect x="33" y="56" width="34" height="8" rx="4"/><path d="M46 8h8v7h7v8h-7v11h-8V23h-7v-8h7z"/>'
+    };
+    var DETAIL = {
+      N: '<circle cx="37" cy="33" r="3.4"/><circle cx="24" cy="48" r="1.9"/><path d="M51 24c9 6 13 17 13 29" fill="none" stroke-width="3" stroke-linecap="round"/>',
+      B: '<path d="M55 22l-9 12" fill="none" stroke-width="4" stroke-linecap="round"/>'
+    };
+    var PIECE = {};
+    function pieceSvg(code) {
+      if (PIECE[code]) return PIECE[code];
+      var w = code.charAt(0) === 'w', t = code.charAt(1);
+      var fill = w ? '#fbfaf6' : '#34363e', line = w ? '#23262c' : '#0b0c0f', det = w ? '#23262c' : '#eceef2';
+      return (PIECE[code] = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g fill="' + fill + '" stroke="' + line + '" stroke-width="4" stroke-linejoin="round">' + SHAPES[t] +
+        '<rect x="22" y="78" width="56" height="12" rx="6"/></g>' + (DETAIL[t] ? '<g fill="' + det + '" stroke="' + det + '">' + DETAIL[t] + '</g>' : '') + '</svg>');
+    }
+    var NAMES = { P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
+
+    // ---- 🔊 little sounds ----
+    var actx = null;
+    function sound(kind) {
+      if (!S.sound) return;
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        if (actx.state === 'suspended') actx.resume();
+        var t = actx.currentTime;
+        var tone = function (f, dur, type, vol, delay) {
+          var o = actx.createOscillator(), g = actx.createGain(), s0 = t + (delay || 0);
+          o.type = type || 'triangle'; o.frequency.value = f;
+          g.gain.setValueAtTime(vol || 0.15, s0); g.gain.exponentialRampToValueAtTime(0.001, s0 + dur);
+          o.connect(g); g.connect(actx.destination); o.start(s0); o.stop(s0 + dur + 0.02);
+        };
+        if (kind === 'move') tone(520, 0.07, 'triangle', 0.2);
+        else if (kind === 'cap') { tone(300, 0.09, 'square', 0.1); tone(170, 0.14, 'triangle', 0.2, 0.03); }
+        else if (kind === 'check') { tone(660, 0.08, 'triangle', 0.18); tone(880, 0.12, 'triangle', 0.18, 0.09); }
+        else if (kind === 'castle') { tone(500, 0.06, 'triangle', 0.18); tone(560, 0.07, 'triangle', 0.18, 0.08); }
+        else if (kind === 'win') [523, 659, 784, 1047].forEach(function (f, j) { tone(f, 0.2, 'triangle', 0.16, j * 0.11); });
+        else if (kind === 'lose') [392, 330, 262].forEach(function (f, j) { tone(f, 0.25, 'sine', 0.16, j * 0.16); });
+        else if (kind === 'draw') [440, 440].forEach(function (f, j) { tone(f, 0.18, 'sine', 0.14, j * 0.18); });
+      } catch (e) {}
+    }
+
+    // ---- 🧠 bot thinking happens in a background worker, so the screen never freezes ----
+    var worker = null, jobs = {}, jobN = 0, AI = null;
+    function startWorker() {
+      if (worker !== null) return;
+      try {
+        var src = 'var FVChessEngine = ' + FVChessEngine.toString() + ';\nvar E = FVChessEngine(19);\n' +
+          'self.onmessage = function (e) { var d = e.data, r = null; try { E.play(d.moves, d.fen); r = E.think(d.opts); } catch (err) { r = { error: String(err) }; } self.postMessage({ id: d.id, r: r }); };';
+        var url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+        worker = new Worker(url);
+        worker.onmessage = function (e) { var j = jobs[e.data.id]; delete jobs[e.data.id]; if (j) j.cb(e.data.r); };
+        worker.onerror = function (e) { if (e && e.preventDefault) e.preventDefault(); var left = jobs; jobs = {}; try { worker.terminate(); } catch (x) {} worker = false; Object.keys(left).forEach(function (k) { runHere(left[k]); }); };
+      } catch (e) { worker = false; }
+    }
+    function runHere(j) {   // no worker (some browsers block them): think on the main thread instead
+      setTimeout(function () { AI = AI || FVChessEngine(17); AI.play(j.moves, j.fen); var r = null; try { r = AI.think(j.opts); } catch (e) {} j.cb(r); }, 40);
+    }
+    function ask(opts, cb) {   // think about the position on the board
+      var j = { moves: game.moves.slice(), fen: game.fen || null, opts: opts, cb: cb };
+      startWorker();
+      if (worker) { var id = ++jobN; jobs[id] = j; worker.postMessage({ id: id, moves: j.moves, fen: j.fen, opts: opts }); } else runHere(j);
+    }
+    function cancelThinking() {
+      token++; thinking = false; hintBusy = false;
+      if (worker && Object.keys(jobs).length) { try { worker.terminate(); } catch (e) {} worker = null; jobs = {}; }
+    }
+
+    // ---- board geometry ----
+    function nameAt(c, r) { var f = orient === 'w' ? c : 7 - c, rk = orient === 'w' ? 7 - r : r; return 'abcdefgh'.charAt(f) + (rk + 1); }
+    function posOf(n) { var f = n.charCodeAt(0) - 97, rk = +n.charAt(1) - 1; return orient === 'w' ? { c: f, r: 7 - rk } : { c: 7 - f, r: rk }; }
+    function sqAt(x, y) {
+      var b = $('board').getBoundingClientRect(), c = Math.floor((x - b.left) / b.width * 8), r = Math.floor((y - b.top) / b.height * 8);
+      return c < 0 || c > 7 || r < 0 || r > 7 ? null : nameAt(c, r);
+    }
+    function pieceAt(n) { var f = n.charCodeAt(0) - 97, rk = +n.charAt(1) - 1; return G.pieces()[(7 - rk) * 8 + f]; }
+
+    // ---- drawing ----
+    function renderBoard(anim) {
+      var b = $('board'), pcs = G.pieces(), chk = !game.over || game.over.reason === 'checkmate' ? (G.inCheck() ? G.kingSquare(G.turn()) : null) : null, h = '';
+      b.className = 'chs-board t-' + S.theme;
+      for (var i = 0; i < 64; i++) {
+        var c = i & 7, r = i >> 3, n = nameAt(c, r), f = n.charCodeAt(0) - 97, rk = +n.charAt(1) - 1, pc = pcs[(7 - rk) * 8 + f];
+        var cls = 'chs-sq ' + ((f + rk) % 2 ? 'l' : 'd');
+        if (last && (n === last.from || n === last.to)) cls += ' last';
+        if (sel === n) cls += ' sel';
+        if (hint && (n === hint.from || n === hint.to)) cls += ' hint';
+        if (chk === n) cls += ' chk';
+        if (targets.indexOf(n) >= 0) cls += pc ? ' cap' : ' dot';
+        h += '<div class="' + cls + '" data-sq="' + n + '" role="gridcell" aria-label="' + n + (pc ? ' ' + (pc.charAt(0) === 'w' ? 'white ' : 'black ') + NAMES[pc.charAt(1)] : '') + '">' +
+          (r === 7 ? '<span class="chs-co f">' + n.charAt(0) + '</span>' : '') + (c === 0 ? '<span class="chs-co r">' + n.charAt(1) + '</span>' : '') +
+          (pc ? '<div class="chs-p' + (down && down.moved && down.s === n ? ' lift' : '') + '">' + pieceSvg(pc) + '</div>' : '') + '</div>';
+      }
+      b.innerHTML = h;
+      if (anim && anim.from) {
+        var sz = b.clientWidth / 8, slide = function (from, to) {
+          var el = b.querySelector('[data-sq="' + to + '"] .chs-p'); if (!el) return;
+          var a = posOf(from), z = posOf(to);
+          el.style.transition = 'none'; el.style.zIndex = '5'; el.style.transform = 'translate(' + (a.c - z.c) * sz + 'px,' + (a.r - z.r) * sz + 'px)';
+          el.getBoundingClientRect();
+          el.style.transition = 'transform 0.2s ease'; el.style.transform = '';
+        };
+        slide(anim.from, anim.to);
+        if (anim.castle) { var rk2 = anim.to.charAt(1), ks = anim.to.charAt(0) === 'g'; slide((ks ? 'h' : 'a') + rk2, (ks ? 'f' : 'd') + rk2); }
+      }
+    }
+    function capturedBy(c) {   // the other side's pieces that this side has taken
+      var have = { P: 0, N: 0, B: 0, R: 0, Q: 0 }, other = c === 'w' ? 'b' : 'w';
+      G.pieces().forEach(function (p) { if (p && p.charAt(0) === other && have[p.charAt(1)] != null) have[p.charAt(1)]++; });
+      var h = '';
+      ['Q', 'R', 'B', 'N', 'P'].forEach(function (t) { for (var k = have[t]; k < COUNT[t]; k++) h += pieceSvg(other + t); });
+      var m = G.material(), adv = c === 'w' ? m.w - m.b : m.b - m.w;
+      return h + (adv > 0 ? '<span class="chs-adv">+' + adv + '</span>' : '');
+    }
+    function sideHtml(c) {
+      var bot = game.mode === 'bot' && c !== game.you ? BOT[game.bot] : null, you = game.mode === 'bot' && c === game.you;
+      var av = bot ? bot.e : you ? '🙂' : c === 'w' ? '⚪' : '⚫', hue = bot ? bot.hue : you ? 'var(--accent-2)' : c === 'w' ? '#dfe3ea' : '#4b5568';
+      var nm = bot ? bot.n + '<small>' + bot.elo + '</small>' : you ? 'You<small>' + S.rating + '</small>' : c === 'w' ? 'White' : 'Black';
+      if (bot && thinking) nm += '<span class="chs-think" aria-label="thinking"><i></i><i></i><i></i></span>';
+      return '<span class="chs-av" style="--hue:' + hue + '">' + av + '</span><div class="chs-pl-info"><div class="chs-pl-n">' + nm + '</div><div class="chs-capt">' + capturedBy(c) + '</div></div>' +
+        (bot ? '<div class="chs-say' + (chat.text && Date.now() < chat.t ? ' on' : '') + '" id="chs-say">' + esc(chat.text) + '</div>' : '');
+    }
+    function esc(t) { return String(t || '').replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+    function renderSides() {
+      var top = orient === 'w' ? 'b' : 'w';
+      $('top').innerHTML = sideHtml(top); $('bot').innerHTML = sideHtml(orient);
+    }
+    function say(text) {
+      chat = { text: text, t: Date.now() + 4200 };
+      var el = $('say'); if (el) { el.textContent = text; el.classList.add('on'); }
+      clearTimeout(say.tm); say.tm = setTimeout(function () { var e2 = $('say'); if (e2) e2.classList.remove('on'); }, 4200);
+    }
+    function reasonText() {
+      var o = game.over, bot = game.mode === 'bot' ? BOT[game.bot] : null;
+      if (o.reason === 'checkmate') return 'Checkmate!';
+      if (o.reason === 'resign') return bot ? 'You resigned.' : (o.res === 'w' ? '⚫ Black' : '⚪ White') + ' resigned.';
+      if (o.reason === 'botresign') return bot.n + ' resigned!';
+      return { stalemate: 'Stalemate: no legal moves, but not in check.', material: 'Not enough pieces left to checkmate.', fifty: '50 moves in a row with no captures or pawn moves.', repetition: 'The same position happened 3 times.', agreed: 'Draw agreed.' }[o.reason] || '';
+    }
+    function renderStatus() {
+      var el = $('status'), t = '', cls = 'chs-status';
+      if (game.over) {
+        var r = game.over.res;
+        if (game.mode === 'bot') { t = r === 'd' ? '🤝 Draw' : r === game.you ? '🏆 You won!' : '😢 ' + BOT[game.bot].n + ' won'; if (r !== 'd') cls += r === game.you ? ' win' : ' lose'; }
+        else t = r === 'd' ? '🤝 Draw' : (r === 'w' ? '⚪ White' : '⚫ Black') + ' wins!';
+        t += ' · ' + reasonText();
+      } else if (game.mode === 'friend') t = (G.turn() === 'w' ? '⚪ White' : '⚫ Black') + ' to move' + (G.inCheck() ? ' · Check!' : '');
+      else if (thinking) t = '🤔 ' + BOT[game.bot].n + ' is thinking…';
+      else if (G.turn() === game.you) t = G.inCheck() ? '⚠️ Check! Save your king!' : hintBusy ? '💡 Finding a good move…' : 'Your move';
+      el.textContent = t; el.className = cls;
+      $('after').hidden = !game.over;
+    }
+    function humanTurn() { return game.mode === 'friend' || G.turn() === game.you; }
+    function renderTools() {
+      var over = !!game.over, ht = humanTurn();
+      $('hint').disabled = over || !ht || thinking || hintBusy; $('hint').classList.toggle('busy', hintBusy);
+      $('undo').disabled = over || !game.moves.length || (game.mode === 'bot' && !thinking && game.moves.length < 2);
+      $('draw').disabled = over || !game.moves.length || (game.mode === 'bot' && (!ht || thinking));
+      $('resign').disabled = over;
+    }
+    function renderMoves() {
+      var h = '', n = game.sans.length;
+      for (var i = 0; i < n; i += 2) {
+        h += '<span class="chs-mv"><i>' + (i / 2 + 1) + '.</i><b' + (i === n - 1 ? ' class="now"' : '') + '>' + esc(game.sans[i]) + '</b>' +
+          (i + 1 < n ? ' <b' + (i + 1 === n - 1 ? ' class="now"' : '') + '>' + esc(game.sans[i + 1]) + '</b>' : '') + '</span>';
+      }
+      var el = $('moves'); el.innerHTML = h; el.scrollTop = el.scrollHeight;
+    }
+    function render(anim) { if (!game) return; renderBoard(anim); renderSides(); renderStatus(); renderTools(); renderMoves(); }
+
+    // ---- moving pieces: tap a piece then a square, or drag it ----
+    function canMoveNow() { return game && !game.over && !thinking && humanTurn(); }
+    function select(n) {
+      sel = n; targets = [];
+      G.moves().forEach(function (m) { if (m.from === n && targets.indexOf(m.to) < 0) targets.push(m.to); });
+      renderBoard();
+    }
+    function unselect() { if (sel || targets.length) { sel = null; targets = []; renderBoard(); } }
+    function tryMove(from, to, dragged) {
+      var c = G.moves().filter(function (m) { return m.from === from && m.to === to; });
+      if (!c.length) return false;
+      if (c.length > 1) { promo(from, to); return true; }
+      playMove(c[0].uci, false, dragged);
+      return true;
+    }
+    function promo(from, to) {
+      var col = G.turn();
+      openCard(function (card) {
+        card.appendChild(mk('h3', null, '👑 Promote your pawn'));
+        card.appendChild(mk('p', null, 'Pick what your pawn turns into.'));
+        var g = mk('div', 'chs-promo');
+        [['q', 'Q'], ['r', 'R'], ['b', 'B'], ['n', 'N']].forEach(function (p) {
+          var bt = mk('button'); bt.type = 'button'; bt.setAttribute('aria-label', NAMES[p[1]]); bt.setAttribute('data-promo', p[0]); bt.innerHTML = pieceSvg(col + p[1]);
+          bt.addEventListener('click', function () { closeCard(); playMove(from + to + p[0], false, false); });
+          g.appendChild(bt);
+        });
+        card.appendChild(g);
+        var cancel = mk('button', 'btn ghost', 'Cancel'); cancel.type = 'button'; cancel.addEventListener('click', function () { closeCard(); unselect(); }); card.appendChild(cancel);
+      });
+    }
+    var boardEl = $('board');
+    boardEl.addEventListener('pointerdown', function (e) {
+      if (!game || (e.button != null && e.button > 0)) return;
+      var n = sqAt(e.clientX, e.clientY); if (!n) return;
+      if (actx && actx.state === 'suspended') try { actx.resume(); } catch (x) {}
+      down = { s: n, x: e.clientX, y: e.clientY, id: e.pointerId, wasSel: sel === n, moved: false, drag: false };
+      var pc = pieceAt(n);
+      if (canMoveNow() && pc && pc.charAt(0) === G.turn()) {
+        if (sel !== n) { hint = null; select(n); }
+        down.drag = true;
+        try { boardEl.setPointerCapture(e.pointerId); } catch (x) {}
+      }
+      e.preventDefault();
+    });
+    boardEl.addEventListener('pointermove', function (e) {
+      if (!down || !down.drag || e.pointerId !== down.id) return;
+      var dx = e.clientX - down.x, dy = e.clientY - down.y;
+      if (!down.moved) {
+        if (dx * dx + dy * dy < 49) return;
+        down.moved = true;
+        var lifted = boardEl.querySelector('[data-sq="' + down.s + '"] .chs-p'); if (lifted) lifted.classList.add('lift');
+        ghost = mk('div', 'chs-ghost'); ghost.innerHTML = pieceSvg(pieceAt(down.s));
+        var sz = boardEl.getBoundingClientRect().width / 8; ghost.style.width = ghost.style.height = sz + 'px';
+        document.body.appendChild(ghost);
+      }
+      ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px';
+    });
+    function dropGhost() { if (ghost) { ghost.remove(); ghost = null; } }
+    boardEl.addEventListener('pointerup', function (e) {
+      if (!down || e.pointerId !== down.id) return;
+      var d = down; down = null;
+      var n = sqAt(e.clientX, e.clientY);
+      if (d.moved) { dropGhost(); if (!(n && sel && targets.indexOf(n) >= 0 && tryMove(sel, n, true))) renderBoard(); return; }
+      if (n !== d.s) return;
+      if (sel && n !== sel && targets.indexOf(n) >= 0) { tryMove(sel, n, false); return; }
+      if (d.drag) { if (d.wasSel) unselect(); return; }
+      unselect();
+    });
+    boardEl.addEventListener('pointercancel', function () { if (down && down.moved) { dropGhost(); renderBoard(); } down = null; });
+
+    function playMove(uci, byBot, dragged) {
+      var x = G.move(uci); if (!x) return false;
+      game.moves.push(x.uci); game.sans.push(x.san);
+      last = { from: x.from, to: x.to }; sel = null; targets = []; hint = null; hintBusy = false;
+      var st = G.status(), chk = G.inCheck();
+      if (st) finish(st);
+      else { sound(x.capture ? 'cap' : chk ? 'check' : x.castle ? 'castle' : 'move'); react(x, byBot, chk); }
+      save();
+      render(dragged ? null : x);
+      if (!game.over) setTimeout(botTurn, 60);
+      return true;
+    }
+    function react(x, byBot, chk) {
+      if (game.mode !== 'bot') return;
+      var p = Math.random();
+      if (byBot) { if (chk && p < 0.6) say(pick(SAY.check)); else if (x.capture && p < 0.4) say(pick(SAY.cap)); }
+      else if (chk && p < 0.6) say(pick(SAY.checked)); else if (x.capture && p < 0.45) say(pick(SAY.lost));
+    }
+
+    // ---- the bot's turn ----
+    function bookMove(bot) {
+      if (!bot.book || game.fen || Math.random() > bot.book) return null;
+      var sofar = game.moves.join(' '), n = game.moves.length, opts = [];
+      CHESS_BOOK.forEach(function (l) { if (l.length > n && l.slice(0, n).join(' ') === sofar) opts.push(l[n]); });
+      var u = opts.length ? pick(opts) : null;
+      return u && G.sanOf(u) ? u : null;
+    }
+    function fullMoves() { return +G.fen().split(' ')[5] || 1; }
+    function botTurn() {
+      if (!game || game.over || game.mode !== 'bot' || G.turn() === game.you || thinking) return;
+      var bot = BOT[game.bot], my = ++token, t0 = Date.now(), wait0 = bot.elo < 1800 ? 450 + Math.random() * 650 : 250;
+      thinking = true; renderSides(); renderStatus(); renderTools();
+      var done = function (uci, r) {
+        if (my !== token) return;
+        setTimeout(function () {
+          if (my !== token || !game || game.over) return;
+          thinking = false;
+          if (r && bot.resign && fullMoves() >= 15 && r.score <= -1200 && !(r.mate > 0)) { say('I resign. You win!'); finish('botresign', game.you); render(); return; }
+          if (r) game.botScore = r.score;
+          if (!playMove(uci, true)) render();
+        }, Math.max(0, wait0 - (Date.now() - t0)));
+      };
+      var bk = bookMove(bot);
+      if (bk) { done(bk, null); return; }
+      ask(bot.s, function (r) {
+        if (my !== token) return;
+        if (!r || !r.uci || !G.sanOf(r.uci)) { var lm = G.moves(); if (lm.length) done(pick(lm).uci, null); return; }
+        done(r.uci, r);
+      });
+    }
+
+    // ---- the end of a game ----
+    function rate(score) {   // Elo: beat a bot rated above you and your rating goes up a lot
+      var b = BOT[game.bot], exp = 1 / (1 + Math.pow(10, (b.elo - S.rating) / 400)), k = S.games < 10 ? 48 : 32, old = S.rating;
+      S.rating = Math.max(100, Math.round(S.rating + k * (score - exp))); S.games++;
+      var rec = S.rec[b.id] || (S.rec[b.id] = { w: 0, l: 0, d: 0 });
+      if (score === 1) rec.w++; else if (score === 0) rec.l++; else rec.d++;
+      game.delta = S.rating - old; game.rated = true; game.firstWin = score === 1 && rec.w === 1;
+    }
+    function finish(reason, winner) {
+      var res = reason === 'checkmate' ? (G.turn() === 'w' ? 'b' : 'w') : (reason === 'resign' || reason === 'botresign') ? winner : 'd';
+      game.over = { res: res, reason: reason };
+      token++; thinking = false; hintBusy = false; sel = null; targets = []; hint = null;
+      if (game.mode === 'bot' && !game.rated) rate(res === 'd' ? 0.5 : res === game.you ? 1 : 0);
+      sound(res === 'd' ? 'draw' : game.mode === 'friend' || res === game.you ? 'win' : 'lose');
+      save();
+      clearTimeout(finish.tm); finish.tm = setTimeout(showOver, 700);
+    }
+    function nextBot() {   // the weakest bot you haven't beaten yet
+      for (var i = 0; i < CHESS_BOTS.length; i++) { var r = S.rec[CHESS_BOTS[i].id]; if (!r || !r.w) return CHESS_BOTS[i]; }
+      return null;
+    }
+    function showOver() {
+      if (!game || !game.over || !$('ov').hidden) return;
+      var o = game.over, bot = game.mode === 'bot' ? BOT[game.bot] : null, draw = o.res === 'd', won = bot && o.res === game.you;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', draw ? '🤝' : bot && !won ? '😢' : '🏆'));
+        c.appendChild(mk('h3', null, draw ? 'It’s a draw!' : bot ? (won ? 'You won!' : bot.n + ' won') : (o.res === 'w' ? '⚪ White' : '⚫ Black') + ' wins!'));
+        c.appendChild(mk('p', null, reasonText()));
+        if (bot) {
+          c.appendChild(mk('p', 'chs-quote', bot.e + ' “' + (draw ? 'Good game! Let’s call it even.' : won ? bot.lose : bot.win) + '”'));
+          if (game.rated) {
+            var dl = mk('div', 'chs-delta'), up = game.delta >= 0;
+            dl.innerHTML = 'Your rating: ' + (S.rating - game.delta) + ' → ' + S.rating + ' <span class="' + (up ? 'up' : 'down') + '">(' + (up ? '+' : '−') + Math.abs(game.delta) + ')</span>';
+            c.appendChild(dl);
+          }
+          if (game.firstWin) { var nb = nextBot(); c.appendChild(mk('p', null, '🎉 First win against ' + bot.n + '!' + (nb ? ' Next challenge: ' + nb.e + ' ' + nb.n + ' (' + nb.elo + ').' : ' You’ve beaten EVERY bot. You’re a chess legend!'))); }
+        }
+        var again = mk('button', 'btn', '🔁 Play again'); again.type = 'button'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
+        var row = mk('div', 'chs-row');
+        var pk = mk('button', 'btn ghost', '🤖 Bots'); pk.type = 'button'; pk.addEventListener('click', function () { closeCard(); showMenu(); });
+        var look = mk('button', 'btn ghost', '👀 See board'); look.type = 'button'; look.addEventListener('click', closeCard);
+        row.appendChild(pk); row.appendChild(look); c.appendChild(row);
+      });
+    }
+    function rematch() { if (game) newGame(game.mode, game.bot, game.pick); }
+
+    // ---- buttons under the board ----
+    function confirmCard(title, text, yes, fn) {
+      openCard(function (c) {
+        c.appendChild(mk('h3', null, title)); c.appendChild(mk('p', null, text));
+        var row = mk('div', 'chs-row'), y = mk('button', 'btn', yes), n = mk('button', 'btn ghost', 'Keep playing');
+        y.type = n.type = 'button';
+        y.addEventListener('click', function () { closeCard(); fn(); }); n.addEventListener('click', closeCard);
+        row.appendChild(n); row.appendChild(y); c.appendChild(row);
+      });
+    }
+    $('hint').addEventListener('click', function () {
+      if (!game || game.over || thinking || hintBusy || !humanTurn()) return;
+      var my = ++token; hintBusy = true; hint = null; renderStatus(); renderTools();
+      ask({ time: 800 }, function (r) {
+        if (my !== token) return;
+        hintBusy = false;
+        if (r && r.uci) { hint = { from: r.uci.slice(0, 2), to: r.uci.slice(2, 4) }; game.hints = (game.hints || 0) + 1; sel = null; targets = []; save(); }
+        render();
+      });
+    });
+    $('undo').addEventListener('click', function () {
+      if (!game || game.over || !game.moves.length) return;
+      var n = game.mode === 'bot' && !thinking ? 2 : 1;
+      if (n > game.moves.length) return;
+      cancelThinking(); clearTimeout(finish.tm);
+      for (var i = 0; i < n; i++) { G.undo(); game.moves.pop(); game.sans.pop(); }
+      game.undos = (game.undos || 0) + 1; game.botScore = null;
+      var lu = game.moves[game.moves.length - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
+      sel = null; targets = []; hint = null;
+      save(); render(); botTurn();
+    });
+    $('flip').addEventListener('click', function () { if (!game) return; orient = game.orient = orient === 'w' ? 'b' : 'w'; save(); render(); });
+    $('draw').addEventListener('click', function () {
+      if (!game || game.over) return;
+      if (game.mode === 'friend') { confirmCard('🤝 Call it a draw?', 'Do both players agree to a draw?', 'Yes, draw', function () { finish('agreed'); render(); }); return; }
+      if (thinking || !humanTurn()) return;
+      var sc = game.botScore;   // how the bot thinks it's doing (from its side)
+      if (sc != null && (sc <= -150 || (game.moves.length >= 60 && Math.abs(sc) <= 40))) { say(pick(SAY.yesdraw)); finish('agreed'); render(); }
+      else say(pick(SAY.nodraw));
+    });
+    $('resign').addEventListener('click', function () {
+      if (!game || game.over) return;
+      var who = game.mode === 'bot' ? game.you : G.turn();
+      confirmCard('🏳️ Resign?', game.mode === 'bot' ? 'Give up this game against ' + BOT[game.bot].n + '?' : (who === 'w' ? '⚪ White' : '⚫ Black') + ' gives up and loses this game?', 'Yes, resign', function () {
+        cancelThinking(); finish('resign', who === 'w' ? 'b' : 'w'); render();
+      });
+    });
+    $('menuBtn').addEventListener('click', function () { cancelThinking(); save(); showMenu(); });
+    $('rematch').addEventListener('click', rematch);
+    $('pick').addEventListener('click', showMenu);
+
+    // ---- pop-up cards ----
+    function openCard(build) {
+      var c = $('card'); c.innerHTML = ''; build(c); $('ov').hidden = false;
+      var f = c.querySelector('.btn, button'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
+    }
+    function closeCard() { $('ov').hidden = true; $('card').innerHTML = ''; }
+    $('ov').addEventListener('click', function (e) { if (e.target === $('ov')) closeCard(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('ov').hidden && root.classList.contains('active')) closeCard(); });
+
+    // ---- the bot list ----
+    function beaten() { return CHESS_BOTS.filter(function (b) { return S.rec[b.id] && S.rec[b.id].w; }).length; }
+    function goodMatch() {
+      var best = null, bd = 1e9;
+      CHESS_BOTS.forEach(function (b) { var d = Math.abs(b.elo - S.rating); if (d < bd) { bd = d; best = b; } });
+      return best;
+    }
+    function showMenu() {
+      cancelThinking(); dropGhost(); down = null;
+      $('game').hidden = true; $('menu').hidden = false;
+      var m = $('menu'), gm = goodMatch(); m.innerHTML = '';
+      var head = mk('div', 'panel chs-head');
+      head.innerHTML = '<div class="bs-kicker">Your rating</div><div><div class="chs-rating">' + S.rating + '<small>Elo</small></div><p class="chs-sub">You’ve beaten ' + beaten() + ' of ' + CHESS_BOTS.length + ' bots · ' + S.games + (S.games === 1 ? ' game' : ' games') + ' played</p></div><div class="chs-big" aria-hidden="true">♟️</div>';
+      var opts = mk('div', 'chs-opts');
+      THEMES.forEach(function (t) {
+        var p = mk('button', 'chs-pill' + (S.theme === t[0] ? ' on' : ''), t[1]); p.type = 'button'; p.setAttribute('data-theme', t[0]);
+        p.addEventListener('click', function () { S.theme = t[0]; save(); showMenu(); });
+        opts.appendChild(p);
+      });
+      var snd = mk('button', 'chs-pill' + (S.sound ? ' on' : ''), S.sound ? '🔊 Sound on' : '🔇 Sound off'); snd.type = 'button';
+      snd.addEventListener('click', function () { S.sound = !S.sound; save(); showMenu(); if (S.sound) sound('move'); });
+      opts.appendChild(snd); head.appendChild(opts); m.appendChild(head);
+      if (game && !game.over) {
+        var who = game.mode === 'bot' ? BOT[game.bot].e + ' ' + BOT[game.bot].n : '👥 your friend';
+        var cont = mk('button', 'btn chs-cont', '▶ Back to your game vs ' + who); cont.type = 'button'; cont.id = 'chs-continue';
+        cont.addEventListener('click', showGame); m.appendChild(cont);
+      }
+      var fr = mk('button', 'chs-friend'); fr.type = 'button'; fr.id = 'chs-friendBtn';
+      fr.innerHTML = '<span class="chs-av" style="--hue:var(--c4)">👥</span><span><b>Play a friend</b><small>Two players, one phone. Take turns!</small></span>';
+      fr.addEventListener('click', function () { newGame('friend', null, 'w'); });
+      m.appendChild(fr);
+      var lo = 0;
+      TIERS.forEach(function (tr) {
+        var list = CHESS_BOTS.filter(function (b) { return b.elo >= lo && b.elo < tr.hi; }); lo = tr.hi;
+        if (!list.length) return;
+        var hd = mk('div', 'chs-tier'); hd.innerHTML = '<h3>' + tr.e + ' ' + tr.t + '</h3><small>' + tr.d + '</small>'; m.appendChild(hd);
+        var grid = mk('div', 'chs-bots');
+        list.forEach(function (b) {
+          var r = S.rec[b.id], bt = mk('button', 'chs-botc' + (gm === b ? ' match' : '')); bt.type = 'button'; bt.setAttribute('data-bot', b.id); bt.style.setProperty('--hue', b.hue);
+          bt.innerHTML = '<span class="chs-av">' + b.e + '</span><b>' + b.n + '</b><small>' + b.elo + '</small>' + (r && r.w ? '<span class="chs-tag" title="Beaten!">✅</span>' : '') + (gm === b ? '<span class="chs-tagm">Good match</span>' : '');
+          bt.addEventListener('click', function () { openBot(b.id); });
+          grid.appendChild(bt);
+        });
+        m.appendChild(grid);
+      });
+      window.scrollTo(0, 0);
+    }
+    function openBot(id) {
+      var b = BOT[id], r = S.rec[id], side = S.lastPick || 'w';
+      openCard(function (c) {
+        var av = mk('span', 'chs-av', b.e); av.style.setProperty('--hue', b.hue); c.appendChild(av);
+        c.appendChild(mk('h3', null, b.n));
+        var elo = mk('span', 'chs-elo', 'Elo ' + b.elo); elo.style.setProperty('--hue', b.hue); c.appendChild(elo);
+        c.appendChild(mk('p', null, b.d));
+        c.appendChild(mk('p', 'chs-quote', '“' + b.hi + '”'));
+        if (r) { var rc = mk('div', 'chs-rec'); rc.innerHTML = '<span>Wins <b>' + r.w + '</b></span><span>Losses <b>' + r.l + '</b></span><span>Draws <b>' + r.d + '</b></span>'; c.appendChild(rc); }
+        var seg = mk('div', 'chs-seg');
+        [['w', '⚪ White'], ['r', '🎲 Random'], ['b', '⚫ Black']].forEach(function (o) {
+          var bt = mk('button', side === o[0] ? 'on' : '', o[1]); bt.type = 'button'; bt.setAttribute('data-side', o[0]);
+          bt.addEventListener('click', function () { side = o[0]; [].forEach.call(seg.children, function (x) { x.className = x === bt ? 'on' : ''; }); });
+          seg.appendChild(bt);
+        });
+        c.appendChild(seg);
+        var go = mk('button', 'btn', '▶ Play ' + b.n); go.type = 'button'; go.id = 'chs-go';
+        go.addEventListener('click', function () { S.lastPick = side; closeCard(); newGame('bot', id, side); });
+        c.appendChild(go);
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+    function newGame(mode, botId, side) {
+      cancelThinking(); clearTimeout(finish.tm);
+      var you = side === 'r' ? (Math.random() < 0.5 ? 'w' : 'b') : side === 'b' ? 'b' : 'w';
+      game = { mode: mode, bot: botId || null, pick: side || 'w', you: mode === 'bot' ? you : null, orient: mode === 'bot' ? you : 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false };
+      G.reset(); orient = game.orient; last = null; sel = null; targets = []; hint = null; chat = { text: '', t: 0 };
+      save(); showGame();
+      if (mode === 'bot') say(BOT[botId].hi);
+    }
+    function showGame() {
+      if (!game) { showMenu(); return; }
+      $('menu').hidden = true; $('game').hidden = false;
+      render();
+      if (game.over) setTimeout(showOver, 300); else botTurn();
+    }
+
+    function enter() {
+      if (!G) G = FVChessEngine(8);
+      S = load(); game = null;
+      var cur = S.cur;
+      if (cur && cur.moves && (cur.mode === 'friend' || BOT[cur.bot])) {
+        game = cur; game.sans = game.sans || [];
+        var n = G.play(game.moves, game.fen);
+        if (n < game.moves.length || game.sans.length !== n) { game.moves.length = n; game.sans = []; G.load(game.fen); game.moves.forEach(function (u) { game.sans.push(G.sanOf(u)); G.move(u); }); }
+        orient = game.orient || 'w';
+        var lu = game.moves[n - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
+      }
+      sel = null; targets = []; hint = null; thinking = false; hintBusy = false;
+      if (game && !game.over) showGame(); else showMenu();
+    }
+    function leave() { cancelThinking(); clearTimeout(finish.tm); dropGhost(); down = null; closeCard(); if (game) save(); }
+    window.registerHook('chess', enter, leave);
+    window.__chess = {   // for the tests
+      state: function () { return game; }, saved: function () { return S; }, fen: function () { return G && G.fen(); },
+      load: function (fen, you, botId) { cancelThinking(); closeCard(); game = { mode: botId ? 'bot' : 'friend', bot: botId || null, pick: you || 'w', you: botId ? you || 'w' : null, orient: you || 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, fen: fen }; G.load(fen); orient = game.orient; last = null; sel = null; targets = []; hint = null; save(); showGame(); },
+      bots: CHESS_BOTS, book: CHESS_BOOK, engine: function () { return G; }, worker: function () { return worker; }
+    };
+  })();
+  // ============ end Chess ============
 
 </script>
 <script>
