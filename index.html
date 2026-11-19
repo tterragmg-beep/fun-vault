@@ -16049,7 +16049,7 @@
     var killers = new Int32Array(MAXPLY * 2 + 4), hist = new Int32Array(16 * 120);
     var mvBuf = [], scBuf = [];
     for (i = 0; i <= MAXPLY + 2; i++) { mvBuf.push(new Int32Array(256)); scBuf.push(new Int32Array(256)); }
-    var nodes = 0, stopAt = 0, nodeLimit = 0, stopped = false, rootBest = 0, useQS = true, selDepth = 0;
+    var nodes = 0, stopAt = 0, nodeLimit = 0, stopped = false, rootBest = 0, useQS = true, selDepth = 0, farBlindPly = -1;
     var VAL = [0, 1, 3, 3, 5, 9, 20];
     function now() { return Date.now(); }
     function ttProbe() { var x = hashLo & TTM; return ttHi[x] === hashHi && ttFlag[x] ? x : -1; }
@@ -16090,6 +16090,7 @@
       for (var j = 0; j < n; j++) {
         var m = pickNext(buf, sc, n, j), cap = board[(m >> 7) & 127], pr = (m >> 14) & 7;
         if (!pr && stand + (cap ? MGV[cap & 7] : 100) + 200 < alpha) continue;   // can't possibly help
+        if (ply === farBlindPly && farCapture(m)) continue;   // a human-sized slip: didn't notice that long-range capture
         make(m);
         if (attacked(kingSq[us >> 3], side)) { unmake(); continue; }
         var s = -quiesce(-beta, -alpha, ply + 1);
@@ -16165,6 +16166,10 @@
       ttStore(depth, best >= beta ? 2 : best > a0 ? 1 : 3, best, bestMove, ply);
       return best;
     }
+    function farCapture(m) {   // a bishop, rook or queen capturing from 3+ squares away: the attacks people miss most
+      var f = m & 127, t = (m >> 7) & 127, pt = board[f] & 7;
+      return (pt === B || pt === R || pt === Q) && Math.max(Math.abs(fileOf(f) - fileOf(t)), Math.abs(rankOf(f) - rankOf(t))) >= 3;
+    }
     // every legal move with its own score (for bots that make human-sized mistakes)
     function scoreAll(depth) {
       var lm = legalMoves(), out = [];
@@ -16178,11 +16183,15 @@
       return out;
     }
     function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-    // o: { depth, time, nodes, noise, random, greed, qs }
+    // o: { depth, time, nodes, noise, random, greed, qs, aimless, blind, slip }
+    //   Human-sized mistakes for the lower bots (instead of silly random moves):
+    //   aimless = chance of a pointless (but safe) move, blind = chance it doesn't check what you can take back at all,
+    //   slip = chance it only looks one move ahead and misses captures from far away (long diagonals, open files)
     function think(o) {
       o = o || {};
       var t0 = now(), lm = legalMoves();
-      nodes = 0; stopped = false; selDepth = 0; rootBest = 0; useQS = o.qs !== false;
+      var blind = !!(o.blind && Math.random() < o.blind), slip = !blind && !!(o.slip && Math.random() < o.slip);
+      nodes = 0; stopped = false; selDepth = 0; rootBest = 0; useQS = o.qs !== false && !blind; farBlindPly = slip ? 1 : -1;
       stopAt = o.time ? t0 + o.time : 0; nodeLimit = o.nodes || 0;
       for (var j = 0; j < killers.length; j++) killers[j] = 0;
       for (j = 0; j < hist.length; j++) hist[j] >>= 2;
@@ -16190,8 +16199,17 @@
       var res = { move: 0, score: 0, depth: 0 };
       if (lm.length === 1) { res.move = lm[0]; res.score = evaluate(); }
       else if (o.random && Math.random() < o.random) { res.move = lm[(Math.random() * lm.length) | 0]; res.score = 0; res.depth = 0; res.random = true; }
-      else if (o.noise || o.greed || o.qs === false) {
-        var all = scoreAll(o.depth || 1), bs = -INF * 2, bm = all.length ? all[0][0] : lm[0], raw = 0;
+      else if (o.aimless && Math.random() < o.aimless) {   // a pointless move… that doesn't just give a piece away
+        useQS = true; farBlindPly = -1;
+        var sa = scoreAll(1), top = -INF * 2, safe = [];
+        for (j = 0; j < sa.length; j++) if (sa[j][1] > top) top = sa[j][1];
+        for (j = 0; j < sa.length; j++) if (sa[j][1] >= top - 150) safe.push(sa[j]);
+        var pk = safe[(Math.random() * safe.length) | 0] || sa[0];
+        res.move = pk[0]; res.score = pk[1]; res.depth = 1; res.aimless = true;
+      }
+      else if (o.noise || o.greed || o.qs === false || blind || slip) {
+        var all = scoreAll(blind || slip ? 1 : o.depth || 1), bs = -INF * 2, bm = all.length ? all[0][0] : lm[0], raw = 0;
+        res.blind = blind; res.slip = slip;
         for (j = 0; j < all.length; j++) {
           var m = all[j][0], s = all[j][1];
           if (o.greed && (board[(m >> 7) & 127] || ((m >>> 17) & 2))) s += o.greed;
@@ -16211,6 +16229,7 @@
         }
         res.move = best; res.score = bestScore;
       }
+      useQS = true; farBlindPly = -1;
       res.nodes = nodes; res.ms = now() - t0; res.uci = moveUci(res.move); res.san = san(res.move, lm);
       return res;
     }
@@ -16260,43 +16279,43 @@
         s: { random: 0.8, depth: 1, qs: false, noise: 300 } },
       { id: 'shelly', e: '🐌', n: 'Shelly', elo: 200, hue: '#a3e635', d: 'Slow and steady. Very slow. Very steady.',
         hi: 'Hiii… let’s… play…', win: 'Slow… and steady… wins… the race!', lose: 'Too… fast… for me…',
-        s: { random: 0.62, depth: 1, qs: false, noise: 300 } },
+        s: { random: 0.35, blind: 0.9, depth: 1, noise: 260 } },
       { id: 'biscuit', e: '🐶', n: 'Biscuit', elo: 300, hue: '#e4a64a', d: 'Chases every piece it sees. Can’t resist a capture. Woof!',
         hi: 'Woof! Throw me a piece!', win: 'Who’s a good boy? ME! I won!', lose: 'Woof… you’re a good player.',
-        s: { random: 0.58, depth: 1, qs: false, noise: 260, greed: 180 } },
+        s: { random: 0.3, blind: 0.8, depth: 1, noise: 220, greed: 160 } },
       { id: 'beepbop', e: '🤖', n: 'Beep-Bop', elo: 400, hue: '#4db6ff', d: 'A little robot that’s still learning the rules. Beep!',
         hi: 'BEEP. CHESS MODE: ON.', win: 'VICTORY.EXE HAS STARTED.', lose: 'ERROR 404: WIN NOT FOUND. GOOD GAME.',
-        s: { random: 0.34, depth: 1, qs: false, noise: 200 } },
+        s: { aimless: 0.15, blind: 0.3, slip: 0.5, depth: 1, noise: 150, greed: 50 } },
       { id: 'whiskers', e: '🐱', n: 'Whiskers', elo: 500, hue: '#f472b6', d: 'Plays whatever looks shiny. Might knock your pieces off the table.',
         hi: 'Meow. Your pawns look tasty.', win: 'Purr-fect.', lose: 'Hiss! Fine. You win this time.',
-        s: { random: 0.22, depth: 1, qs: false, noise: 160 } },
+        s: { aimless: 0.1, blind: 0.12, slip: 0.5, depth: 1, noise: 125, greed: 30 } },
       { id: 'waddles', e: '🦆', n: 'Waddles', elo: 600, hue: '#3cc7c0', d: 'Knows all the rules. Mostly. Quack.',
         hi: 'Quack! Ready when you are.', win: 'QUACK QUACK! I won!', lose: 'Quack… good one!',
-        s: { random: 0.16, depth: 2, qs: false, noise: 150 } },
+        s: { aimless: 0.08, blind: 0.08, slip: 0.45, depth: 2, noise: 120 } },
       { id: 'hopper', e: '🐸', n: 'Hopper', elo: 700, hue: '#39c98a', d: 'Jumps at every chance to attack. Ribbit!',
         hi: 'Ribbit! Let’s hop to it.', win: 'Ribbit-tastic!', lose: 'You out-hopped me!',
-        s: { random: 0.1, depth: 2, qs: false, noise: 120, greed: 60 } },
+        s: { aimless: 0.04, blind: 0.06, slip: 0.35, depth: 2, noise: 100, greed: 50 } },
       { id: 'pebble', e: '🐧', n: 'Pebble', elo: 800, hue: '#7c6cff', d: 'Stays cool under pressure. Slides right into the endgame.',
         hi: 'Brrr. It’s chess time.', win: 'Cool, cool, cool. I win.', lose: 'Brr… that was ice cold. Nice!',
-        s: { random: 0.07, depth: 2, noise: 110 } },
+        s: { aimless: 0.03, blind: 0.05, slip: 0.28, depth: 2, noise: 85 } },
       { id: 'rusty', e: '🦊', n: 'Rusty', elo: 900, hue: '#ff7a59', d: 'A sneaky fox. Watch out for forks!',
         hi: 'Heh heh. Watch your knights.', win: 'Outfoxed you!', lose: 'Clever! Too clever for a fox.',
-        s: { random: 0.05, depth: 2, noise: 90 } },
+        s: { blind: 0.03, slip: 0.2, depth: 2, noise: 65 } },
       { id: 'bamboo', e: '🐼', n: 'Bamboo', elo: 1000, hue: '#93a1b5', d: 'Calm and steady. Takes a snack break every few moves.', book: 0.4,
         hi: '*munch munch* Your move.', win: '*happy munching* Good game!', lose: 'Wow. I need more bamboo to think.',
-        s: { random: 0.03, depth: 2, noise: 70 } },
+        s: { blind: 0.015, slip: 0.12, depth: 2, noise: 50 } },
       { id: 'bandit', e: '🦝', n: 'Bandit', elo: 1100, hue: '#5d6676', d: 'Steals any pawn you leave lying around.', book: 0.5,
         hi: 'Leave anything unguarded? It’s mine now.', win: 'Stolen! The win is mine!', lose: 'Caught red-pawned. You win!',
-        s: { random: 0.02, depth: 3, noise: 70, greed: 50 } },
+        s: { blind: 0.015, slip: 0.2, depth: 3, noise: 70, greed: 40 } },
       { id: 'merlina', e: '🧙', n: 'Merlina', elo: 1200, hue: '#7c6cff', d: 'A wizard who knows a few tricks… and a few traps.', book: 0.6,
         hi: 'Abracadabra… your move.', win: 'Just as my crystal ball said!', lose: 'Your magic is stronger than mine!',
-        s: { random: 0.01, depth: 3, noise: 55 } },
+        s: { slip: 0.1, depth: 3, noise: 48 } },
       { id: 'hoot', e: '🦉', n: 'Professor Hoot', elo: 1300, hue: '#e4a64a', d: 'Read every chess book in the library. Twice.', book: 0.8,
         hi: 'Hoo! Let us begin, student.', win: 'Class dismissed. Hoo hoo!', lose: 'Hoo! The student has become the teacher!',
         s: { depth: 3, noise: 45 } },
       { id: 'grizzly', e: '🐻', n: 'Grizzly', elo: 1400, hue: '#b5761c', d: 'Big, strong, and always coming for your king.', book: 1, resign: true,
         hi: 'RAWR. I’m coming for your king.', win: 'RAWRRR! Bear hug for the winner: me!', lose: 'Grr… you’re one tough cub.',
-        s: { depth: 3, noise: 35 } },
+        s: { depth: 4, noise: 50 } },
       { id: 'luna', e: '🐺', n: 'Luna', elo: 1500, hue: '#4db6ff', d: 'Hunts at night. Very patient. Waits for you to slip.', book: 1, resign: true,
         hi: 'Awooo… the hunt begins.', win: 'The pack wins tonight.', lose: 'Awoo… you’re the alpha now.',
         s: { depth: 4, noise: 32 } },
