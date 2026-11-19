@@ -1200,6 +1200,19 @@
   .chs-lt i.chs-ltodo { margin-left: 6px; color: var(--fg); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: color-mix(in srgb, var(--accent) 18%, var(--panel-2)); }
   .chs-lhead p.chs-lnote { margin-top: 10px; font-size: 0.86rem; }
   .chs-lhead p.chs-lnote b { display: inline-block; margin-top: 6px; color: var(--fg); }
+  .chs-clock { margin-left: auto; flex: none; min-width: 66px; text-align: center; font: 700 1.08rem var(--font-display); font-variant-numeric: tabular-nums; padding: 6px 10px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--line); color: var(--muted); }
+  .chs-clock.on { color: var(--fg); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, var(--panel-2)); }
+  .chs-clock.low { color: var(--bad); }
+  .chs-clock.on.low { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 16%, var(--panel-2)); }
+  .chs-duel { display: grid; gap: 10px; margin-top: 12px; text-align: left; }
+  .chs-dname { display: grid; grid-template-columns: 78px 1fr; align-items: center; gap: 8px; font-weight: 700; font-size: 0.92rem; }
+  .chs-dname input { width: 100%; min-width: 0; font: 600 1rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .chs-dname input:focus { outline: none; border-color: var(--accent); }
+  .chs-duel .chs-pill { justify-self: start; }
+  .chs-dlabel { font-weight: 700; font-size: 0.9rem; margin-top: 4px; }
+  .chs-seg.chs-seg5 { grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 0; }
+  .chs-seg.chs-seg5 button { font-size: 0.8rem; padding: 10px 2px; }
+  .chs-card p.chs-dscore { color: var(--fg); font-weight: 700; }
   /* ---- end Chess ---- */
 </style>
 </head>
@@ -1359,7 +1372,7 @@
       <button class="card" style="--hue: var(--c2);" data-goto="chess">
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21h12"/><path d="M8 21c0-3.2 1-5.6 3-7.6-1.4.4-2.8.3-3.8-.5-.8-.7-.8-1.7-.2-2.5L10.2 6l.6-2.6 2 1.9c3.1.8 5.2 3.7 5.2 7.6V21"/><circle cx="11.6" cy="8.6" r=".5" fill="currentColor"/></svg></span>
         <h2>Chess</h2>
-        <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). Beat them all to become a legend, or play a friend on the same phone.</p>
+        <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). 1v1 a friend on the same phone, or learn openings and checkmates with Coach Hoot.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -16361,6 +16374,7 @@
 
     // ---- 🎓 lessons: openings you play move by move, and checkmates you find yourself ----
     // Each opening is a list of [move, what Coach Hoot says]. Your moves' text is said BEFORE you play them.
+    // any: 1 = a setup you can build in any order (the Hippo), so its test accepts your moves in any order.
     var CHESS_OPENINGS = [
       { id: 'italian', e: '🇮🇹', n: 'Italian Game', side: 'w', d: 'Aim your bishop at f7, the weakest square near Black’s king.', line: [
         ['e2e4', 'Push your king’s pawn two squares, to e4. It grabs the middle of the board and opens paths for your queen and bishop.'],
@@ -16424,6 +16438,26 @@
         ['c2c3', 'Protect d4 with c3. Your pawns make a strong triangle.'],
         ['b8c6', 'Black develops its other knight.'],
         ['b1d2', 'Knight to d2. Next: bishop to d3, then castle. That’s the London System!']] },
+      { id: 'hippoatk', e: '🦛', n: 'Hippo Attack', side: 'w', any: 1, d: 'The Hippo, but for White! Same easy setup: little pawns on a3, b3, d3, e3, g3 and h3, with your pieces hiding behind them. Works against almost anything, in almost any order.', line: [
+        ['g2g3', 'Start the Hippo Attack with g3. It makes a home for your bishop, just like in the Hippo Defense!'],
+        ['e7e5', 'Black takes the center with e5.'],
+        ['f1g2', 'Fianchetto your bishop on g2. It looks down the long diagonal, across the whole board.'],
+        ['d7d5', 'Black grabs even more of the center with d5.'],
+        ['d2d3', 'Push your d-pawn just one square, to d3. The Hippo takes small steps!'],
+        ['g8f6', 'Black brings out a knight.'],
+        ['e2e3', 'Now e3. Your pawns on d3 and e3 guard the squares in front of them.'],
+        ['b8c6', 'Black brings out its other knight.'],
+        ['g1e2', 'Your knight goes to e2, safe behind your pawns.'],
+        ['f8e7', 'Black develops its bishop.'],
+        ['b2b3', 'Push b3 to make a home for your other bishop.'],
+        ['e8g8', 'Black castles.'],
+        ['c1b2', 'Fianchetto your second bishop on b2! Now both bishops aim at Black’s big center.'],
+        ['c8e6', 'Black brings out its last bishop.'],
+        ['b1d2', 'Your last knight goes to d2. Everything is hiding behind your pawns, like a hippo in the water 🦛'],
+        ['d8d7', 'Black puts its queen on d7.'],
+        ['a2a3', 'Play a3, so Black’s pieces can’t use the b4 square.'],
+        ['a8d8', 'Black brings a rook to the middle.'],
+        ['h2h3', 'Finish with h3. Your Hippo Attack is ready: pawns on a3, b3, d3, e3, g3 and h3! Next, castle to keep your king safe. Later you break out with f4 or d4 and attack Black’s big center.']] },
       { id: 'sicilian', e: '🌋', n: 'Sicilian Defense', side: 'b', d: 'Fight back against e4 from the side. The most popular defense in the world.', line: [
         ['e2e4', 'White starts with e4.'],
         ['c7c5', 'The Sicilian: push your c-pawn to c5. It fights for the center from the side.'],
@@ -16479,6 +16513,27 @@
         ['d7d6', 'Play d6. Let White have the center for now. You’ll attack it later.'],
         ['g1f3', 'White develops its other knight.'],
         ['e8g8', 'Castle! Your king is safe. Next, you’ll strike back with e5. That’s the King’s Indian!']] },
+      { id: 'hippo', e: '🦛', n: 'Hippo Defense', side: 'b', any: 1, d: 'Build a wall of little pawns and hide your pieces behind it, like a hippo in the water. It works against almost anything, in almost any order!', line: [
+        ['e2e4', 'White starts with e4.'],
+        ['g7g6', 'The Hippo starts small: push your g-pawn just one square, to g6. It makes a home for your bishop.'],
+        ['d2d4', 'White grabs the center with d4.'],
+        ['f8g7', 'Put your bishop on g7. From there it looks down the long diagonal, across the whole board. That’s called a fianchetto!'],
+        ['b1c3', 'White brings out a knight.'],
+        ['d7d6', 'Push your d-pawn just one square, to d6. The Hippo takes small steps!'],
+        ['g1f3', 'White brings out its other knight.'],
+        ['e7e6', 'Now e6. Your pawns on d6 and e6 guard the squares in front of them, so White’s pieces can’t come close.'],
+        ['f1e2', 'White develops its bishop to e2.'],
+        ['g8e7', 'Your knight goes to e7, safe behind your pawns.'],
+        ['e1g1', 'White castles to keep its king safe.'],
+        ['b7b6', 'Push b6 to make a home for your other bishop.'],
+        ['f1e1', 'White puts a rook on e1.'],
+        ['c8b7', 'Fianchetto your second bishop on b7! Now both bishops aim at the middle of the board.'],
+        ['e2f1', 'White moves its bishop back to f1.'],
+        ['b8d7', 'Your last knight goes to d7. Everything is hiding behind your pawns, like a hippo in the water 🦛'],
+        ['a2a4', 'White pushes its a-pawn to a4.'],
+        ['a7a6', 'Play a6, so White’s pieces can’t use the b5 square.'],
+        ['h2h3', 'White plays h3.'],
+        ['h7h6', 'Finish with h6. Your Hippo is complete: pawns on a6, b6, d6, e6, g6 and h6! Later you break out with e5 or c5. Boris Spassky played the Hippo in a World Championship match in 1966!']] },
       { id: 'friedliver', e: '🔥', n: 'Fried Liver Attack', side: 'w', d: 'A wild attack where you sacrifice a knight to hunt the king.', line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16495,6 +16550,26 @@
         ['d1f3', 'Queen to f3: check! It also attacks the knight on d5.'],
         ['f7e6', 'The king has to step forward to protect its knight. Yikes!'],
         ['b1c3', 'Knight to c3 attacks the d5 knight again. Black’s king is in BIG trouble. That’s the Fried Liver Attack!']] },
+      { id: 'alien', e: '👽', n: 'Alien Gambit', side: 'w', d: 'A wild gambit against the Caro-Kann: sacrifice a knight on f7 to drag Black’s king out into the open!', line: [
+        ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
+        ['c7c6', 'Black plays c6. That’s the Caro-Kann Defense: Black wants to push d5 next.'],
+        ['d2d4', 'Grab even more of the center with d4.'],
+        ['d7d5', 'Black hits your e4 pawn with d5.'],
+        ['b1c3', 'Protect e4 with your knight on c3.'],
+        ['d5e4', 'Black takes your pawn on e4.'],
+        ['c3e4', 'Take it back with your knight: Nxe4.'],
+        ['g8f6', 'Black attacks your knight with Nf6 and offers a trade.'],
+        ['e4g5', 'Here comes the alien 👽 Don’t trade! Jump your knight to g5. It eyes f7, the weak square next to Black’s king.'],
+        ['h7h6', 'Black kicks your knight with h6: “Go away!”'],
+        ['g5f7', 'The Alien Gambit! Sacrifice your knight on f7! It attacks Black’s queen AND rook, so Black has to take it with the king.'],
+        ['e8f7', 'Black’s king takes your knight. Now it’s stuck out in the open, and it can never castle!'],
+        ['g1f3', 'Bring out your other knight to f3. Next it wants to jump to e5 with check!'],
+        ['c8g4', 'Black pins your knight to your queen with Bg4. That’s Black’s most common move… and it’s a mistake!'],
+        ['f3e5', 'Ne5, check! Black has to save its king, so it can’t take your queen. And your knight attacks the bishop on g4 too: a fork!'],
+        ['f7e8', 'The king runs back to e8.'],
+        ['e5g4', 'Now grab the bishop on g4! You win your piece back.'],
+        ['f6g4', 'Black takes your knight.'],
+        ['d1g4', 'Take back with your queen. You’re a pawn ahead, and Black’s king can never castle. Out of this world! 👽']] },
       { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', side: 'w', d: 'A 4-move checkmate. Great to know, and even better to know how to stop!', line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16528,33 +16603,34 @@
         ['c3d5', 'Knight to d5: CHECKMATE! Three little pieces beat Black’s whole army. That’s Légal’s Trap!']] }
     ];
     // checkmate patterns: find the checkmate (n = in how many moves), or "drill" = checkmate a lone king against the computer
-    // test = the test against the AI afterwards: ai = the AI's move first (a mistake that lets you use the pattern), limit = most moves allowed
+    // tests = positions for the test against the AI afterwards (all different from the lesson; each try uses a new one, sometimes flipped):
+    //   ai = the AI's move first (a mistake that lets you use the pattern), n = checkmate in how many, limit = most moves allowed
     var CHESS_MATES = [
-      { id: 'backrank', e: '🧱', n: 'Back-Rank Mate', d: 'The king is stuck behind its own pawns, so a rook or queen on the back row is checkmate!', test: { fen: '3r2k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', ai: 'd8d2', n: 1 }, parts: [
+      { id: 'backrank', e: '🧱', n: 'Back-Rank Mate', d: 'The king is stuck behind its own pawns, so a rook or queen on the back row is checkmate!', tests: [{ fen: '3r2k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', ai: 'd8d2', n: 1 }, { fen: '2r3k1/pb3ppp/1p6/8/8/1P3N2/P4PPP/4R1K1 b - - 0 1', ai: 'c8c2', n: 1 }, { fen: '6k1/2q2ppp/8/8/8/8/1P3PPP/3Q2K1 b - - 0 1', ai: 'c7c2', n: 1 }], parts: [
         { fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', n: 1 }, { fen: '1k6/ppp5/8/8/8/8/8/K3Q3 w - - 0 1', n: 1 }] },
-      { id: 'kiss', e: '💋', n: 'Queen Kiss Mate', d: 'Put your queen right next to the enemy king, protected by your own king. The king can’t take it!', test: { fen: '6k1/Q7/5K2/8/8/8/8/8 b - - 0 1', ai: 'g8h8', n: 1 }, parts: [
+      { id: 'kiss', e: '💋', n: 'Queen Kiss Mate', d: 'Put your queen right next to the enemy king, protected by your own king. The king can’t take it!', tests: [{ fen: '6k1/Q7/5K2/8/8/8/8/8 b - - 0 1', ai: 'g8h8', n: 1 }, { fen: '2k5/7Q/2K5/8/8/8/8/8 b - - 0 1', ai: 'c8b8', n: 1 }, { fen: '3k4/p7/3K4/8/Q7/8/P7/8 b - - 0 1', ai: 'a7a6', n: 1 }], parts: [
         { fen: '7k/8/6K1/8/8/8/8/Q7 w - - 0 1', n: 1 }, { fen: '3k4/7Q/3K4/8/8/8/8/8 w - - 0 1', n: 1 }] },
-      { id: 'smother', e: '🐴', n: 'Smothered Mate', d: 'The king is surrounded by its own pieces, so a knight can checkmate it all by itself!', test: { fen: '5r1k/6pp/8/4N3/8/8/8/6K1 b - - 0 1', ai: 'f8g8', n: 1 }, parts: [
+      { id: 'smother', e: '🐴', n: 'Smothered Mate', d: 'The king is surrounded by its own pieces, so a knight can checkmate it all by itself!', tests: [{ fen: 'k3r3/pp6/8/3N4/8/8/5PPP/6K1 b - - 0 1', ai: 'e8b8', n: 1 }, { fen: '7k/6pp/5n2/4N3/8/8/5PPP/6K1 b - - 0 1', ai: 'f6g8', n: 1 }, { fen: '5r1k/pp4pp/8/q3N3/8/8/PP3PPP/3Q2K1 b - - 0 1', ai: 'f8g8', n: 1 }], parts: [
         { fen: '6rk/6pp/8/6N1/8/8/8/6K1 w - - 0 1', n: 1 }] },
-      { id: 'arabian', e: '🌙', n: 'Arabian Mate', d: 'A rook and a knight team up to trap the king in the corner. The knight protects the rook!', test: { fen: '7k/1R6/5N2/8/8/8/7r/6K1 b - - 0 1', ai: 'h2a2', n: 1 }, parts: [
+      { id: 'arabian', e: '🌙', n: 'Arabian Mate', d: 'A rook and a knight team up to trap the king in the corner. The knight protects the rook!', tests: [{ fen: '3r3k/1R6/5Npp/8/8/8/6PP/6K1 b - - 0 1', ai: 'd8d2', n: 1 }, { fen: '7k/1R6/6p1/8/4N3/8/6PP/6K1 b - - 0 1', ai: 'g6g5', n: 2 }], parts: [
         { fen: '7k/1R6/5N2/8/8/8/8/7K w - - 0 1', n: 1 }] },
-      { id: 'anastasia', e: '🦄', n: 'Anastasia’s Mate', d: 'A knight blocks the king’s escape squares, and a rook checkmates it on the edge.', test: { fen: '6k1/4N1p1/8/R7/8/8/8/2K5 b - - 0 1', ai: 'g8h7', n: 1 }, parts: [
+      { id: 'anastasia', e: '🦄', n: 'Anastasia’s Mate', d: 'A knight blocks the king’s escape squares, and a rook checkmates it on the edge.', tests: [{ fen: '8/4N1pk/8/3r4/8/4R3/5PPP/6K1 b - - 0 1', ai: 'd5d2', n: 1 }, { fen: '8/pp2N1pk/8/8/R2n4/8/5PPP/6K1 b - - 0 1', ai: 'd4c2', n: 1 }], parts: [
         { fen: '8/4N1pk/8/R7/8/8/8/2K5 w - - 0 1', n: 1 }] },
-      { id: 'boden', e: '✂️', n: 'Boden’s Mate', d: 'Two bishops on crossing diagonals checkmate a king that castled to the queen side.', test: { fen: '2kr4/pp1n4/8/8/5B2/8/8/4KB2 b - - 0 1', ai: 'b7b6', n: 1 }, parts: [
+      { id: 'boden', e: '✂️', n: 'Boden’s Mate', d: 'Two bishops on crossing diagonals checkmate a king that castled to the queen side.', tests: [{ fen: '2kr4/pp1bq3/2p5/8/5B2/4Q3/PPP2PPP/2KR1B2 b - - 0 1', ai: 'b7b6', n: 1 }, { fen: '2k1rb1r/ppp3pp/2n2q2/3p1b2/2B2P2/2P1BQ2/PP1N1P1P/2KR3R w - - 0 14', ai: 'c4d5', n: 2, note: 'This is from Boden’s real game in 1853!' }], parts: [
         { fen: '2kr4/p2n4/8/8/5B2/8/8/4KB2 w - - 0 1', n: 1 }] },
-      { id: 'epaulette', e: '🎖️', n: 'Epaulette Mate', d: 'The king’s own rooks sit on both sides of it like shoulder pads, so it can’t step sideways.', test: { fen: '3r1r2/4k3/8/8/8/8/Q7/6K1 b - - 0 1', ai: 'e7e8', n: 1 }, parts: [
+      { id: 'epaulette', e: '🎖️', n: 'Epaulette Mate', d: 'The king’s own rooks sit on both sides of it like shoulder pads, so it can’t step sideways.', tests: [{ fen: '2r1r3/p2k3p/8/8/1Q6/8/5PPP/6K1 b - - 0 1', ai: 'd7d8', n: 1 }, { fen: '3rk2r/pp6/8/8/8/1Q6/5PPP/6K1 b - - 0 1', ai: 'h8f8', n: 1 }], parts: [
         { fen: '3rkr2/8/8/8/8/8/Q7/6K1 w - - 0 1', n: 1 }] },
-      { id: 'damiano', e: '⚔️', n: 'Damiano’s Mate', d: 'A pawn protects your queen right in front of the castled king.', test: { fen: '5rk1/5p2/6P1/8/7q/8/8/6KQ b - - 0 1', ai: 'h4a4', n: 1 }, parts: [
+      { id: 'damiano', e: '⚔️', n: 'Damiano’s Mate', d: 'A pawn protects your queen right in front of the castled king.', tests: [{ fen: '5rk1/pp3p2/5nP1/8/8/7Q/PP3P2/6K1 b - - 0 1', ai: 'f6d5', n: 1 }, { fen: '5rk1/1p3p2/p5P1/3q4/8/7Q/PP3PP1/6K1 b - - 0 1', ai: 'b7b5', n: 1 }], parts: [
         { fen: '5rk1/5p2/6P1/8/8/8/8/6KQ w - - 0 1', n: 1 }] },
-      { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', d: 'Your queen and bishop team up on f7, the weakest square at the start of the game.', test: { fen: 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3', ai: 'g8f6', n: 1, nomirror: 1 }, parts: [
+      { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', d: 'Your queen and bishop team up on f7, the weakest square at the start of the game.', tests: [{ fen: 'rnbqk1nr/pppp1ppp/8/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3', ai: 'b8c6', n: 1, nomirror: 1 }, { fen: 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3', ai: 'c6d4', n: 1, nomirror: 1 }, { fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 3 3', ai: 'c6d4', n: 1, nomirror: 1 }], parts: [
         { fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4', n: 1 }] },
-      { id: 'fool', e: '🤡', n: 'Fool’s Mate', d: 'The fastest checkmate in chess! White made two weak pawn moves. You’re Black: punish them!', test: { fen: 'rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2', ai: 'g2g4', n: 1, nomirror: 1 }, parts: [
+      { id: 'fool', e: '🤡', n: 'Fool’s Mate', d: 'The fastest checkmate in chess! White made two weak pawn moves. You’re Black: punish them!', tests: [{ fen: 'rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2', ai: 'g2g4', n: 1, nomirror: 1 }, { fen: 'rnbqkbnr/pppp1ppp/4p3/8/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2', ai: 'g2g4', n: 1, nomirror: 1 }, { fen: 'rnbqkbnr/pppp1ppp/4p3/8/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2', ai: 'g2g4', n: 1, nomirror: 1 }, { fen: 'rnbqkbnr/ppp2ppp/3p4/4p3/8/P4P2/1PPPP1PP/RNBQKBNR w KQkq - 0 3', ai: 'g2g4', n: 1, nomirror: 1 }], parts: [
         { fen: 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2', n: 1 }] },
-      { id: 'ladder', e: '🪜', n: 'Ladder Mate', d: 'Two rooks take turns, like climbing a ladder: one blocks a row, the other checks. Checkmate in 2!', test: { fen: '4k3/8/8/8/8/8/7R/R5K1 w - - 0 1', n: 2 }, parts: [
+      { id: 'ladder', e: '🪜', n: 'Ladder Mate', d: 'Two rooks take turns, like climbing a ladder: one blocks a row, the other checks. Checkmate in 2!', tests: [{ fen: '4k3/8/8/8/8/8/7R/R5K1 w - - 0 1', n: 2 }, { fen: '8/4k3/R7/8/8/8/8/1R4K1 w - - 0 1', n: 2 }, { fen: '3k4/R7/8/p5p1/8/8/5PPP/1R4K1 b - - 0 1', ai: 'd8e8', n: 1 }], parts: [
         { fen: '4k3/8/8/8/8/8/R7/1R2K3 w - - 0 1', n: 2 }] },
-      { id: 'kq', e: '👑', n: 'King + Queen vs King', d: 'Use your queen to push the king to the edge (don’t trap it with no moves, or it’s stalemate!). Then bring your king close and checkmate.', test: { fen: '8/8/3k4/8/8/8/8/1Q4K1 w - - 0 1', drill: 1, limit: 30 }, parts: [
+      { id: 'kq', e: '👑', n: 'King + Queen vs King', d: 'Use your queen to push the king to the edge (don’t trap it with no moves, or it’s stalemate!). Then bring your king close and checkmate.', tests: [{ fen: '8/8/3k4/8/8/8/8/1Q4K1 w - - 0 1', drill: 1, limit: 30 }, { fen: '8/8/8/2k5/8/8/8/4K2Q w - - 0 1', drill: 1, limit: 30 }, { fen: '6Q1/8/8/8/3k4/8/8/3K4 w - - 0 1', drill: 1, limit: 30 }], parts: [
         { fen: '8/8/8/4k3/8/8/8/3QK3 w - - 0 1', drill: 1 }] },
-      { id: 'kr', e: '🏰', n: 'King + Rook vs King', d: 'Use your rook to build a box around the king. Make the box smaller and smaller, use your king to help, and checkmate on the edge!', test: { fen: '8/8/8/3k4/8/8/8/6RK w - - 0 1', drill: 1, limit: 45 }, parts: [
+      { id: 'kr', e: '🏰', n: 'King + Rook vs King', d: 'Use your rook to build a box around the king. Make the box smaller and smaller, use your king to help, and checkmate on the edge!', tests: [{ fen: '8/8/8/3k4/8/8/8/6RK w - - 0 1', drill: 1, limit: 45 }, { fen: '8/8/8/8/2k5/8/8/4K2R w - - 0 1', drill: 1, limit: 45 }, { fen: 'R7/8/8/4k3/8/8/8/4K3 w - - 0 1', drill: 1, limit: 45 }], parts: [
         { fen: '8/8/8/4k3/8/8/8/R3K3 w - - 0 1', drill: 1 }] }
     ];
 
@@ -16585,7 +16661,7 @@
     function fix(s) {
       s = s && typeof s === 'object' ? s : {};
       s.rating = +s.rating || 400; s.games = +s.games || 0; s.rec = s.rec || {};
-      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true; s.learn = s.learn || {};
+      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.duel = s.duel || {};
       return s;
     }
     function load() { try { return fix(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return fix(null); } }
@@ -16743,6 +16819,7 @@
     function sideHtml(c) {
       if (game.mode === 'lesson' && c !== game.you) return (game.phase === 'test' ? '<span class="chs-av" style="--hue:#7c9cff" title="Test Bot">🤖</span>' : '<span class="chs-av" style="--hue:#e4a64a" title="Coach Hoot">🦉</span>') + '<div class="chs-say on chs-coach" id="chs-say">' + esc(game.coach) + '</div>';
       if (game.mode === 'lesson') return '<span class="chs-av" style="--hue:var(--accent-2)">🙂</span><div class="chs-pl-info"><div class="chs-pl-n">You</div><div class="chs-capt">' + capturedBy(c) + '</div></div>';
+      if (game.mode === 'friend') return duelSide(c);
       var bot = game.mode === 'bot' && c !== game.you ? BOT[game.bot] : null, you = game.mode === 'bot' && c === game.you;
       var av = bot ? bot.e : you ? '🙂' : c === 'w' ? '⚪' : '⚫', hue = bot ? bot.hue : you ? 'var(--accent-2)' : c === 'w' ? '#dfe3ea' : '#4b5568';
       var nm = bot ? bot.n + '<small>' + bot.elo + '</small>' : you ? 'You<small>' + S.rating + '</small>' : c === 'w' ? 'White' : 'Black';
@@ -16763,7 +16840,9 @@
     function reasonText() {
       var o = game.over, bot = game.mode === 'bot' ? BOT[game.bot] : null;
       if (o.reason === 'checkmate') return 'Checkmate!';
-      if (o.reason === 'resign') return bot ? 'You resigned.' : (o.res === 'w' ? '⚫ Black' : '⚪ White') + ' resigned.';
+      if (o.reason === 'resign') return bot ? 'You resigned.' : (o.res === 'w' ? '⚫ ' + duelName('b') : '⚪ ' + duelName('w')) + ' resigned.';
+      if (o.reason === 'time') return '⏰ ' + (o.res === 'w' ? '⚫ ' + duelName('b') : '⚪ ' + duelName('w')) + ' ran out of time!';
+      if (o.reason === 'timedraw') return '⏰ Time ran out, but there aren’t enough pieces left to checkmate.';
       if (o.reason === 'botresign') return bot.n + ' resigned!';
       return { stalemate: 'Stalemate: no legal moves, but not in check.', material: 'Not enough pieces left to checkmate.', fifty: '50 moves in a row with no captures or pawn moves.', repetition: 'The same position happened 3 times.', agreed: 'Draw agreed.' }[o.reason] || '';
     }
@@ -16787,19 +16866,20 @@
       if (game.over) {
         var r = game.over.res;
         if (game.mode === 'bot') { t = r === 'd' ? '🤝 Draw' : r === game.you ? '🏆 You won!' : '😢 ' + BOT[game.bot].n + ' won'; if (r !== 'd') cls += r === game.you ? ' win' : ' lose'; }
-        else t = r === 'd' ? '🤝 Draw' : (r === 'w' ? '⚪ White' : '⚫ Black') + ' wins!';
+        else t = r === 'd' ? '🤝 Draw' : (r === 'w' ? '⚪ ' : '⚫ ') + duelName(r) + ' wins!';
         t += ' · ' + reasonText();
-      } else if (game.mode === 'friend') t = (G.turn() === 'w' ? '⚪ White' : '⚫ Black') + ' to move' + (G.inCheck() ? ' · Check!' : '');
+      } else if (game.mode === 'friend') t = (G.turn() === 'w' ? '⚪ ' : '⚫ ') + duelName(G.turn()) + '’s turn' + (G.inCheck() ? ' · Check!' : '');
       else if (thinking) t = '🤔 ' + BOT[game.bot].n + ' is thinking…';
       else if (G.turn() === game.you) t = G.inCheck() ? '⚠️ Check! Save your king!' : hintBusy ? '💡 Finding a good move…' : 'Your move';
       el.textContent = t; el.className = cls;
       $('after').hidden = !game.over;
+      if (game.over) { $('rematch').textContent = game.mode === 'friend' ? '🔁 Rematch' : '🔁 Play again'; $('pick').textContent = game.mode === 'friend' ? '♟️ Menu' : '🤖 Pick a bot'; }
     }
     function humanTurn() { return game.mode === 'friend' || G.turn() === game.you; }
     function renderTools() {
       var over = !!game.over, ht = humanTurn(), les = game.mode === 'lesson';
       $('undo').hidden = $('draw').hidden = $('resign').hidden = les; $('restart').hidden = !les; $('hint').hidden = les && game.phase === 'test';
-      $('menuBtn').innerHTML = les ? '<span>📚</span>Lessons' : '<span>🤖</span>Bots';
+      $('menuBtn').innerHTML = les ? '<span>📚</span>Lessons' : game.mode === 'friend' ? '<span>♟️</span>Menu' : '<span>🤖</span>Bots';
       if (les) { $('hint').disabled = !!game.busy || !!game.done || hintBusy; $('hint').classList.toggle('busy', hintBusy); return; }
       $('hint').disabled = over || !ht || thinking || hintBusy; $('hint').classList.toggle('busy', hintBusy);
       $('undo').disabled = over || !game.moves.length || (game.mode === 'bot' && !thinking && game.moves.length < 2);
@@ -16908,7 +16988,9 @@
 
     function userMove(uci, dragged) { if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
     function playMove(uci, byBot, dragged) {
+      var mover = G.turn(), left = clockOn() && !game.over && game.clock.at ? clockLeft(mover) : null;
       var x = G.move(uci); if (!x) return false;
+      if (clockOn() && !game.over) { if (left != null) game.clock[mover] = left; game.clock.at = Date.now(); }   // the other player's clock starts
       game.moves.push(x.uci); game.sans.push(x.san);
       last = { from: x.from, to: x.to }; sel = null; targets = []; hint = null; hintBusy = false;
       var st = G.status(), chk = G.inCheck();
@@ -16916,6 +16998,7 @@
       else { sound(x.capture ? 'cap' : chk ? 'check' : x.castle ? 'castle' : 'move'); react(x, byBot, chk); }
       save();
       render(dragged ? null : x);
+      if (game.mode === 'friend' && game.flip && !game.over) { clearTimeout(flipTm); flipTm = setTimeout(turnBoard, 650); }
       if (!game.over) setTimeout(botTurn, 60);
       return true;
     }
@@ -16967,10 +17050,14 @@
       game.delta = S.rating - old; game.rated = true; game.firstWin = score === 1 && rec.w === 1;
     }
     function finish(reason, winner) {
-      var res = reason === 'checkmate' ? (G.turn() === 'w' ? 'b' : 'w') : (reason === 'resign' || reason === 'botresign') ? winner : 'd';
+      var res = reason === 'checkmate' ? (G.turn() === 'w' ? 'b' : 'w') : (reason === 'resign' || reason === 'botresign' || reason === 'time') ? winner : 'd';
       game.over = { res: res, reason: reason };
       token++; thinking = false; hintBusy = false; sel = null; targets = []; hint = null;
       if (game.mode === 'bot' && !game.rated) rate(res === 'd' ? 0.5 : res === game.you ? 1 : 0);
+      if (game.mode === 'friend') {
+        if (game.clock && game.clock.at) { var tc = G.turn(); game.clock[tc] = Math.max(0, game.clock[tc] - (Date.now() - game.clock.at)); game.clock.at = null; }
+        tally(res);
+      }
       sound(res === 'd' ? 'draw' : game.mode === 'friend' || res === game.you ? 'win' : 'lose');
       save();
       clearTimeout(finish.tm); finish.tm = setTimeout(showOver, 700);
@@ -16984,8 +17071,9 @@
       var o = game.over, bot = game.mode === 'bot' ? BOT[game.bot] : null, draw = o.res === 'd', won = bot && o.res === game.you;
       openCard(function (c) {
         c.appendChild(mk('div', 'chs-big', draw ? '🤝' : bot && !won ? '😢' : '🏆'));
-        c.appendChild(mk('h3', null, draw ? 'It’s a draw!' : bot ? (won ? 'You won!' : bot.n + ' won') : (o.res === 'w' ? '⚪ White' : '⚫ Black') + ' wins!'));
+        c.appendChild(mk('h3', null, draw ? 'It’s a draw!' : bot ? (won ? 'You won!' : bot.n + ' won') : (o.res === 'w' ? '⚪ ' : '⚫ ') + duelName(o.res) + ' wins!'));
         c.appendChild(mk('p', null, reasonText()));
+        if (game.mode === 'friend') c.appendChild(mk('p', 'chs-dscore', scoreText()));
         if (bot) {
           c.appendChild(mk('p', 'chs-quote', bot.e + ' “' + (draw ? 'Good game! Let’s call it even.' : won ? bot.lose : bot.win) + '”'));
           if (game.rated) {
@@ -16995,14 +17083,17 @@
           }
           if (game.firstWin) { var nb = nextBot(); c.appendChild(mk('p', null, '🎉 First win against ' + bot.n + '!' + (nb ? ' Next challenge: ' + nb.e + ' ' + nb.n + ' (' + nb.elo + ').' : ' You’ve beaten EVERY bot. You’re a chess legend!'))); }
         }
-        var again = mk('button', 'btn', '🔁 Play again'); again.type = 'button'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
+        var again = mk('button', 'btn', game.mode === 'friend' ? '🔁 Rematch (switch colors)' : '🔁 Play again'); again.type = 'button'; again.id = 'chs-again'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
         var row = mk('div', 'chs-row');
-        var pk = mk('button', 'btn ghost', '🤖 Bots'); pk.type = 'button'; pk.addEventListener('click', function () { closeCard(); showMenu(); });
+        var pk = mk('button', 'btn ghost', game.mode === 'friend' ? '♟️ Menu' : '🤖 Bots'); pk.type = 'button'; pk.addEventListener('click', function () { closeCard(); showMenu(); });
         var look = mk('button', 'btn ghost', '👀 See board'); look.type = 'button'; look.addEventListener('click', closeCard);
         row.appendChild(pk); row.appendChild(look); c.appendChild(row);
       });
     }
-    function rematch() { if (game) newGame(game.mode, game.bot, game.pick); }
+    function rematch() {
+      if (game && game.mode === 'friend') { var nm = game.names || ['Player 1', 'Player 2']; newDuel([nm[1], nm[0]], game.clock ? game.clock.base / 60000 : 0, !!game.flip); return; }   // 1v1: switch colors
+      if (game) newGame(game.mode, game.bot, game.pick);
+    }
 
     // ---- buttons under the board ----
     function confirmCard(title, text, yes, fn) {
@@ -17029,8 +17120,9 @@
       if (!game || game.over || !game.moves.length) return;
       var n = game.mode === 'bot' && !thinking ? 2 : 1;
       if (n > game.moves.length) return;
-      cancelThinking(); clearTimeout(finish.tm);
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(flipTm); pauseClock();
       for (var i = 0; i < n; i++) { G.undo(); game.moves.pop(); game.sans.pop(); }
+      if (game.mode === 'friend') { if (game.flip) orient = game.orient = G.turn(); resumeClock(); }
       game.undos = (game.undos || 0) + 1; game.botScore = null;
       var lu = game.moves[game.moves.length - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
       sel = null; targets = []; hint = null;
@@ -17048,11 +17140,11 @@
     $('resign').addEventListener('click', function () {
       if (!game || game.over) return;
       var who = game.mode === 'bot' ? game.you : G.turn();
-      confirmCard('🏳️ Resign?', game.mode === 'bot' ? 'Give up this game against ' + BOT[game.bot].n + '?' : (who === 'w' ? '⚪ White' : '⚫ Black') + ' gives up and loses this game?', 'Yes, resign', function () {
+      confirmCard('🏳️ Resign?', game.mode === 'bot' ? 'Give up this game against ' + BOT[game.bot].n + '?' : (who === 'w' ? '⚪ ' : '⚫ ') + duelName(who) + ' gives up and loses this game?', 'Yes, resign', function () {
         cancelThinking(); finish('resign', who === 'w' ? 'b' : 'w'); render();
       });
     });
-    $('menuBtn').addEventListener('click', function () { cancelThinking(); clearTimeout(lessonTm); if (game && game.mode === 'lesson') { showLessons(game.kind); return; } save(); showMenu(); });
+    $('menuBtn').addEventListener('click', function () { cancelThinking(); clearTimeout(lessonTm); if (game && game.mode === 'lesson') { showLessons(game.kind); return; } pauseClock(); save(); showMenu(); });
     $('restart').addEventListener('click', function () {   // in a test, starting over counts as another try (and checkmates get a new position)
       if (!game || game.mode !== 'lesson') return;
       if (game.phase === 'test') startTest(game.kind, game.lesson, game.attempt + 1, game.ver + 1); else startLesson(game.kind, game.lesson);
@@ -17075,7 +17167,7 @@
     function isTest() { return !!game && game.mode === 'lesson' && game.phase === 'test'; }
     function lessonOf() { return game.kind === 'op' ? OPEN[game.lesson] : MATE[game.lesson]; }
     function curPart() { return MATE[game.lesson].parts[game.part]; }
-    function testOf() { return MATE[game.lesson].test; }
+    function testOf() { return game.T; }   // the checkmate test position this try uses
     function yourMoves(L, upto) { return L.line.slice(0, upto == null ? L.line.length : upto).filter(function (x, i) { return (i % 2 === 0) === (L.side === 'w'); }); }
     function lessonProgress() {
       var L = lessonOf(), tr = game.attempt > 1 ? ' · try #' + game.attempt : '';
@@ -17226,11 +17318,11 @@
       lessonTm = setTimeout(function () {
         if (my !== token || !game || game.mode !== 'lesson' || game.phase === 'test' || !$('ov').hidden) return;
         openCard(function (c) {
-          var T = kind === 'mate' ? L.test : null;
+          var T = kind === 'mate' ? L.tests[0] : null;
           c.appendChild(mk('div', 'chs-big', '🧪'));
           c.appendChild(mk('h3', null, 'Lesson done! Now the test'));
           c.appendChild(mk('p', 'chs-quote', '🦉 “' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + ' Now show 🤖 Test Bot what you learned!”'));
-          c.appendChild(mk('p', null, 'You finished the ' + L.e + ' ' + L.n + ' lesson. Now ' + (kind === 'op' ? 'play it against 🤖 Test Bot from memory.' : T.drill ? 'checkmate 🤖 Test Bot’s lone king in ' + T.limit + ' moves or less.' : 'use it to checkmate 🤖 Test Bot in a new position.') +
+          c.appendChild(mk('p', null, 'You finished the ' + L.e + ' ' + L.n + ' lesson. Now ' + (kind === 'op' ? 'play it against 🤖 Test Bot from memory.' + (L.any ? ' Any order works!' : '') : T.drill ? 'checkmate 🤖 Test Bot’s lone king in ' + T.limit + ' moves or less.' : 'use it to checkmate 🤖 Test Bot in a new position.') +
             ' No hints this time! If you make a mistake, you have to try again. Pass the test to earn your ⭐'));
           var go = mk('button', 'btn', '🧪 Start the test'); go.type = 'button'; go.id = 'chs-startTest'; go.addEventListener('click', function () { startTest(kind, L.id, 1); }); c.appendChild(go);
           var row = mk('div', 'chs-row');
@@ -17265,7 +17357,7 @@
       var list = mk('div', 'chs-lessons');
       lessonList(kind).forEach(function (L) {
         var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
-        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
+        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
         b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
           (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
         b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
@@ -17281,7 +17373,7 @@
         c.appendChild(mk('h3', null, L.n));
         c.appendChild(mk('p', null, lv >= 2 ? '⭐ You passed the test! Want to practice it again?' : '📖 You did the lesson. Now pass the test against 🤖 Test Bot to earn your ⭐'));
         var tb = mk('button', lv >= 2 ? 'btn ghost' : 'btn', lv >= 2 ? '🧪 Take the test again' : '🧪 Take the test'); tb.type = 'button'; tb.id = 'chs-takeTest';
-        tb.addEventListener('click', function () { startTest(kind, L.id, 1, lv >= 2 ? (Math.random() * 4) | 0 : 0); });
+        tb.addEventListener('click', function () { startTest(kind, L.id, 1); });   // (each test starts on a random position)
         var lb = mk('button', lv >= 2 ? 'btn' : 'btn ghost', '📖 Learn it again'); lb.type = 'button'; lb.id = 'chs-learnAgain';
         lb.addEventListener('click', function () { startLesson(kind, L.id); });
         if (lv >= 2) { c.appendChild(lb); c.appendChild(tb); } else { c.appendChild(tb); c.appendChild(lb); }
@@ -17303,32 +17395,39 @@
     function flipSq(q, m, sw) { var f = q.charCodeAt(0) - 97, r = +q.charAt(1); return String.fromCharCode(97 + (m ? 7 - f : f)) + (sw ? 9 - r : r); }
     function flipUci(u, m, sw) { return flipSq(u.slice(0, 2), m, sw) + flipSq(u.slice(2, 4), m, sw) + u.slice(4); }
     function testVersions(T) { var v = [[0, 0]]; if (!T.nomirror) v.push([1, 0]); v.push([0, 1]); if (!T.nomirror) v.push([1, 1]); return v; }
+    function mateVariants(L) {   // every test position × every flip, mixed so that each new try looks different
+      var vv = L.tests.map(testVersions), most = Math.max.apply(null, vv.map(function (x) { return x.length; })), out = [];
+      for (var j = 0; j < most; j++) for (var p = 0; p < L.tests.length; p++) if (j < vv[p].length) out.push([p, j]);
+      return out;
+    }
+    var testPin = null;   // (the automatic tests can pin which position comes first)
     function startTest(kind, id, attempt, ver) {
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
       var L = kind === 'op' ? OPEN[id] : MATE[id]; if (!L) return;
-      attempt = attempt || 1; ver = ver == null ? attempt - 1 : ver;
+      attempt = attempt || 1; if (ver == null) ver = testPin != null ? testPin : (Math.random() * 9973) | 0;   // a new test starts on a random position
       game = { mode: 'lesson', phase: 'test', kind: kind, lesson: id, attempt: attempt, ver: ver, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
       sel = null; targets = []; hint = null; last = null;
       var hi = attempt > 1 ? 'Try #' + attempt + '! ' : 'Beep boop! I’m Test Bot. ';
       if (kind === 'op') {
         game.you = game.orient = orient = L.side; G.reset();
-        coachSays(hi + 'Show me the ' + L.n + ' from memory: all ' + yourMoves(L).length + ' of your moves. No hints!' + (L.side === 'b' ? ' I’ll go first.' : ''));
+        game.todo = L.any ? yourMoves(L).map(function (x) { return x[0]; }) : null;   // a setup like the Hippo: any order works
+        coachSays(hi + 'Show me the ' + L.n + ' from memory: all ' + yourMoves(L).length + ' of your moves' + (L.any ? ', in any order you like' : '') + '. No hints!' + (L.side === 'b' ? ' I’ll go first.' : ''));
         showGame(); testNext(true); return;
       }
-      var T = L.test, vs = testVersions(T), v = vs[ver % vs.length], ai = T.ai ? flipUci(T.ai, v[0], v[1]) : null;
+      var mv = mateVariants(L), pk = mv[ver % mv.length], T = game.T = L.tests[pk[0]], v = testVersions(T)[pk[1]], ai = T.ai ? flipUci(T.ai, v[0], v[1]) : null;
       game.fen = flipFEN(T.fen, v[0], v[1]); G.load(game.fen);
       game.you = ai ? (G.turn() === 'w' ? 'b' : 'w') : G.turn(); game.orient = orient = game.you;
       game.left = T.drill ? 0 : T.n;
       var job = T.drill ? 'Checkmate my lone king in ' + T.limit + ' moves or less. I’ll run away!' :
         (ai ? 'I’ll make a move first. Then checkmate me' : 'Checkmate me') + ' in ' + T.n + (T.n === 1 ? '' : ' moves') + ' with the ' + L.n + '!';
-      coachSays(hi + (attempt > 1 ? 'New position. ' : 'Test time! ') + job + ' No hints!' + (game.you === 'b' ? ' (You’re Black.)' : ''));
+      coachSays(hi + (attempt > 1 ? 'New position. ' : 'Test time! ') + (T.note ? T.note + ' ' : '') + job + ' No hints!' + (game.you === 'b' ? ' (You’re Black.)' : ''));
       game.busy = !!ai; showGame();
       if (!ai) return;
       var my = token;
       lessonTm = setTimeout(function () {   // Test Bot makes its move (a mistake that lets you use the pattern!)
         if (my !== token || !isTest()) return;
         applyMove(ai); game.busy = false;
-        coachSays('Your turn! I bet you can’t checkmate me in ' + T.n + (T.n === 1 ? '' : ' moves') + '. 😏');
+        coachSays('Your turn! ' + (T.note ? T.note + ' ' : '') + 'I bet you can’t checkmate me in ' + T.n + (T.n === 1 ? '' : ' moves') + '. 😏');
         render();
       }, 1700);
     }
@@ -17351,7 +17450,14 @@
       if (game.kind === 'op') {
         var L = OPEN[game.lesson], st = L.line[game.step];
         if (!st) return;
-        if (uci !== st[0]) { sel = null; targets = []; testFail('❌ Oops! In the ' + L.n + ' you play ' + G.sanOf(st[0]) + ' here (in blue).', st[0]); return; }
+        if (L.any ? game.todo.indexOf(uci) < 0 : uci !== st[0]) {
+          var want = st[0];
+          if (L.any) { want = game.todo[0]; for (var w = 0; w < game.todo.length; w++) if (G.sanOf(game.todo[w])) { want = game.todo[w]; break; } }
+          sel = null; targets = [];
+          testFail(L.any ? '❌ Oops! That’s not a ' + L.n + ' move. You could play ' + G.sanOf(want) + ' here (in blue).' : '❌ Oops! In the ' + L.n + ' you play ' + G.sanOf(st[0]) + ' here (in blue).', want);
+          return;
+        }
+        if (L.any) game.todo.splice(game.todo.indexOf(uci), 1);
         applyMove(uci, dragged); game.step++;
         sound('right'); flash('✅ ' + pick(['Correct!', 'Nice!', 'Yes!', 'Perfect!']));
         testNext(); return;
@@ -17450,6 +17556,105 @@
     $('ov').addEventListener('click', function (e) { if (e.target === $('ov')) closeCard(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('ov').hidden && root.classList.contains('active')) closeCard(); });
 
+    // ---- ⚔️ 1v1 on one phone: names, a chess clock, and a score ----
+    var flipTm = 0, clockIv = 0;
+    function cleanName(t) { return String(t || '').replace(/\s+/g, ' ').trim().slice(0, 14); }
+    function duelName(c) { var n = game && game.names; return n ? n[c === 'w' ? 0 : 1] : c === 'w' ? 'White' : 'Black'; }
+    function duelScore(a, b, make) {   // wins for each player name, plus draws (the same two names in any order share a score)
+      var k = [a.toLowerCase(), b.toLowerCase()].sort().join('|'), all = S.duel.scores || (S.duel.scores = {});
+      if (!all[k] && !make) return { w: {}, d: 0 };
+      return all[k] || (all[k] = { w: {}, d: 0 });
+    }
+    function tally(res) {
+      if (game.scored) return; game.scored = true;
+      var nm = game.names || ['White', 'Black'], sc = duelScore(nm[0], nm[1], true);
+      if (res === 'd') sc.d++; else { var k = nm[res === 'w' ? 0 : 1].toLowerCase(); sc.w[k] = (sc.w[k] || 0) + 1; }
+    }
+    function scoreText(a, b) {
+      if (!a) { var nm = game.names || ['White', 'Black']; a = nm[0]; b = nm[1]; }
+      var sc = duelScore(a, b), wa = sc.w[a.toLowerCase()] || 0, wb = sc.w[b.toLowerCase()] || 0;
+      return '🏆 Score: ' + a + ' ' + wa + ' – ' + wb + ' ' + b + (sc.d ? ' · ' + sc.d + (sc.d === 1 ? ' draw' : ' draws') : '');
+    }
+    function clockOn() { return !!game && game.mode === 'friend' && !!game.clock && game.clock.base > 0; }
+    function clockLeft(c) { var k = game.clock, t = k[c]; if (k.at && !game.over && G.turn() === c) t -= Date.now() - k.at; return Math.max(0, t); }
+    function fmtClock(ms) { if (ms < 10000) return (Math.floor(ms / 100) / 10).toFixed(1); var s = Math.ceil(ms / 1000); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
+    function pauseClock() { if (clockOn() && game.clock.at && !game.over) { var c = G.turn(); game.clock[c] = clockLeft(c); game.clock.at = null; } }
+    function resumeClock() { if (clockOn() && !game.over && game.moves.length && !game.clock.at) game.clock.at = Date.now(); }   // the clock starts after White's first move
+    function tickClock() {
+      if (!clockOn() || game.over || $('game').hidden) return;
+      [].forEach.call(root.querySelectorAll('.chs-clock'), function (el) {
+        var c = el.getAttribute('data-c'), left = clockLeft(c);
+        el.textContent = fmtClock(left); el.classList.toggle('low', left < 20000); el.classList.toggle('on', G.turn() === c);
+      });
+      if (game.clock.at && clockLeft(G.turn()) <= 0) flagFall(G.turn());
+    }
+    function flagFall(c) {   // c ran out of time: the other player wins, unless they don't have enough pieces left to ever checkmate
+      var other = c === 'w' ? 'b' : 'w', army = G.pieces().filter(function (p) { return p && p.charAt(0) === other && p.charAt(1) !== 'K'; });
+      game.clock[c] = 0; game.clock.at = null;
+      cancelThinking(); clearTimeout(flipTm); closeCard();
+      if (!army.length || (army.length === 1 && /[BN]/.test(army[0].charAt(1)))) finish('timedraw'); else finish('time', other);
+      render();
+    }
+    function turnBoard() {   // the player whose turn it is sits at the bottom
+      if (!game || game.mode !== 'friend' || !game.flip || game.over || orient === G.turn()) return;
+      orient = game.orient = G.turn(); sel = null; targets = [];
+      renderBoard(); renderSides(); renderTip(); save();
+    }
+    function duelSide(c) {
+      var left = game.clock ? clockLeft(c) : 0;
+      return '<span class="chs-av" style="--hue:' + (c === 'w' ? '#dfe3ea' : '#4b5568') + '">' + (c === 'w' ? '⚪' : '⚫') + '</span><div class="chs-pl-info"><div class="chs-pl-n">' + esc(duelName(c)) + '</div><div class="chs-capt">' + capturedBy(c) + '</div></div>' +
+        (game.clock ? '<span class="chs-clock' + (!game.over && G.turn() === c ? ' on' : '') + (left < 20000 ? ' low' : '') + '" data-c="' + c + '">' + fmtClock(left) + '</span>' : '');
+    }
+    function newDuel(names, mins, flip) {
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(flipTm); closeCard();
+      var base = Math.round((+mins || 0) * 60000);
+      game = { mode: 'friend', bot: null, pick: 'w', you: null, orient: 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, names: names, flip: !!flip, clock: base ? { base: base, w: base, b: base, at: null } : null };
+      G.reset(); orient = 'w'; last = null; sel = null; targets = []; hint = null; chat = { text: '', t: 0 };
+      save(); showGame();
+    }
+    function openDuel() {
+      var d = S.duel, mins = d.mins || 0, flip = d.flip !== false;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '⚔️'));
+        c.appendChild(mk('h3', null, '1v1 on one phone'));
+        c.appendChild(mk('p', null, 'Play a friend! Take turns on the same phone.'));
+        var box = mk('div', 'chs-duel'), ins = [];
+        [['⚪ White', 'chs-p1', 'Player 1', d.p1], ['⚫ Black', 'chs-p2', 'Player 2', d.p2]].forEach(function (o) {
+          var lb = mk('label', 'chs-dname'), inp = mk('input');
+          lb.appendChild(mk('span', null, o[0]));
+          inp.id = o[1]; inp.type = 'text'; inp.maxLength = 14; inp.placeholder = o[2]; inp.value = o[3] || ''; inp.autocomplete = 'off'; inp.setAttribute('enterkeyhint', 'done');
+          lb.appendChild(inp); box.appendChild(lb); ins.push(inp);
+        });
+        var sw = mk('button', 'chs-pill', '🔀 Switch colors'); sw.type = 'button'; sw.id = 'chs-swap';
+        sw.addEventListener('click', function () { var v = ins[0].value, p = ins[0].placeholder; ins[0].value = ins[1].value; ins[0].placeholder = ins[1].placeholder; ins[1].value = v; ins[1].placeholder = p; });
+        box.appendChild(sw);
+        box.appendChild(mk('div', 'chs-dlabel', '⏱️ Clock for each player'));
+        var seg = mk('div', 'chs-seg chs-seg5');
+        [[0, '∞ None'], [1, '1 min'], [3, '3 min'], [5, '5 min'], [10, '10 min']].forEach(function (o) {
+          var b = mk('button', mins === o[0] ? 'on' : '', o[1]); b.type = 'button'; b.setAttribute('data-clock', o[0]);
+          b.addEventListener('click', function () { mins = o[0]; [].forEach.call(seg.children, function (x) { x.className = x === b ? 'on' : ''; }); });
+          seg.appendChild(b);
+        });
+        box.appendChild(seg);
+        var fl = mk('button', 'chs-pill'); fl.type = 'button'; fl.id = 'chs-autoflip';
+        var flText = function () { fl.textContent = '🔄 Turn the board for each player: ' + (flip ? 'ON' : 'OFF'); fl.className = 'chs-pill' + (flip ? ' on' : ''); };
+        flText(); fl.addEventListener('click', function () { flip = !flip; flText(); });
+        box.appendChild(fl);
+        c.appendChild(box);
+        var a0 = cleanName(d.p1) || 'Player 1', b0 = cleanName(d.p2) || 'Player 2', sc0 = duelScore(a0, b0);
+        if (sc0.d || Object.keys(sc0.w).length) c.appendChild(mk('p', 'chs-dscore', scoreText(a0, b0)));
+        var go = mk('button', 'btn', '⚔️ Start the 1v1'); go.type = 'button'; go.id = 'chs-duelGo';
+        go.addEventListener('click', function () {
+          var a = cleanName(ins[0].value) || ins[0].placeholder, b = cleanName(ins[1].value) || ins[1].placeholder;
+          if (a.toLowerCase() === b.toLowerCase()) b += ' 2';
+          d.p1 = cleanName(ins[0].value); d.p2 = cleanName(ins[1].value); d.mins = mins; d.flip = flip;
+          newDuel([a, b], mins, flip);
+        });
+        c.appendChild(go);
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+
     // ---- the bot list ----
     function beaten() { return CHESS_BOTS.filter(function (b) { return S.rec[b.id] && S.rec[b.id].w; }).length; }
     function goodMatch() {
@@ -17458,7 +17663,7 @@
       return best;
     }
     function showMenu() {
-      cancelThinking(); dropGhost(); down = null;
+      cancelThinking(); dropGhost(); down = null; pauseClock(); clearTimeout(flipTm);
       $('game').hidden = true; $('menu').hidden = false;
       var m = $('menu'), gm = goodMatch(); m.innerHTML = '';
       var head = mk('div', 'panel chs-head');
@@ -17475,8 +17680,8 @@
       opts.appendChild(snd); opts.appendChild(gb); head.appendChild(opts); m.appendChild(head);
       var resume = game && game.mode !== 'lesson' ? (game.over ? null : game) : savedGame();
       if (resume) {
-        var who = resume.mode === 'bot' ? BOT[resume.bot].e + ' ' + BOT[resume.bot].n : '👥 your friend';
-        var cont = mk('button', 'btn chs-cont', '▶ Back to your game vs ' + who); cont.type = 'button'; cont.id = 'chs-continue';
+        var who = resume.mode === 'bot' ? 'game vs ' + BOT[resume.bot].e + ' ' + BOT[resume.bot].n : '1v1: ' + (resume.names || ['White', 'Black']).join(' vs ');
+        var cont = mk('button', 'btn chs-cont', '▶ Back to your ' + who); cont.type = 'button'; cont.id = 'chs-continue';
         cont.addEventListener('click', function () { if (game !== resume) useGame(resume); showGame(); }); m.appendChild(cont);
       }
       var lh = mk('div', 'chs-tier'); lh.innerHTML = '<h3>🎓 Learn</h3><small>Lessons with Coach Hoot 🦉</small>'; m.appendChild(lh);
@@ -17485,10 +17690,10 @@
         '<button type="button" class="chs-lbtn" data-learn="mate"><span class="chs-lic">♚</span><b>Checkmates</b><small>' + learnedText('mate') + '</small></button>';
       learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (b) showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
-      var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>A friend or a bot</small>'; m.appendChild(ph);
+      var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>1v1 a friend, or play a bot</small>'; m.appendChild(ph);
       var fr = mk('button', 'chs-friend'); fr.type = 'button'; fr.id = 'chs-friendBtn';
-      fr.innerHTML = '<span class="chs-av" style="--hue:var(--c4)">👥</span><span><b>Play a friend</b><small>Two players, one phone. Take turns!</small></span>';
-      fr.addEventListener('click', function () { newGame('friend', null, 'w'); });
+      fr.innerHTML = '<span class="chs-av" style="--hue:var(--c4)">⚔️</span><span><b>1v1 on one phone</b><small>Play a friend: take turns on the same phone. Pick your names and a clock!</small></span>';
+      fr.addEventListener('click', openDuel);
       m.appendChild(fr);
       var lo = 0;
       TIERS.forEach(function (tr) {
@@ -17539,6 +17744,7 @@
     function showGame() {
       if (!game) { showMenu(); return; }
       $('menu').hidden = true; $('game').hidden = false;
+      resumeClock();
       render();
       if (game.over) setTimeout(showOver, 300); else botTurn();
     }
@@ -17546,6 +17752,7 @@
     function savedGame() { var c = S.cur; return c && c.moves && !c.over && (c.mode === 'friend' || BOT[c.bot]) ? c : null; }
     function useGame(g) {
       game = g; game.sans = game.sans || [];
+      if (game.clock) game.clock.at = null;   // a saved 1v1 clock waits until the game is on the screen again
       var n = G.play(game.moves, game.fen);
       if (n < game.moves.length || game.sans.length !== n) { game.moves.length = n; game.sans = []; G.load(game.fen); game.moves.forEach(function (u) { game.sans.push(G.sanOf(u)); G.move(u); }); }
       orient = game.orient || 'w';
@@ -17554,20 +17761,22 @@
     }
     function enter() {
       if (!G) G = FVChessEngine(8);
+      clearInterval(clockIv); clockIv = setInterval(tickClock, 200);
       S = load(); game = null;
       var cur = savedGame();
       if (cur) useGame(cur);
       sel = null; targets = []; hint = null; thinking = false; hintBusy = false;
       if (game && !game.over) showGame(); else showMenu();
     }
-    function leave() { cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); dropGhost(); down = null; closeCard(); if (game) save(); }
+    function leave() { cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); clearTimeout(flipTm); clearInterval(clockIv); pauseClock(); dropGhost(); down = null; closeCard(); if (game) save(); }
     window.registerHook('chess', enter, leave);
     window.__chess = {   // for the tests
       state: function () { return game; }, saved: function () { return S; }, fen: function () { return G && G.fen(); },
       load: function (fen, you, botId) { cancelThinking(); closeCard(); game = { mode: botId ? 'bot' : 'friend', bot: botId || null, pick: you || 'w', you: botId ? you || 'w' : null, orient: you || 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, fen: fen }; G.load(fen); orient = game.orient; last = null; sel = null; targets = []; hint = null; save(); showGame(); },
       bots: CHESS_BOTS, book: CHESS_BOOK, engine: function () { return G; }, worker: function () { return worker; },
       openings: CHESS_OPENINGS, mates: CHESS_MATES, lesson: function (kind, id) { startLesson(kind, id); },
-      test: function (kind, id, attempt, ver) { startTest(kind, id, attempt || 1, ver); }, flipFEN: flipFEN,
+      test: function (kind, id, attempt, ver) { startTest(kind, id, attempt || 1, ver); }, flipFEN: flipFEN, pin: function (v) { testPin = v; },
+      duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); }
     };
   })();
