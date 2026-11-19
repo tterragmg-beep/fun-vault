@@ -1196,6 +1196,10 @@
   .chs-lt i { display: inline-block; margin-top: 7px; font-style: normal; font-size: 0.72rem; font-weight: 700; color: var(--muted); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; }
   .chs-ldone { position: absolute; top: 10px; right: 10px; font-size: 1.05rem; }
   .chs-say.chs-coach { opacity: 1; transform: none; white-space: pre-line; margin-left: 6px; }
+  .chs-lesson.half { border-style: dashed; border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+  .chs-lt i.chs-ltodo { margin-left: 6px; color: var(--fg); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: color-mix(in srgb, var(--accent) 18%, var(--panel-2)); }
+  .chs-lhead p.chs-lnote { margin-top: 10px; font-size: 0.86rem; }
+  .chs-lhead p.chs-lnote b { display: inline-block; margin-top: 6px; color: var(--fg); }
   /* ---- end Chess ---- */
 </style>
 </head>
@@ -1358,27 +1362,6 @@
         <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). Beat them all to become a legend, or play a friend on the same phone.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
   </section>
 
@@ -16545,32 +16528,33 @@
         ['c3d5', 'Knight to d5: CHECKMATE! Three little pieces beat Black’s whole army. That’s Légal’s Trap!']] }
     ];
     // checkmate patterns: find the checkmate (n = in how many moves), or "drill" = checkmate a lone king against the computer
+    // test = the test against the AI afterwards: ai = the AI's move first (a mistake that lets you use the pattern), limit = most moves allowed
     var CHESS_MATES = [
-      { id: 'backrank', e: '🧱', n: 'Back-Rank Mate', d: 'The king is stuck behind its own pawns, so a rook or queen on the back row is checkmate!', parts: [
+      { id: 'backrank', e: '🧱', n: 'Back-Rank Mate', d: 'The king is stuck behind its own pawns, so a rook or queen on the back row is checkmate!', test: { fen: '3r2k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1', ai: 'd8d2', n: 1 }, parts: [
         { fen: '6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1', n: 1 }, { fen: '1k6/ppp5/8/8/8/8/8/K3Q3 w - - 0 1', n: 1 }] },
-      { id: 'kiss', e: '💋', n: 'Queen Kiss Mate', d: 'Put your queen right next to the enemy king, protected by your own king. The king can’t take it!', parts: [
+      { id: 'kiss', e: '💋', n: 'Queen Kiss Mate', d: 'Put your queen right next to the enemy king, protected by your own king. The king can’t take it!', test: { fen: '6k1/Q7/5K2/8/8/8/8/8 b - - 0 1', ai: 'g8h8', n: 1 }, parts: [
         { fen: '7k/8/6K1/8/8/8/8/Q7 w - - 0 1', n: 1 }, { fen: '3k4/7Q/3K4/8/8/8/8/8 w - - 0 1', n: 1 }] },
-      { id: 'smother', e: '🐴', n: 'Smothered Mate', d: 'The king is surrounded by its own pieces, so a knight can checkmate it all by itself!', parts: [
+      { id: 'smother', e: '🐴', n: 'Smothered Mate', d: 'The king is surrounded by its own pieces, so a knight can checkmate it all by itself!', test: { fen: '5r1k/6pp/8/4N3/8/8/8/6K1 b - - 0 1', ai: 'f8g8', n: 1 }, parts: [
         { fen: '6rk/6pp/8/6N1/8/8/8/6K1 w - - 0 1', n: 1 }] },
-      { id: 'arabian', e: '🌙', n: 'Arabian Mate', d: 'A rook and a knight team up to trap the king in the corner. The knight protects the rook!', parts: [
+      { id: 'arabian', e: '🌙', n: 'Arabian Mate', d: 'A rook and a knight team up to trap the king in the corner. The knight protects the rook!', test: { fen: '7k/1R6/5N2/8/8/8/7r/6K1 b - - 0 1', ai: 'h2a2', n: 1 }, parts: [
         { fen: '7k/1R6/5N2/8/8/8/8/7K w - - 0 1', n: 1 }] },
-      { id: 'anastasia', e: '🦄', n: 'Anastasia’s Mate', d: 'A knight blocks the king’s escape squares, and a rook checkmates it on the edge.', parts: [
+      { id: 'anastasia', e: '🦄', n: 'Anastasia’s Mate', d: 'A knight blocks the king’s escape squares, and a rook checkmates it on the edge.', test: { fen: '6k1/4N1p1/8/R7/8/8/8/2K5 b - - 0 1', ai: 'g8h7', n: 1 }, parts: [
         { fen: '8/4N1pk/8/R7/8/8/8/2K5 w - - 0 1', n: 1 }] },
-      { id: 'boden', e: '✂️', n: 'Boden’s Mate', d: 'Two bishops on crossing diagonals checkmate a king that castled to the queen side.', parts: [
+      { id: 'boden', e: '✂️', n: 'Boden’s Mate', d: 'Two bishops on crossing diagonals checkmate a king that castled to the queen side.', test: { fen: '2kr4/pp1n4/8/8/5B2/8/8/4KB2 b - - 0 1', ai: 'b7b6', n: 1 }, parts: [
         { fen: '2kr4/p2n4/8/8/5B2/8/8/4KB2 w - - 0 1', n: 1 }] },
-      { id: 'epaulette', e: '🎖️', n: 'Epaulette Mate', d: 'The king’s own rooks sit on both sides of it like shoulder pads, so it can’t step sideways.', parts: [
+      { id: 'epaulette', e: '🎖️', n: 'Epaulette Mate', d: 'The king’s own rooks sit on both sides of it like shoulder pads, so it can’t step sideways.', test: { fen: '3r1r2/4k3/8/8/8/8/Q7/6K1 b - - 0 1', ai: 'e7e8', n: 1 }, parts: [
         { fen: '3rkr2/8/8/8/8/8/Q7/6K1 w - - 0 1', n: 1 }] },
-      { id: 'damiano', e: '⚔️', n: 'Damiano’s Mate', d: 'A pawn protects your queen right in front of the castled king.', parts: [
+      { id: 'damiano', e: '⚔️', n: 'Damiano’s Mate', d: 'A pawn protects your queen right in front of the castled king.', test: { fen: '5rk1/5p2/6P1/8/7q/8/8/6KQ b - - 0 1', ai: 'h4a4', n: 1 }, parts: [
         { fen: '5rk1/5p2/6P1/8/8/8/8/6KQ w - - 0 1', n: 1 }] },
-      { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', d: 'Your queen and bishop team up on f7, the weakest square at the start of the game.', parts: [
+      { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', d: 'Your queen and bishop team up on f7, the weakest square at the start of the game.', test: { fen: 'r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3', ai: 'g8f6', n: 1, nomirror: 1 }, parts: [
         { fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4', n: 1 }] },
-      { id: 'fool', e: '🤡', n: 'Fool’s Mate', d: 'The fastest checkmate in chess! White made two weak pawn moves. You’re Black: punish them!', parts: [
+      { id: 'fool', e: '🤡', n: 'Fool’s Mate', d: 'The fastest checkmate in chess! White made two weak pawn moves. You’re Black: punish them!', test: { fen: 'rnbqkbnr/pppp1ppp/8/4p3/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2', ai: 'g2g4', n: 1, nomirror: 1 }, parts: [
         { fen: 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2', n: 1 }] },
-      { id: 'ladder', e: '🪜', n: 'Ladder Mate', d: 'Two rooks take turns, like climbing a ladder: one blocks a row, the other checks. Checkmate in 2!', parts: [
+      { id: 'ladder', e: '🪜', n: 'Ladder Mate', d: 'Two rooks take turns, like climbing a ladder: one blocks a row, the other checks. Checkmate in 2!', test: { fen: '4k3/8/8/8/8/8/7R/R5K1 w - - 0 1', n: 2 }, parts: [
         { fen: '4k3/8/8/8/8/8/R7/1R2K3 w - - 0 1', n: 2 }] },
-      { id: 'kq', e: '👑', n: 'King + Queen vs King', d: 'Use your queen to push the king to the edge (don’t trap it with no moves, or it’s stalemate!). Then bring your king close and checkmate.', parts: [
+      { id: 'kq', e: '👑', n: 'King + Queen vs King', d: 'Use your queen to push the king to the edge (don’t trap it with no moves, or it’s stalemate!). Then bring your king close and checkmate.', test: { fen: '8/8/3k4/8/8/8/8/1Q4K1 w - - 0 1', drill: 1, limit: 30 }, parts: [
         { fen: '8/8/8/4k3/8/8/8/3QK3 w - - 0 1', drill: 1 }] },
-      { id: 'kr', e: '🏰', n: 'King + Rook vs King', d: 'Use your rook to build a box around the king. Make the box smaller and smaller, use your king to help, and checkmate on the edge!', parts: [
+      { id: 'kr', e: '🏰', n: 'King + Rook vs King', d: 'Use your rook to build a box around the king. Make the box smaller and smaller, use your king to help, and checkmate on the edge!', test: { fen: '8/8/8/3k4/8/8/8/6RK w - - 0 1', drill: 1, limit: 45 }, parts: [
         { fen: '8/8/8/4k3/8/8/8/R3K3 w - - 0 1', drill: 1 }] }
     ];
 
@@ -16738,16 +16722,26 @@
         if (anim.castle) { var rk2 = anim.to.charAt(1), ks = anim.to.charAt(0) === 'g'; slide((ks ? 'h' : 'a') + rk2, (ks ? 'f' : 'd') + rk2); }
       }
     }
-    function capturedBy(c) {   // the other side's pieces that this side has taken
-      var have = { P: 0, N: 0, B: 0, R: 0, Q: 0 }, other = c === 'w' ? 'b' : 'w';
+    var startCache = { fen: null };
+    function startCount(side) {   // how many of each piece a side had when this game (or puzzle) started
+      if (!game || !game.fen) return COUNT;
+      if (startCache.fen !== game.fen) {
+        startCache = { fen: game.fen, w: { P: 0, N: 0, B: 0, R: 0, Q: 0 }, b: { P: 0, N: 0, B: 0, R: 0, Q: 0 } };
+        game.fen.split(' ')[0].replace(/[PNBRQpnbrq]/g, function (ch) { var up = ch.toUpperCase(); startCache[ch === up ? 'w' : 'b'][up]++; return ch; });
+      }
+      return startCache[side];
+    }
+    function worth(n) { var t = 0; for (var k in n) t += n[k] * WORTH[k]; return t; }
+    function capturedBy(c) {   // the other side's pieces that this side has taken (since the game or puzzle started)
+      var have = { P: 0, N: 0, B: 0, R: 0, Q: 0 }, other = c === 'w' ? 'b' : 'w', start = startCount(other);
       G.pieces().forEach(function (p) { if (p && p.charAt(0) === other && have[p.charAt(1)] != null) have[p.charAt(1)]++; });
       var h = '';
-      ['Q', 'R', 'B', 'N', 'P'].forEach(function (t) { for (var k = have[t]; k < COUNT[t]; k++) h += pieceSvg(other + t); });
-      var m = G.material(), adv = c === 'w' ? m.w - m.b : m.b - m.w;
+      ['Q', 'R', 'B', 'N', 'P'].forEach(function (t) { for (var k = have[t]; k < start[t]; k++) h += pieceSvg(other + t); });
+      var m = G.material(), adv = (c === 'w' ? m.w - m.b : m.b - m.w) - (worth(startCount(c)) - worth(start));   // a puzzle that starts a queen up isn't "+9"
       return h + (adv > 0 ? '<span class="chs-adv">+' + adv + '</span>' : '');
     }
     function sideHtml(c) {
-      if (game.mode === 'lesson' && c !== game.you) return '<span class="chs-av" style="--hue:#e4a64a" title="Coach Hoot">🦉</span><div class="chs-say on chs-coach" id="chs-say">' + esc(game.coach) + '</div>';
+      if (game.mode === 'lesson' && c !== game.you) return (game.phase === 'test' ? '<span class="chs-av" style="--hue:#7c9cff" title="Test Bot">🤖</span>' : '<span class="chs-av" style="--hue:#e4a64a" title="Coach Hoot">🦉</span>') + '<div class="chs-say on chs-coach" id="chs-say">' + esc(game.coach) + '</div>';
       if (game.mode === 'lesson') return '<span class="chs-av" style="--hue:var(--accent-2)">🙂</span><div class="chs-pl-info"><div class="chs-pl-n">You</div><div class="chs-capt">' + capturedBy(c) + '</div></div>';
       var bot = game.mode === 'bot' && c !== game.you ? BOT[game.bot] : null, you = game.mode === 'bot' && c === game.you;
       var av = bot ? bot.e : you ? '🙂' : c === 'w' ? '⚪' : '⚫', hue = bot ? bot.hue : you ? 'var(--accent-2)' : c === 'w' ? '#dfe3ea' : '#4b5568';
@@ -16776,14 +16770,18 @@
     function renderStatus() {
       var el = $('status'), t = '', cls = 'chs-status';
       if (game.mode === 'lesson') {
-        var fl = game.flash && Date.now() < game.flashT ? game.flash : '';
-        if (game.done) t = '⭐ Lesson complete!';
+        var fl = game.flash && Date.now() < game.flashT ? game.flash : '', tst = game.phase === 'test', T = tst && game.kind === 'mate' ? testOf() : null;
+        if (game.done) t = tst ? '⭐ Test passed!' : '📖 Lesson complete! Next: the test 🧪';
+        else if (game.failed) t = game.failed;
         else if (fl) t = fl;
         else if (hintBusy) t = '💡 Coach Hoot is thinking…';
-        else if (game.busy) t = game.kind === 'op' ? '👀 Watch…' : '🤔 Let’s see…';
+        else if (game.busy) t = tst ? '🤖 Test Bot is thinking…' : game.kind === 'op' ? '👀 Watch…' : '🤔 Let’s see…';
+        else if (tst && !T) t = 'Your move: play the ' + OPEN[game.lesson].n + ' from memory!';
+        else if (T && T.drill) { var ml = T.limit - game.mine; t = 'Your move: ' + ml + (ml === 1 ? ' move' : ' moves') + ' left to checkmate!'; }
+        else if (T) t = 'Your move: checkmate in ' + game.left + (game.left === 1 ? '!' : ' moves!');
         else if (game.kind === 'op') t = 'Your move: do what Coach Hoot says';
         else t = curPart().drill ? 'Your move: checkmate the lone king!' : 'Your move: checkmate in ' + game.left + (game.left === 1 ? '!' : ' moves!');
-        el.textContent = t; el.className = cls + (/^(✅|🎉|⭐)/.test(t) ? ' win' : /^❌/.test(t) ? ' lose' : '');
+        el.textContent = t; el.className = cls + (/^(✅|🎉|⭐|📖)/.test(t) ? ' win' : /^❌/.test(t) ? ' lose' : '');
         $('after').hidden = true; return;
       }
       if (game.over) {
@@ -16800,7 +16798,7 @@
     function humanTurn() { return game.mode === 'friend' || G.turn() === game.you; }
     function renderTools() {
       var over = !!game.over, ht = humanTurn(), les = game.mode === 'lesson';
-      $('undo').hidden = $('draw').hidden = $('resign').hidden = les; $('restart').hidden = !les;
+      $('undo').hidden = $('draw').hidden = $('resign').hidden = les; $('restart').hidden = !les; $('hint').hidden = les && game.phase === 'test';
       $('menuBtn').innerHTML = les ? '<span>📚</span>Lessons' : '<span>🤖</span>Bots';
       if (les) { $('hint').disabled = !!game.busy || !!game.done || hintBusy; $('hint').classList.toggle('busy', hintBusy); return; }
       $('hint').disabled = over || !ht || thinking || hintBusy; $('hint').classList.toggle('busy', hintBusy);
@@ -16819,7 +16817,7 @@
     function renderTip() {   // tap a piece: it says what it is and how it moves
       var el = $('tip'), pc = sel ? pieceAt(sel) : null;
       if (pc && game && !game.over) el.innerHTML = '<b>' + (pc.charAt(0) === 'w' ? 'White ' : 'Black ') + HOW[pc.charAt(1)][0].toLowerCase() + ':</b> ' + HOW[pc.charAt(1)][1];
-      else if (game && game.mode === 'lesson') el.textContent = lessonProgress();
+      else if (game && game.mode === 'lesson') { if (game.done && game.phase !== 'test') el.innerHTML = '<button type="button" class="chs-link" data-test="1">🧪 Start the test against Test Bot</button>'; else el.textContent = lessonProgress(); }
       else el.innerHTML = '<button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
     }
     function guide() {
@@ -17055,24 +17053,38 @@
       });
     });
     $('menuBtn').addEventListener('click', function () { cancelThinking(); clearTimeout(lessonTm); if (game && game.mode === 'lesson') { showLessons(game.kind); return; } save(); showMenu(); });
-    $('restart').addEventListener('click', function () { if (game && game.mode === 'lesson') startLesson(game.kind, game.lesson); });
-    $('tip').addEventListener('click', function (e) { if (e.target.closest('[data-guide]')) guide(); });
+    $('restart').addEventListener('click', function () {   // in a test, starting over counts as another try (and checkmates get a new position)
+      if (!game || game.mode !== 'lesson') return;
+      if (game.phase === 'test') startTest(game.kind, game.lesson, game.attempt + 1, game.ver + 1); else startLesson(game.kind, game.lesson);
+    });
+    $('tip').addEventListener('click', function (e) {
+      if (e.target.closest('[data-guide]')) guide();
+      else if (e.target.closest('[data-test]') && game && game.mode === 'lesson') startTest(game.kind, game.lesson, 1);
+    });
     $('rematch').addEventListener('click', rematch);
     $('pick').addEventListener('click', showMenu);
 
-    // ---- 🎓 lessons with Coach Hoot ----
+    // ---- 🎓 lessons with Coach Hoot, then a test against 🤖 Test Bot ----
+    // S.learn['op:italian']: 1 = you did the lesson (the test is still left), 2 = you passed the test too (⭐)
     var OPEN = {}, MATE = {}, lessonTm = 0;
     CHESS_OPENINGS.forEach(function (o) { OPEN[o.id] = o; }); CHESS_MATES.forEach(function (o) { MATE[o.id] = o; });
-    function learned(kind) { return (kind === 'op' ? CHESS_OPENINGS : CHESS_MATES).filter(function (L) { return S.learn[kind + ':' + L.id]; }).length; }
+    function lessonList(kind) { return kind === 'op' ? CHESS_OPENINGS : CHESS_MATES; }
+    function learned(kind) { return lessonList(kind).filter(function (L) { return S.learn[kind + ':' + L.id] >= 2; }).length; }
+    function testsLeft(kind) { return lessonList(kind).filter(function (L) { return S.learn[kind + ':' + L.id] === 1; }).length; }
+    function learnedText(kind) { var n = testsLeft(kind); return learned(kind) + ' of ' + lessonList(kind).length + ' learned' + (n ? ' · 🧪 ' + n + (n === 1 ? ' test' : ' tests') + ' to take' : ''); }
+    function isTest() { return !!game && game.mode === 'lesson' && game.phase === 'test'; }
     function lessonOf() { return game.kind === 'op' ? OPEN[game.lesson] : MATE[game.lesson]; }
     function curPart() { return MATE[game.lesson].parts[game.part]; }
+    function testOf() { return MATE[game.lesson].test; }
+    function yourMoves(L, upto) { return L.line.slice(0, upto == null ? L.line.length : upto).filter(function (x, i) { return (i % 2 === 0) === (L.side === 'w'); }); }
     function lessonProgress() {
-      var L = lessonOf();
+      var L = lessonOf(), tr = game.attempt > 1 ? ' · try #' + game.attempt : '';
       if (game.kind === 'op') {
-        var mine = function (x, i) { return (i % 2 === 0) === (L.side === 'w'); };
-        var total = L.line.filter(mine).length, done = L.line.slice(0, game.step).filter(mine).length;
+        var total = yourMoves(L).length, done = yourMoves(L, game.step).length;
+        if (game.phase === 'test') return '🧪 Test: ' + L.e + ' ' + L.n + ' · ' + (game.done ? 'all ' + total + ' moves right!' : 'move ' + Math.min(total, done + 1) + ' of ' + total) + tr;
         return L.e + ' ' + L.n + ' · ' + (game.done ? 'all ' + total + ' of your moves done!' : 'your move ' + Math.min(total, done + 1) + ' of ' + total);
       }
+      if (game.phase === 'test') return '🧪 Test: ' + L.e + ' ' + L.n + (testOf().drill ? ' · moves used: ' + game.mine + ' of ' + testOf().limit : '') + tr;
       return L.e + ' ' + L.n + (curPart().drill ? ' · practice' : ' · puzzle ' + (game.part + 1) + ' of ' + L.parts.length);
     }
     function flash(t) { game.flash = t; game.flashT = Date.now() + 1800; clearTimeout(flash.tm); flash.tm = setTimeout(function () { if (game && game.mode === 'lesson') renderStatus(); }, 1850); }
@@ -17080,7 +17092,7 @@
     function startLesson(kind, id) {
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
       var L = kind === 'op' ? OPEN[id] : MATE[id]; if (!L) return;
-      game = { mode: 'lesson', kind: kind, lesson: id, part: 0, step: 0, wrong: 0, left: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false };
+      game = { mode: 'lesson', phase: 'learn', kind: kind, lesson: id, attempt: 0, ver: 0, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
       sel = null; targets = []; hint = null; last = null;
       if (kind === 'op') {
         game.you = game.orient = L.side; G.reset(); orient = game.orient;
@@ -17114,6 +17126,7 @@
     function lessonMove(uci, dragged) {
       if (game.busy || game.done) return;
       hint = null; game.flash = '';   // an old ❌ shouldn't stick around after a new move
+      if (game.phase === 'test') { testMove(uci, dragged); return; }
       if (game.kind === 'op') {
         var st = OPEN[game.lesson].line[game.step];
         if (!st || uci !== st[0]) {
@@ -17171,8 +17184,12 @@
         }, 300);
       });
     }
+    function drawWhy(st) {
+      return st === 'stalemate' ? 'Oh no, stalemate! The king had no moves but wasn’t in check, so it’s a draw.' : st === 'material' ? 'Oops! The king took your piece, so there’s nothing left to checkmate with.' : st === 'fifty' ? 'That took too long: 50 moves without a checkmate is a draw.' : st === 'repetition' ? 'The same position happened 3 times, so it’s a draw.' : 'It’s a draw.';
+    }
     function drillFail(st) {
-      var why = st === 'stalemate' ? 'Oh no, stalemate! The king had no moves but wasn’t in check, so it’s a draw.' : st === 'material' ? 'Oops! The king took your piece, so there’s nothing left to checkmate with.' : st === 'fifty' ? 'That took too long: 50 moves without a checkmate is a draw.' : 'It’s a draw.';
+      var why = drawWhy(st);
+      if (game.phase === 'test') { testFail('❌ ' + why); return; }
       game.busy = true; sound('wrong'); coachSays(why + ' Let’s try again!'); flash('❌ It’s a draw!'); render();
       var my = token;
       lessonTm = setTimeout(function () { if (my !== token || !game || game.mode !== 'lesson') return; setupPart(game.part, ''); }, 2800);
@@ -17197,31 +17214,34 @@
       }
       lessonDone();
     }
-    function lessonDone() {
-      var L = lessonOf(), kind = game.kind;
-      S.learn[kind + ':' + game.lesson] = 1; game.done = true; game.busy = false; save();
+    function lessonDone() {   // the lesson part is done: next comes the test against Test Bot (the ⭐ waits until you pass it)
+      var L = lessonOf(), kind = game.kind, key = kind + ':' + game.lesson;
+      if (!(S.learn[key] >= 1)) S.learn[key] = 1;
+      game.done = true; game.busy = false; save();
       if (kind === 'op') sound('win');
-      coachSays('⭐ ' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + ' ' + (game.coach || ''));
+      var said = kind === 'op' ? (game.coach || '').replace(/^👉 /, '') + '\n' : '';
+      coachSays(said + '🎉 ' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + '\n🧪 Next: a test against 🤖 Test Bot!');
       render();
       var my = token;
       lessonTm = setTimeout(function () {
-        if (my !== token || !game || game.mode !== 'lesson' || !$('ov').hidden) return;
+        if (my !== token || !game || game.mode !== 'lesson' || game.phase === 'test' || !$('ov').hidden) return;
         openCard(function (c) {
-          var list = kind === 'op' ? CHESS_OPENINGS : CHESS_MATES, nx = list[list.indexOf(L) + 1];
-          c.appendChild(mk('div', 'chs-big', '⭐'));
-          c.appendChild(mk('h3', null, (kind === 'op' ? 'You learned the ' : 'You mastered the ') + L.n + '!'));
-          c.appendChild(mk('p', 'chs-quote', '🦉 “' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + '”'));
-          c.appendChild(mk('p', null, learned(kind) + ' of ' + list.length + (kind === 'op' ? ' openings' : ' checkmates') + ' learned.' + (kind === 'op' ? ' Try it in a real game against a bot!' : '')));
-          if (nx) { var b1 = mk('button', 'btn', '▶ Next: ' + nx.e + ' ' + nx.n); b1.type = 'button'; b1.id = 'chs-nextLesson'; b1.addEventListener('click', function () { startLesson(kind, nx.id); }); c.appendChild(b1); }
+          var T = kind === 'mate' ? L.test : null;
+          c.appendChild(mk('div', 'chs-big', '🧪'));
+          c.appendChild(mk('h3', null, 'Lesson done! Now the test'));
+          c.appendChild(mk('p', 'chs-quote', '🦉 “' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + ' Now show 🤖 Test Bot what you learned!”'));
+          c.appendChild(mk('p', null, 'You finished the ' + L.e + ' ' + L.n + ' lesson. Now ' + (kind === 'op' ? 'play it against 🤖 Test Bot from memory.' : T.drill ? 'checkmate 🤖 Test Bot’s lone king in ' + T.limit + ' moves or less.' : 'use it to checkmate 🤖 Test Bot in a new position.') +
+            ' No hints this time! If you make a mistake, you have to try again. Pass the test to earn your ⭐'));
+          var go = mk('button', 'btn', '🧪 Start the test'); go.type = 'button'; go.id = 'chs-startTest'; go.addEventListener('click', function () { startTest(kind, L.id, 1); }); c.appendChild(go);
           var row = mk('div', 'chs-row');
-          var again = mk('button', 'btn ghost', '🔁 Again'); again.type = 'button'; again.addEventListener('click', function () { startLesson(kind, L.id); });
+          var again = mk('button', 'btn ghost', '📖 Learn again'); again.type = 'button'; again.addEventListener('click', function () { startLesson(kind, L.id); });
           var all = mk('button', 'btn ghost', '📚 Lessons'); all.type = 'button'; all.addEventListener('click', function () { closeCard(); showLessons(kind); });
           row.appendChild(again); row.appendChild(all); c.appendChild(row);
         });
       }, kind === 'op' ? 1300 : 900);
     }
     function lessonHint() {
-      if (!game || game.mode !== 'lesson' || game.done || game.busy || hintBusy) return;
+      if (!game || game.mode !== 'lesson' || game.phase === 'test' || game.done || game.busy || hintBusy) return;
       game.hints++;
       if (game.kind === 'op') { var st = OPEN[game.lesson].line[game.step]; if (st) { hint = { from: st[0].slice(0, 2), to: st[0].slice(2, 4) }; sel = null; targets = []; render(); } return; }
       var P = curPart(), my = ++token; hintBusy = true; render();
@@ -17238,19 +17258,187 @@
       var m = $('menu'); m.innerHTML = '';
       var back = mk('button', 'chs-pill', '← Back'); back.type = 'button'; back.id = 'chs-lessonsBack'; back.addEventListener('click', showMenu); m.appendChild(back);
       var head = mk('div', 'panel chs-lhead');
-      head.innerHTML = kind === 'op' ? '<div class="chs-big">📖</div><h2>Openings</h2><p>The first moves of the game, the way great players do it. You play the moves, and Coach Hoot 🦉 explains why each one is good.</p>' :
-        '<div class="chs-big">♚</div><h2>Checkmates</h2><p>Learn famous checkmate patterns, then find the checkmate yourself! At the end, practice checkmating a lone king.</p>';
+      head.innerHTML = (kind === 'op' ? '<div class="chs-big">📖</div><h2>Openings</h2><p>The first moves of the game, the way great players do it. You play the moves, and Coach Hoot 🦉 explains why each one is good.</p>' :
+        '<div class="chs-big">♚</div><h2>Checkmates</h2><p>Learn famous checkmate patterns, then find the checkmate yourself! At the end, practice checkmating a lone king.</p>') +
+        '<p class="chs-lnote">🧪 After each lesson, 🤖 Test Bot tests you with no hints. Make a mistake and you try again. Pass to earn your ⭐<br><b>' + esc(learnedText(kind)) + '</b></p>';
       m.appendChild(head);
       var list = mk('div', 'chs-lessons');
-      (kind === 'op' ? CHESS_OPENINGS : CHESS_MATES).forEach(function (L) {
-        var done = S.learn[kind + ':' + L.id], b = mk('button', 'chs-lesson' + (done ? ' done' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
+      lessonList(kind).forEach(function (L) {
+        var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
         var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
-        b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i></span>' + (done ? '<span class="chs-ldone" title="Learned!">⭐</span>' : '');
-        b.addEventListener('click', function () { startLesson(kind, L.id); });
+        b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
+          (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
+        b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
         list.appendChild(b);
       });
       m.appendChild(list);
       window.scrollTo(0, 0);
+    }
+    function lessonChoice(kind, L) {   // a lesson you already did: take the test, or learn it again
+      var lv = S.learn[kind + ':' + L.id] || 0;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', L.e));
+        c.appendChild(mk('h3', null, L.n));
+        c.appendChild(mk('p', null, lv >= 2 ? '⭐ You passed the test! Want to practice it again?' : '📖 You did the lesson. Now pass the test against 🤖 Test Bot to earn your ⭐'));
+        var tb = mk('button', lv >= 2 ? 'btn ghost' : 'btn', lv >= 2 ? '🧪 Take the test again' : '🧪 Take the test'); tb.type = 'button'; tb.id = 'chs-takeTest';
+        tb.addEventListener('click', function () { startTest(kind, L.id, 1, lv >= 2 ? (Math.random() * 4) | 0 : 0); });
+        var lb = mk('button', lv >= 2 ? 'btn' : 'btn ghost', '📖 Learn it again'); lb.type = 'button'; lb.id = 'chs-learnAgain';
+        lb.addEventListener('click', function () { startLesson(kind, L.id); });
+        if (lv >= 2) { c.appendChild(lb); c.appendChild(tb); } else { c.appendChild(tb); c.appendChild(lb); }
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+
+    // ---- 🧪 the test: do it against 🤖 Test Bot with no hints. One mistake and you try again ----
+    function flipFEN(fen, mirror, swap) {   // the same position, mirrored left↔right and/or with the colors swapped
+      var p = fen.split(' ');
+      var rows = p[0].split('/').map(function (r) { return r.replace(/\d/g, function (d) { return new Array(+d + 1).join('1'); }).split(''); });
+      if (mirror) rows = rows.map(function (r) { return r.reverse(); });
+      if (swap) rows = rows.reverse().map(function (r) { return r.map(function (ch) { return ch === '1' ? ch : ch === ch.toUpperCase() ? ch.toLowerCase() : ch.toUpperCase(); }); });
+      var cs = p[2] || '-';
+      if (mirror) cs = '-';
+      else if (swap && cs !== '-') cs = (cs.indexOf('k') >= 0 ? 'K' : '') + (cs.indexOf('q') >= 0 ? 'Q' : '') + (cs.indexOf('K') >= 0 ? 'k' : '') + (cs.indexOf('Q') >= 0 ? 'q' : '') || '-';
+      return [rows.map(function (r) { return r.join('').replace(/1+/g, function (x) { return x.length; }); }).join('/'), swap ? (p[1] === 'w' ? 'b' : 'w') : p[1], cs, '-', p[4] || '0', p[5] || '1'].join(' ');
+    }
+    function flipSq(q, m, sw) { var f = q.charCodeAt(0) - 97, r = +q.charAt(1); return String.fromCharCode(97 + (m ? 7 - f : f)) + (sw ? 9 - r : r); }
+    function flipUci(u, m, sw) { return flipSq(u.slice(0, 2), m, sw) + flipSq(u.slice(2, 4), m, sw) + u.slice(4); }
+    function testVersions(T) { var v = [[0, 0]]; if (!T.nomirror) v.push([1, 0]); v.push([0, 1]); if (!T.nomirror) v.push([1, 1]); return v; }
+    function startTest(kind, id, attempt, ver) {
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
+      var L = kind === 'op' ? OPEN[id] : MATE[id]; if (!L) return;
+      attempt = attempt || 1; ver = ver == null ? attempt - 1 : ver;
+      game = { mode: 'lesson', phase: 'test', kind: kind, lesson: id, attempt: attempt, ver: ver, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
+      sel = null; targets = []; hint = null; last = null;
+      var hi = attempt > 1 ? 'Try #' + attempt + '! ' : 'Beep boop! I’m Test Bot. ';
+      if (kind === 'op') {
+        game.you = game.orient = orient = L.side; G.reset();
+        coachSays(hi + 'Show me the ' + L.n + ' from memory: all ' + yourMoves(L).length + ' of your moves. No hints!' + (L.side === 'b' ? ' I’ll go first.' : ''));
+        showGame(); testNext(true); return;
+      }
+      var T = L.test, vs = testVersions(T), v = vs[ver % vs.length], ai = T.ai ? flipUci(T.ai, v[0], v[1]) : null;
+      game.fen = flipFEN(T.fen, v[0], v[1]); G.load(game.fen);
+      game.you = ai ? (G.turn() === 'w' ? 'b' : 'w') : G.turn(); game.orient = orient = game.you;
+      game.left = T.drill ? 0 : T.n;
+      var job = T.drill ? 'Checkmate my lone king in ' + T.limit + ' moves or less. I’ll run away!' :
+        (ai ? 'I’ll make a move first. Then checkmate me' : 'Checkmate me') + ' in ' + T.n + (T.n === 1 ? '' : ' moves') + ' with the ' + L.n + '!';
+      coachSays(hi + (attempt > 1 ? 'New position. ' : 'Test time! ') + job + ' No hints!' + (game.you === 'b' ? ' (You’re Black.)' : ''));
+      game.busy = !!ai; showGame();
+      if (!ai) return;
+      var my = token;
+      lessonTm = setTimeout(function () {   // Test Bot makes its move (a mistake that lets you use the pattern!)
+        if (my !== token || !isTest()) return;
+        applyMove(ai); game.busy = false;
+        coachSays('Your turn! I bet you can’t checkmate me in ' + T.n + (T.n === 1 ? '' : ' moves') + '. 😏');
+        render();
+      }, 1700);
+    }
+    function testNext(first) {   // openings: Test Bot plays the other side's moves from the line
+      var L = OPEN[game.lesson], st = L.line[game.step];
+      if (!st) { testPass(); return; }
+      if (G.turn() === game.you) { render(); return; }
+      game.busy = true; render();
+      var my = token;
+      lessonTm = setTimeout(function () {
+        if (my !== token || !isTest()) return;
+        var x = applyMove(st[0]); game.step++; game.busy = false;
+        if (!L.line[game.step]) { testPass(); return; }
+        coachSays('I play ' + (x ? x.san : '…') + '. Your move!');
+        render();
+      }, first ? 1500 : 800);
+    }
+    function mateIn1() { var ms = G.moves(); for (var i = 0; i < ms.length; i++) { G.move(ms[i].uci); var ok = G.status() === 'checkmate'; G.undo(); if (ok) return ms[i].uci; } return null; }
+    function testMove(uci, dragged) {
+      if (game.kind === 'op') {
+        var L = OPEN[game.lesson], st = L.line[game.step];
+        if (!st) return;
+        if (uci !== st[0]) { sel = null; targets = []; testFail('❌ Oops! In the ' + L.n + ' you play ' + G.sanOf(st[0]) + ' here (in blue).', st[0]); return; }
+        applyMove(uci, dragged); game.step++;
+        sound('right'); flash('✅ ' + pick(['Correct!', 'Nice!', 'Yes!', 'Perfect!']));
+        testNext(); return;
+      }
+      var T = testOf();
+      applyMove(uci, dragged); game.mine++;
+      var s2 = G.status();
+      if (s2 === 'checkmate') { testPass(); return; }
+      if (T.drill) {
+        if (s2) drillFail(s2);
+        else if (game.mine >= T.limit) testFail('❌ Out of moves! You had ' + T.limit + ' moves to checkmate me.');
+        else defend();
+        return;
+      }
+      if (game.left <= 1 || s2) { testWrong('❌ That’s not checkmate!'); return; }
+      game.busy = true; render();
+      var my = ++token;
+      ask({ depth: 2 * game.left - 1, time: 3000 }, function (r) {   // does this still force checkmate?
+        if (my !== token || !isTest()) return;
+        if (r && r.uci && r.mate < 0 && -r.mate <= game.left - 1) {
+          lessonTm = setTimeout(function () {
+            if (my !== token || !isTest()) return;
+            applyMove(r.uci); game.left--; game.busy = false;
+            coachSays('Eek! I got away… for now. Checkmate me in ' + game.left + (game.left === 1 ? '!' : ' moves!'));
+            render();
+          }, 600);
+        } else testWrong('❌ That lets my king escape!');
+      });
+    }
+    function testWrong(msg) {   // checkmate tests: show the wrong move for a moment, take it back, then show the right one in blue
+      game.busy = true; sound('wrong'); flash(msg); render();
+      var my = token;
+      lessonTm = setTimeout(function () {
+        if (my !== token || !isTest()) return;
+        G.undo(); game.moves.pop(); game.sans.pop();
+        var lu = game.moves[game.moves.length - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
+        var tell = function (u) { testFail(msg + (u ? ' The right move was ' + G.sanOf(u) + ' (in blue).' : ''), u, true); };
+        var m1 = game.left <= 1 ? mateIn1() : null;
+        if (m1) tell(m1);
+        else ask({ depth: 2 * game.left + 1, time: 3000 }, function (r) { if (my === token && isTest()) tell(r && r.uci && G.sanOf(r.uci) ? r.uci : null); });
+      }, 1000);
+    }
+    function testFail(msg, answer, quiet) {   // a mistake: say what went wrong (the right move shows in blue), then the test starts over
+      var kind = game.kind, id = game.lesson, at = game.attempt, ver = game.ver;
+      game.busy = true; game.failed = '❌ Not quite! Get ready to try again…';
+      if (!quiet) sound('wrong');
+      if (answer) { hint = { from: answer.slice(0, 2), to: answer.slice(2, 4) }; sel = null; targets = []; }
+      coachSays(msg + '\n🔁 Let’s try the test again' + (kind === 'mate' ? ', with a new position!' : '!'));
+      render();
+      var my = token;
+      lessonTm = setTimeout(function () { if (my !== token || !isTest()) return; startTest(kind, id, at + 1, ver + 1); }, answer ? 4500 : 3800);
+    }
+    function testPass() {
+      var L = lessonOf(), kind = game.kind, at = game.attempt, ver = game.ver, you = game.you, moves = game.moves.slice();
+      S.learn[kind + ':' + game.lesson] = 2; game.done = true; game.busy = false; game.failed = ''; hint = null; save();
+      sound('win'); flash(kind === 'op' ? '✅ All your moves were right!' : '🎉 Checkmate!');
+      coachSays(pick(['Bzzzt… you got me!', 'Beep… boop… I lost!', 'Error! Error! You’re too good!']) + ' ' + (kind === 'op' ? 'You really know the ' + L.n + '.' : 'That’s checkmate!') + ' You passed the test! ⭐');
+      render();
+      var my = token;
+      lessonTm = setTimeout(function () {
+        if (my !== token || !isTest() || !$('ov').hidden) return;
+        openCard(function (c) {
+          var list = lessonList(kind), nx = list[list.indexOf(L) + 1];
+          c.appendChild(mk('div', 'chs-big', '⭐'));
+          c.appendChild(mk('h3', null, 'Test passed! You ' + (kind === 'op' ? 'learned the ' : 'mastered the ') + L.n + '!'));
+          c.appendChild(mk('p', 'chs-quote', '🤖 “' + pick(['Beep boop… you beat me fair and square!', 'My circuits are fried. Great job!', 'Bzzzt! You’re too good for me!']) + '”'));
+          c.appendChild(mk('p', null, (at === 1 ? '🎯 First try! ' : '💪 You kept trying and passed! ') + learned(kind) + ' of ' + list.length + (kind === 'op' ? ' openings' : ' checkmates') + ' learned.'));
+          if (kind === 'op') {
+            var gm = goodMatch(), kp = mk('button', 'btn', '♟️ Keep playing vs ' + gm.e + ' ' + gm.n + ' (' + gm.elo + ')'); kp.type = 'button'; kp.id = 'chs-keepPlaying';
+            kp.addEventListener('click', function () { playFrom(gm.id, you, moves); }); c.appendChild(kp);
+          }
+          if (nx) { var b1 = mk('button', kind === 'op' ? 'btn ghost' : 'btn', '▶ Next: ' + nx.e + ' ' + nx.n); b1.type = 'button'; b1.id = 'chs-nextLesson'; b1.addEventListener('click', function () { startLesson(kind, nx.id); }); c.appendChild(b1); }
+          var row = mk('div', 'chs-row');
+          var again = mk('button', 'btn ghost', '🔁 Test again'); again.type = 'button'; again.id = 'chs-testAgain'; again.addEventListener('click', function () { startTest(kind, L.id, 1, ver + 1); });
+          var all = mk('button', 'btn ghost', '📚 Lessons'); all.type = 'button'; all.addEventListener('click', function () { closeCard(); showLessons(kind); });
+          row.appendChild(again); row.appendChild(all); c.appendChild(row);
+        });
+      }, 1400);
+    }
+    function playFrom(botId, you, moves) {   // after an opening test: keep the game going against a real bot
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard();
+      game = { mode: 'bot', bot: botId, pick: you, you: you, orient: you, moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false };
+      G.reset();
+      moves.forEach(function (u) { var x = G.move(u); if (x) { game.moves.push(x.uci); game.sans.push(x.san); } });
+      var lu = game.moves[game.moves.length - 1];
+      orient = you; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null; sel = null; targets = []; hint = null; chat = { text: '', t: 0 };
+      save(); showGame(); say(BOT[botId].hi);
     }
 
     // ---- pop-up cards ----
@@ -17293,8 +17481,8 @@
       }
       var lh = mk('div', 'chs-tier'); lh.innerHTML = '<h3>🎓 Learn</h3><small>Lessons with Coach Hoot 🦉</small>'; m.appendChild(lh);
       var learn = mk('div', 'chs-learn');
-      learn.innerHTML = '<button type="button" class="chs-lbtn" data-learn="op"><span class="chs-lic">📖</span><b>Openings</b><small>' + learned('op') + ' of ' + CHESS_OPENINGS.length + ' learned</small></button>' +
-        '<button type="button" class="chs-lbtn" data-learn="mate"><span class="chs-lic">♚</span><b>Checkmates</b><small>' + learned('mate') + ' of ' + CHESS_MATES.length + ' learned</small></button>';
+      learn.innerHTML = '<button type="button" class="chs-lbtn" data-learn="op"><span class="chs-lic">📖</span><b>Openings</b><small>' + learnedText('op') + '</small></button>' +
+        '<button type="button" class="chs-lbtn" data-learn="mate"><span class="chs-lic">♚</span><b>Checkmates</b><small>' + learnedText('mate') + '</small></button>';
       learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (b) showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>A friend or a bot</small>'; m.appendChild(ph);
@@ -17378,7 +17566,9 @@
       state: function () { return game; }, saved: function () { return S; }, fen: function () { return G && G.fen(); },
       load: function (fen, you, botId) { cancelThinking(); closeCard(); game = { mode: botId ? 'bot' : 'friend', bot: botId || null, pick: you || 'w', you: botId ? you || 'w' : null, orient: you || 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, fen: fen }; G.load(fen); orient = game.orient; last = null; sel = null; targets = []; hint = null; save(); showGame(); },
       bots: CHESS_BOTS, book: CHESS_BOOK, engine: function () { return G; }, worker: function () { return worker; },
-      openings: CHESS_OPENINGS, mates: CHESS_MATES, lesson: function (kind, id) { startLesson(kind, id); }
+      openings: CHESS_OPENINGS, mates: CHESS_MATES, lesson: function (kind, id) { startLesson(kind, id); },
+      test: function (kind, id, attempt, ver) { startTest(kind, id, attempt || 1, ver); }, flipFEN: flipFEN,
+      think: function (opts) { return new Promise(function (res) { ask(opts, res); }); }
     };
   })();
   // ============ end Chess ============
