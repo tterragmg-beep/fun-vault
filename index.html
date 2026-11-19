@@ -16985,6 +16985,10 @@
       unselect();
     });
     boardEl.addEventListener('pointercancel', function () { if (down && down.moved) { dropGhost(); renderBoard(); } down = null; });
+    // Phones: after a tap, the browser also sends a "click" where the finger was. If the tap opened a pop-up
+    // (like 👑 Promote your pawn), that click landed on the pop-up's dark background and closed it at once.
+    // The board only uses pointer events, so it never needs those clicks.
+    boardEl.addEventListener('touchend', function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false });
 
     function userMove(uci, dragged) { if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
     function playMove(uci, byBot, dragged) {
@@ -17553,7 +17557,9 @@
       var f = c.querySelector('.btn, button'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
     function closeCard() { $('ov').hidden = true; $('card').innerHTML = ''; }
-    $('ov').addEventListener('click', function (e) { if (e.target === $('ov')) closeCard(); });
+    var ovPress = false;   // tapping the dark background closes a pop-up, but only if the tap started there too
+    $('ov').addEventListener('pointerdown', function (e) { ovPress = e.target === $('ov'); });
+    $('ov').addEventListener('click', function (e) { if (e.target === $('ov') && ovPress) closeCard(); ovPress = false; });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('ov').hidden && root.classList.contains('active')) closeCard(); });
 
     // ---- ⚔️ 1v1 on one phone: names, a chess clock, and a score ----
