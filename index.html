@@ -1215,6 +1215,8 @@
   .chs-card p.chs-dscore { color: var(--fg); font-weight: 700; }
   .chs-lbtn.chs-ldead { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); background: color-mix(in srgb, var(--bad) 9%, var(--panel)); }
   .chs-lbtn.chs-ldead:hover, .chs-lbtn.chs-ldead:focus-visible { border-color: var(--bad); }
+  .chs-lbtn.chs-lctr { grid-column: 1 / -1; border-color: color-mix(in srgb, var(--c4) 50%, var(--line)); background: color-mix(in srgb, var(--c4) 10%, var(--panel)); }
+  .chs-lbtn.chs-lctr:hover, .chs-lbtn.chs-lctr:focus-visible { border-color: var(--c4); }
   .chs-board { position: relative; }
   .chs-arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; color: rgba(21, 128, 61, 0.82); }
   .chs-tour { font-weight: 700; margin-right: 8px; }
@@ -1380,7 +1382,7 @@
       <button class="card" style="--hue: var(--c2);" data-goto="chess">
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21h12"/><path d="M8 21c0-3.2 1-5.6 3-7.6-1.4.4-2.8.3-3.8-.5-.8-.7-.8-1.7-.2-2.5L10.2 6l.6-2.6 2 1.9c3.1.8 5.2 3.7 5.2 7.6V21"/><circle cx="11.6" cy="8.6" r=".5" fill="currentColor"/></svg></span>
         <h2>Chess</h2>
-        <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). 1v1 a friend on the same phone, or learn openings and checkmates with Coach Hoot.</p>
+        <p>Play 24 bots, from a baby chick (100 Elo) all the way up to the final boss (3200). 1v1 a friend on the same phone, or learn openings, counters and checkmates with Coach Hoot.</p>
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
     </div>
@@ -16403,6 +16405,8 @@
     // Each opening is a list of [move, what Coach Hoot says]. Your moves' text is said BEFORE you play them.
     // any: 1 = a setup you can build in any order (the Hippo), so its test accepts your moves in any order.
     // deadly: 1 = it goes in 💀 Deadly Openings (gambits and traps). mate: 1 = the line ends in checkmate.
+    // counter: 1 = it goes in 🛡️ Counters (how to beat a tricky gambit or trap when someone plays it against you).
+    // alts = 😮 surprises: { at: which move of the line the other side changes, line: the moves from there (ending with yours) }.
     // plan = 🗺️ what to do AFTER the opening: [what Coach Hoot says, arrows to draw]. For checkmate traps: what to do if they don’t fall for it.
     var CHESS_OPENINGS = [
       { id: 'italian', e: '🇮🇹', n: 'Italian Game', side: 'w', d: 'Aim your bishop at f7, the weakest square near Black’s king.', plan: [['Put a rook on e1. It guards your e4 pawn.', 'f1e1'], ['Send your other knight on a trip: d2, then f1, then g3. From g3 it helps attack Black’s king.', 'b1d2 d2f1 f1g3'], ['Play h3, so Black’s bishop can’t come to g4 and pin your knight.', 'h2h3'], ['When everything is ready, push d4 to take over the center!', 'd3d4']], line: [
@@ -16417,7 +16421,22 @@
         ['d2d3', 'Protect e4 with your d-pawn: d3. Calm and solid.'],
         ['d7d6', 'Black protects e5 and opens a path for its other bishop.'],
         ['e1g1', 'Castle! Move your king two squares toward the rook, to g1. The king hides in the corner and the rook joins the game.'],
-        ['e8g8', 'Black castles too. Both kings are safe and everyone is ready to fight. That’s the Italian Game!']] },
+        ['e8g8', 'Black castles too. Both kings are safe and everyone is ready to fight. That’s the Italian Game!']],
+      alts: [
+        { at: 5, line: [
+          ['g8f6', 'Black plays Nf6 instead of Bc5. That’s the Two Knights Defense, and it attacks your e4 pawn!'],
+          ['d2d3', 'Don’t panic! Just protect e4 with d3. Calm and solid.'],
+          ['f8e7', 'Black brings the bishop to e7.'],
+          ['e1g1', 'Castle! Your king is safe.'],
+          ['e8g8', 'Black castles too.'],
+          ['f1e1', 'Rook to e1, guarding e4. Next you can push c3 and d4, just like in the main line!']] },
+        { at: 3, line: [
+          ['d7d6', 'Black protects e5 with a pawn instead of the knight. That’s the Philidor Defense.'],
+          ['d2d4', 'When Black plays slowly, grab the center: push d4!'],
+          ['e5d4', 'Black takes your pawn.'],
+          ['f3d4', 'Take back with your knight. It loves the middle of the board.'],
+          ['g8f6', 'Black brings out a knight and attacks e4.'],
+          ['b1c3', 'Protect e4 with your other knight. Next: Bc4 (or Be2) and castle!']] }] },
       { id: 'ruy', e: '🇪🇸', n: 'Ruy Lopez (Spanish Game)', side: 'w', d: 'Attack the knight that protects Black’s center pawn.', plan: [['When Black kicks your bishop with b5, step back to b3. It still aims at f7!', 'a4b3'], ['Push c3. It gives your bishop a safe home and gets ready for d4.', 'c2c3'], ['Play h3, so Black’s bishop can’t pin your knight from g4.', 'h2h3'], ['Then push d4 and grab the whole center. That’s the classic Ruy Lopez plan!', 'd2d4']], line: [
         ['e2e4', 'Start with your king’s pawn to e4. Take the center!'],
         ['e7e5', 'Black answers with e5.'],
@@ -16429,7 +16448,22 @@
         ['g8f6', 'Black brings out its other knight and attacks your e4 pawn.'],
         ['e1g1', 'Castle to g1! Your king is safe, and your rook gets ready to help.'],
         ['f8e7', 'Black gets ready to castle too.'],
-        ['f1e1', 'Rook to e1. It guards your e4 pawn. This opening is over 400 years old, and the best players in the world still play it!']] },
+        ['f1e1', 'Rook to e1. It guards your e4 pawn. This opening is over 400 years old, and the best players in the world still play it!']],
+      alts: [
+        { at: 5, line: [
+          ['g8f6', 'Black skips a6 and attacks your e4 pawn with Nf6. That’s the Berlin Defense!'],
+          ['d2d3', 'Protect e4 with d3. Nice and solid.'],
+          ['f8c5', 'Black’s bishop comes out to c5.'],
+          ['c2c3', 'Push c3. It helps you push d4 later, and gives your bishop a way back home.'],
+          ['e8g8', 'Black castles.'],
+          ['e1g1', 'You castle too! Next: Re1, then push d4.']] },
+        { at: 7, line: [
+          ['b7b5', 'Black kicks your bishop right away with b5!'],
+          ['a4b3', 'Step back to b3. Your bishop still aims at f7!'],
+          ['g8f6', 'Black attacks your e4 pawn.'],
+          ['e1g1', 'Castle! Your king is safe, and your rook is ready for e1.'],
+          ['f8e7', 'Black develops the bishop to e7.'],
+          ['f1e1', 'Rook to e1, to guard e4. Then c3 and d4: the classic Ruy Lopez plan!']] }] },
       { id: 'scotch', e: '⚔️', n: 'Scotch Game', side: 'w', d: 'Blast open the center right away.', plan: [['Black’s knight has to run from your e5 pawn (usually to d5). Kick it again with c4!', 'c2c4'], ['Play b3 and put your bishop on b2. It helps hold your e5 pawn.', 'b2b3 c1b2'], ['Fianchetto your other bishop with g3 and Bg2, then castle. Your e5 pawn cramps Black’s whole position!', 'g2g3 f1g2 e1g1']], line: [
         ['e2e4', 'King’s pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16443,7 +16477,20 @@
         ['b7c6', 'Black takes back with a pawn.'],
         ['e4e5', 'Push to e5! Your pawn attacks Black’s knight and grabs space.'],
         ['d8e7', 'Black’s queen pins your pawn: if it moves, your king is in check.'],
-        ['d1e2', 'Queen to e2 blocks the pin. Now your pawn is safe. That’s the Scotch Game!']] },
+        ['d1e2', 'Queen to e2 blocks the pin. Now your pawn is safe. That’s the Scotch Game!']],
+      alts: [
+        { at: 7, line: [
+          ['f8c5', 'Black attacks your knight on d4 with Bc5!'],
+          ['c1e3', 'Protect the knight with your bishop: Be3.'],
+          ['d8f6', 'Black’s queen attacks your knight too.'],
+          ['c2c3', 'Push c3, so the knight has another defender. Now it’s rock solid.'],
+          ['g8e7', 'Black brings the other knight to e7.'],
+          ['f1c4', 'Bishop to c4, then castle. All your pieces are coming out!']] },
+        { at: 5, line: [
+          ['c6d4', 'Black’s knight grabs your d4 pawn!'],
+          ['f3d4', 'Take it with your knight.'],
+          ['e5d4', 'Black takes back with a pawn.'],
+          ['d1d4', 'Take the pawn with your queen! She’s strong in the middle, and Black’s e-pawn is gone. Next: Nc3, Be3 and castle.']] }] },
       { id: 'qgambit', e: '👑', n: 'Queen’s Gambit', side: 'w', d: 'Offer a pawn to win the center.', plan: [['Bring out your last knight to f3.', 'g1f3'], ['Rook to c1. The c-file will open up later, and your rook wants to be ready.', 'a1c1'], ['Bishop to d3, then castle.', 'f1d3 e1g1'], ['A great trick: trade pawns on d5 (cxd5), so Black’s light bishop stays stuck behind its own pawns.', 'c4d5']], line: [
         ['d2d4', 'Start with your queen’s pawn: push it to d4.'],
         ['d7d5', 'Black does the same with d5.'],
@@ -16454,7 +16501,22 @@
         ['c1g5', 'Bishop to g5 pins the knight: if it moves, Black’s queen gets attacked.'],
         ['f8e7', 'Black breaks the pin by putting its bishop in between.'],
         ['e2e3', 'Push e3 so your other bishop can come out.'],
-        ['e8g8', 'Black castles. World champions have played this exact position many times!']] },
+        ['e8g8', 'Black castles. World champions have played this exact position many times!']],
+      alts: [
+        { at: 3, line: [
+          ['d5c4', 'Black takes your pawn! That’s the Queen’s Gambit Accepted.'],
+          ['e2e3', 'Don’t worry, you’ll get it back. Push e3, so your bishop can reach c4.'],
+          ['g8f6', 'Black brings out a knight.'],
+          ['f1c4', 'Take the pawn back with your bishop. Material is equal again!'],
+          ['e7e6', 'Black opens the door for its other bishop.'],
+          ['g1f3', 'Knight to f3, then castle. You have a nice center and fast pieces.']] },
+        { at: 3, line: [
+          ['c7c6', 'Black protects d5 with c6 instead. That’s the Slav Defense.'],
+          ['g1f3', 'Develop your knight to f3.'],
+          ['g8f6', 'Black does the same.'],
+          ['b1c3', 'Other knight to c3. Both knights watch the center.'],
+          ['e7e6', 'Black pushes e6.'],
+          ['e2e3', 'Push e3 to free your bishop. Next: Bd3 and castle!']] }] },
       { id: 'london', e: '🏰', n: 'London System', side: 'w', d: 'An easy setup you can play almost every game.', plan: [['Bishop to d3, aiming at Black’s king side.', 'f1d3'], ['Castle to keep your king safe.', 'e1g1'], ['Jump your knight to e5. It’s super strong there, and you can support it with f4 later.', 'f3e5'], ['Later, swing your queen to f3 or h5 and attack Black’s king!', 'd1f3']], line: [
         ['d2d4', 'Push your queen’s pawn to d4.'],
         ['d7d5', 'Black plays d5.'],
@@ -16466,7 +16528,22 @@
         ['c7c5', 'Black attacks your d4 pawn.'],
         ['c2c3', 'Protect d4 with c3. Your pawns make a strong triangle.'],
         ['b8c6', 'Black develops its other knight.'],
-        ['b1d2', 'Knight to d2. Next: bishop to d3, then castle. That’s the London System!']] },
+        ['b1d2', 'Knight to d2. Next: bishop to d3, then castle. That’s the London System!']],
+      alts: [
+        { at: 3, line: [
+          ['c7c5', 'Black hits your center with c5 right away!'],
+          ['e2e3', 'Stay calm: push e3, just like always in the London.'],
+          ['b8c6', 'Black develops a knight.'],
+          ['c2c3', 'Push c3 to make d4 rock solid.'],
+          ['d8b6', 'Black’s queen attacks your b2 pawn!'],
+          ['d1b3', 'Block it with Qb3! If Black trades queens, take back with your a-pawn. Your b2 pawn is safe.']] },
+        { at: 1, line: [
+          ['g8f6', 'Black starts with Nf6 instead of d5.'],
+          ['c1f4', 'No problem! The London works against almost anything: bishop to f4.'],
+          ['g7g6', 'Black wants to put its bishop on g7.'],
+          ['e2e3', 'Push e3, like always.'],
+          ['f8g7', 'Black’s bishop goes to g7.'],
+          ['g1f3', 'Knight to f3. Next: h3, Be2 and castle. Same plan as always!']] }] },
       { id: 'hippoatk', e: '🦛', n: 'Hippo Attack', side: 'w', any: 1, d: 'The Hippo, but for White! Same easy setup: little pawns on a3, b3, d3, e3, g3 and h3, with your pieces hiding behind them. Works against almost anything, in almost any order.', plan: [['Castle! Your king hides behind the bishop on g2.', 'e1g1'], ['Get ready to break out: push f4 to hit Black’s big center.', 'f2f4'], ['Or push d4 to hit e5. When the center opens, your bishops on b2 and g2 come alive!', 'd3d4']], line: [
         ['g2g3', 'Start the Hippo Attack with g3. It makes a home for your bishop, just like in the Hippo Defense!'],
         ['e7e5', 'Black takes the center with e5.'],
@@ -16498,7 +16575,20 @@
         ['f8c5', 'Black’s bishop copies yours and aims at f2.'],
         ['f2f4', 'Now push f4! That’s the Vienna’s big idea: hit Black’s e5 pawn and open the f-file for your rook.'],
         ['d7d6', 'Black protects e5 with d6.'],
-        ['g1f3', 'Knight to f3. Your pieces are out and that f-pawn is ready to attack. That’s the Vienna Game!']] },
+        ['g1f3', 'Knight to f3. Your pieces are out and that f-pawn is ready to attack. That’s the Vienna Game!']],
+      alts: [
+        { at: 5, line: [
+          ['f6e4', 'Black grabs your e4 pawn! It’s a trick: if you take back with Nxe4, Black plays d5 and forks your bishop and knight.'],
+          ['d1h5', 'Don’t take back! Queen to h5. Now you threaten Qxf7, checkmate!'],
+          ['e4d6', 'Black defends f7 with Nd6, and attacks your bishop at the same time.'],
+          ['c4b3', 'Move your bishop back to b3. It’s safe there and still aims at f7. Next, Nf3 attacks e5 to win your pawn back.']] },
+        { at: 3, line: [
+          ['b8c6', 'Black plays Nc6 instead of Nf6.'],
+          ['f1c4', 'Bishop to c4, aiming at f7. Same plan as always!'],
+          ['f8c5', 'Black’s bishop copies yours.'],
+          ['d2d3', 'Pawn to d3, so e4 is rock solid.'],
+          ['d7d6', 'Black protects e5.'],
+          ['c3a4', 'Knight to a4! It attacks the bishop on c5. Trade it off, then you can castle safely and push f4.']] }] },
       { id: 'english', e: '🇬🇧', n: 'English Opening', side: 'w', d: 'Start with the c-pawn and control the center from the side.', plan: [['Push d3 to open the door for your other bishop.', 'd2d3'], ['Play a3, then b4. Your pawns march at Black’s knight on c6!', 'a2a3 b2b4'], ['Bishop to e3 and rook to c1. The c-file is open for your rook.', 'c1e3 a1c1']], line: [
         ['c2c4', 'Push your c-pawn to c4. That’s the English Opening! It grabs the d5 square from the side.'],
         ['e7e5', 'Black takes the center with e5.'],
@@ -16512,7 +16602,20 @@
         ['d5b6', 'The knight runs back to b6.'],
         ['g1f3', 'Knight to f3, so you can castle.'],
         ['b8c6', 'Black develops its other knight.'],
-        ['e1g1', 'Castle! Your king is safe and your bishop on g2 is a monster. That’s the English Opening!']] },
+        ['e1g1', 'Castle! Your king is safe and your bishop on g2 is a monster. That’s the English Opening!']],
+      alts: [
+        { at: 1, line: [
+          ['c7c5', 'Black copies you with c5! That’s the Symmetrical English.'],
+          ['b1c3', 'Knight to c3, watching d5.'],
+          ['b8c6', 'Black copies again.'],
+          ['g2g3', 'Push g3 to make a home for your bishop.'],
+          ['g7g6', 'Black keeps copying you!'],
+          ['f1g2', 'Bishop to g2, looking down the long diagonal. Next: Nf3 and castle. Copying can’t go on forever!']] },
+        { at: 5, line: [
+          ['f8b4', 'Black’s bishop jumps to b4 to fight your knight, instead of pushing d5.'],
+          ['f1g2', 'Keep going with your setup: bishop to g2.'],
+          ['e8g8', 'Black castles.'],
+          ['g1f3', 'Knight to f3, then castle too. If Black takes your knight with Bxc3, take back with a pawn: your two bishops will be strong!']] }] },
       { id: 'kia', e: '🏯', n: 'King’s Indian Attack', side: 'w', any: 1, d: 'A setup you can play against almost anything, in almost any order, just like the Hippo. Then you attack with e4!', plan: [['Rook to e1, to back up your e4 pawn.', 'f1e1'], ['Push e5! It kicks Black’s knight away from the king.', 'e4e5'], ['Then go for Black’s king: knight to f1, then h2 and g4, and push your h-pawn. That’s the King’s Indian Attack plan!', 'd2f1 h2h4']], line: [
         ['g1f3', 'Knight to f3. The King’s Indian Attack starts quietly.'],
         ['d7d5', 'Black takes the center with d5.'],
@@ -16537,7 +16640,22 @@
         ['f3d4', 'White takes back with the knight.'],
         ['g8f6', 'Knight to f6. It attacks White’s e4 pawn.'],
         ['b1c3', 'White protects e4 with its other knight.'],
-        ['a7a6', 'The Najdorf: a6! A tiny pawn move that keeps White’s pieces off b5. Lots of world champions love it.']] },
+        ['a7a6', 'The Najdorf: a6! A tiny pawn move that keeps White’s pieces off b5. Lots of world champions love it.']],
+      alts: [
+        { at: 2, line: [
+          ['c2c3', 'White plays c3 instead of Nf3. That’s the Alapin: White wants to push d4 and build a big center.'],
+          ['g8f6', 'Attack the e4 pawn with Nf6!'],
+          ['e4e5', 'White pushes e5 to kick your knight.'],
+          ['f6d5', 'Jump to d5. Your knight is safe there in the middle.'],
+          ['d2d4', 'White grabs the center with d4.'],
+          ['c5d4', 'Take it: cxd4! Next: Nc6 and d6 to fight White’s pawns.']] },
+        { at: 4, line: [
+          ['f1b5', 'White gives a check with Bb5+ instead of pushing d4!'],
+          ['c8d7', 'Block the check with your bishop.'],
+          ['b5d7', 'White trades bishops with check.'],
+          ['d8d7', 'Take back with your queen.'],
+          ['e1g1', 'White castles.'],
+          ['b8c6', 'Knight to c6. Next: Nf6, then g6 and Bg7. Everything is fine!']] }] },
       { id: 'french', e: '🥖', n: 'French Defense', side: 'b', d: 'Build a strong wall of pawns.', plan: [['Hit White’s pawn chain from the side with c5!', 'c7c5'], ['Bring your other knight to c6 to attack d4 again.', 'b8c6'], ['Castle, then push f6 to break the chain from the other side.', 'e8g8 f7f6']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e6', 'The French Defense: play e6. It’s a small step that gets ready for d5.'],
@@ -16548,7 +16666,22 @@
         ['c1g5', 'White pins your knight to your queen.'],
         ['f8e7', 'Bishop to e7 breaks the pin.'],
         ['e4e5', 'White pushes e5 and attacks your knight!'],
-        ['f6d7', 'Knight back to d7. Later you can attack White’s pawn chain with c5. That’s the French!']] },
+        ['f6d7', 'Knight back to d7. Later you can attack White’s pawn chain with c5. That’s the French!']],
+      alts: [
+        { at: 4, line: [
+          ['e4e5', 'White pushes e5 right away. That’s the Advance French!'],
+          ['c7c5', 'Hit the pawn chain from the side with c5!'],
+          ['c2c3', 'White protects d4 with c3.'],
+          ['b8c6', 'Attack d4 again with your knight.'],
+          ['g1f3', 'White protects d4 with its knight.'],
+          ['d8b6', 'Queen to b6! It puts even more pressure on d4, and eyes the b2 pawn too.']] },
+        { at: 4, line: [
+          ['e4d5', 'White trades pawns: exd5. That’s the Exchange French.'],
+          ['e6d5', 'Take back with your e-pawn. Now your light bishop is free!'],
+          ['f1d3', 'White develops the bishop.'],
+          ['f8d6', 'Copy White: bishop to d6.'],
+          ['g1f3', 'White brings out a knight.'],
+          ['g8f6', 'Knight to f6, then castle. It’s equal and easy to play!']] }] },
       { id: 'caro', e: '🛡️', n: 'Caro-Kann Defense', side: 'b', d: 'A super solid defense that’s hard to break.', plan: [['If White pushes h4 to chase your bishop, play h6 and let it hide on h7.', 'h7h6'], ['Develop: knights to d7 and f6, and push e6.', 'b8d7 g8f6 e7e6'], ['Then bishop to e7 and castle. Stay solid: the Caro-Kann wins in the long run!', 'f8e7 e8g8']], line: [
         ['e2e4', 'White starts with e4.'],
         ['c7c6', 'The Caro-Kann: play c6. It gets ready for d5 and keeps a path open for your light-squared bishop.'],
@@ -16559,7 +16692,22 @@
         ['c3e4', 'White takes back with the knight.'],
         ['c8f5', 'Bishop to f5! It attacks the knight, and it gets out before you play e6.'],
         ['e4g3', 'White’s knight steps back to g3 and attacks your bishop.'],
-        ['f5g6', 'Bishop back to g6. Your position is rock solid. That’s the Caro-Kann!']] },
+        ['f5g6', 'Bishop back to g6. Your position is rock solid. That’s the Caro-Kann!']],
+      alts: [
+        { at: 4, line: [
+          ['e4e5', 'White pushes e5 instead. That’s the Advance Caro-Kann.'],
+          ['c8f5', 'Bring your bishop out to f5 FIRST, before you push e6. That’s the big idea of the Caro-Kann!'],
+          ['g1f3', 'White brings out a knight.'],
+          ['e7e6', 'Now push e6. Your bishop is already outside the pawn wall!'],
+          ['f1e2', 'White develops the bishop.'],
+          ['c6c5', 'Hit White’s center with c5! Next: Nc6 to attack d4 again.']] },
+        { at: 4, line: [
+          ['e4d5', 'White trades pawns: exd5. That’s the Exchange Caro-Kann.'],
+          ['c6d5', 'Take back with your c-pawn. You still have a pawn in the center.'],
+          ['f1d3', 'White’s bishop aims at h7.'],
+          ['b8c6', 'Develop your knight to c6.'],
+          ['c2c3', 'White makes d4 solid.'],
+          ['g8f6', 'Knight to f6. Next: Bg4 and e6, then castle!']] }] },
       { id: 'scandi', e: '⚡', n: 'Scandinavian Defense', side: 'b', d: 'Attack White’s pawn on your very first move.', plan: [['Play c6, so your queen always has a safe way back home.', 'c7c6'], ['Push e6, then your bishop can come out to b4.', 'e7e6 f8b4'], ['Knight to d7 and castle. Everything is solid and your bishop on f5 is happy!', 'b8d7 e8g8']], line: [
         ['e2e4', 'White starts with e4.'],
         ['d7d5', 'The Scandinavian: d5! Attack White’s pawn right away.'],
@@ -16570,7 +16718,22 @@
         ['d2d4', 'White takes the center.'],
         ['g8f6', 'Knight to f6.'],
         ['g1f3', 'White develops.'],
-        ['c8f5', 'Bishop to f5: it’s outside your pawns and very active. That’s the Scandinavian!']] },
+        ['c8f5', 'Bishop to f5: it’s outside your pawns and very active. That’s the Scandinavian!']],
+      alts: [
+        { at: 2, line: [
+          ['e4e5', 'White doesn’t take! It pushes e5 instead.'],
+          ['c8f5', 'Bring your bishop out to f5 before you push e6.'],
+          ['d2d4', 'White makes a pawn chain with d4.'],
+          ['e7e6', 'Push e6. Now your pawns are solid.'],
+          ['g1f3', 'White develops a knight.'],
+          ['c7c5', 'Hit White’s pawn chain with c5! Next: Nc6.']] },
+        { at: 4, line: [
+          ['g1f3', 'White plays Nf3 instead of attacking your queen with Nc3.'],
+          ['g8f6', 'Develop your knight. Your queen is fine on d5 for now.'],
+          ['d2d4', 'White grabs the center.'],
+          ['c8g4', 'Pin White’s knight with Bg4!'],
+          ['f1e2', 'White breaks the pin with Be2.'],
+          ['e7e6', 'Push e6 to free your other bishop. If a knight attacks your queen later, step back to a5 or d6.']] }] },
       { id: 'kid', e: '🗡️', n: 'King’s Indian Defense', side: 'b', d: 'Let White take the center, then hit back hard.', plan: [['Strike the center with e5!', 'e7e5'], ['Knight to c6. If White pushes d5, jump to e7.', 'b8c6 c6e7'], ['Then the big attack: knight to d7 and push f5 at White’s king!', 'f6d7 f7f5']], line: [
         ['d2d4', 'White starts with d4.'],
         ['g8f6', 'Knight to f6 first. It controls e4.'],
@@ -16581,7 +16744,20 @@
         ['e2e4', 'White builds a huge center.'],
         ['d7d6', 'Play d6. Let White have the center for now. You’ll attack it later.'],
         ['g1f3', 'White develops its other knight.'],
-        ['e8g8', 'Castle! Your king is safe. Next, you’ll strike back with e5. That’s the King’s Indian!']] },
+        ['e8g8', 'Castle! Your king is safe. Next, you’ll strike back with e5. That’s the King’s Indian!']],
+      alts: [
+        { at: 2, line: [
+          ['c1f4', 'White plays Bf4 instead of c4. That’s the London System!'],
+          ['g7g6', 'No problem! Keep building your King’s Indian: g6.'],
+          ['e2e3', 'White pushes e3.'],
+          ['f8g7', 'Bishop to g7, aiming down the long diagonal.'],
+          ['g1f3', 'White develops a knight.'],
+          ['e8g8', 'Castle! Next: d6, then hit the center with c5 or e5.']] },
+        { at: 8, line: [
+          ['f2f3', 'White plays f3 instead of Nf3. That’s the Sämisch: it makes e4 super solid.'],
+          ['e8g8', 'Castle first. Your king is safe.'],
+          ['c1e3', 'White develops the bishop.'],
+          ['e7e5', 'Strike the center with e5, just like always!']] }] },
       { id: 'hippo', e: '🦛', n: 'Hippo Defense', side: 'b', any: 1, d: 'Build a wall of little pawns and hide your pieces behind it, like a hippo in the water. It works against almost anything, in almost any order!', plan: [['Castle! Your king hides behind the bishop on g7.', 'e8g8'], ['Break out with e5, hitting White’s center.', 'e6e5'], ['Or push c5. When the center opens, your bishops on b7 and g7 come alive!', 'c7c5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['g7g6', 'The Hippo starts small: push your g-pawn just one square, to g6. It makes a home for your bishop.'],
@@ -16615,7 +16791,22 @@
         ['e2e3', 'White opens a door for its other bishop.'],
         ['e8g8', 'Castle! Your king is safe.'],
         ['g1f3', 'White develops its last knight.'],
-        ['b8d7', 'Knight to d7. Everything protects everything: rock solid! Later you can push c5 or e5 to free your pieces.']] },
+        ['b8d7', 'Knight to d7. Everything protects everything: rock solid! Later you can push c5 or e5 to free your pieces.']],
+      alts: [
+        { at: 6, line: [
+          ['c4d5', 'White trades pawns on d5 instead of playing Bg5. That’s the Exchange Variation.'],
+          ['e6d5', 'Take back with your e-pawn. Now your light bishop can come out!'],
+          ['c1g5', 'White pins your knight.'],
+          ['f8e7', 'Break the pin with Be7.'],
+          ['e2e3', 'White pushes e3.'],
+          ['e8g8', 'Castle! Next: c6 and Nbd7. Super solid.']] },
+        { at: 4, line: [
+          ['g1f3', 'White plays Nf3 instead of Nc3.'],
+          ['g8f6', 'Develop your knight too.'],
+          ['g2g3', 'White wants to put its bishop on g2. That’s the Catalan!'],
+          ['f8e7', 'Bishop to e7, getting ready to castle.'],
+          ['f1g2', 'White’s bishop aims at your queen side.'],
+          ['e8g8', 'Castle! Next: c6 and Nbd7, just like always.']] }] },
       { id: 'slav', e: '🪆', n: 'Slav Defense', side: 'b', d: 'Protect d5 with your c-pawn, so your light bishop can still come out.', plan: [['Castle to keep your king safe.', 'e8g8'], ['Knight to d7 and queen to e7. Everything is protected.', 'b8d7 d8e7'], ['If White pushes e4, move your bishop back to g6. Later, push c5 or e5 to hit the center.', 'f5g6']], line: [
         ['d2d4', 'White starts with d4.'],
         ['d7d5', 'Pawn to d5.'],
@@ -16630,7 +16821,20 @@
         ['e2e3', 'White gets ready to win the pawn back.'],
         ['e7e6', 'Pawn to e6, opening the door for your other bishop.'],
         ['f1c4', 'White takes the pawn back.'],
-        ['f8b4', 'Bishop to b4, pinning the knight. All your pieces are out and happy. That’s the Slav Defense!']] },
+        ['f8b4', 'Bishop to b4, pinning the knight. All your pieces are out and happy. That’s the Slav Defense!']],
+      alts: [
+        { at: 4, line: [
+          ['c4d5', 'White trades pawns right away. That’s the Exchange Slav.'],
+          ['c6d5', 'Take back with your c-pawn.'],
+          ['b1c3', 'White develops a knight.'],
+          ['g8f6', 'Develop your knight too.'],
+          ['c1f4', 'White’s bishop comes out.'],
+          ['b8c6', 'Knight to c6. Next: Bf5 and e6. Copy White’s good moves!']] },
+        { at: 8, line: [
+          ['e2e3', 'White plays e3 instead of a4, to win the c4 pawn back with the bishop.'],
+          ['b7b5', 'Protect your extra pawn with b5!'],
+          ['a2a4', 'White attacks your b5 pawn.'],
+          ['b5b4', 'Push b4! It kicks White’s knight away. Next: e6 and Bb7.']] }] },
       { id: 'nimzo', e: '🪄', n: 'Nimzo-Indian Defense', side: 'b', d: 'Pin White’s knight so it can’t help take over the center.', plan: [['Knight to c6, so all your pieces join the fight for the center.', 'b8c6'], ['If White plays a3, take the knight: Bxc3! White ends up with doubled pawns.', 'b4c3'], ['Then take on c4 (dxc4) and put your queen on c7. You’re equal and comfy!', 'd5c4 d8c7']], line: [
         ['d2d4', 'White starts with d4.'],
         ['g8f6', 'Knight to f6 first. It stops White from playing e4.'],
@@ -16643,7 +16847,22 @@
         ['f1d3', 'White develops its bishop.'],
         ['d7d5', 'Pawn to d5, grabbing the center.'],
         ['g1f3', 'White brings out its last knight.'],
-        ['c7c5', 'Pawn to c5! You hit White’s center from both sides. Great job!']] },
+        ['c7c5', 'Pawn to c5! You hit White’s center from both sides. Great job!']],
+      alts: [
+        { at: 4, line: [
+          ['g1f3', 'White plays Nf3 instead of Nc3, so you can’t pin the knight.'],
+          ['b7b6', 'Then fianchetto your other bishop: b6! That’s the Queen’s Indian Defense.'],
+          ['g2g3', 'White gets ready for its own fianchetto.'],
+          ['c8b7', 'Bishop to b7. It watches e4 and the long diagonal.'],
+          ['f1g2', 'White’s bishop goes to g2.'],
+          ['f8e7', 'Bishop to e7, then castle. Nice and solid!']] },
+        { at: 6, line: [
+          ['d1c2', 'White plays Qc2, so it can take back on c3 with the queen.'],
+          ['e8g8', 'Castle first.'],
+          ['a2a3', 'White kicks your bishop.'],
+          ['b4c3', 'Take the knight, with check!'],
+          ['c2c3', 'White takes back with the queen.'],
+          ['d7d5', 'Push d5 and fight for the center. You have a good game!']] }] },
       { id: 'pirc', e: '🦎', n: 'Pirc Defense', side: 'b', d: 'Let White build a big center, then attack it with your pieces.', plan: [['Knight to d7, getting ready to push e5.', 'b8d7'], ['Push e5! It fights White’s center.', 'e7e5'], ['Or push b5 to attack on the queenside. Your bishop on g7 loves it when the center opens.', 'b7b5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['d7d6', 'Pawn to d6. Small and sneaky!'],
@@ -16656,7 +16875,20 @@
         ['f1e2', 'White develops its bishop.'],
         ['e8g8', 'Castle! Your king hides behind the fianchetto.'],
         ['e1g1', 'White castles too.'],
-        ['c7c6', 'Pawn to c6. Next you can push b5 or e5 and fight for the center. That’s the Pirc Defense!']] },
+        ['c7c6', 'Pawn to c6. Next you can push b5 or e5 and fight for the center. That’s the Pirc Defense!']],
+      alts: [
+        { at: 6, line: [
+          ['f2f4', 'White pushes f4 instead! That’s the Austrian Attack: White wants to attack with its pawns.'],
+          ['f8g7', 'Stay calm: bishop to g7.'],
+          ['g1f3', 'White develops a knight.'],
+          ['e8g8', 'Castle! Next, hit White’s big center with c5 or e5.']] },
+        { at: 6, line: [
+          ['c1e3', 'White plays Be3, planning Qd2 and a big attack.'],
+          ['f8g7', 'Bishop to g7, like always.'],
+          ['d1d2', 'White lines up its queen and bishop. It wants Bh6 to trade off your strong bishop.'],
+          ['c7c6', 'Push c6, getting ready for b5.'],
+          ['f2f3', 'White makes e4 solid.'],
+          ['b7b5', 'Push b5! Attack on the queen side before White attacks your king.']] }] },
       { id: 'petrov', e: '🐻', n: 'Petrov’s Defense', side: 'b', d: 'Copy White’s knight move and counterattack the e4 pawn.', plan: [['Castle next. Your king is safe and everything is equal.', 'e8g8'], ['Bishop to f5, protecting your strong knight on e4.', 'c8f5'], ['If White kicks your knight, it can hop back to f6. Play calmly and wait for White to make a mistake!', 'e4f6']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Pawn to e5.'],
@@ -16671,7 +16903,20 @@
         ['f1d3', 'White develops and hits your knight.'],
         ['b8c6', 'Knight to c6.'],
         ['e1g1', 'White castles.'],
-        ['f8e7', 'Bishop to e7, so you can castle next. Solid and equal. That’s Petrov’s Defense!']] },
+        ['f8e7', 'Bishop to e7, so you can castle next. Solid and equal. That’s Petrov’s Defense!']],
+      alts: [
+        { at: 4, line: [
+          ['b1c3', 'White doesn’t take e5. It plays Nc3 instead: the Four Knights Game.'],
+          ['b8c6', 'Develop your other knight.'],
+          ['f1b5', 'White pins your knight.'],
+          ['f8b4', 'Copy White: Bb4!'],
+          ['e1g1', 'White castles.'],
+          ['e8g8', 'You castle too. Everything is equal!']] },
+        { at: 8, line: [
+          ['d1e2', 'White’s queen attacks your knight on e4. Careful: the knight is pinned to your king!'],
+          ['d8e7', 'Protect it with your queen. Now the knight is safe.'],
+          ['d2d3', 'White kicks your knight with d3.'],
+          ['e4f6', 'Knight back to f6. If White trades queens, take back and keep developing. It’s equal!']] }] },
       { id: 'friedliver', e: '🔥', n: 'Fried Liver Attack', side: 'w', deadly: 1, d: 'A wild attack where you sacrifice a knight to hunt the king.', plan: [['Black’s knight on d5 is pinned to the king and attacked three times. Black has to keep defending it!', ''], ['Push d4 to open the center. Black’s king has nowhere safe to hide!', 'd2d4'], ['Castle and bring your rook to e1. Every open line toward the king helps your attack.', 'e1g1 f1e1']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16687,7 +16932,22 @@
         ['e8f7', 'The king takes your knight. Now it’s out in the open!'],
         ['d1f3', 'Queen to f3: check! It also attacks the knight on d5.'],
         ['f7e6', 'The king has to step forward to protect its knight. Yikes!'],
-        ['b1c3', 'Knight to c3 attacks the d5 knight again. Black’s king is in BIG trouble. That’s the Fried Liver Attack!']] },
+        ['b1c3', 'Knight to c3 attacks the d5 knight again. Black’s king is in BIG trouble. That’s the Fried Liver Attack!']],
+      alts: [
+        { at: 9, line: [
+          ['c6a5', 'Black doesn’t take back on d5! Na5 attacks your bishop instead. That’s the best defense.'],
+          ['c4b5', 'Save your bishop with a check: Bb5+.'],
+          ['c7c6', 'Black blocks with c6.'],
+          ['d5c6', 'Take the pawn: dxc6!'],
+          ['b7c6', 'Black takes back and attacks your bishop.'],
+          ['b5e2', 'Move your bishop back to e2. You’re a pawn ahead!'],
+          ['h7h6', 'Black kicks your knight.'],
+          ['g5f3', 'Knight back to f3. Black will push e4 to kick it again, so get ready to jump to e5. Then castle!']] },
+        { at: 7, line: [
+          ['f8c5', 'Black ignores f7 and plays Bc5! That’s the Traxler: if your knight takes f7, Black sacrifices on f2. Super dangerous!'],
+          ['c4f7', 'Take f7 with your BISHOP instead, with check. It’s much safer!'],
+          ['e8e7', 'Black’s king steps up.'],
+          ['f7d5', 'Move your bishop to d5, where it’s safe. You won a pawn, and Black’s king can’t castle!']] }] },
       { id: 'alien', e: '👽', n: 'Alien Gambit', side: 'w', deadly: 1, d: 'A wild gambit against the Caro-Kann: sacrifice a knight on f7 to drag Black’s king out into the open!', plan: [['Black’s king can never castle. Keep it stuck in the middle!', ''], ['Bring out your bishop to d3, aiming at the weak squares around Black’s king.', 'f1d3'], ['Castle and put a rook on e1. Then push into the open lines!', 'e1g1 f1e1']], line: [
         ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
         ['c7c6', 'Black plays c6. That’s the Caro-Kann Defense: Black wants to push d5 next.'],
@@ -16707,7 +16967,27 @@
         ['f7e8', 'The king runs back to e8.'],
         ['e5g4', 'Now grab the bishop on g4! You win your piece back.'],
         ['f6g4', 'Black takes your knight.'],
-        ['d1g4', 'Take back with your queen. You’re a pawn ahead, and Black’s king can never castle. Out of this world! 👽']] },
+        ['d1g4', 'Take back with your queen. You’re a pawn ahead, and Black’s king can never castle. Out of this world! 👽']],
+      alts: [
+        { at: 7, line: [
+          ['c8f5', 'Black plays Bf5 instead of Nf6, attacking your knight. Now the Alien Gambit can’t happen.'],
+          ['e4g3', 'Move your knight to g3, attacking the bishop.'],
+          ['f5g6', 'Black’s bishop steps back.'],
+          ['h2h4', 'Push h4! It threatens h5, trapping the bishop.'],
+          ['h7h6', 'Black makes room for the bishop on h7.'],
+          ['g1f3', 'Knight to f3. Next: push h5, then Bd3. That’s the main line of the Caro-Kann!']] },
+        { at: 9, line: [
+          ['e7e6', 'Black doesn’t kick your knight. It plays e6 instead.'],
+          ['g1f3', 'Bring out your other knight.'],
+          ['f8e7', 'Black develops the bishop.'],
+          ['f1d3', 'Bishop to d3, aiming at Black’s king side.'],
+          ['h7h6', 'Now Black kicks your knight.'],
+          ['g5e4', 'This time Black is ready, so skip the sacrifice: step back to e4. Next: castle and Re1.']] },
+        { at: 13, line: [
+          ['e7e6', 'Black doesn’t fall for it! No Bg4 this time: e6 instead.'],
+          ['f1d3', 'You’re a knight down, so attack fast! Bishop to d3, aiming at Black’s king.'],
+          ['c6c5', 'Black hits back in the center.'],
+          ['e1g1', 'Castle, then bring your rook to e1. Black’s king is still stuck on f7: go after it!']] }] },
       { id: 'kingsgambit', e: '🤴', n: 'King’s Gambit (Muzio)', side: 'w', deadly: 1, d: 'Sacrifice a pawn AND a knight to blast open the f-file and hunt the king. One of the wildest attacks ever!', plan: [['Push d3 to free your other bishop, then take on f4 with it.', 'd2d3 c1f4'], ['Knight to c3. Every piece joins the attack!', 'b1c3'], ['Aim everything at f7. You’re a piece down, so attack fast before Black gets its pieces out!', 'c4f7']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16719,7 +16999,20 @@
         ['g5g4', 'Black kicks your knight with g4.'],
         ['e1g1', 'Don’t move the knight. Castle instead! That’s the Muzio Gambit: you’re giving away a whole knight!'],
         ['g4f3', 'Black takes your knight.'],
-        ['d1f3', 'Queen takes f3. You’re a knight down, but your queen, bishop and rook all aim at f7, and Black’s king is stuck in the middle. Attack!']] },
+        ['d1f3', 'Queen takes f3. You’re a knight down, but your queen, bishop and rook all aim at f7, and Black’s king is stuck in the middle. Attack!']],
+      alts: [
+        { at: 3, line: [
+          ['f8c5', 'Black doesn’t take your pawn. Its bishop aims at g1, so you can’t castle yet.'],
+          ['g1f3', 'Develop your knight.'],
+          ['d7d6', 'Black protects e5.'],
+          ['c2c3', 'Push c3. You want to play d4 and kick the bishop.'],
+          ['g8f6', 'Black brings out a knight.'],
+          ['d2d4', 'Push d4! Your pawns kick the bishop and take over the center.']] },
+        { at: 5, line: [
+          ['d7d6', 'Black plays d6 instead of g5.'],
+          ['d2d4', 'Grab the center with d4!'],
+          ['g7g5', 'Now Black pushes g5 to protect the f4 pawn.'],
+          ['h2h4', 'Hit it with h4! Black’s pawns get loose, and later your pieces can win f4 back.']] }] },
       { id: 'evans', e: '🎩', n: 'Evans Gambit', side: 'w', deadly: 1, d: 'Give up a pawn to win time and build a giant center. Attacking players have loved it for almost 200 years!', plan: [['Take back on d4 (cxd4). Now you have a giant pawn center!', 'c3d4'], ['Queen to b3! With your bishop on c4, you attack f7 twice.', 'd1b3'], ['Bishop to a3 stops Black from castling. Then push e5 and attack!', 'c1a3 e4e5']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16733,7 +17026,20 @@
         ['b4a5', 'The bishop runs to a5.'],
         ['d2d4', 'Push d4! Now you have a giant center.'],
         ['e5d4', 'Black takes another pawn.'],
-        ['e1g1', 'Castle! You’re two pawns down for now, but your pieces are ready to attack while Black’s are still at home. That’s the Evans Gambit!']] },
+        ['e1g1', 'Castle! You’re two pawns down for now, but your pieces are ready to attack while Black’s are still at home. That’s the Evans Gambit!']],
+      alts: [
+        { at: 7, line: [
+          ['c5b6', 'Black says “no thanks” and doesn’t take the pawn. That’s the Evans Gambit Declined.'],
+          ['a2a4', 'Push a4! It threatens a5, trapping the bishop.'],
+          ['a7a6', 'Black makes a safe square for the bishop.'],
+          ['b1c3', 'Develop your knight. You got extra space on the queen side for free!']] },
+        { at: 9, line: [
+          ['b4c5', 'Black’s bishop goes back to c5 instead of a5.'],
+          ['d2d4', 'Push d4! It attacks the e5 pawn AND the bishop.'],
+          ['e5d4', 'Black takes on d4.'],
+          ['e1g1', 'Castle! Your king is safe, and you’re ready to take back on d4.'],
+          ['d7d6', 'Black protects its bishop.'],
+          ['c3d4', 'Take back: cxd4! You have a giant pawn center.']] }] },
       { id: 'danish', e: '🇩🇰', n: 'Danish Gambit', side: 'w', deadly: 1, d: 'Give away TWO pawns so your bishops can fire across the whole board.', plan: [['Bring out your knights fast: c3 and f3.', 'b1c3 g1f3'], ['Castle and put your rooks in the middle.', 'e1g1'], ['Your bishops aim at f7 and g7, the squares next to Black’s king. Look for knight jumps to g5 or d5 to crash through!', 'c4f7 b2g7']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16743,7 +17049,20 @@
         ['d4c3', 'Black takes again.'],
         ['f1c4', 'Don’t take back! Bishop to c4, aiming at f7.'],
         ['c3b2', 'Black gobbles up your b2 pawn too.'],
-        ['c1b2', 'Bishop takes b2. You’re two pawns down, but your bishops are laser beams pointing at Black’s king side, and Black hasn’t moved a single piece. Black has to be super careful now!']] },
+        ['c1b2', 'Bishop takes b2. You’re two pawns down, but your bishops are laser beams pointing at Black’s king side, and Black hasn’t moved a single piece. Black has to be super careful now!']],
+      alts: [
+        { at: 5, line: [
+          ['d7d5', 'Black doesn’t take! It hits back with d5. That’s the best defense.'],
+          ['e4d5', 'Take the pawn: exd5.'],
+          ['d8d5', 'Black’s queen takes back.'],
+          ['c3d4', 'Take back on d4. Now you have a pawn in the center.'],
+          ['b8c6', 'Black develops and attacks d4.'],
+          ['g1f3', 'Protect d4 with your knight. Next: Nc3 to kick the queen, then Be2 and castle.']] },
+        { at: 7, line: [
+          ['d7d6', 'Black takes only ONE pawn and plays d6.'],
+          ['b1c3', 'Take back with your knight. You’re just one pawn behind, and your pieces are super fast.'],
+          ['b8c6', 'Black develops.'],
+          ['g1f3', 'Knight to f3, then castle. Your bishops love the open lines!']] }] },
       { id: 'morra', e: '🌪️', n: 'Smith-Morra Gambit', side: 'w', deadly: 1, d: 'The Sicilian’s nightmare: give a pawn for fast pieces and open lines.', plan: [['Queen to e2, so your rooks can come to the middle.', 'd1e2'], ['Bishop to f4. It aims at Black’s weak d6 pawn.', 'c1f4'], ['Rooks to d1 and c1: they aim at d6 and the open c-file. Look for knight jumps to d5 or b5!', 'f1d1 a1c1']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['c7c5', 'Black plays the Sicilian Defense.'],
@@ -16757,7 +17076,20 @@
         ['d7d6', 'Black plays d6.'],
         ['f1c4', 'Bishop to c4, aiming at f7.'],
         ['e7e6', 'Black blocks your bishop with e6.'],
-        ['e1g1', 'Castle! Next your queen goes to e2 and your rooks to c1 and d1. Black will be squeezed! That’s the Smith-Morra Gambit.']] },
+        ['e1g1', 'Castle! Next your queen goes to e2 and your rooks to c1 and d1. Black will be squeezed! That’s the Smith-Morra Gambit.']],
+      alts: [
+        { at: 5, line: [
+          ['g8f6', 'Black doesn’t take! Nf6 attacks your e4 pawn instead.'],
+          ['e4e5', 'Push e5, kicking the knight.'],
+          ['f6d5', 'The knight jumps to d5.'],
+          ['c3d4', 'Take back on d4. Now you have two strong center pawns!'],
+          ['d7d6', 'Black attacks your e5 pawn.'],
+          ['g1f3', 'Protect it with your knight. Next: Bc4 to chase the d5 knight.']] },
+        { at: 5, line: [
+          ['d4d3', 'Black pushes the pawn to d3 and gives it back.'],
+          ['f1d3', 'Take it with your bishop.'],
+          ['b8c6', 'Black develops.'],
+          ['g1f3', 'Knight out, then castle. You have the center and fast pieces!']] }] },
       { id: 'halloween', e: '🎃', n: 'Halloween Gambit', side: 'w', deadly: 1, d: 'A spooky knight sacrifice on move 4 that scares Black’s pieces all the way back home!', plan: [['Push f4, then f5. It kicks Black’s knight on g6 again and opens lines.', 'f2f4 f4f5'], ['Queen to f3 and castle. Everything attacks f7!', 'd1f3 e1g1'], ['You’re a knight down, so attack fast before Black gets its pieces out!', '']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16771,7 +17103,15 @@
         ['e5g6', 'The knight runs to g6.'],
         ['e4e5', 'Push e5 to kick the OTHER knight!'],
         ['f6g8', 'It runs all the way back home.'],
-        ['f1c4', 'Bishop to c4, aiming at f7. You’re a knight down, but your pawns rule the center and Black’s pieces got scared back home. Spooky!']] },
+        ['f1c4', 'Bishop to c4, aiming at f7. You’re a knight down, but your pawns rule the center and Black’s pieces got scared back home. Spooky!']],
+      alts: [
+        { at: 9, line: [
+          ['e5c6', 'Black’s knight goes back to c6 instead of g6.'],
+          ['d4d5', 'Kick it again with d5!'],
+          ['c6e5', 'The knight jumps to e5.'],
+          ['f2f4', 'And again with f4! Your pawns push Black’s pieces around.'],
+          ['e5g6', 'The knight runs to g6.'],
+          ['e4e5', 'Push e5 to kick the other knight too! You’re a knight down, but Black’s pieces keep going backwards.']] }] },
       { id: 'scholar', e: '🎓', n: 'Scholar’s Mate', side: 'w', deadly: 1, mate: 1, d: 'A 4-move checkmate. Great to know, and even better to know how to stop!', plan: [['If Black blocks with g6, your queen is attacked! Move it to f3, so it still aims at f7.', ''], ['Then develop normally: knight to c3 or e2, push d3, and castle.', ''], ['Be careful: your queen came out early, so Black will try to chase it. Don’t let it get trapped!', '']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16779,8 +17119,21 @@
         ['b8c6', 'Black develops a knight.'],
         ['d1h5', 'Queen to h5! Now your queen and bishop BOTH aim at f7.'],
         ['g8f6', 'Black attacks your queen… but forgets to protect f7!'],
-        ['h5f7', 'Queen takes f7: CHECKMATE! Your bishop protects the queen, so the king can’t take it. (Good players know how to stop this. Learn how in the next lesson!)']] },
-      { id: 'stopscholar', e: '🧱', n: 'Stop the Scholar’s Mate', side: 'b', d: 'What to do when White’s queen comes out early to attack f7.', plan: [['Knight to d4 kicks White’s queen and attacks the pawn on c2!', 'c6d4'], ['Fianchetto your bishop on g7, then castle.', 'f8g7 e8g8'], ['Then d6 and bishop to g4. White wasted moves with the queen, so you’ll be ahead!', 'd7d6 c8g4']], line: [
+        ['h5f7', 'Queen takes f7: CHECKMATE! Your bishop protects the queen, so the king can’t take it. (Good players know how to stop this. Learn how in 🛡️ Counters!)']],
+      alts: [
+        { at: 5, line: [
+          ['g7g6', 'Black doesn’t fall for it! g6 blocks the attack AND attacks your queen.'],
+          ['h5f3', 'Move your queen to f3. It still aims at f7, so Black has to defend again!'],
+          ['g8f6', 'Black blocks with Nf6.'],
+          ['g1e2', 'Develop your knight to e2 (f3 is taken by your queen).'],
+          ['f8g7', 'Black develops the bishop.'],
+          ['b1c3', 'Other knight to c3. Next: d3 and castle. Careful: Black will try to chase your queen!']] },
+        { at: 3, line: [
+          ['g8f6', 'Black plays Nf6 first. Now if your queen goes to h5, the knight just takes it!'],
+          ['d2d3', 'Forget the trap and play normal chess: d3 protects e4.'],
+          ['f8c5', 'Black develops the bishop.'],
+          ['g1f3', 'Knight to f3, then castle. It’s a normal Italian Game now.']] }] },
+      { id: 'stopscholar', e: '🧱', n: 'Stop the Scholar’s Mate', side: 'b', counter: 1, d: 'What to do when White’s queen comes out early to attack f7, again and again.', plan: [['If White takes f7 with Bxf7+, step up with Ke7. The bishop is stuck there, and White’s queen is still attacked!', ''], ['If White’s queen runs away, chase it with c6 and b5. Your pawns kick it around!', 'c7c6 b7b5'], ['Then fianchetto your bishop on g7 and castle. White wasted lots of moves, so you’re way ahead!', 'f8g7 e8g8']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Answer with e5.'],
         ['d1h5', 'White’s queen jumps out to h5. It attacks your e5 pawn AND f7!'],
@@ -16788,7 +17141,20 @@
         ['f1c4', 'Uh-oh: now White threatens queen takes f7, checkmate!'],
         ['g7g6', 'Push g6! It kicks the queen away and blocks the attack.'],
         ['h5f3', 'The queen tries again: from f3 it aims at f7 one more time.'],
-        ['g8f6', 'Knight to f6 blocks it! Now f7 is safe and White’s queen wasted lots of moves. You stopped the Scholar’s Mate!']] },
+        ['g8f6', 'Knight to f6 blocks it! Now f7 is safe again.'],
+        ['f3b3', 'The queen moves AGAIN, to b3. With the bishop, it attacks f7 one more time!'],
+        ['c6d4', 'Counterattack! Nd4 attacks White’s queen AND the c2 pawn. White is in trouble. You stopped the Scholar’s Mate!']],
+      alts: [
+        { at: 8, line: [
+          ['g2g4', 'White pushes g4. It wants g5 to kick your knight away, so the queen can reach f7 again.'],
+          ['c6d4', 'Counterattack the queen with Nd4!'],
+          ['f3d1', 'The queen runs all the way back home.'],
+          ['d7d5', 'Push d5! Open the center while White’s pieces are lost. You’re way ahead!']] },
+        { at: 6, line: [
+          ['h5e2', 'White’s queen steps back to e2 instead.'],
+          ['c6d4', 'Attack it again with Nd4!'],
+          ['e2d1', 'The queen runs back home.'],
+          ['g8f6', 'Develop your other knight. White wasted three moves with the queen!']] }] },
       { id: 'legal', e: '🪤', n: 'Légal’s Trap', side: 'w', deadly: 1, mate: 1, d: 'Let Black take your queen… then checkmate with three little pieces!', plan: [['If Black takes your knight (dxe5) instead of your queen, take Black’s bishop with your queen: Qxg4. You win a pawn!', ''], ['Then castle and keep your bishop aimed at f7.', ''], ['Only try this trap when Black’s bishop pins your knight to your queen.', '']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -16802,7 +17168,15 @@
         ['g4d1', 'Black grabs your queen… and walks right into the trap.'],
         ['c4f7', 'Bishop takes f7: check!'],
         ['e8e7', 'The king has only one square to go to.'],
-        ['c3d5', 'Knight to d5: CHECKMATE! Three little pieces beat Black’s whole army. That’s Légal’s Trap!']] },
+        ['c3d5', 'Knight to d5: CHECKMATE! Three little pieces beat Black’s whole army. That’s Légal’s Trap!']],
+      alts: [
+        { at: 9, line: [
+          ['d6e5', 'Black doesn’t take your queen! It takes your knight instead.'],
+          ['d1g4', 'Take the bishop with your queen. You won a pawn!'],
+          ['g8f6', 'Black attacks your queen.'],
+          ['g4e2', 'Move your queen to e2, where it’s safe.'],
+          ['b8c6', 'Black develops.'],
+          ['e1g1', 'Castle! You’re a pawn ahead, and your bishop still aims at f7.']] }] },
       { id: 'stafford', e: '🐍', n: 'Stafford Gambit', side: 'b', deadly: 1, mate: 1, d: 'Give up a pawn and set sneaky traps. If White falls for this one, it’s checkmate in 8 moves!', plan: [['If White doesn’t fall for it, keep attacking: push h5 and bring your knight to g4. White’s f2 square is weak!', ''], ['Your queen loves d4, and your bishop loves c5. Both aim at f2!', ''], ['Castle queenside when you can, and keep throwing pawns at White’s king.', '']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Pawn to e5.'],
@@ -16819,7 +17193,13 @@
         ['g5d8', 'White grabs your queen. Now spring the trap!'],
         ['c5f2', 'Bishop takes f2: check!'],
         ['e1e2', 'The king has to step up to e2.'],
-        ['c8g4', 'Bishop to g4: CHECKMATE! You gave away your queen and still won. That’s the Stafford Gambit trap!']] },
+        ['c8g4', 'Bishop to g4: CHECKMATE! You gave away your queen and still won. That’s the Stafford Gambit trap!']],
+      alts: [
+        { at: 10, line: [
+          ['f1e2', 'White plays Be2 instead of Bg5. No trap this time, so keep up the pressure!'],
+          ['h7h5', 'Push h5! Now your knight can jump to g4, and the h-pawn joins the attack.'],
+          ['h2h3', 'White pushes h3 to stop Ng4.'],
+          ['d8d4', 'Queen to d4! It teams up with your bishop to attack f2. White has to be careful!']] }] },
       { id: 'englund', e: '🪝', n: 'Englund Gambit', side: 'b', deadly: 1, mate: 1, d: 'A cheeky answer to 1.d4, with a queen trap that ends in checkmate!', plan: [['If White doesn’t play Bf4, win your pawn back on e5 and develop normally.', ''], ['Bring your knights and bishops out fast, then castle.', ''], ['This gambit is risky. If the trap doesn’t work, play solid chess and don’t keep moving your queen.', '']], line: [
         ['d2d4', 'White starts with d4.'],
         ['e7e5', 'Pawn to e5! That’s the Englund Gambit: you offer a pawn right away.'],
@@ -16836,7 +17216,18 @@
         ['d1d2', 'White protects the bishop with its queen.'],
         ['b4c3', 'Bishop takes c3!'],
         ['d2c3', 'White takes back with the queen…'],
-        ['b2c1', 'Queen to c1: CHECKMATE! The king is stuck behind its own pieces. That’s the Englund Gambit trap!']] },
+        ['b2c1', 'Queen to c1: CHECKMATE! The king is stuck behind its own pieces. That’s the Englund Gambit trap!']],
+      alts: [
+        { at: 6, line: [
+          ['b1c3', 'White plays Nc3 instead of Bf4. Now Qb4 isn’t check, so the trap won’t work.'],
+          ['c6e5', 'Win your pawn back: Nxe5!'],
+          ['f3e5', 'White trades knights.'],
+          ['e7e5', 'Take back with your queen. Material is equal! Next: Nf6, Bb4 and castle.']] },
+        { at: 6, line: [
+          ['d1d5', 'White’s queen protects the e5 pawn.'],
+          ['f7f6', 'Attack e5 again with f6!'],
+          ['e5f6', 'White takes.'],
+          ['g8f6', 'Take back with your knight. It attacks White’s queen! You’re a pawn down, but your pieces are fast.']] }] },
       { id: 'shilling', e: '🪙', n: 'Blackburne Shilling Gambit', side: 'b', deadly: 1, mate: 1, d: 'Put your knight where it looks like a mistake. If White grabs the bait, it’s a smothered mate!', plan: [['If White doesn’t take the bait, just develop: knight to f6, bishop to c5.', ''], ['If White trades your knight with Nxd4, take back with exd4. You’re still fine!', ''], ['Castle soon and play normal chess. The trap only works when White gets greedy.', '']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Pawn to e5.'],
@@ -16851,7 +17242,18 @@
         ['h1f1', 'The rook runs to f1.'],
         ['g2e4', 'Queen takes e4: check!'],
         ['c4e2', 'White blocks with the bishop.'],
-        ['d4f3', 'Knight to f3: SMOTHERED MATE! The king is trapped by its own pieces. That’s the Blackburne Shilling Gambit!']] },
+        ['d4f3', 'Knight to f3: SMOTHERED MATE! The king is trapped by its own pieces. That’s the Blackburne Shilling Gambit!']],
+      alts: [
+        { at: 6, line: [
+          ['f3d4', 'White doesn’t grab e5. It takes your knight instead.'],
+          ['e5d4', 'Take back with your pawn.'],
+          ['c2c3', 'White attacks your d4 pawn.'],
+          ['g8f6', 'Develop your knight and attack e4. Next: Bc5 and castle.']] },
+        { at: 8, line: [
+          ['c4f7', 'White takes f7 with the bishop and check, instead of the knight.'],
+          ['e8e7', 'Step up with your king. Now your queen attacks the knight on e5 AND the g2 pawn!'],
+          ['e1g1', 'White castles to protect g2.'],
+          ['g5e5', 'Grab the knight! Next you can take the bishop on f7 with your king too.']] }] },
       { id: 'fishing', e: '🎣', n: 'Fishing Pole Trap', side: 'b', deadly: 1, mate: 1, d: 'Dangle your knight like bait on a fishing pole. If White takes it, the h-file opens and your queen and rook go for checkmate!', plan: [['If White doesn’t take your knight, just bring it back to f6 when it gets attacked, and play normal chess.', ''], ['Keep your rook on h8: if the h-file ever opens, it joins the attack.', ''], ['Remember: this trap only works when White has castled on the side you’re attacking.', '']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Pawn to e5.'],
@@ -16870,7 +17272,13 @@
         ['e5f3', 'White’s knight runs back to guard h2… and attacks your queen.'],
         ['g4f3', 'Pawn takes the knight!'],
         ['d1f3', 'White takes back…'],
-        ['h4h2', 'Queen to h2: CHECKMATE! Your rook on h8 protects the queen. Never bite the fishing pole bait!']] },
+        ['h4h2', 'Queen to h2: CHECKMATE! Your rook on h8 protects the queen. Never bite the fishing pole bait!']],
+      alts: [
+        { at: 10, line: [
+          ['d2d4', 'White doesn’t take your knight. It hits the center with d4 instead.'],
+          ['e5d4', 'Take the pawn: exd4.'],
+          ['f3d4', 'White takes back. Now White’s queen is aiming at your knight on g4!'],
+          ['f8c5', 'Bishop to c5! It attacks the knight on d4. If White takes your knight, you take White’s knight back.']] }] },
       { id: 'budapest', e: '🇭🇺', n: 'Budapest Gambit', side: 'b', deadly: 1, mate: 1, d: 'Strike back against 1.d4 right away, with a famous smothered-mate trap!', plan: [['If White doesn’t fall for it, you still win your pawn back on e5.', ''], ['Trade your bishop for White’s knight with Bxd2+, then castle.', ''], ['Play d6 and bring your last bishop out. Your pieces are active and you’re equal!', '']], line: [
         ['d2d4', 'White starts with d4.'],
         ['g8f6', 'Knight to f6.'],
@@ -16887,7 +17295,274 @@
         ['a2a3', 'White attacks your bishop. It looks like White is winning a piece!'],
         ['g4e5', 'Knight takes e5! Let White take the bishop…'],
         ['a3b4', 'White grabs your bishop. Big mistake!'],
-        ['e5d3', 'Knight to d3: SMOTHERED MATE! White’s e2 pawn can’t take it because your queen pins it. That’s the Budapest trap!']] }
+        ['e5d3', 'Knight to d3: SMOTHERED MATE! White’s e2 pawn can’t take it because your queen pins it. That’s the Budapest trap!']],
+      alts: [
+        { at: 14, line: [
+          ['f3e5', 'White doesn’t take your bishop. It takes your knight instead.'],
+          ['c6e5', 'Take back with your other knight.'],
+          ['e2e3', 'White plays e3, so there’s no more smothered mate on d3.'],
+          ['b4d2', 'Your bishop is attacked by the a3 pawn, so trade it: Bxd2+.'],
+          ['d1d2', 'White takes back.'],
+          ['d7d6', 'Pawn to d6, then castle. You won your pawn back, and it’s an equal game!']] },
+        { at: 6, line: [
+          ['e2e4', 'White plays e4 instead of Bf4, grabbing the center.'],
+          ['g4e5', 'Win your pawn back: Nxe5!'],
+          ['f2f4', 'White kicks your knight with f4.'],
+          ['e5c6', 'Step back to c6. Next: Bc5 and d6. White’s big center can become a target!']] }] },
+      { id: 'vsalien', e: '👽', n: 'Beat the Alien Gambit', side: 'b', counter: 1, d: 'When White sacrifices a knight on f7 to drag your king out, take it, dodge the trap, and hide your king. You stay a whole knight ahead!', plan: [['Your king isn’t safe on f7. Walk it to g8, then h7. That’s castling by hand!', 'f7g8 g8h7'], ['Bring your rook from h8 into the game, to f8 or e8.', 'h8f8'], ['Knight to d7, then trade pieces when you can. The more you trade, the more your extra knight matters!', 'b8d7']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['c7c6', 'Play c6: the Caro-Kann. Next you push d5.'],
+        ['d2d4', 'White grabs the center.'],
+        ['d7d5', 'Hit the e4 pawn with d5.'],
+        ['b1c3', 'White protects e4 with the knight.'],
+        ['d5e4', 'Take on e4.'],
+        ['c3e4', 'White takes back.'],
+        ['g8f6', 'Attack the knight with Nf6.'],
+        ['e4g5', 'Uh-oh: Ng5! White wants to play the Alien Gambit 👽'],
+        ['h7h6', 'Kick the knight with h6. Let’s see if White dares to sacrifice it!'],
+        ['g5f7', 'Here it comes: Nxf7! The knight attacks your queen and rook.'],
+        ['e8f7', 'Take it with your king! You’re a whole knight ahead.'],
+        ['g1f3', 'White brings out its other knight. It wants to jump to e5 with check.'],
+        ['c8f5', 'Here’s the key: DON’T play Bg4 (Ne5+ would fork your king and bishop). Play Bf5! Now Ne5+ doesn’t win anything.'],
+        ['f1d3', 'White wants to trade bishops.'],
+        ['e7e6', 'Push e6. Your king gets some shelter, and your other bishop can come out.'],
+        ['e1g1', 'White castles.'],
+        ['f8d6', 'Bishop to d6. Next, walk your king to safety: Kg8, then Kh7. You’re a knight ahead!']],
+      alts: [
+        { at: 14, line: [
+          ['f3e5', 'White checks with Ne5+ right away.'],
+          ['f7g8', 'King to g8. It’s safer there.'],
+          ['f1d3', 'White wants to trade bishops.'],
+          ['f5d3', 'Trade them: Bxd3!'],
+          ['d1d3', 'White takes back with the queen.'],
+          ['d8d5', 'Queen to d5! It offers a queen trade. Trading queens is great when you’re a piece ahead!']] }] },
+      { id: 'vsfried', e: '🔥', n: 'Stop the Fried Liver', side: 'b', counter: 1, d: 'When White’s knight jumps to g5 to attack f7, block with d5, then play the surprise move Na5! White’s attack fizzles out.', plan: [['Castle to keep your king safe.', 'e8g8'], ['Queen to c7, behind your bishop. Together they aim at the knight on e5 and at White’s king side.', 'd8c7'], ['Rook to e8 or d8, and keep kicking White’s pieces. You have plenty of play for the pawn!', 'f8e8']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['e7e5', 'Answer with e5.'],
+        ['g1f3', 'White attacks your e5 pawn.'],
+        ['b8c6', 'Protect it with Nc6.'],
+        ['f1c4', 'White’s bishop aims at f7.'],
+        ['g8f6', 'Develop your knight to f6. (That’s the Two Knights Defense.)'],
+        ['f3g5', 'White’s knight jumps to g5. Now knight AND bishop attack f7!'],
+        ['d7d5', 'Block the bishop with d5!'],
+        ['e4d5', 'White takes your pawn.'],
+        ['c6a5', 'Here’s the secret move: DON’T take back with the knight (that allows the Fried Liver, Nxf7!). Play Na5 and attack the bishop!'],
+        ['c4b5', 'White’s bishop escapes with check.'],
+        ['c7c6', 'Block with c6, attacking the bishop again.'],
+        ['d5c6', 'White takes.'],
+        ['b7c6', 'Take back. You’re a pawn down, but your pieces are getting FAST.'],
+        ['b5e2', 'White’s bishop runs back home.'],
+        ['h7h6', 'Kick the knight with h6.'],
+        ['g5f3', 'The knight goes back to f3.'],
+        ['e5e4', 'Kick it again with e4!'],
+        ['f3e5', 'The knight jumps to e5.'],
+        ['f8d6', 'Bishop to d6, then castle. You have lots of space, and White’s pieces keep running away!']],
+      alts: [
+        { at: 10, line: [
+          ['d2d3', 'White plays d3 instead of Bb5+.'],
+          ['h7h6', 'Kick the knight on g5!'],
+          ['g5f3', 'The knight goes back.'],
+          ['e5e4', 'Kick it again!'],
+          ['d1e2', 'White pins your e4 pawn with the queen.'],
+          ['a5c4', 'Grab the bishop!'],
+          ['d3c4', 'White takes back.'],
+          ['f8c5', 'Bishop to c5, then castle. You have two bishops and lots of fast pieces!']] }] },
+      { id: 'vsstafford', e: '🐍', n: 'Beat the Stafford Gambit', side: 'w', counter: 1, d: 'Black gives up a pawn and sets sneaky traps. Know the safe moves, and you just stay a pawn ahead!', plan: [['Watch out! If Black’s queen comes to d6, it wants Qxh2, checkmate. Kick it away with e5!', 'e4e5'], ['Your bishop on f4 can also block the queen’s path to h2. Never play h3 while that’s possible!', 'c1f4'], ['Bring out your last knight (Nd2, then f3) to guard h2. You stay a pawn ahead!', 'b1d2 d2f3']], line: [
+        ['e2e4', 'Push your e-pawn to e4.'],
+        ['e7e5', 'Black answers e5.'],
+        ['g1f3', 'Knight to f3, attacking e5.'],
+        ['g8f6', 'Black counterattacks your e4 pawn.'],
+        ['f3e5', 'Take the pawn on e5!'],
+        ['b8c6', 'Black offers its knight: that’s the Stafford Gambit 🐍'],
+        ['e5c6', 'Trade knights: Nxc6.'],
+        ['d7c6', 'Black takes back. Now its bishops and queen are free to attack.'],
+        ['d2d3', 'Protect your e4 pawn with d3.'],
+        ['f8c5', 'Black’s bishop aims at f2.'],
+        ['f1e2', 'Careful! Bg5?? loses to a famous trap (Nxe4!). Play Be2 instead. It’s safe and gets ready to castle.'],
+        ['h7h5', 'Black pushes h5, getting ready for Ng4.'],
+        ['c2c3', 'Push c3! It stops Black’s queen from coming to d4, and gets ready for d4.'],
+        ['f6g4', 'Black’s knight jumps to g4 and eyes f2.'],
+        ['d3d4', 'Push d4! It blocks Black’s bishop from attacking f2.'],
+        ['c5b6', 'Black’s bishop steps back to b6.'],
+        ['e1g1', 'Castle! Your king is safe, you’re a pawn ahead, and you have a big center.']],
+      alts: [
+        { at: 13, line: [
+          ['d8d6', 'Black’s queen comes to d6, eyeing your h2 pawn.'],
+          ['d3d4', 'Push d4! It attacks Black’s bishop and blocks its path to f2.'],
+          ['c5b6', 'The bishop steps back.'],
+          ['e4e5', 'Push e5! It kicks Black’s queen AND blocks its path to h2.']] }] },
+      { id: 'vshalloween', e: '🎃', n: 'Beat the Halloween Gambit', side: 'b', counter: 1, d: 'White sacrifices a knight to chase your knights back home. Stay calm: you’re a whole piece ahead. Protect f7 and develop!', plan: [['Trade pawns on e5 (dxe5), and bring your knight back out to f6.', 'd6e5 g8f6'], ['Bishop to e7, then castle. Get your king safe!', 'f8e7 e8g8'], ['Trade pieces! The more you trade, the more your extra knight matters.', '']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['e7e5', 'Answer with e5.'],
+        ['g1f3', 'White attacks e5.'],
+        ['b8c6', 'Protect it.'],
+        ['b1c3', 'White develops its other knight.'],
+        ['g8f6', 'Develop yours too. (That’s the Four Knights Game.)'],
+        ['f3e5', 'Whoa! White gives up a knight for a pawn: the Halloween Gambit 🎃'],
+        ['c6e5', 'Take it! You’re a whole knight ahead.'],
+        ['d2d4', 'White kicks your knight with d4.'],
+        ['e5g6', 'Knight to g6.'],
+        ['e4e5', 'White kicks your other knight!'],
+        ['f6g8', 'Back home to g8. Don’t worry: you’re still a knight ahead.'],
+        ['f1c4', 'White aims at f7.'],
+        ['d7d6', 'Push d6! It attacks White’s e5 pawn and opens the door for your bishop.'],
+        ['d1f3', 'White’s queen and bishop BOTH aim at f7. Danger!'],
+        ['d8d7', 'Protect f7 with Qd7. Now f7 is safe, and you’re still a knight ahead!']],
+      alts: [
+        { at: 14, line: [
+          ['e5d6', 'White takes your d6 pawn.'],
+          ['f8d6', 'Take back with your bishop. It’s developed now!'],
+          ['e1g1', 'White castles.'],
+          ['g8f6', 'Bring your knight back out, then castle too. You’re a knight ahead!']] }] },
+      { id: 'vsshilling', e: '🪙', n: 'Beat the Blackburne Shilling', side: 'w', counter: 1, d: 'When a knight jumps to d4, the e5 pawn looks free. It’s a trap! Trade the knight instead, castle, and you’re better.', plan: [['Take on d4 with your c-pawn (cxd4) for a big center. If Black takes on c3 first, take back with your knight!', 'c3d4'], ['Push d3 to open the door for your other bishop, then pin Black’s knight with Bg5.', 'd2d3 c1g5'], ['Knight to c3, and push e5 when you’re ready. Black’s king is still in the middle!', 'b1c3']], line: [
+        ['e2e4', 'Push your e-pawn to e4.'],
+        ['e7e5', 'Black answers e5.'],
+        ['g1f3', 'Knight to f3.'],
+        ['b8c6', 'Black protects e5.'],
+        ['f1c4', 'Bishop to c4, aiming at f7.'],
+        ['c6d4', 'Black’s knight jumps to d4. It looks like a mistake, because e5 is free now…'],
+        ['f3d4', 'Don’t take e5! That’s the trap (Qg5 is coming). Trade the knight instead: Nxd4.'],
+        ['e5d4', 'Black takes back.'],
+        ['e1g1', 'Castle! Your king is safe.'],
+        ['g8f6', 'Black attacks your e4 pawn.'],
+        ['f1e1', 'Protect it with your rook.'],
+        ['d7d6', 'Black pushes d6 to open a path for its bishop.'],
+        ['c2c3', 'Push c3! It attacks Black’s d4 pawn. When the center opens, your pieces are faster.']] },
+      { id: 'vsfishing', e: '🎣', n: 'Beat the Fishing Pole', side: 'w', counter: 1, d: 'Black dangles a knight on g4 as bait. If you take it with your h-pawn, the h-file opens for Black’s queen and rook. Here’s how to dodge it!', plan: [['If Black’s bishop attacks your knight with Bc5, step back to b3 (or protect it with c3).', 'd4b3'], ['Then Black’s knight on g4 is in big trouble: hxg4! If Black takes back, your queen grabs g4.', 'h3g4 d1g4'], ['Then develop: Nc3 and Re1. You’re ahead!', 'b1c3 f1e1']], line: [
+        ['e2e4', 'Push your e-pawn to e4.'],
+        ['e7e5', 'Black answers e5.'],
+        ['g1f3', 'Knight to f3.'],
+        ['b8c6', 'Black protects e5.'],
+        ['f1b5', 'Bishop to b5: the Ruy Lopez!'],
+        ['g8f6', 'Black attacks your e4 pawn.'],
+        ['e1g1', 'Castle your king to safety.'],
+        ['f6g4', 'Black’s knight hops to g4. Hmm, what’s it doing there?'],
+        ['h2h3', 'Kick it with h3.'],
+        ['h7h5', 'Black doesn’t move the knight! It protects it with h5. That’s the Fishing Pole 🎣'],
+        ['d2d4', 'DON’T take the knight: hxg4?? opens the h-file for Black’s queen and rook. Hit the center with d4 instead!'],
+        ['e5d4', 'Black takes your pawn.'],
+        ['f3d4', 'Take back! Now your queen on d1 ALSO attacks the knight on g4. Black’s bait is in trouble!']],
+      alts: [
+        { at: 9, line: [
+          ['g4f6', 'Black’s knight runs back to f6. You got h3 for free!'],
+          ['f1e1', 'Rook to e1, guarding e4.'],
+          ['d7d6', 'Black protects e5.'],
+          ['d2d4', 'Push d4 and take over the center!']] }] },
+      { id: 'vsenglund', e: '🪝', n: 'Beat the Englund Gambit', side: 'w', counter: 1, d: 'Black gives up a pawn on move 1 and sets a queen trap. Dodge it with Nc3, and you get a big lead in development!', plan: [['Castle! Your king is safe, and Black’s queen is still in the middle.', 'e1g1'], ['Kick the queen with f4 (or bring a rook to e1). Every time it moves, you get a free move!', 'f2f4'], ['Bring out your last bishop and put your rooks in the middle. You’re way ahead!', 'c1e3']], line: [
+        ['d2d4', 'Push your d-pawn to d4.'],
+        ['e7e5', 'Black plays e5: the Englund Gambit 🪝 It just gives you a pawn!'],
+        ['d4e5', 'Take it: dxe5.'],
+        ['b8c6', 'Black attacks your pawn.'],
+        ['g1f3', 'Protect it with Nf3.'],
+        ['d8e7', 'Black’s queen attacks e5 too, and sets a trap.'],
+        ['b1c3', 'The trap is Bf4?? Qb4+, hitting b2. Play Nc3 instead: it blocks that check, and your bishop keeps guarding b2.'],
+        ['c6e5', 'Black wins the pawn back.'],
+        ['e2e4', 'Push e4! Grab the center.'],
+        ['g8f6', 'Black attacks your e4 pawn.'],
+        ['f3e5', 'Trade knights: Nxe5.'],
+        ['e7e5', 'Black takes back. Its queen is out early again!'],
+        ['f1d3', 'Protect e4 with Bd3. Next: castle, then kick the queen. You’re way ahead in development!']] },
+      { id: 'vsbudapest', e: '🇭🇺', n: 'Beat the Budapest Gambit', side: 'w', counter: 1, d: 'Black hits back against d4 with a smothered-mate trap. One quiet move (e3!) stops it, and you get a comfy game.', plan: [['Now kick the bishop with a3. If it takes your knight, take back with the queen.', 'a2a3'], ['Put your queen on c2 and a rook on d1. The d-file is yours!', 'd1c2 f1d1'], ['Push b4 and c5 later to grab space on the queen side.', 'b2b4']], line: [
+        ['d2d4', 'Push your d-pawn to d4.'],
+        ['g8f6', 'Black develops a knight.'],
+        ['c2c4', 'Push c4, like in the Queen’s Gambit.'],
+        ['e7e5', 'Black strikes back with e5: the Budapest Gambit 🇭🇺'],
+        ['d4e5', 'Take the pawn!'],
+        ['f6g4', 'Black’s knight attacks your e5 pawn.'],
+        ['c1f4', 'Protect e5 with your bishop.'],
+        ['b8c6', 'Black attacks e5 again.'],
+        ['g1f3', 'Protect it again with Nf3.'],
+        ['f8b4', 'Check from the bishop!'],
+        ['b1d2', 'Block with your knight.'],
+        ['d8e7', 'Black’s queen joins the attack on e5, and lines up on the e-file.'],
+        ['e2e3', 'The key move: e3! Never a3 here: Black has a smothered-mate trap on d3. With e3, your king and bishop get room.'],
+        ['g4e5', 'Black wins its pawn back.'],
+        ['f3e5', 'Trade knights.'],
+        ['c6e5', 'Black takes back.'],
+        ['f1e2', 'Bishop to e2, getting ready to castle.'],
+        ['e8g8', 'Black castles.'],
+        ['e1g1', 'You castle too! Your king is safe and the trap is gone.']] },
+      { id: 'vskg', e: '🤴', n: 'Beat the King’s Gambit', side: 'b', counter: 1, d: 'Take White’s f-pawn, then hit back right away with d5! White never gets the wild attack it wanted.', plan: [['Castle! Your king is safe.', 'e8g8'], ['Bring your knight to c6 and your bishop to e6. Everything is protected.', 'b8c6 c8e6'], ['Hold on to your f4 pawn if you can. It blocks White’s bishop on c1, and you’re a pawn ahead!', '']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['e7e5', 'Answer with e5.'],
+        ['f2f4', 'White offers a pawn: the King’s Gambit 🤴'],
+        ['e5f4', 'Take it! It’s free.'],
+        ['g1f3', 'White develops and stops Qh4+.'],
+        ['d7d5', 'Here’s the counter: strike back with d5! Now your pieces come out fast.'],
+        ['e4d5', 'White takes.'],
+        ['g8f6', 'Develop your knight. It attacks d5.'],
+        ['f1c4', 'White protects d5 with the bishop.'],
+        ['f6d5', 'Take the pawn with your knight. You’re still a pawn ahead!'],
+        ['e1g1', 'White castles.'],
+        ['f8e7', 'Bishop to e7, then castle. Your f4 pawn is a thorn in White’s side!']],
+      alts: [
+        { at: 8, line: [
+          ['f1b5', 'White gives a check instead.'],
+          ['c7c6', 'Block with c6, attacking the bishop!'],
+          ['d5c6', 'White takes.'],
+          ['b8c6', 'Take back with your knight. Your pieces are flying out!'],
+          ['d2d4', 'White grabs the center.'],
+          ['f8d6', 'Bishop to d6, protecting your f4 pawn. Next: castle!']] }] },
+      { id: 'vsdanish', e: '🇩🇰', n: 'Beat the Danish Gambit', side: 'b', counter: 1, d: 'White wants to give two pawns for an attack. Don’t grab them all! Hit back with d5, and you get an easy game.', plan: [['Knight to c6, attacking White’s d4 pawn.', 'b8c6'], ['Rook to e8, lining up against White’s king.', 'f8e8'], ['White’s d4 pawn is all alone. Attack it with your pieces and win it!', '']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['e7e5', 'Answer with e5.'],
+        ['d2d4', 'White attacks e5 with d4.'],
+        ['e5d4', 'Take the pawn.'],
+        ['c2c3', 'White offers another pawn: the Danish Gambit 🇩🇰'],
+        ['d7d5', 'Don’t be greedy! Hit back with d5. That’s the best answer.'],
+        ['e4d5', 'White takes.'],
+        ['d8d5', 'Take back with your queen. She’s strong in the middle.'],
+        ['c3d4', 'White takes back on d4.'],
+        ['f8b4', 'Check with your bishop!'],
+        ['b1c3', 'White blocks with the knight. It can’t attack your queen, because it’s pinned!'],
+        ['g8f6', 'Develop your knight.'],
+        ['g1f3', 'White develops too.'],
+        ['e8g8', 'Castle! Your king is safe.'],
+        ['f1e2', 'White gets ready to castle.'],
+        ['f6e4', 'Knight to e4! White’s pinned knight on c3 is attacked twice. You’re doing great!']],
+      alts: [
+        { at: 10, line: [
+          ['c1d2', 'White blocks the check with its bishop.'],
+          ['b4d2', 'Trade bishops, with check.'],
+          ['b1d2', 'White takes back.'],
+          ['g8f6', 'Develop your knight.'],
+          ['g1f3', 'White develops too.'],
+          ['e8g8', 'Castle! White’s d4 pawn is all alone, and you can attack it.']] }] },
+      { id: 'vsmorra', e: '🌪️', n: 'Beat the Smith-Morra', side: 'b', counter: 1, d: 'White wants to give a pawn for fast pieces. Say “no thanks” with Nf6, and play an easy, solid game.', plan: [['Trade pawns on e5 (dxe5) when you can, so your pieces get more room.', 'd6e5'], ['Push e6, bishop to e7, and castle.', 'e7e6 f8e7 e8g8'], ['White’s d4 pawn may end up all alone. Attack it with your knights!', '']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['c7c5', 'Play c5: the Sicilian.'],
+        ['d2d4', 'White pushes d4.'],
+        ['c5d4', 'Take the pawn.'],
+        ['c2c3', 'White offers a pawn: the Smith-Morra Gambit 🌪️'],
+        ['g8f6', 'Don’t take the pawn! Attack e4 with Nf6 instead.'],
+        ['e4e5', 'White kicks your knight.'],
+        ['f6d5', 'Jump to d5, a great square in the middle.'],
+        ['c3d4', 'White takes back on d4.'],
+        ['d7d6', 'Attack White’s e5 pawn with d6.'],
+        ['g1f3', 'White protects e5.'],
+        ['b8c6', 'Knight to c6: now e5 is attacked twice. No gambit, and an easy game for you!']],
+      alts: [
+        { at: 8, line: [
+          ['g1f3', 'White develops a knight first.'],
+          ['b8c6', 'Develop your knight too.'],
+          ['c3d4', 'White takes back on d4.'],
+          ['d7d6', 'Attack e5 with d6. Same idea!']] }] },
+      { id: 'vsalbin', e: '⚡', n: 'Beat the Albin Countergambit', side: 'w', counter: 1, d: 'Black gives a pawn to set a nasty trap where a pawn turns into a KNIGHT! Don’t play e3, and you stay a pawn ahead.', plan: [['Push a3, then b4. Your pawns march at Black’s king!', 'a2a3 b2b4'], ['Queen to a4 and knight to b3: they attack together.', 'd1a4 d2b3'], ['Hold on to your e5 pawn: it’s your extra pawn!', '']], line: [
+        ['d2d4', 'Push your d-pawn to d4.'],
+        ['d7d5', 'Black answers d5.'],
+        ['c2c4', 'Queen’s Gambit: c4!'],
+        ['e7e5', 'Black strikes back with e5: the Albin Countergambit ⚡'],
+        ['d4e5', 'Take the pawn!'],
+        ['d5d4', 'Black’s pawn pushes into your half of the board. It’s annoying!'],
+        ['g1f3', 'Develop your knight. DON’T play e3: Black has a famous trap (Bb4+ and dxe3) where its pawn turns into a knight!'],
+        ['b8c6', 'Black develops and attacks e5.'],
+        ['g2g3', 'Push g3: your bishop is going to g2.'],
+        ['c8e6', 'Black develops its bishop.'],
+        ['b1d2', 'Knight to d2. Later it can go to b3 to attack the d4 pawn.'],
+        ['d8d7', 'Black gets ready to castle queen side.'],
+        ['f1g2', 'Bishop to g2.'],
+        ['e8c8', 'Black castles queen side.'],
+        ['e1g1', 'You castle too. You’re a pawn ahead! Next: a3 and b4, attacking Black’s king.']] }
     ];
     // checkmate patterns: find the checkmate (n = in how many moves), or "drill" = checkmate a lone king against the computer
     // tests = positions for the test against the AI afterwards (all different from the lesson; each try uses a new one, sometimes flipped):
@@ -17192,7 +17867,7 @@
           '<button type="button" class="chs-link chs-tnext" data-tour="1">' + (game.tour.step + 1 < ns ? 'Next ▶' : 'Done ✓') + '</button>';
       }
       else if (game && game.mode === 'lesson') { if (game.done && game.phase !== 'test') el.innerHTML = '<button type="button" class="chs-link" data-test="1">🧪 Start the test against Test Bot</button>'; else el.textContent = lessonProgress(); }
-      else el.innerHTML = (game && game.planFor && OPEN[game.planFor] ? '<button type="button" class="chs-link" data-plan="1">🗺️ Your plan for the ' + esc(OPEN[game.planFor].n) + '</button> · ' : '') + '<button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
+      else el.innerHTML = (game && game.planFor && OPEN[game.planFor] ? '<button type="button" class="chs-link" data-plan="1">' + (OPEN[game.planFor].counter ? '🗺️ Your plan: ' : '🗺️ Your plan for the ') + esc(OPEN[game.planFor].n) + '</button> · ' : '') + '<button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
     }
     function guide() {
       openCard(function (c) {
@@ -17445,7 +18120,7 @@
     $('menuBtn').addEventListener('click', function () { cancelThinking(); clearTimeout(lessonTm); if (game && game.mode === 'lesson') { showLessons(viewOf(game.kind, lessonOf())); return; } pauseClock(); save(); showMenu(); });
     $('restart').addEventListener('click', function () {   // in a test, starting over counts as another try (and checkmates get a new position)
       if (!game || game.mode !== 'lesson') return;
-      if (game.phase === 'test') startTest(game.kind, game.lesson, game.attempt + 1, game.ver + 1); else startLesson(game.kind, game.lesson);
+      if (game.phase === 'test') startTest(game.kind, game.lesson, game.attempt + 1, game.ver + 1, game.route); else startLesson(game.kind, game.lesson);
     });
     $('tip').addEventListener('click', function (e) {
       if (e.target.closest('[data-guide]')) guide();
@@ -17460,9 +18135,9 @@
     // S.learn['op:italian']: 1 = you did the lesson (the test is still left), 2 = you passed the test too (⭐)
     var OPEN = {}, MATE = {}, lessonTm = 0;
     CHESS_OPENINGS.forEach(function (o) { OPEN[o.id] = o; }); CHESS_MATES.forEach(function (o) { MATE[o.id] = o; });
-    // three lesson lists: 'op' = 📖 openings, 'dead' = 💀 deadly openings (gambits and traps), 'mate' = ♚ checkmates
-    function lessonList(view) { return view === 'mate' ? CHESS_MATES : CHESS_OPENINGS.filter(function (L) { return !L.deadly === (view !== 'dead'); }); }
-    function viewOf(kind, L) { return kind === 'mate' ? 'mate' : L && L.deadly ? 'dead' : 'op'; }
+    // four lesson lists: 'op' = 📖 openings, 'dead' = 💀 deadly openings (gambits and traps), 'counter' = 🛡️ counters (beat the tricky stuff), 'mate' = ♚ checkmates
+    function viewOf(kind, L) { return kind === 'mate' ? 'mate' : L && L.counter ? 'counter' : L && L.deadly ? 'dead' : 'op'; }
+    function lessonList(view) { return view === 'mate' ? CHESS_MATES : CHESS_OPENINGS.filter(function (L) { return viewOf('op', L) === view; }); }
     function keyOf(view) { return view === 'mate' ? 'mate' : 'op'; }   // progress is saved as 'op:alien', 'mate:kiss', …
     function learned(view) { var k = keyOf(view); return lessonList(view).filter(function (L) { return S.learn[k + ':' + L.id] >= 2; }).length; }
     function testsLeft(view) { var k = keyOf(view); return lessonList(view).filter(function (L) { return S.learn[k + ':' + L.id] === 1; }).length; }
@@ -17471,13 +18146,19 @@
     function lessonOf() { return game.kind === 'op' ? OPEN[game.lesson] : MATE[game.lesson]; }
     function curPart() { return MATE[game.lesson].parts[game.part]; }
     function testOf() { return game.T; }   // the checkmate test position this try uses
-    function yourMoves(L, upto) { return L.line.slice(0, upto == null ? L.line.length : upto).filter(function (x, i) { return (i % 2 === 0) === (L.side === 'w'); }); }
+    function yourMoves(L, upto, line) { line = line || L.line; return line.slice(0, upto == null ? line.length : upto).filter(function (x, i) { return (i % 2 === 0) === (L.side === 'w'); }); }
+    // route 0 = the main line; route k = 😮 surprise k: the other side plays something else at move L.alts[k-1].at
+    function routes(L) { return 1 + (L && L.alts ? L.alts.length : 0); }
+    function routeOf(L, r) { var a = r && L.alts && L.alts[r - 1]; return a ? L.line.slice(0, a.at).concat(a.line) : L.line; }
+    function nameOf(L) { return L.counter ? 'how to ' + L.n.charAt(0).toLowerCase() + L.n.slice(1) : 'the ' + L.n; }   // “the Italian Game”, “how to beat the Alien Gambit”
+    function lineNow() { return routeOf(OPEN[game.lesson], game.route || 0); }
+    function altNow() { var L = OPEN[game.lesson]; return game.route && L.alts ? L.alts[game.route - 1] : null; }
     function lessonProgress() {
       var L = lessonOf(), tr = game.attempt > 1 ? ' · try #' + game.attempt : '';
       if (game.kind === 'op') {
-        var total = yourMoves(L).length, done = yourMoves(L, game.step).length;
+        var ln = lineNow(), total = yourMoves(L, null, ln).length, done = yourMoves(L, game.step, ln).length;
         if (game.phase === 'test') return '🧪 Test: ' + L.e + ' ' + L.n + ' · ' + (game.done ? 'all ' + total + ' moves right!' : 'move ' + Math.min(total, done + 1) + ' of ' + total) + tr;
-        return L.e + ' ' + L.n + ' · ' + (game.done ? 'all ' + total + ' of your moves done!' : 'your move ' + Math.min(total, done + 1) + ' of ' + total);
+        return L.e + ' ' + L.n + (game.route ? ' · 😮 surprise ' + game.route + ' of ' + L.alts.length : '') + ' · ' + (game.done ? 'all ' + total + ' of your moves done!' : 'your move ' + Math.min(total, done + 1) + ' of ' + total);
       }
       if (game.phase === 'test') return '🧪 Test: ' + L.e + ' ' + L.n + (testOf().drill ? ' · moves used: ' + game.mine + ' of ' + testOf().limit : '') + tr;
       return L.e + ' ' + L.n + (curPart().drill ? ' · practice' : ' · puzzle ' + (game.part + 1) + ' of ' + L.parts.length);
@@ -17487,16 +18168,16 @@
     function startLesson(kind, id) {
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
       var L = kind === 'op' ? OPEN[id] : MATE[id]; if (!L) return;
-      game = { mode: 'lesson', phase: 'learn', kind: kind, lesson: id, attempt: 0, ver: 0, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
+      game = { mode: 'lesson', phase: 'learn', kind: kind, lesson: id, route: 0, attempt: 0, ver: 0, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
       sel = null; targets = []; hint = null; last = null;
       if (kind === 'op') {
         game.you = game.orient = L.side; G.reset(); orient = game.orient;
         showGame();
-        lessonNext('Hoo! Let’s learn the ' + L.n + '. You play ' + (L.side === 'w' ? 'White ⚪' : 'Black ⚫') + '. ' + L.d);
+        lessonNext('Hoo! Let’s learn ' + nameOf(L) + '. You play ' + (L.side === 'w' ? 'White ⚪' : 'Black ⚫') + '. ' + L.d);
       } else setupPart(0, 'Hoo! This is the ' + L.n + '. ' + L.d);
     }
-    function lessonNext(intro) {   // openings: Coach Hoot plays the other side's move, or tells you yours
-      var L = OPEN[game.lesson], st = L.line[game.step];
+    function lessonNext(intro, keep) {   // openings: Coach Hoot plays the other side's move, or tells you yours (keep = the intro stays up after that move)
+      var ln = lineNow(), st = ln[game.step];
       if (!st) { lessonDone(); return; }
       if (G.turn() === game.you) { coachSays((intro ? intro + '\n👉 ' : '👉 ') + st[1]); render(); return; }
       game.busy = true; if (intro) coachSays(intro); render();
@@ -17504,8 +18185,8 @@
       lessonTm = setTimeout(function () {
         if (my !== token || !game || game.mode !== 'lesson') return;
         applyMove(st[0]); game.step++; game.busy = false;
-        var nx = L.line[game.step];
-        coachSays((G.turn() === 'w' ? '⚫ ' : '⚪ ') + st[1] + (nx ? '\n👉 ' + nx[1] : ''));
+        var nx = ln[game.step];
+        coachSays((keep && intro ? intro + '\n' : '') + (G.turn() === 'w' ? '⚫ ' : '⚪ ') + st[1] + (nx ? '\n👉 ' + nx[1] : ''));
         if (!nx) { lessonDone(); return; }
         render();
       }, intro ? 1700 : 850);
@@ -17523,7 +18204,7 @@
       hint = null; game.flash = '';   // an old ❌ shouldn't stick around after a new move
       if (game.phase === 'test') { testMove(uci, dragged); return; }
       if (game.kind === 'op') {
-        var st = OPEN[game.lesson].line[game.step];
+        var st = lineNow()[game.step];
         if (!st || uci !== st[0]) {
           game.wrong++; sound('wrong'); sel = null; targets = [];
           if (game.wrong >= 2 && st) hint = { from: st[0].slice(0, 2), to: st[0].slice(2, 4) };
@@ -17611,6 +18292,7 @@
     }
     function lessonDone() {   // the lesson part is done: first the 🗺️ plan for what comes next, then the test (the ⭐ waits until you pass it)
       var L = lessonOf(), kind = game.kind, key = kind + ':' + game.lesson, hasPlan = kind === 'op' && planOf(L).length > 0;
+      if (kind === 'op' && game.route) { altDone(); return; }   // (a 😮 surprise is done)
       if (!(S.learn[key] >= 1)) S.learn[key] = 1;
       game.done = true; game.busy = false; save();
       if (kind === 'op') sound('win');
@@ -17620,8 +18302,53 @@
       var my = token;
       lessonTm = setTimeout(function () {
         if (my !== token || !game || game.mode !== 'lesson' || game.phase === 'test' || !$('ov').hidden) return;
-        if (hasPlan) startPlan(function () { doneCard(kind, L); }); else doneCard(kind, L);
+        if (hasPlan) startPlan(function () { afterPlan(kind, L); }); else afterPlan(kind, L);
       }, kind === 'op' ? (hasPlan ? 2200 : 1300) : 900);
+    }
+    function afterPlan(kind, L) { if (kind === 'op' && L.alts && L.alts.length) altCard(L); else doneCard(kind, L); }
+    function altCard(L) {   // 😮 real opponents don't always play the moves from the lesson
+      var n = L.alts.length;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '😮'));
+        c.appendChild(mk('h3', null, 'What if they play something else?'));
+        c.appendChild(mk('p', null, 'Real opponents don’t always play the moves from the lesson. Let’s practice ' + (n === 1 ? 'a surprise' : n + ' surprises') + ' that ' + (L.side === 'w' ? 'Black' : 'White') + ' might try, so you know what to do and don’t panic!'));
+        var go = mk('button', 'btn', n === 1 ? '😮 Show me the surprise' : '😮 Show me the surprises'); go.type = 'button'; go.id = 'chs-altGo';
+        go.addEventListener('click', function () { startAlt(1); }); c.appendChild(go);
+        var skip = mk('button', 'btn ghost', '🧪 Skip to the test'); skip.type = 'button'; skip.id = 'chs-altSkip';
+        skip.addEventListener('click', function () { doneCard('op', L); }); c.appendChild(skip);
+      });
+    }
+    function startAlt(k) {   // back to where the other side can surprise you, then play 😮 surprise k
+      var L = OPEN[game.lesson], a = L.alts[k - 1];
+      cancelThinking(); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
+      game.phase = 'learn'; game.route = k; game.step = a.at; game.done = false; game.busy = false; game.wrong = 0; game.tour = null; game.flash = '';
+      G.reset(); game.moves = []; game.sans = [];
+      L.line.slice(0, a.at).forEach(function (x) { var mv = G.move(x[0]); if (mv) { game.moves.push(mv.uci); game.sans.push(mv.san); } });
+      var lu = game.moves[game.moves.length - 1];
+      last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null; sel = null; targets = []; hint = null; orient = game.orient = L.side;
+      lessonNext('😮 Surprise ' + k + ' of ' + L.alts.length + ': what if ' + (L.side === 'w' ? 'Black' : 'White') + ' doesn’t play ' + G.sanOf(L.line[a.at][0]) + '?', true);
+    }
+    function altDone() {   // on to the next surprise, or to the test
+      var L = OPEN[game.lesson], k = game.route, more = k < L.alts.length;
+      game.done = true; game.busy = more; sound('win');
+      coachSays((game.coach || '').replace(/^👉 /, '') + '\n✅ ' + pick(['Now you know what to do!', 'No need to panic!', 'Surprise handled!']) + (more ? ' Here comes another surprise…' : ' Now you’re ready for the test!'));
+      render();
+      var my = token;
+      lessonTm = setTimeout(function () {
+        if (my !== token || !game || game.mode !== 'lesson' || game.phase === 'test' || !$('ov').hidden) return;
+        if (more) startAlt(k + 1); else doneCard('op', L);
+      }, more ? 2600 : 1800);
+    }
+    function practiceAlts(id) {   // straight to the 😮 surprises of a lesson
+      var L = OPEN[id];
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
+      game = { mode: 'lesson', phase: 'learn', kind: 'op', lesson: id, route: 0, attempt: 0, ver: 0, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: L.side, orient: L.side, moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
+      orient = L.side; G.reset(); showGame(); startAlt(1);
+    }
+    function toMainEnd(L) {   // the board at the end of the main line (where the 🗺️ plan's arrows start)
+      game.route = 0; game.step = L.line.length; G.reset(); game.moves = []; game.sans = [];
+      L.line.forEach(function (x) { var mv = G.move(x[0]); if (mv) { game.moves.push(mv.uci); game.sans.push(mv.san); } });
+      var lu = game.moves[game.moves.length - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
     }
     function doneCard(kind, L) {
       openCard(function (c) {
@@ -17645,7 +18372,7 @@
     function lessonHint() {
       if (!game || game.mode !== 'lesson' || game.phase === 'test' || game.done || game.busy || hintBusy) return;
       game.hints++;
-      if (game.kind === 'op') { var st = OPEN[game.lesson].line[game.step]; if (st) { hint = { from: st[0].slice(0, 2), to: st[0].slice(2, 4) }; sel = null; targets = []; render(); } return; }
+      if (game.kind === 'op') { var st = lineNow()[game.step]; if (st) { hint = { from: st[0].slice(0, 2), to: st[0].slice(2, 4) }; sel = null; targets = []; render(); } return; }
       var P = curPart(), my = ++token; hintBusy = true; render();
       ask(P.drill ? { time: 900 } : { depth: 2 * game.left + 1, time: 3000 }, function (r) {
         if (my !== token) return;
@@ -17663,13 +18390,14 @@
       var head = mk('div', 'panel chs-lhead');
       head.innerHTML = (view === 'op' ? '<div class="chs-big">📖</div><h2>Openings</h2><p>The first moves of the game, the way great players do it. You play the moves, and Coach Hoot 🦉 explains why each one is good.</p>' :
         view === 'dead' ? '<div class="chs-big">💀</div><h2>Deadly Openings</h2><p>Gambits and traps that can win in a flash! Learn them to surprise your opponents… and so they never work on YOU.</p>' :
+        view === 'counter' ? '<div class="chs-big">🛡️</div><h2>Counters</h2><p>How to beat tricky gambits and traps when someone plays them against YOU. The best answers are hard to find on the spot, so learn them now!</p>' :
         '<div class="chs-big">♚</div><h2>Checkmates</h2><p>Learn famous checkmate patterns, then find the checkmate yourself! At the end, practice checkmating a lone king.</p>') +
-        '<p class="chs-lnote">🧪 After each lesson, 🤖 Test Bot tests you with no hints. Make a mistake and you try again. Pass to earn your ⭐<br><b>' + esc(learnedText(view)) + '</b></p>';
+        '<p class="chs-lnote">🧪 After each lesson, 🤖 Test Bot tests you with no hints' + (view === 'mate' ? '' : ', and it might surprise you with different moves 😮') + '. Make a mistake and you try again. Pass to earn your ⭐<br><b>' + esc(learnedText(view)) + '</b></p>';
       m.appendChild(head);
       var list = mk('div', 'chs-lessons');
       lessonList(view).forEach(function (L) {
         var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
-        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
+        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
         b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
           (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
         b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
@@ -17693,6 +18421,10 @@
           var sp = mk('button', 'btn ghost', L.mate ? '🗺️ What if they don’t fall for it?' : '🗺️ See the game plan'); sp.type = 'button'; sp.id = 'chs-seePlan';
           sp.addEventListener('click', function () { viewPlan(L.id); }); c.appendChild(sp);
         }
+        if (kind === 'op' && L.alts) {
+          var sa = mk('button', 'btn ghost', '😮 Practice the surprises (' + L.alts.length + ')'); sa.type = 'button'; sa.id = 'chs-seeAlts';
+          sa.addEventListener('click', function () { practiceAlts(L.id); }); c.appendChild(sa);
+        }
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
       });
     }
@@ -17713,6 +18445,7 @@
     function startPlan(done) {   // walk through the plan on the board, one step at a time
       var L = OPEN[game.lesson];
       if (L.mate) { planCard(L, done); return; }   // a trap that ended the game: the plan is for when they DON'T fall for it
+      if (game.route) toMainEnd(L);   // (after a 😮 surprise: back to the main line, where the arrows start)
       closeCard(); sel = null; targets = []; hint = null;
       game.tour = { step: 0, done: done };
       showPlanStep();
@@ -17747,7 +18480,7 @@
       var L = OPEN[id];
       if (L.mate) { planCard(L, function () { lessonChoice('op', L); }); return; }
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
-      game = { mode: 'lesson', phase: 'learn', kind: 'op', lesson: id, attempt: 0, ver: 0, part: 0, step: L.line.length, wrong: 0, left: 0, mine: 0, you: L.side, orient: L.side, moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: true, failed: '' };
+      game = { mode: 'lesson', phase: 'learn', kind: 'op', lesson: id, route: 0, attempt: 0, ver: 0, part: 0, step: L.line.length, wrong: 0, left: 0, mine: 0, you: L.side, orient: L.side, moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: true, failed: '' };
       G.reset(); L.line.forEach(function (x) { var mv = G.move(x[0]); if (mv) { game.moves.push(mv.uci); game.sans.push(mv.san); } });
       var lu = game.moves[game.moves.length - 1];
       orient = L.side; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null; sel = null; targets = []; hint = null;
@@ -17775,17 +18508,18 @@
       return out;
     }
     var testPin = null;   // (the automatic tests can pin which position comes first)
-    function startTest(kind, id, attempt, ver) {
+    function startTest(kind, id, attempt, ver, route) {
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
       var L = kind === 'op' ? OPEN[id] : MATE[id]; if (!L) return;
       attempt = attempt || 1; if (ver == null) ver = testPin != null ? testPin : (Math.random() * 9973) | 0;   // a new test starts on a random position
-      game = { mode: 'lesson', phase: 'test', kind: kind, lesson: id, attempt: attempt, ver: ver, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
+      game = { mode: 'lesson', phase: 'test', kind: kind, lesson: id, route: 0, attempt: attempt, ver: ver, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
       sel = null; targets = []; hint = null; last = null;
       var hi = attempt > 1 ? 'Try #' + attempt + '! ' : 'Beep boop! I’m Test Bot. ';
       if (kind === 'op') {
+        game.route = route != null ? route : ver % routes(L);   // 0 = the main line, or one of the 😮 surprises
         game.you = game.orient = orient = L.side; G.reset();
         game.todo = L.any ? yourMoves(L).map(function (x) { return x[0]; }) : null;   // a setup like the Hippo: any order works
-        coachSays(hi + 'Show me the ' + L.n + ' from memory: all ' + yourMoves(L).length + ' of your moves' + (L.any ? ', in any order you like' : '') + '. No hints!' + (L.side === 'b' ? ' I’ll go first.' : ''));
+        coachSays(hi + 'Show me ' + nameOf(L) + ' from memory' + (L.alts ? '' : ': all ' + yourMoves(L).length + ' of your moves') + (L.any ? ', in any order you like' : '') + '. No hints!' + (L.alts ? ' And watch out: I might not play the moves you expect! 😏' : '') + (L.side === 'b' ? ' I’ll go first.' : ''));
         showGame(); testNext(true); return;
       }
       var mv = mateVariants(L), pk = mv[ver % mv.length], T = game.T = L.tests[pk[0]], v = testVersions(T)[pk[1]], ai = T.ai ? flipUci(T.ai, v[0], v[1]) : null;
@@ -17806,29 +18540,29 @@
       }, 1700);
     }
     function testNext(first) {   // openings: Test Bot plays the other side's moves from the line
-      var L = OPEN[game.lesson], st = L.line[game.step];
+      var ln = lineNow(), st = ln[game.step], a = altNow();
       if (!st) { testPass(); return; }
       if (G.turn() === game.you) { render(); return; }
       game.busy = true; render();
-      var my = token;
+      var my = token, surprise = !!a && game.step === a.at;
       lessonTm = setTimeout(function () {
         if (my !== token || !isTest()) return;
         var x = applyMove(st[0]); game.step++; game.busy = false;
-        if (!L.line[game.step]) { testPass(); return; }
-        coachSays('I play ' + (x ? x.san : '…') + '. Your move!');
+        if (!ln[game.step]) { testPass(); return; }
+        coachSays((surprise ? '😏 Surprise! ' : '') + 'I play ' + (x ? x.san : '…') + '. Your move!');
         render();
       }, first ? 1500 : 800);
     }
     function mateIn1() { var ms = G.moves(); for (var i = 0; i < ms.length; i++) { G.move(ms[i].uci); var ok = G.status() === 'checkmate'; G.undo(); if (ok) return ms[i].uci; } return null; }
     function testMove(uci, dragged) {
       if (game.kind === 'op') {
-        var L = OPEN[game.lesson], st = L.line[game.step];
+        var L = OPEN[game.lesson], st = lineNow()[game.step], a = altNow();
         if (!st) return;
         if (L.any ? game.todo.indexOf(uci) < 0 : uci !== st[0]) {
           var want = st[0];
           if (L.any) { want = game.todo[0]; for (var w = 0; w < game.todo.length; w++) if (G.sanOf(game.todo[w])) { want = game.todo[w]; break; } }
           sel = null; targets = [];
-          testFail(L.any ? '❌ Oops! That’s not a ' + L.n + ' move. You could play ' + G.sanOf(want) + ' here (in blue).' : '❌ Oops! In the ' + L.n + ' you play ' + G.sanOf(st[0]) + ' here (in blue).', want);
+          testFail(L.any ? '❌ Oops! That’s not a ' + L.n + ' move. You could play ' + G.sanOf(want) + ' here (in blue).' : '❌ Oops! ' + (a && game.step > a.at ? 'After my surprise, you' : L.counter ? 'You' : 'In the ' + L.n + ', you') + ' play ' + G.sanOf(st[0]) + ' here (in blue).', want);
           return;
         }
         if (L.any) game.todo.splice(game.todo.indexOf(uci), 1);
@@ -17875,20 +18609,20 @@
       }, 1000);
     }
     function testFail(msg, answer, quiet) {   // a mistake: say what went wrong (the right move shows in blue), then the test starts over
-      var kind = game.kind, id = game.lesson, at = game.attempt, ver = game.ver;
+      var kind = game.kind, id = game.lesson, at = game.attempt, ver = game.ver, rt = game.route, a = kind === 'op' ? altNow() : null;
       game.busy = true; game.failed = '❌ Not quite! Get ready to try again…';
       if (!quiet) sound('wrong');
       if (answer) { hint = { from: answer.slice(0, 2), to: answer.slice(2, 4) }; sel = null; targets = []; }
-      coachSays(msg + '\n🔁 Let’s try the test again' + (kind === 'mate' ? ', with a new position!' : '!'));
+      coachSays(msg + '\n🔁 Let’s try the test again' + (kind === 'mate' ? ', with a new position!' : a && game.step > a.at ? ', with the same surprise!' : '!'));
       render();
       var my = token;
-      lessonTm = setTimeout(function () { if (my !== token || !isTest()) return; startTest(kind, id, at + 1, ver + 1); }, answer ? 4500 : 3800);
+      lessonTm = setTimeout(function () { if (my !== token || !isTest()) return; startTest(kind, id, at + 1, ver + 1, rt); }, answer ? 4500 : 3800);
     }
     function testPass() {
-      var L = lessonOf(), kind = game.kind, at = game.attempt, ver = game.ver, you = game.you, moves = game.moves.slice();
+      var L = lessonOf(), kind = game.kind, at = game.attempt, ver = game.ver, you = game.you, moves = game.moves.slice(), rt = kind === 'op' ? game.route || 0 : 0;
       S.learn[kind + ':' + game.lesson] = 2; game.done = true; game.busy = false; game.failed = ''; hint = null; save();
       sound('win'); flash(kind === 'op' ? '✅ All your moves were right!' : '🎉 Checkmate!');
-      coachSays(pick(['Bzzzt… you got me!', 'Beep… boop… I lost!', 'Error! Error! You’re too good!']) + ' ' + (kind === 'op' ? 'You really know the ' + L.n + '.' : 'That’s checkmate!') + ' You passed the test! ⭐');
+      coachSays(pick(['Bzzzt… you got me!', 'Beep… boop… I lost!', 'Error! Error! You’re too good!']) + ' ' + (kind === 'op' ? 'You really know ' + nameOf(L) + (rt ? ', even with my surprise' : '') + '.' : 'That’s checkmate!') + ' You passed the test! ⭐');
       render();
       var my = token;
       lessonTm = setTimeout(function () {
@@ -17899,14 +18633,14 @@
         openCard(function (c) {
           var view = viewOf(kind, L), list = lessonList(view), nx = list[list.indexOf(L) + 1];
           c.appendChild(mk('div', 'chs-big', '⭐'));
-          c.appendChild(mk('h3', null, 'Test passed! You ' + (kind === 'op' ? 'learned the ' : 'mastered the ') + L.n + '!'));
+          c.appendChild(mk('h3', null, 'Test passed! You ' + (kind === 'op' ? 'learned ' + nameOf(L) : 'mastered the ' + L.n) + '!'));
           c.appendChild(mk('p', 'chs-quote', '🤖 “' + pick(['Beep boop… you beat me fair and square!', 'My circuits are fried. Great job!', 'Bzzzt! You’re too good for me!']) + '”'));
-          c.appendChild(mk('p', null, (at === 1 ? '🎯 First try! ' : '💪 You kept trying and passed! ') + learned(view) + ' of ' + list.length + (view === 'mate' ? ' checkmates' : view === 'dead' ? ' deadly openings' : ' openings') + ' learned.'));
+          c.appendChild(mk('p', null, (at === 1 ? '🎯 First try! ' : '💪 You kept trying and passed! ') + (rt ? '😮 You handled my surprise too! ' : '') + learned(view) + ' of ' + list.length + (view === 'mate' ? ' checkmates' : view === 'dead' ? ' deadly openings' : view === 'counter' ? ' counters' : ' openings') + ' learned.'));
           if (kind === 'op' && !G.status()) {   // (not after a trap that ended in checkmate)
             var gm = goodMatch(), kp = mk('button', 'btn', '♟️ Keep playing vs ' + gm.e + ' ' + gm.n + ' (' + gm.elo + ')'); kp.type = 'button'; kp.id = 'chs-keepPlaying';
-            kp.addEventListener('click', function () { playFrom(gm.id, you, moves, L.id); }); c.appendChild(kp);
+            kp.addEventListener('click', function () { playFrom(gm.id, you, moves, L.mate || !rt ? L.id : null); }); c.appendChild(kp);
           }
-          if (kind === 'op' && planOf(L).length) {
+          if (kind === 'op' && planOf(L).length && (L.mate || !rt)) {   // (the plan's arrows are for the main line)
             var pp = mk('button', 'btn ghost', L.mate ? '🗺️ What if they don’t fall for it?' : '🗺️ What do I do next?'); pp.type = 'button'; pp.id = 'chs-passPlan';
             pp.addEventListener('click', function () { closeCard(); startPlan(showPass); }); c.appendChild(pp);
           }
@@ -18071,7 +18805,8 @@
       var learn = mk('div', 'chs-learn');
       learn.innerHTML = '<button type="button" class="chs-lbtn" data-learn="op"><span class="chs-lic">📖</span><b>Openings</b><small>' + learnedText('op') + '</small></button>' +
         '<button type="button" class="chs-lbtn" data-learn="mate"><span class="chs-lic">♚</span><b>Checkmates</b><small>' + learnedText('mate') + '</small></button>' +
-        '<button type="button" class="chs-lbtn chs-ldead" data-learn="dead"><span class="chs-lic">💀</span><b>Deadly Openings</b><small>Gambits and traps that win fast · ' + learnedText('dead') + '</small></button>';
+        '<button type="button" class="chs-lbtn chs-ldead" data-learn="dead"><span class="chs-lic">💀</span><b>Deadly Openings</b><small>Gambits and traps that win fast · ' + learnedText('dead') + '</small></button>' +
+        '<button type="button" class="chs-lbtn chs-lctr" data-learn="counter"><span class="chs-lic">🛡️</span><b>Counters</b><small>Beat tricky gambits and traps · ' + learnedText('counter') + '</small></button>';
       learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (b) showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>1v1 a friend, or play a bot</small>'; m.appendChild(ph);
@@ -18159,7 +18894,7 @@
       load: function (fen, you, botId) { cancelThinking(); closeCard(); game = { mode: botId ? 'bot' : 'friend', bot: botId || null, pick: you || 'w', you: botId ? you || 'w' : null, orient: you || 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, fen: fen }; G.load(fen); orient = game.orient; last = null; sel = null; targets = []; hint = null; save(); showGame(); },
       bots: CHESS_BOTS, book: CHESS_BOOK, engine: function () { return G; }, worker: function () { return worker; },
       openings: CHESS_OPENINGS, mates: CHESS_MATES, lesson: function (kind, id) { startLesson(kind, id); },
-      test: function (kind, id, attempt, ver) { startTest(kind, id, attempt || 1, ver); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); },
+      test: function (kind, id, attempt, ver, route) { startTest(kind, id, attempt || 1, ver, route); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); }
     };
