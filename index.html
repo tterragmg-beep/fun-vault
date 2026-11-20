@@ -1112,6 +1112,40 @@
   .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
   .chs-pick { margin-top: 14px; text-align: left; }
   .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1296,6 +1330,8 @@
   .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
   .chs-pick { margin-top: 14px; text-align: left; }
   .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -16324,7 +16360,7 @@
       o = o || {};
       var lm = legalMoves(), t0 = now(), want = [], j;
       for (j = 0; j < list.length; j++) want.push(findUci(list[j]) || 0);
-      if (!lm.length || !want[0]) return null;
+      if (!lm.length || (want.length && !want[0])) return null;   // (an empty list: just the best move, and o.threat)
       nodes = 0; stopped = false; selDepth = 0; useQS = true; farBlindPly = -1; nodeLimit = 0; stopAt = t0 + (o.time || 800);
       for (j = 0; j < killers.length; j++) killers[j] = 0;
       for (j = 0; j < hist.length; j++) hist[j] >>= 2;
@@ -16349,10 +16385,21 @@
         res = { best: bm1, bestScore: s1, scores: scoreAt(1, s1, bm1), depth: 1 };
       }
       var u = want[0], b = res.best;
-      var out = { uci: moveUci(u), san: san(u, lm), score: res.scores[0], scores: res.scores, sans: want.map(function (m) { return m ? san(m, lm) : null; }),
+      var out = { uci: u ? moveUci(u) : null, san: u ? san(u, lm) : null, score: u ? res.scores[0] : null, scores: res.scores, sans: want.map(function (m) { return m ? san(m, lm) : null; }), inCheck: inCheck(),
         best: moveUci(b), bestSan: san(b, lm), bestScore: res.bestScore, depth: res.depth,
         bestCap: pieceOn((b >> 7) & 127) || ((b >>> 17) & 2 ? 'P' : ''), bestTo: sqName((b >> 7) & 127) };
-      out.mate = mateIn(out.score); out.bestMate = mateIn(out.bestScore);
+      out.mate = u ? mateIn(out.score) : 0; out.bestMate = mateIn(out.bestScore);
+      if (o.threat && !out.inCheck) {   // 🗺️ what is the other side threatening? (as if it could move twice in a row)
+        makeNull();
+        var lm3 = legalMoves();
+        if (lm3.length) {
+          stopped = false; stopAt = now() + 250; var tb = 0, tsc = 0;
+          for (var d3 = 1; d3 <= Math.max(1, Math.min(4, res.depth - 1)); d3++) { rootBest = 0; var s3 = negamax(d3, -INF, INF, 0, false); if (stopped) break; if (rootBest) { tb = rootBest; tsc = s3; } }
+          if (tb) out.threat = { uci: moveUci(tb), san: san(tb, lm3), to: sqName((tb >> 7) & 127), cap: pieceOn((tb >> 7) & 127) || ((tb >>> 17) & 2 ? 'P' : ''), score: tsc, mate: mateIn(tsc) > 0 };
+        }
+        unmakeNull();
+      }
+      if (!u) { useQS = true; farBlindPly = -1; stopAt = 0; out.ms = now() - t0; return out; }
       make(u);
       var lm2 = legalMoves();
       out.after = !lm2.length ? (inCheck() ? 'checkmate' : 'stalemate') : insufficient() ? 'material' : half >= 100 ? 'fifty' : repeats(true) >= 2 ? 'repetition' : '';
@@ -18336,7 +18383,7 @@
       }
       if (game.mode === 'drill' || (game.pr && game.pr.state && !game.over)) {   // 🎯 fixing a mistake (in a practice game, or 🧩 one you saved)
         var fl2 = game.flash && Date.now() < game.flashT ? game.flash : '', ps = game.pr && game.pr.state, fx = game.pr && game.pr.fix;
-        t = !game.pr ? '🧩 All done!' : fl2 || (ps === 'check' ? '🦉 Coach Hoot is checking your move…' : ps === 'oops' ? OOPS[fx.kind] : ps === 'try' ? '🦉 Let’s see…' : ps === 'wrong' ? '❌ Not that one…' :
+        t = !game.pr ? '🧩 All done!' : fl2 || (ps === 'check' ? '🦉 Coach Hoot is checking your move…' : ps === 'advise' ? '🦉 Coach Hoot is thinking…' : ps === 'oops' ? OOPS[fx.kind] : ps === 'try' ? '🦉 Let’s see…' : ps === 'wrong' ? '❌ Not that one…' :
           ps === 'solved' ? '✅ Solved!' : game.mode === 'drill' ? '🧩 Find a better move!' : fx && fx.kind === 'book' ? '📖 Play the lesson move!' : fx && fx.kind === 'missedmate' ? '🎯 Find the checkmate!' : '🎯 Find a better move!');
         el.textContent = t; el.className = cls + (/^✅/.test(t) ? ' win' : /^(❌|😬|😱|😮|📖 Oops)/.test(t) ? ' lose' : '');
         $('after').hidden = true; return;
@@ -18349,7 +18396,7 @@
       } else if (game.mode === 'friend') t = (G.turn() === 'w' ? '⚪ ' : '⚫ ') + duelName(G.turn()) + '’s turn' + (G.inCheck() ? ' · Check!' : '');
       else if (game.practice && game.flash && Date.now() < game.flashT) t = game.flash;   // ✅ Much better!
       else if (thinking) t = '🤔 ' + BOT[game.bot].n + ' is thinking…';
-      else if (G.turn() === game.you) t = G.inCheck() ? '⚠️ Check! Save your king!' : hintBusy ? '💡 Finding a good move…' : 'Your move';
+      else if (G.turn() === game.you) t = G.inCheck() ? '⚠️ Check! Save your king!' : hintBusy ? '💡 Finding a good move…' : game.after && AFTERST[game.after.mode] ? AFTERST[game.after.mode] : 'Your move';
       el.textContent = t; el.className = cls + (!game.over && /^✅/.test(t) ? ' win' : '');
       $('after').hidden = !game.over;
       if (game.over) { $('rematch').textContent = game.mode === 'friend' ? '🔁 Rematch' : '🔁 Play again'; $('pick').textContent = game.mode === 'friend' ? '♟️ Menu' : '🤖 Pick a bot'; }
@@ -18376,7 +18423,7 @@
     }
     function renderTip() {   // tap a piece: it says what it is and how it moves
       var el = $('tip'), pc = sel ? pieceAt(sel) : null, ps = game && game.pr ? game.pr.state : null;
-      if (game && game.practice && ps && ps !== 'check' && !game.over) el.innerHTML = practiceTip();   // 🦉 Coach Hoot's box stays up while you fix a mistake
+      if (game && game.practice && !game.over && ((ps && ps !== 'check') || game.after)) el.innerHTML = practiceTip();   // (🗺️ the plan's box stays up while you pick a piece)   // 🦉 Coach Hoot's box stays up while you fix a mistake
       else if (pc && game && !game.over) el.innerHTML = '<b>' + (pc.charAt(0) === 'w' ? 'White ' : 'Black ') + HOW[pc.charAt(1)][0].toLowerCase() + ':</b> ' + HOW[pc.charAt(1)][1];
       else if (game && game.tour) {   // 🗺️ step 2 of 4 · 👉 Your move! (a step with nothing to play: Next ▶)
         var ns = planOf(OPEN[game.lesson]).length;
@@ -18485,7 +18532,10 @@
     function userMove(uci, dragged) { if (game.tour) planMove(uci, dragged); else if (game.pr && game.pr.state === 'fix') fixMove(uci, dragged); else if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
     function playMove(uci, byBot, dragged) {
       var mover = G.turn(), left = clockOn() && !game.over && game.clock.at ? clockLeft(mover) : null;
+      var capB = byBot && game.after ? pieceAt(uci.slice(2, 4)) : '';   // (🗺️ what the bot takes, if anything)
       var x = G.move(uci); if (!x) return false;
+      if (byBot && game.after) game.after.bot = { san: x.san, to: x.to, cap: capB ? capB.charAt(1) : x.ep ? 'P' : '' };
+      if (!byBot && game.practice) game.arrows = null;
       if (clockOn() && !game.over) { if (left != null) game.clock[mover] = left; game.clock.at = Date.now(); }   // the other player's clock starts
       game.moves.push(x.uci); game.sans.push(x.san);
       last = { from: x.from, to: x.to }; sel = null; targets = []; hint = null; hintBusy = false;
@@ -18497,6 +18547,7 @@
       if (game.mode === 'friend' && game.flip && !game.over) { clearTimeout(flipTm); flipTm = setTimeout(turnBoard, 650); }
       if (watch) practiceCheck(x, st);
       else if (!game.over) setTimeout(botTurn, 60);
+      if (byBot && game.after && !game.over) setTimeout(adviseNow, 30);   // 🗺️ your turn: what now?
       return true;
     }
     function react(x, byBot, chk) {
@@ -18583,7 +18634,7 @@
           if (game.firstWin) { var nb = nextBot(); c.appendChild(mk('p', null, '🎉 First win against ' + bot.n + '!' + (nb ? ' Next challenge: ' + nb.e + ' ' + nb.n + ' (' + nb.elo + ').' : ' You’ve beaten EVERY bot. You’re a chess legend!'))); }
         }
         if (game.practice) practiceSummary(c);   // 🎯 the mistakes you fixed, and what to practice next
-        var again = mk('button', 'btn', game.mode === 'friend' ? '🔁 Rematch (switch colors)' : game.practice ? '🔁 Practice again' : '🔁 Play again'); again.type = 'button'; again.id = 'chs-again'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
+        var again = mk('button', 'btn', game.mode === 'friend' ? '🔁 Rematch (switch colors)' : game.after ? '🔁 Same opening again' : game.practice ? '🔁 Practice again' : '🔁 Play again'); again.type = 'button'; again.id = 'chs-again'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
         var row = mk('div', 'chs-row');
         var pk = mk('button', 'btn ghost', game.mode === 'friend' ? '♟️ Menu' : game.practice ? '🎯 Practice' : '🤖 Bots'); pk.type = 'button'; pk.addEventListener('click', function () { closeCard(); showMenu(); });
         var look = mk('button', 'btn ghost', '👀 See board'); look.type = 'button'; look.addEventListener('click', closeCard);
@@ -18592,6 +18643,7 @@
     }
     function rematch() {
       if (game && game.mode === 'friend') { var nm = game.names || ['Player 1', 'Player 2']; newDuel([nm[1], nm[0]], game.clock ? game.clock.base / 60000 : 0, !!game.flip); return; }   // 1v1: switch colors
+      if (game && game.after && OPEN[game.after.id]) { startAfter(game.after.id, game.bot); return; }   // 🗺️ the same opening again
       if (game) newGame(game.mode, game.bot, game.pick, game.practice);
     }
 
@@ -18626,6 +18678,7 @@
       for (var i = 0; i < n; i++) { G.undo(); game.moves.pop(); game.sans.pop(); }
       if (game.mode === 'friend') { if (game.flip) orient = game.orient = G.turn(); resumeClock(); }
       game.undos = (game.undos || 0) + 1; game.botScore = null;
+      if (game.after) { game.after.mode = ''; game.after.want = null; game.after.text = ''; game.arrows = null; setTimeout(adviseNow, 30); }
       var lu = game.moves[game.moves.length - 1]; last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null;
       sel = null; targets = []; hint = null;
       save(); render(); botTurn();
@@ -18963,6 +19016,8 @@
         if (kind === 'op' && planOf(L).length) {
           var sp = mk('button', 'btn ghost', L.mate ? '🗺️ What if they don’t fall for it?' : '🗺️ Play the game plan'); sp.type = 'button'; sp.id = 'chs-seePlan';
           sp.addEventListener('click', function () { viewPlan(L.id); }); c.appendChild(sp);
+          var ap = mk('button', 'btn ghost', '🗺️ Play what comes next (vs a bot)'); ap.type = 'button'; ap.id = 'chs-afterLes';
+          ap.addEventListener('click', function () { closeCard(); openAfter(L.id); }); c.appendChild(ap);
         }
         if (kind === 'op' && L.alts) {
           var sa = mk('button', 'btn ghost', '😮 Practice the surprises (' + L.alts.length + ')'); sa.type = 'button'; sa.id = 'chs-seeAlts';
@@ -19334,13 +19389,13 @@
       return bookLines().filter(function (b) { return b.L.side === you && b.u.length > n && b.u.slice(0, n).join(' ') === key; });
     }
     function cp(s) { return Math.max(-1500, Math.min(1500, s || 0)); }   // (every checkmate counts as ±15 pawns: mate in 1 or in 3 is just “winning”)
-    function judge(r) {   // was it a mistake? '' = the move is fine
+    function judge(r, lim) {   // was it a mistake? '' = the move is fine (lim: how much worse than the best move counts as a blunder)
       if (!r || r.uci === r.best || r.after === 'checkmate') return '';
       var loss = cp(r.bestScore) - cp(r.score);
       if (r.mate < 0 && !(r.bestMate < 0)) return 'mated';   // it walks into a checkmate
       if (r.after && r.bestScore >= 300) return 'draw';   // stalemate (or another draw) when you were winning
       if (r.bestMate > 0 && r.bestMate <= 3 && !(r.mate > 0)) return 'missedmate';
-      if (loss >= 200 && (r.score < 300 || loss >= 400) && r.bestScore > -600) return 'blunder';
+      if (loss >= (lim || 200) && (r.score < 300 || loss >= 400) && r.bestScore > -600) return 'blunder';
       return '';
     }
     function fixOk(r) { return !!r && (r.after === 'checkmate' || (cp(r.bestScore) - cp(r.score) < 100 && !(r.mate < 0))); }   // close enough to the best move
@@ -19362,6 +19417,18 @@
       var bk = game.fen ? [] : bookAt(before, you), own = you === 'w' ? Math.ceil(n / 2) : Math.floor(n / 2);   // own = how many moves you played before this one
       var hit = bk.filter(function (b) { return b.u[n] === x.uci; });
       p.note = '';
+      var a = game.after, was = a ? a.mode : '';   // 🗺️ After the Opening: did you play what Coach Hoot showed?
+      if (a) {
+        var hitA = !!a.want && x.uci === a.want;
+        if (hitA && was === 'plan') { var pm = a.moves.filter(function (m) { return !m.done && m.u === x.uci; })[0]; if (pm) pm.done = true; }
+        a.mode = ''; a.want = null; a.text = '';
+        if (hitA) {
+          if (was === 'surprise') a.ok++;
+          p.note = was === 'plan' ? '✅ Plan move! (' + afterDid() + ' of ' + a.moves.length + ' done)' : was === 'surprise' ? '✅ Great answer!' : '👍 Good move!';
+          if (st) { finish(st); render(); } else { renderTip(); setTimeout(botTurn, 60); }
+          return;
+        }
+      }
       if (hit.length) {   // 📖 a move from your lessons: on with the game
         var ls = []; hit.forEach(function (b) { if (ls.indexOf(b.L) < 0) ls.push(b.L); });
         p.open = ls.length === 1 ? ls[0].e + ' ' + ls[0].n : '📖 Your opening lessons';
@@ -19376,7 +19443,7 @@
       askAt(before, { review: [x.uci].concat(lm), time: 700 }, function (r) {
         if (my !== token || !game || game.pr !== p || p.state !== 'check') return;
         p.state = null;
-        var kind = judge(r), les = null, ok = null, best = r && r.best, bestSan = r && r.bestSan, lt = '';
+        var kind = judge(r, was === 'surprise' ? 150 : 0), les = null, ok = null, best = r && r.best, bestSan = r && r.bestSan, lt = '';
         if (r && lm.length && own >= 1) {   // 📖 you were playing an opening from your lessons… and left it
           var bi = 1;
           for (var i = 2; i < r.scores.length; i++) if (r.scores[i] != null && (r.scores[bi] == null || r.scores[i] > r.scores[bi])) bi = i;
@@ -19386,6 +19453,8 @@
           else if (!kind) { p.note = '📖 You left the ' + les.n + ' here (the lesson plays ' + r.sans[bi] + '). Your move is okay too!'; les = null; }
         }
         if (!kind) {
+          if (a && was === 'surprise') { a.ok++; p.note = p.note || '✅ Good answer!'; }
+          else if (a && was === 'plan') p.note = p.note || '👍 That works too. The plan is still waiting for you!';
           if (st) { finish(st); render(); return; }
           renderStatus(); renderTools(); renderTip(); setTimeout(botTurn, 60); return;
         }
@@ -19469,6 +19538,11 @@
       if (p.state === 'oops') return cbox(fx.why + (game.arrows ? '\n👀 The red arrow shows what ' + botName() + ' would do.' : '')) +
         '<button type="button" class="btn slim chs-fixgo" id="chs-fixGo" data-fix="1">↩️ Take it back and try again</button>';
       if (fx && p.state && p.state !== 'check') return cbox(p.state === 'try' ? '🦉 Hmm, let’s see…' : fx.say);
+      var a = game.after;
+      if (a) {   // 🗺️ After the Opening: the plan's next step, or what to do about a surprise
+        var t = p.state === 'advise' ? '🦉 Hmm, let me look…' : G.turn() === game.you && a.text ? a.text : p.note;
+        return (t ? cbox(t) : '') + '<span class="chs-watch">🗺️ After the ' + esc(OPEN[a.id].n) + (a.moves.length ? ' · plan ' + afterDid() + '/' + a.moves.length : '') + '</span>';
+      }
       var hi = !game.moves.length || (game.moves.length === 1 && game.you === 'b') ? 'Hoo! I’m Coach Hoot. I’ll watch your moves. If you make a big mistake, we’ll stop and practice a better move!' : '';
       return (p.note || hi ? cbox(p.note || hi) : '') + '<span class="chs-watch">🦉 Coach Hoot is watching' + (p.open ? ' · ' + esc(p.open) : '') + '</span> · <button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
     }
@@ -19476,11 +19550,16 @@
       var p = game.pr;
       if (p.state === 'try' || p.state === 'wrong') { G.undo(); game.moves.pop(); game.sans.pop(); relast(); game.arrows = null; p.state = 'fix'; p.fix.say = fixAsk(p.fix); }
       else if (p.state === 'check') { p.state = null; var lu = game.moves[game.moves.length - 1]; if (lu && G.turn() !== game.you) practiceCheck({ uci: lu }, G.status()); }
+      else if (p.state === 'advise') { p.state = null; setTimeout(adviseNow, 50); }
     }
     function practiceSummary(c) {   // 🎯 the end of a practice game: the mistakes you fixed, and what to practice next
       var p = game.pr || { log: [], mist: [] }, log = p.log, box = mk('div', 'chs-psum');
       box.appendChild(mk('p', null, log.length ? '🦉 You fixed ' + log.length + (log.length === 1 ? ' mistake' : ' mistakes') + ' in this game:' : '🦉 No big mistakes in this game. Hoo hoo, great job!'));
       if (log.length) { var ul = mk('ul', 'chs-plog'); log.slice(-6).forEach(function (l) { ul.appendChild(mk('li', null, l.no + ' ' + l.bad + ' ❌ → ' + (l.good ? l.good + ' ✅' : '…'))); }); box.appendChild(ul); }
+      if (game.after) {   // 🗺️ how the plan went
+        var af = game.after, nmv = af.moves.length;
+        box.insertBefore(mk('p', 'chs-astat', '🗺️ ' + (nmv ? 'Plan moves played: ' + afterDid() + ' of ' + nmv : 'After the ' + OPEN[af.id].n) + (af.sup ? ' · 😮 Surprises answered: ' + Math.min(af.ok, af.sup) + ' of ' + af.sup : '')), box.firstChild);
+      }
       box.appendChild(mk('p', 'chs-sub', '🎯 Practice games don’t change your rating.'));
       c.appendChild(box);
       var ids = p.mist.filter(mistById);
@@ -19492,6 +19571,7 @@
         var lb = mk('button', 'btn ghost', '📖 Practice the ' + OPEN[l.les].n + ' lesson'); lb.type = 'button'; lb.setAttribute('data-les', l.les);
         lb.addEventListener('click', function () { closeCard(); startLesson('op', l.les); }); c.appendChild(lb);
       });
+      if (game.after) { var ao = mk('button', 'btn ghost', '🗺️ Another opening'); ao.type = 'button'; ao.id = 'chs-afterOther'; ao.addEventListener('click', function () { closeCard(); openAfter(); }); c.appendChild(ao); }
     }
     function openPractice() {   // 🎯 pick a bot to practice against
       var gm = goodMatch(), bot = BOT[S.pracBot] ? S.pracBot : gm.id, side = S.lastPick || 'w';
@@ -19512,6 +19592,155 @@
         c.appendChild(seg);
         var go = mk('button', 'btn', '▶ Start practicing'); go.type = 'button'; go.id = 'chs-pgo';
         go.addEventListener('click', function () { S.pracBot = pk.value; S.lastPick = side; closeCard(); newGame('bot', pk.value, side, true); });
+        c.appendChild(go);
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+
+    // ---- 🗺️ After the Opening: start at the end of an opening you know and play on against a bot ----
+    // Every turn Coach Hoot shows what to do: the plan's next move (a green arrow)… or, when the bot surprises you
+    // (a check, a threat, a capture, a move that spoils the plan), what the bot is up to (a red arrow) and a good answer.
+    // It's a 🎯 practice game too: blunders still stop the game, and it doesn't change your rating.
+    var SCR = null, AFTERST = { plan: '🗺️ Your move: follow the plan!', surprise: '😮 Surprise! Your move', wait: 'Your move' };
+    function scratch() { return SCR || (SCR = FVChessEngine(4)); }
+    function afterStart(L) {   // where to start: the end of the main line (a trap that ends in checkmate: a 😮 surprise line where they DON'T fall for it)
+      var line = function (r) { return routeOf(L, r).map(function (x) { return x[0]; }); };
+      if (!L.mate) return line(0);
+      var E = scratch(), ok = [];
+      for (var r = 1; r < routes(L); r++) { var ln = line(r); E.play(ln, null); if (E.status() !== 'checkmate') ok.push(ln); }
+      return ok.length ? pick(ok) : null;
+    }
+    function afterMoves(L, start) {   // the plan's moves, each with the piece that makes it (so we know when one can't happen anymore)
+      var E = scratch(), out = [];
+      if (L.mate) return out;   // (a trap's plan is just words)
+      E.play(start, null);
+      planOf(L).forEach(function (st, i) {
+        stepMoves(st).forEach(function (u) {
+          var f = E.fen().split(' '); if (f[1] !== L.side) { f[1] = L.side; f[3] = '-'; E.load(f.join(' ')); }
+          var pc = E.pieces()[(8 - +u.charAt(1)) * 8 + u.charCodeAt(0) - 97];
+          if (E.move(u)) out.push({ u: u, pc: pc, step: i, done: false, wait: 0 });
+        });
+      });
+      return out;
+    }
+    function ideasOf(st) { return (st && st[1] ? st[1].split(' ') : []).filter(function (a) { return a.charAt(0) === '~'; }); }
+    function startAfter(id, botId) {   // ▶ 🗺️ After the Opening
+      var L = OPEN[id], start = L && afterStart(L); if (!start || !BOT[botId]) return;
+      S.afterId = id; S.afterBot = botId;
+      newGame('bot', botId, L.side, true, null, start);
+      game.after = { id: id, moves: afterMoves(L, start), shown: -1, want: null, mode: '', text: '', sup: 0, ok: 0, done: false, trap: !!L.mate, bot: null, prev: null, doneText: '' };
+      game.pr.note = '🗺️ This is the end of the ' + L.n + '. What comes next? Coach Hoot will show you!';
+      save(); render();
+      if (G.turn() === game.you) adviseNow();
+    }
+    function afterNext() {   // the next move of the plan that can still happen
+      var a = game.after;
+      for (var i = 0; i < a.moves.length; i++) {
+        var m = a.moves[i], here = pieceAt(m.u.slice(0, 2)) === m.pc;
+        if (m.done === true && here) m.done = false;   // (you took it back with ↩️ Undo)
+        if (m.done) continue;
+        if (!here || m.wait > 3) { m.done = 'skip'; continue; }   // (that piece moved, got taken, or it's been stuck for a while: skip it)
+        return m;
+      }
+      return null;
+    }
+    function afterDid() { return game.after.moves.filter(function (m) { return m.done === true; }).length; }
+    function afterHead(pend) {   // 💭 plan steps with nothing to play (just ideas) that come before this one
+      var a = game.after, steps = planOf(OPEN[a.id]), upto = pend ? pend.step : steps.length, t = '', ideas = [];
+      for (var i = a.shown + 1; i < upto; i++) if (!a.moves.some(function (m) { return m.step === i; })) { t += '💭 ' + steps[i][0] + '\n'; ideas = ideas.concat(ideasOf(steps[i])); }
+      a.shown = Math.max(a.shown, upto - 1);
+      return { t: t, ideas: ideas };
+    }
+    function adviseNow() {   // 🦉 your turn: what does the plan say… and did the bot surprise you?
+      var a = game && game.after, p = game && game.pr;
+      if (!a || !p || p.state || game.over || G.turn() !== game.you) return;
+      var nx = afterNext();
+      if (!nx && !a.done) {   // 🎉 the whole plan is done (a trap: they didn't fall for it, so here's what to do instead)
+        a.done = true;
+        var L = OPEN[a.id], h = afterHead(null);
+        a.doneText = a.trap ? '😮 ' + botName() + ' didn’t fall for the ' + L.n + '! Here’s what to do now:\n' + h.t :
+          h.t + '🎉 That’s the whole plan! Keep playing: Coach Hoot will still warn you when ' + botName() + ' surprises you.';
+        a.doneIdeas = h.ideas;
+      }
+      var legal = !!nx && G.moves().some(function (m) { return m.uci.slice(0, 4) === nx.u; });
+      if (nx && !legal) nx.wait++;
+      p.state = 'advise'; a.want = null; a.mode = ''; a.text = ''; renderStatus(); renderTools(); renderTip();
+      var my = ++token;
+      askAt(game.moves.slice(), { review: legal ? [nx.u] : [], threat: true, time: 600 }, function (r) {
+        if (my !== token || !game || game.after !== a || p.state !== 'advise') return;
+        p.state = null;
+        afterAdvice(r, legal ? nx : null, nx);
+        a.bot = null;
+        save(); render();
+      });
+    }
+    function afterAdvice(r, nx, pend) {   // decide what Coach Hoot says (and which arrows to draw)
+      var a = game.after, steps = planOf(OPEN[a.id]), who = botName(), bm = a.bot;
+      a.want = null; a.mode = ''; a.text = ''; game.arrows = null;
+      if (!r) return;
+      var th = r.threat, pass = th ? cp(r.bestScore) - cp(-th.score) : 0, lossPlan = nx ? cp(r.bestScore) - cp(r.scores[0]) : 9999;
+      var jump = a.prev != null ? cp(r.bestScore) - cp(a.prev) : 0;   // how much better things got since your last move (did the bot blunder?)
+      a.prev = r.bestScore;
+      var h = pend ? afterHead(pend) : { t: '', ideas: [] };
+      if (nx && lossPlan < 120 && !r.inCheck) {   // 🗺️ the plan's move is still a good one: play it!
+        a.mode = 'plan'; a.want = nx.u;
+        a.text = h.t + '🗺️ Step ' + (nx.step + 1) + ' of ' + steps.length + ': ' + steps[nx.step][0] + '\n👉 Play the green arrow!';
+        game.arrows = h.ideas.concat(ideasOf(steps[nx.step]), [nx.u]);
+        return;
+      }
+      var took = bm && bm.cap && r.bestTo === bm.to && r.bestCap ? bm.cap : '';   // it took one of yours, and the best answer takes back
+      var big = th && pass >= 150, hitsAttacker = big && r.best.slice(2, 4) === th.uci.slice(0, 2);   // (the best answer takes the piece that attacks you)
+      var why = r.inCheck ? 'Check! ' + who + ' is attacking your king. Get it to safety!' :
+        th && th.mate && big ? 'Watch out! ' + who + ' wants to checkmate you with ' + th.san + ' (the red arrow)! Stop it!' :
+        took ? who + ' took your ' + PNAME[took] + '! Take back.' :
+        big && th.cap && th.cap !== 'P' ? who + ' is attacking your ' + PNAME[th.cap] + ' on ' + th.to + ' (the red arrow)!' + (hitsAttacker ? ' But you can take the attacker!' : ' Move it, or protect it.') :
+        r.bestCap && r.bestCap !== 'P' && jump >= 150 ? who + ' left its ' + PNAME[r.bestCap] + ' on ' + r.bestTo + ' unprotected! Take it!' :
+        big ? who + ' wants to play ' + th.san + ' next (the red arrow), and that would hurt! ' + (hitsAttacker ? 'Take that piece!' : 'Stop it.') :
+        jump >= 150 ? who + ' made a mistake! Can you punish it?' :
+        nx ? 'Careful! Right now the plan move ' + r.sans[0] + ' isn’t a good idea. Do this first, then back to the plan.' : '';
+      if (why) {
+        a.mode = 'surprise'; a.want = r.best; a.sup++;
+        a.text = h.t + '😮 ' + (bm && !r.inCheck ? who + ' played ' + bm.san + '. ' : '') + why + '\n👉 A good answer: ' + r.bestSan + ' (the green arrow).';
+        game.arrows = (big && !took && !r.inCheck && !(r.bestCap && r.bestCap !== 'P' && jump >= 150 && !(th.cap && th.cap !== 'P')) ? ['!' + th.uci] : []).concat([r.best]);
+        return;
+      }
+      if (pend) {   // the plan's next move can't be played yet
+        a.mode = 'wait'; a.want = r.best;
+        a.text = h.t + '🗺️ Next in the plan: ' + steps[pend.step][0] + '\n⏳ That can’t be played yet. For now, a good move is ' + r.bestSan + ' (the green arrow).';
+        game.arrows = h.ideas.concat([r.best]);
+        return;
+      }
+      if (a.doneText) {   // 🎉 (just once)
+        a.text = a.doneText + (a.trap ? '\n👉 A good move now: ' + r.bestSan + ' (the green arrow).' : '');
+        game.arrows = (a.doneIdeas || []).concat(a.trap ? [r.best] : []); a.want = a.trap ? r.best : null; a.mode = a.trap ? 'wait' : '';
+        a.doneText = ''; a.doneIdeas = null;
+      }
+    }
+    function openAfter(pre) {   // 🗺️ pick an opening (and a bot)
+      var gm = goodMatch(), bot = BOT[S.afterBot] ? S.afterBot : gm.id, cur = pre || (OPEN[S.afterId] ? S.afterId : 'italian');
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🗺️'));
+        c.appendChild(mk('h3', null, 'After the Opening'));
+        c.appendChild(mk('p', null, 'Start at the end of an opening and keep playing against a bot. Coach Hoot 🦉 shows you what to do next (green arrows)… and what to do when the bot surprises you (red arrows)!'));
+        var l1 = mk('label', 'chs-dname chs-pick'); l1.appendChild(mk('span', null, '📖 Opening'));
+        var os = mk('select'); os.id = 'chs-aop';
+        [['op', '📖 Openings'], ['dead', '💀 Deadly Openings'], ['counter', '🛡️ Counters']].forEach(function (g) {
+          var og = mk('optgroup'); og.label = g[1];
+          lessonList(g[0]).forEach(function (L) {
+            if (!planOf(L).length) return;
+            var o = mk('option', null, L.e + ' ' + L.n + (S.learn['op:' + L.id] >= 2 ? ' ⭐' : '') + (L.mate ? ' (if they dodge it)' : '')); o.value = L.id;
+            if (L.id === cur) o.selected = true;
+            og.appendChild(o);
+          });
+          os.appendChild(og);
+        });
+        l1.appendChild(os); c.appendChild(l1);
+        var l2 = mk('label', 'chs-dname chs-pick'); l2.appendChild(mk('span', null, '🤖 Bot'));
+        var bs = mk('select'); bs.id = 'chs-abot';
+        CHESS_BOTS.forEach(function (b) { var o = mk('option', null, b.e + ' ' + b.n + ' (' + b.elo + ')' + (b === gm ? ' · good match' : '')); o.value = b.id; if (b.id === bot) o.selected = true; bs.appendChild(o); });
+        l2.appendChild(bs); c.appendChild(l2);
+        var go = mk('button', 'btn', '▶ Start'); go.type = 'button'; go.id = 'chs-ago';
+        go.addEventListener('click', function () { closeCard(); startAfter(os.value, bs.value); });
         c.appendChild(go);
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
       });
@@ -19703,7 +19932,7 @@
       opts.appendChild(snd); opts.appendChild(gb); head.appendChild(opts); m.appendChild(head);
       var resume = game && game.mode !== 'lesson' && game.mode !== 'drill' ? (game.over ? null : game) : savedGame();
       if (resume) {
-        var who = resume.mode === 'bot' ? (resume.practice ? '🎯 practice game vs ' : 'game vs ') + BOT[resume.bot].e + ' ' + BOT[resume.bot].n : '1v1: ' + (resume.names || ['White', 'Black']).join(' vs ');
+        var who = resume.mode === 'bot' ? (resume.after && OPEN[resume.after.id] ? '🗺️ ' + OPEN[resume.after.id].n + ' game vs ' : resume.practice ? '🎯 practice game vs ' : 'game vs ') + BOT[resume.bot].e + ' ' + BOT[resume.bot].n : '1v1: ' + (resume.names || ['White', 'Black']).join(' vs ');
         var cont = mk('button', 'btn chs-cont', '▶ Back to your ' + who); cont.type = 'button'; cont.id = 'chs-continue';
         cont.addEventListener('click', function () { if (game !== resume) useGame(resume); showGame(); }); m.appendChild(cont);
       }
@@ -19719,6 +19948,9 @@
       var pb = mk('button', 'chs-friend chs-prac'); pb.type = 'button'; pb.id = 'chs-pracBtn';
       pb.innerHTML = '<span class="chs-av" style="--hue:#e4a64a">🎯</span><span><b>Practice game</b><small>Play any bot. If you blunder or mess up an opening, Coach Hoot stops the game and you practice a better move.</small></span>';
       pb.addEventListener('click', openPractice); m.appendChild(pb);
+      var ab = mk('button', 'chs-friend chs-aft'); ab.type = 'button'; ab.id = 'chs-afterBtn';
+      ab.innerHTML = '<span class="chs-av" style="--hue:#39c98a">🗺️</span><span><b>After the Opening</b><small>Pick an opening and play on against a bot. Coach Hoot shows you what to do next, and what to do when the bot surprises you!</small></span>';
+      ab.addEventListener('click', function () { openAfter(); }); m.appendChild(ab);
       var nmi = S.mist.length, mb = mk('button', 'chs-friend chs-mist'); mb.type = 'button'; mb.id = 'chs-mistBtn';
       mb.innerHTML = '<span class="chs-av" style="--hue:#f472b6">🧩</span><span><b>My mistakes' + (nmi ? ' (' + nmi + ')' : '') + '</b><small>' + (nmi ? 'Practice the mistakes from your practice games. Get one right twice and it’s learned!' : 'The mistakes from your practice games show up here, so you can practice them again.') + '</small></span>';
       mb.disabled = !nmi; mb.addEventListener('click', function () { if (S.mist.length) startDrill(); }); m.appendChild(mb);
@@ -19814,7 +20046,7 @@
       test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); }, planWant: function () { return planWant(); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); },
-      practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
+      after: function (id, botId) { startAfter(id, botId); }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
       review: function (list) { return new Promise(function (res) { askAt(game.moves.slice(), { review: list, time: 700 }, res); }); }
     };
   })();
