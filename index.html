@@ -1060,6 +1060,9 @@
   .lf-heir.lf-rbd { background: linear-gradient(135deg, #5b2a9e, #c04fd6); }
   .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
   .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1223,6 +1226,8 @@
   .chs-arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; color: rgba(21, 128, 61, 0.82); }
   .chs-tour { font-weight: 700; margin-right: 8px; }
   .chs-tip .chs-tnext { font-weight: 700; }
+  .chs-tip .chs-tmove { font-weight: 700; color: var(--accent-2); }
+  .chs-arrows .idea { color: rgba(234, 120, 8, 0.9); }
   .chs-card ol.chs-plan { text-align: left; margin: 12px 0 16px; padding-left: 22px; display: grid; gap: 8px; }
   .chs-card ol.chs-plan li { line-height: 1.4; }
   /* ---- end Chess ---- */
@@ -16606,7 +16611,7 @@
           ['a2a3', 'Pawn to a3.'],
           ['c8b7', 'Black’s bishop goes to b7.'],
           ['h2h3', 'Pawn to h3. Hippo complete, whatever Black does!']] }] },
-      { id: 'vienna', e: '🎻', n: 'Vienna Game', side: 'w', d: 'Bring your queen’s knight out first, so your f-pawn is free to attack later.', plan: [['Black’s bishop on c5 stops you from castling. Hit it with Na4 to trade it off!', 'c3a4'], ['Now castle. Your rook on f1 will love the f-file.', 'e1g1'], ['Push f5! It squeezes Black’s pieces and opens the way toward Black’s king.', 'f4f5']], line: [
+      { id: 'vienna', e: '🎻', n: 'Vienna Game', side: 'w', d: 'Bring your queen’s knight out first, so your f-pawn is free to attack later.', plan: [['Black’s bishop on c5 stops you from castling. Hit it with Na4, then trade it off: Nxc5 (or Nxb6 if it runs to b6)!', 'c3a4 a4c5'], ['Now castle. Your rook on f1 will love the f-file.', 'e1g1'], ['Push f5! It squeezes Black’s pieces and opens the way toward Black’s king.', 'f4f5']], line: [
         ['e2e4', 'Pawn to e4. Take the center!'],
         ['e7e5', 'Black answers with e5.'],
         ['b1c3', 'Here’s the Vienna: knight to c3 FIRST, before Nf3. That keeps your f-pawn free to march!'],
@@ -17037,7 +17042,7 @@
           ['b7b5', 'Protect your extra pawn with b5!'],
           ['a2a4', 'White attacks your b5 pawn.'],
           ['b5b4', 'Push b4! It kicks White’s knight away. Next: e6 and Bb7.']] }] },
-      { id: 'nimzo', e: '🪄', n: 'Nimzo-Indian Defense', side: 'b', d: 'Pin White’s knight so it can’t help take over the center.', plan: [['Knight to c6, so all your pieces join the fight for the center.', 'b8c6'], ['If White plays a3, take the knight: Bxc3! White ends up with doubled pawns.', 'b4c3'], ['Then take on c4 (dxc4) and put your queen on c7. You’re equal and comfy!', 'd5c4 d8c7']], line: [
+      { id: 'nimzo', e: '🪄', n: 'Nimzo-Indian Defense', side: 'b', d: 'Pin White’s knight so it can’t help take over the center.', plan: [['Knight to c6, so all your pieces join the fight for the center.', 'b8c6'], ['If White plays a3, take the knight: Bxc3! White ends up with doubled pawns.', '~b4c3'], ['Then take on c4 (dxc4) and put your queen on c7. You’re equal and comfy!', 'd5c4 d8c7']], line: [
         ['d2d4', 'White starts with d4.'],
         ['g8f6', 'Knight to f6 first. It stops White from playing e4.'],
         ['c2c4', 'White grabs more space with c4.'],
@@ -17254,7 +17259,7 @@
           ['f1d3', 'You’re a knight down, so attack fast! Bishop to d3, aiming at Black’s king.'],
           ['c6c5', 'Black hits back in the center.'],
           ['e1g1', 'Castle, then bring your rook to e1. Black’s king is still stuck on f7: go after it!']] }] },
-      { id: 'kingsgambit', e: '🤴', n: 'King’s Gambit (Muzio)', side: 'w', deadly: 1, d: 'Sacrifice a pawn AND a knight to blast open the f-file and hunt the king. One of the wildest attacks ever!', plan: [['Push d3 to free your other bishop, then take on f4 with it.', 'd2d3 c1f4'], ['Knight to c3. Every piece joins the attack!', 'b1c3'], ['Aim everything at f7. You’re a piece down, so attack fast before Black gets its pieces out!', 'c4f7']], line: [
+      { id: 'kingsgambit', e: '🤴', n: 'King’s Gambit (Muzio)', side: 'w', deadly: 1, d: 'Sacrifice a pawn AND a knight to blast open the f-file and hunt the king. One of the wildest attacks ever!', plan: [['Push d3 to free your other bishop, then take on f4 with it.', 'd2d3 c1f4'], ['Knight to c3. Every piece joins the attack!', 'b1c3'], ['Aim everything at f7. You’re a piece down, so attack fast before Black gets its pieces out!', '~c4f7']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
         ['f2f4', 'Push f4! That’s the King’s Gambit: you offer a pawn to open lines toward Black’s king.'],
@@ -17306,7 +17311,7 @@
           ['e1g1', 'Castle! Your king is safe, and you’re ready to take back on d4.'],
           ['d7d6', 'Black protects its bishop.'],
           ['c3d4', 'Take back: cxd4! You have a giant pawn center.']] }] },
-      { id: 'danish', e: '🇩🇰', n: 'Danish Gambit', side: 'w', deadly: 1, d: 'Give away TWO pawns so your bishops can fire across the whole board.', plan: [['Bring out your knights fast: c3 and f3.', 'b1c3 g1f3'], ['Castle and put your rooks in the middle.', 'e1g1'], ['Your bishops aim at f7 and g7, the squares next to Black’s king. Look for knight jumps to g5 or d5 to crash through!', 'c4f7 b2g7']], line: [
+      { id: 'danish', e: '🇩🇰', n: 'Danish Gambit', side: 'w', deadly: 1, d: 'Give away TWO pawns so your bishops can fire across the whole board.', plan: [['Bring out your knights fast: c3 and f3.', 'b1c3 g1f3'], ['Castle and put your rooks in the middle.', 'e1g1'], ['Your bishops aim at f7 and g7, the squares next to Black’s king. Look for knight jumps to g5 or d5 to crash through!', '~c4f7 ~b2g7']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
         ['d2d4', 'Push d4 to open the center!'],
@@ -17753,7 +17758,7 @@
           ['d2d3', 'Protect e4 with d3.'],
           ['g8f6', 'Black brings out a knight.'],
           ['b1d2', 'Knight to d2. Next, Nf3 kicks Black’s queen away!']] }] },
-      { id: 'vsfishing', e: '🎣', n: 'Beat the Fishing Pole', side: 'w', counter: 1, d: 'Black dangles a knight on g4 as bait. If you take it with your h-pawn, the h-file opens for Black’s queen and rook. Here’s how to dodge it!', plan: [['If Black’s bishop attacks your knight with Bc5, step back to b3 (or protect it with c3).', 'd4b3'], ['Then Black’s knight on g4 is in big trouble: hxg4! If Black takes back, your queen grabs g4.', 'h3g4 d1g4'], ['Then develop: Nc3 and Re1. You’re ahead!', 'b1c3 f1e1']], line: [
+      { id: 'vsfishing', e: '🎣', n: 'Beat the Fishing Pole', side: 'w', counter: 1, d: 'Black dangles a knight on g4 as bait. If you take it with your h-pawn, the h-file opens for Black’s queen and rook. Here’s how to dodge it!', plan: [['If Black’s bishop attacks your knight with Bc5, step back to b3 (or protect it with c3).', 'd4b3'], ['Then Black’s knight on g4 is in big trouble: hxg4! If Black takes back, your queen grabs g4.', 'h3g4 ~d1g4'], ['Then develop: Nc3 and Re1. You’re ahead!', 'b1c3 f1e1']], line: [
         ['e2e4', 'Push your e-pawn to e4.'],
         ['e7e5', 'Black answers e5.'],
         ['g1f3', 'Knight to f3.'],
@@ -17805,7 +17810,7 @@
           ['e2e4', 'Don’t worry about b2: your bishop guards it. Push e4!'],
           ['f8c5', 'Black’s bishop aims at f2.'],
           ['a2a3', 'Kick the queen with a3! It has to run again.']] }] },
-      { id: 'vsbudapest', e: '🇭🇺', n: 'Beat the Budapest Gambit', side: 'w', counter: 1, d: 'Black hits back against d4 with a smothered-mate trap. One quiet move (e3!) stops it, and you get a comfy game.', plan: [['Now kick the bishop with a3. If it takes your knight, take back with the queen.', 'a2a3'], ['Put your queen on c2 and a rook on d1. The d-file is yours!', 'd1c2 f1d1'], ['Push b4 and c5 later to grab space on the queen side.', 'b2b4']], line: [
+      { id: 'vsbudapest', e: '🇭🇺', n: 'Beat the Budapest Gambit', side: 'w', counter: 1, d: 'Black hits back against d4 with a smothered-mate trap. One quiet move (e3!) stops it, and you get a comfy game.', plan: [['Now kick the bishop with a3. If it takes your knight, take back with the queen.', 'a2a3'], ['Put your queen on c2 and a rook on d1. The d-file is yours!', 'd1c2 f1d1'], ['Push b4 and c5 later to grab space on the queen side.', '~b2b4']], line: [
         ['d2d4', 'Push your d-pawn to d4.'],
         ['g8f6', 'Black develops a knight.'],
         ['c2c4', 'Push c4, like in the Queen’s Gambit.'],
@@ -18003,7 +18008,7 @@
     function fix(s) {
       s = s && typeof s === 'object' ? s : {};
       s.rating = +s.rating || 400; s.games = +s.games || 0; s.rec = s.rec || {};
-      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.duel = s.duel || {};
+      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.seen = s.seen || {}; s.duel = s.duel || {};
       return s;
     }
     function load() { try { return fix(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return fix(null); } }
@@ -18128,7 +18133,7 @@
           (pc ? '<div class="chs-p' + (down && down.moved && down.s === n ? ' lift' : '') + '">' + pieceSvg(pc) + '</div>' : '') + '</div>';
       }
       b.innerHTML = h;
-      if (game && game.tour) { var stp = planOf(OPEN[game.lesson])[game.tour.step]; if (stp && stp[1]) b.insertAdjacentHTML('beforeend', arrowsSvg(stp[1].split(' '))); }
+      if (game && game.tour) { var stp = planOf(OPEN[game.lesson])[game.tour.step]; if (stp && stp[1]) b.insertAdjacentHTML('beforeend', arrowsSvg(stp[1].split(' '), game.tour.idx)); }
       if (anim && anim.from) {
         var sz = b.clientWidth / 8, slide = function (from, to) {
           var el = b.querySelector('[data-sq="' + to + '"] .chs-p'); if (!el) return;
@@ -18160,7 +18165,7 @@
       return h + (adv > 0 ? '<span class="chs-adv">+' + adv + '</span>' : '');
     }
     function sideHtml(c) {
-      if (game.mode === 'lesson' && c !== game.you) return (game.phase === 'test' ? '<span class="chs-av" style="--hue:#7c9cff" title="Test Bot">🤖</span>' : '<span class="chs-av" style="--hue:#e4a64a" title="Coach Hoot">🦉</span>') + '<div class="chs-say on chs-coach" id="chs-say">' + esc(game.coach) + '</div>';
+      if (game.mode === 'lesson' && c !== game.you) return (game.phase === 'test' && !game.tour ? '<span class="chs-av" style="--hue:#7c9cff" title="Test Bot">🤖</span>' : '<span class="chs-av" style="--hue:#e4a64a" title="Coach Hoot">🦉</span>') + '<div class="chs-say on chs-coach" id="chs-say">' + esc(game.coach) + '</div>';
       if (game.mode === 'lesson') return '<span class="chs-av" style="--hue:var(--accent-2)">🙂</span><div class="chs-pl-info"><div class="chs-pl-n">You</div><div class="chs-capt">' + capturedBy(c) + '</div></div>';
       if (game.mode === 'friend') return duelSide(c);
       var bot = game.mode === 'bot' && c !== game.you ? BOT[game.bot] : null, you = game.mode === 'bot' && c === game.you;
@@ -18193,7 +18198,7 @@
       var el = $('status'), t = '', cls = 'chs-status';
       if (game.mode === 'lesson') {
         var fl = game.flash && Date.now() < game.flashT ? game.flash : '', tst = game.phase === 'test', T = tst && game.kind === 'mate' ? testOf() : null;
-        if (game.tour) t = '🗺️ What to do next';
+        if (game.tour) t = fl || (planWant() && !game.tour.busy ? '🗺️ Your move: play the plan!' : '🗺️ What to do next');
         else if (game.done) t = tst ? '⭐ Test passed!' : '📖 Lesson complete! Next: the test 🧪';
         else if (game.failed) t = game.failed;
         else if (fl) t = fl;
@@ -18222,9 +18227,9 @@
     function humanTurn() { return game.mode === 'friend' || G.turn() === game.you; }
     function renderTools() {
       var over = !!game.over, ht = humanTurn(), les = game.mode === 'lesson';
-      $('undo').hidden = $('draw').hidden = $('resign').hidden = les; $('restart').hidden = !les; $('hint').hidden = les && game.phase === 'test';
+      $('undo').hidden = $('draw').hidden = $('resign').hidden = les; $('restart').hidden = !les; $('hint').hidden = les && game.phase === 'test' && !game.tour;
       $('menuBtn').innerHTML = les ? '<span>📚</span>Lessons' : game.mode === 'friend' ? '<span>♟️</span>Menu' : '<span>🤖</span>Bots';
-      if (les) { $('hint').disabled = !!game.busy || !!game.done || hintBusy; $('hint').classList.toggle('busy', hintBusy); return; }
+      if (les) { $('hint').disabled = game.tour ? !planWant() || !!game.tour.busy : !!game.busy || !!game.done || hintBusy; $('hint').classList.toggle('busy', hintBusy); return; }
       $('hint').disabled = over || !ht || thinking || hintBusy; $('hint').classList.toggle('busy', hintBusy);
       $('undo').disabled = over || !game.moves.length || (game.mode === 'bot' && !thinking && game.moves.length < 2);
       $('draw').disabled = over || !game.moves.length || (game.mode === 'bot' && (!ht || thinking));
@@ -18241,10 +18246,10 @@
     function renderTip() {   // tap a piece: it says what it is and how it moves
       var el = $('tip'), pc = sel ? pieceAt(sel) : null;
       if (pc && game && !game.over) el.innerHTML = '<b>' + (pc.charAt(0) === 'w' ? 'White ' : 'Black ') + HOW[pc.charAt(1)][0].toLowerCase() + ':</b> ' + HOW[pc.charAt(1)][1];
-      else if (game && game.tour) {
+      else if (game && game.tour) {   // 🗺️ step 2 of 4 · 👉 Your move! (a step with nothing to play: Next ▶)
         var ns = planOf(OPEN[game.lesson]).length;
-        el.innerHTML = '<span class="chs-tour">🗺️ Step ' + (game.tour.step + 1) + ' of ' + ns + '</span>' + (game.tour.step ? '<button type="button" class="chs-link" data-tour="-1">◀ Back</button> ' : '') +
-          '<button type="button" class="chs-link chs-tnext" data-tour="1">' + (game.tour.step + 1 < ns ? 'Next ▶' : 'Done ✓') + '</button>';
+        el.innerHTML = '<span class="chs-tour">🗺️ Step ' + (game.tour.step + 1) + ' of ' + ns + '</span>' + (planWant() ? '<span class="chs-tmove">👉 Your move!</span>' : game.tour.busy ? '' :
+          '<button type="button" class="chs-link chs-tnext" data-tour="1">' + (game.tour.step + 1 < ns ? 'Next ▶' : 'Done ✓') + '</button>');
       }
       else if (game && game.mode === 'lesson') { if (game.done && game.phase !== 'test') el.innerHTML = '<button type="button" class="chs-link" data-test="1">🧪 Start the test against Test Bot</button>'; else el.textContent = lessonProgress(); }
       else el.innerHTML = (game && game.planFor && OPEN[game.planFor] ? '<button type="button" class="chs-link" data-plan="1">' + (OPEN[game.planFor].counter ? '🗺️ Your plan: ' : '🗺️ Your plan for the ') + esc(OPEN[game.planFor].n) + '</button> · ' : '') + '<button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
@@ -18266,7 +18271,10 @@
     function render(anim) { if (!game) return; renderBoard(anim); renderSides(); renderStatus(); renderTools(); renderMoves(); renderTip(); }
 
     // ---- moving pieces: tap a piece then a square, or drag it ----
-    function canMoveNow() { return game && !game.over && !thinking && !game.busy && !game.done && humanTurn(); }
+    function canMoveNow() {
+      if (game && game.tour) return !game.tour.busy && !!planWant() && G.turn() === game.you;   // 🗺️ playing the plan
+      return game && !game.over && !thinking && !game.busy && !game.done && humanTurn();
+    }
     function select(n) {
       sel = n; targets = [];
       G.moves().forEach(function (m) { if (m.from === n && targets.indexOf(m.to) < 0) targets.push(m.to); });
@@ -18339,7 +18347,7 @@
     // The board only uses pointer events, so it never needs those clicks.
     boardEl.addEventListener('touchend', function (e) { if (e.cancelable) e.preventDefault(); }, { passive: false });
 
-    function userMove(uci, dragged) { if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
+    function userMove(uci, dragged) { if (game.tour) planMove(uci, dragged); else if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
     function playMove(uci, byBot, dragged) {
       var mover = G.turn(), left = clockOn() && !game.over && game.clock.at ? clockLeft(mover) : null;
       var x = G.move(uci); if (!x) return false;
@@ -18500,12 +18508,13 @@
     $('menuBtn').addEventListener('click', function () { cancelThinking(); clearTimeout(lessonTm); if (game && game.mode === 'lesson') { showLessons(viewOf(game.kind, lessonOf())); return; } pauseClock(); save(); showMenu(); });
     $('restart').addEventListener('click', function () {   // in a test, starting over counts as another try (and checkmates get a new position)
       if (!game || game.mode !== 'lesson') return;
+      if (game.tour) { startPlan(game.tour.done); return; }   // (playing the plan: start the plan over)
       if (game.phase === 'test') startTest(game.kind, game.lesson, game.attempt + 1, game.ver + 1); else startLesson(game.kind, game.lesson);
     });
     $('tip').addEventListener('click', function (e) {
       if (e.target.closest('[data-guide]')) guide();
-      else if (e.target.closest('[data-test]') && game && game.mode === 'lesson') startTest(game.kind, game.lesson, 1);
-      else if (e.target.closest('[data-tour]') && game && game.tour) planNext(+e.target.closest('[data-tour]').getAttribute('data-tour'));
+      else if (e.target.closest('[data-test]') && game && game.mode === 'lesson') takeTest(game.kind, game.lesson);
+      else if (e.target.closest('[data-tour]') && game && game.tour) planNext();
       else if (e.target.closest('[data-plan]') && game && game.planFor && OPEN[game.planFor]) planCard(OPEN[game.planFor]);
     });
     $('rematch').addEventListener('click', rematch);
@@ -18513,6 +18522,7 @@
 
     // ---- 🎓 lessons with Coach Hoot, then a test against 🤖 Test Bot ----
     // S.learn['op:italian']: 1 = you did the lesson (the test is still left), 2 = you passed the test too (⭐)
+    // S.seen['op:italian'] = 1: you played all its 😮 surprises (you have to, before the test)
     var OPEN = {}, MATE = {}, lessonTm = 0;
     CHESS_OPENINGS.forEach(function (o) { OPEN[o.id] = o; }); CHESS_MATES.forEach(function (o) { MATE[o.id] = o; });
     // four lesson lists: 'op' = 📖 openings, 'dead' = 💀 deadly openings (gambits and traps), 'counter' = 🛡️ counters (beat the tricky stuff), 'mate' = ♚ checkmates
@@ -18680,7 +18690,7 @@
       game.done = true; game.busy = false; save();
       if (kind === 'op') sound('win');
       var said = kind === 'op' ? (game.coach || '').replace(/^👉 /, '') + '\n' : '';
-      coachSays(said + '🎉 ' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + (hasPlan ? '\n🗺️ Now let’s see what to do NEXT…' : '\n🧪 Next: a test against 🤖 Test Bot!'));
+      coachSays(said + '🎉 ' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + (hasPlan ? '\n🗺️ Now YOU play what to do NEXT…' : '\n🧪 Next: a test against 🤖 Test Bot!'));
       render();
       var my = token;
       lessonTm = setTimeout(function () {
@@ -18694,11 +18704,9 @@
       openCard(function (c) {
         c.appendChild(mk('div', 'chs-big', '😮'));
         c.appendChild(mk('h3', null, 'What if they play something else?'));
-        c.appendChild(mk('p', null, 'Real opponents don’t always play the moves from the lesson. Let’s practice ' + (n === 1 ? 'a surprise' : n + ' surprises') + ' that ' + (L.side === 'w' ? 'Black' : 'White') + ' might try, so you know what to do and don’t panic!'));
-        var go = mk('button', 'btn', n === 1 ? '😮 Show me the surprise' : '😮 Show me the surprises'); go.type = 'button'; go.id = 'chs-altGo';
+        c.appendChild(mk('p', null, 'Real opponents don’t always play the moves from the lesson. Now YOU play ' + (n === 1 ? 'a surprise' : n + ' surprises') + ' that ' + (L.side === 'w' ? 'Black' : 'White') + ' might try, so you know what to do and don’t panic! You have to play them before the test.'));
+        var go = mk('button', 'btn', n === 1 ? '😮 Let’s play it!' : '😮 Let’s play them!'); go.type = 'button'; go.id = 'chs-altGo';
         go.addEventListener('click', function () { startAlt(1); }); c.appendChild(go);
-        var skip = mk('button', 'btn ghost', '🧪 Skip to the test'); skip.type = 'button'; skip.id = 'chs-altSkip';
-        skip.addEventListener('click', function () { doneCard('op', L); }); c.appendChild(skip);
       });
     }
     function startAlt(k) {   // back to where the other side can surprise you, then play 😮 surprise k
@@ -18709,24 +18717,31 @@
       L.line.slice(0, a.at).forEach(function (x) { var mv = G.move(x[0]); if (mv) { game.moves.push(mv.uci); game.sans.push(mv.san); } });
       var lu = game.moves[game.moves.length - 1];
       last = lu ? { from: lu.slice(0, 2), to: lu.slice(2, 4) } : null; sel = null; targets = []; hint = null; orient = game.orient = L.side;
-      lessonNext('😮 Surprise ' + k + ' of ' + L.alts.length + ': what if ' + (L.side === 'w' ? 'Black' : 'White') + ' doesn’t play ' + G.sanOf(L.line[a.at][0]) + '?', true);
+      lessonNext((game.thenTest && k === 1 ? '🧪 Before the test, play the surprises! ' : '') + '😮 Surprise ' + k + ' of ' + L.alts.length + ': what if ' + (L.side === 'w' ? 'Black' : 'White') + ' doesn’t play ' + G.sanOf(L.line[a.at][0]) + '?', true);
     }
     function altDone() {   // on to the next surprise, or to the test
-      var L = OPEN[game.lesson], k = game.route, more = k < L.alts.length;
-      game.done = true; game.busy = more; sound('win');
-      coachSays((game.coach || '').replace(/^👉 /, '') + '\n✅ ' + pick(['Now you know what to do!', 'No need to panic!', 'Surprise handled!']) + (more ? ' Here comes another surprise…' : ' Now you’re ready for the test!'));
+      var L = OPEN[game.lesson], k = game.route, more = k < L.alts.length, then = game.thenTest;
+      game.done = true; game.busy = more || then; sound('win');
+      if (!more) { S.seen['op:' + L.id] = 1; save(); }   // you played every surprise: now the test is open
+      coachSays((game.coach || '').replace(/^👉 /, '') + '\n✅ ' + pick(['Now you know what to do!', 'No need to panic!', 'Surprise handled!']) + (more ? ' Here comes another surprise…' : then ? ' Now: the test!' : ' Now you’re ready for the test!'));
       render();
       var my = token;
       lessonTm = setTimeout(function () {
         if (my !== token || !game || game.mode !== 'lesson' || game.phase === 'test' || !$('ov').hidden) return;
-        if (more) startAlt(k + 1); else doneCard('op', L);
+        if (more) startAlt(k + 1); else if (then) startTest('op', L.id, 1); else doneCard('op', L);
       }, more ? 2600 : 1800);
     }
-    function practiceAlts(id) {   // straight to the 😮 surprises of a lesson
+    function practiceAlts(id, thenTest) {   // straight to the 😮 surprises of a lesson (thenTest: the test comes right after)
       var L = OPEN[id];
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
       game = { mode: 'lesson', phase: 'learn', kind: 'op', lesson: id, route: 0, attempt: 0, ver: 0, part: 0, step: 0, wrong: 0, left: 0, mine: 0, you: L.side, orient: L.side, moves: [], sans: [], fen: null, over: null, hints: 0, coach: '', busy: false, done: false, failed: '' };
+      game.thenTest = !!thenTest;
       orient = L.side; G.reset(); showGame(); startAlt(1);
+    }
+    function takeTest(kind, id) {   // 🧪 the test… but first you have to play an opening's 😮 surprises, if you haven't yet
+      var L = kind === 'op' ? OPEN[id] : null;
+      if (L && L.alts && !S.seen['op:' + id]) { practiceAlts(id, true); return; }
+      startTest(kind, id, 1);
     }
     function toMainEnd(L) {   // the board at the end of the main line (where the 🗺️ plan's arrows start)
       game.route = 0; game.step = L.line.length; G.reset(); game.moves = []; game.sans = [];
@@ -18741,9 +18756,9 @@
         c.appendChild(mk('p', 'chs-quote', '🦉 “' + pick(['Hoo hoo! Wonderful work!', 'You’re getting really good at this!', 'A true chess scholar!']) + ' Now show 🤖 Test Bot what you learned!”'));
         c.appendChild(mk('p', null, 'You finished the ' + L.e + ' ' + L.n + ' lesson. Now ' + (kind === 'op' ? 'play it against 🤖 Test Bot from memory.' + (L.any ? ' Any order works!' : '') : T.drill ? 'checkmate 🤖 Test Bot’s lone king in ' + T.limit + ' moves or less.' : 'use it to checkmate 🤖 Test Bot in a new position.') +
           ' No hints this time! If you make a mistake, you have to try again. Pass the test to earn your ⭐'));
-        var go = mk('button', 'btn', '🧪 Start the test'); go.type = 'button'; go.id = 'chs-startTest'; go.addEventListener('click', function () { startTest(kind, L.id, 1); }); c.appendChild(go);
+        var go = mk('button', 'btn', '🧪 Start the test'); go.type = 'button'; go.id = 'chs-startTest'; go.addEventListener('click', function () { takeTest(kind, L.id); }); c.appendChild(go);
         if (kind === 'op' && planOf(L).length) {
-          var pl = mk('button', 'btn ghost', '🗺️ See the plan again'); pl.type = 'button'; pl.id = 'chs-planAgain';
+          var pl = mk('button', 'btn ghost', '🗺️ Play the plan again'); pl.type = 'button'; pl.id = 'chs-planAgain';
           pl.addEventListener('click', function () { closeCard(); startPlan(function () { doneCard(kind, L); }); }); c.appendChild(pl);
         }
         var row = mk('div', 'chs-row');
@@ -18753,6 +18768,7 @@
       });
     }
     function lessonHint() {
+      if (game && game.tour) { var w = planWant(); if (w && !game.tour.busy) { hint = { from: w.slice(0, 2), to: w.slice(2, 4) }; sel = null; targets = []; render(); } return; }   // 🗺️ the arrow's squares light up
       if (!game || game.mode !== 'lesson' || game.phase === 'test' || game.done || game.busy || hintBusy) return;
       game.hints++;
       if (game.kind === 'op') { var st = lineNow()[game.step]; if (st) { hint = { from: st[0].slice(0, 2), to: st[0].slice(2, 4) }; sel = null; targets = []; render(); } return; }
@@ -18780,7 +18796,7 @@
       var list = mk('div', 'chs-lessons');
       lessonList(view).forEach(function (L) {
         var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
-        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
+        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') + (lv && !S.seen['op:' + L.id] ? ' to play' : '') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
         b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
           (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
         b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
@@ -18794,14 +18810,15 @@
       openCard(function (c) {
         c.appendChild(mk('div', 'chs-big', L.e));
         c.appendChild(mk('h3', null, L.n));
-        c.appendChild(mk('p', null, lv >= 2 ? '⭐ You passed the test! Want to practice it again?' : '📖 You did the lesson. Now pass the test against 🤖 Test Bot to earn your ⭐'));
+        var toPlay = kind === 'op' && L.alts && !S.seen['op:' + L.id];
+        c.appendChild(mk('p', null, (lv >= 2 ? '⭐ You passed the test! Want to practice it again?' : '📖 You did the lesson. Now pass the test against 🤖 Test Bot to earn your ⭐') + (toPlay ? ' (First you’ll play the 😮 surprises.)' : '')));
         var tb = mk('button', lv >= 2 ? 'btn ghost' : 'btn', lv >= 2 ? '🧪 Take the test again' : '🧪 Take the test'); tb.type = 'button'; tb.id = 'chs-takeTest';
-        tb.addEventListener('click', function () { startTest(kind, L.id, 1); });   // (each test starts on a random position)
+        tb.addEventListener('click', function () { takeTest(kind, L.id); });   // (each test starts on a random position)
         var lb = mk('button', lv >= 2 ? 'btn' : 'btn ghost', '📖 Learn it again'); lb.type = 'button'; lb.id = 'chs-learnAgain';
         lb.addEventListener('click', function () { startLesson(kind, L.id); });
         if (lv >= 2) { c.appendChild(lb); c.appendChild(tb); } else { c.appendChild(tb); c.appendChild(lb); }
         if (kind === 'op' && planOf(L).length) {
-          var sp = mk('button', 'btn ghost', L.mate ? '🗺️ What if they don’t fall for it?' : '🗺️ See the game plan'); sp.type = 'button'; sp.id = 'chs-seePlan';
+          var sp = mk('button', 'btn ghost', L.mate ? '🗺️ What if they don’t fall for it?' : '🗺️ Play the game plan'); sp.type = 'button'; sp.id = 'chs-seePlan';
           sp.addEventListener('click', function () { viewPlan(L.id); }); c.appendChild(sp);
         }
         if (kind === 'op' && L.alts) {
@@ -18814,33 +18831,78 @@
 
     // ---- 🗺️ the game plan: what to do AFTER the opening (arrows on the board, one step at a time) ----
     function planOf(L) { return (L && L.plan) || []; }
-    function arrowsSvg(list) {
-      var h = '<svg class="chs-arrows" viewBox="0 0 8 8" aria-hidden="true"><defs><marker id="chs-ah" viewBox="0 0 10 10" refX="4" refY="5" markerWidth="3" markerHeight="3" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>';
-      list.forEach(function (u) {
+    // An arrow that starts with ~ is just an IDEA for later (like a sacrifice on f7): it's dashed and orange, and you don't play it.
+    function stepMoves(st) { return (st && st[1] ? st[1].split(' ') : []).filter(function (a) { return /^[a-h][1-8][a-h][1-8]$/.test(a); }); }
+    function stepIdeas(st) { return !!(st && st[1] && /(^| )~/.test(st[1])); }
+    function planWant() {   // the arrow you have to play next in this step (null: nothing left to play)
+      var t = game && game.tour; if (!t) return null;
+      var mv = stepMoves(planOf(OPEN[game.lesson])[t.step]);
+      while (t.idx < mv.length) {
+        var u = mv[t.idx];
+        if (G.moves().some(function (m) { return m.uci.slice(0, 4) === u; })) return u;
+        t.idx++;   // (every plan is checked, so this can't happen… but never get stuck)
+      }
+      return null;
+    }
+    function forceTurn(side) { var f = G.fen().split(' '); if (f[1] !== side) { f[1] = side; f[3] = '-'; G.load(f.join(' ')); } }   // your turn again: the other side waits
+    function arrowsSvg(list, done) {   // done = how many of the arrows you already played (they fade)
+      var head = function (id, cls) { return '<marker id="' + id + '"' + (cls ? ' class="' + cls + '"' : '') + ' viewBox="0 0 10 10" refX="4" refY="5" markerWidth="3" markerHeight="3" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>'; };
+      var h = '<svg class="chs-arrows" viewBox="0 0 8 8" aria-hidden="true"><defs>' + head('chs-ah') + head('chs-ai', 'idea') + '</defs>', k = 0;
+      list.forEach(function (u0) {
+        var idea = u0.charAt(0) === '~', u = idea ? u0.slice(1) : u0;
         if (!/^[a-h][1-8][a-h][1-8]$/.test(u)) return;
+        var old = !idea && k++ < (done || 0);
         var a = posOf(u.slice(0, 2)), z = posOf(u.slice(2, 4)), x1 = a.c + 0.5, y1 = a.r + 0.5, x2 = z.c + 0.5, y2 = z.r + 0.5;
         var dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy) || 1;
         x2 -= dx / len * 0.32; y2 -= dy / len * 0.32;   // so the arrowhead lands right on the square
-        h += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(3) + '" y2="' + y2.toFixed(3) + '" stroke="currentColor" stroke-width="0.16" stroke-linecap="round" marker-end="url(#chs-ah)"/>';
+        h += '<g' + (idea ? ' class="idea"' : old ? ' class="old" opacity="0.3"' : '') + '><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2.toFixed(3) + '" y2="' + y2.toFixed(3) + '" stroke="currentColor" stroke-width="0.16" ' +
+          (idea ? 'stroke-linecap="butt" stroke-dasharray="0.24 0.16" marker-end="url(#chs-ai)"' : 'stroke-linecap="round" marker-end="url(#chs-ah)"') + '/></g>';
       });
       return h + '</svg>';
     }
-    function startPlan(done) {   // walk through the plan on the board, one step at a time
+    function startPlan(done) {   // 🗺️ YOU play the plan: move your pieces where the arrows point, one step at a time (the other side waits)
       var L = OPEN[game.lesson];
       if (L.mate) { planCard(L, done); return; }   // a trap that ended the game: the plan is for when they DON'T fall for it
-      if (game.route || game.phase === 'test') toMainEnd(L);   // (after a 😮 surprise or a test: back to the end of the main line, where the arrows start)
-      closeCard(); sel = null; targets = []; hint = null;
-      game.tour = { step: 0, done: done };
+      clearTimeout(lessonTm); closeCard(); dropGhost(); down = null;
+      toMainEnd(L);   // (always from the end of the main line, where the arrows start: also after a 😮 surprise, a test, or the plan you just played)
+      sel = null; targets = []; hint = null; game.flash = '';
+      game.tour = { step: 0, idx: 0, wrong: 0, busy: false, done: done };
+      forceTurn(game.you);
       showPlanStep();
     }
-    function showPlanStep() {
-      var steps = planOf(OPEN[game.lesson]), st = steps[game.tour.step];
-      coachSays('🗺️ What to do next (' + (game.tour.step + 1) + ' of ' + steps.length + '):\n' + st[0] + (st[1] ? '\n👉 Follow the arrows!' : ''));
-      render();
+    function showPlanStep(anim) {
+      var t = game.tour, steps = planOf(OPEN[game.lesson]), st = steps[t.step], n = stepMoves(st).length, g = stepIdeas(st) ? 'green ' : '';   // (a step can have a dashed idea too)
+      coachSays('🗺️ What to do next (' + (t.step + 1) + ' of ' + steps.length + '):\n' + st[0] +
+        (planWant() ? '\n👉 ' + (t.idx ? 'Now the next ' + g + 'arrow!' : (n > 1 ? 'Your turn: play the ' + n + ' ' + g + 'arrows, one at a time!' : 'Your turn: move your piece where the ' + g + 'arrow points!') + (t.step ? '' : ' (The other side waits while you practice.)')) :
+          t.busy ? '\n✅ ' + pick(['That’s it!', 'You got it!', 'Just like that!']) :
+          stepIdeas(st) ? '\n💭 The dashed orange arrow is an idea for later. You don’t play it now.' : ''));
+      render(anim);
     }
-    function planNext(d) {
-      var t = game.tour, n = planOf(OPEN[game.lesson]).length;
-      t.step = Math.max(0, t.step + d);
+    function planMove(uci, dragged) {   // you play a move of the plan (it has to be the arrow's move)
+      var t = game.tour, want = planWant();
+      if (!want || t.busy) return;
+      hint = null; game.flash = '';
+      if (uci.slice(0, 4) !== want) {
+        t.wrong++; sound('wrong'); sel = null; targets = [];
+        if (t.wrong >= 2) hint = { from: want.slice(0, 2), to: want.slice(2, 4) };
+        flash(t.wrong >= 2 ? '❌ Not quite. Try the blue squares!' : '❌ Not quite. Follow the arrow!');
+        render(); return;
+      }
+      var x = G.move(uci); if (!x) return;
+      forceTurn(game.you); t.idx++; t.wrong = 0;
+      last = { from: x.from, to: x.to }; sel = null; targets = [];
+      sound(x.capture ? 'cap' : x.castle ? 'castle' : 'move'); sound('right');
+      flash('✅ ' + pick(['Correct!', 'Nice!', 'Great move!', 'Perfect!']));
+      var anim = dragged ? null : x, st = planOf(OPEN[game.lesson])[t.step];
+      if (planWant() || stepIdeas(st)) { showPlanStep(anim); return; }   // more arrows to play (or a dashed idea to look at, then Next ▶)
+      t.busy = true; showPlanStep(anim);   // this step is done: on to the next one
+      var my = token;
+      lessonTm = setTimeout(function () { if (my !== token || !game || game.tour !== t) return; t.busy = false; planNext(); }, 1200);
+    }
+    function planNext() {   // on to the next step (only once you played its arrows), or the end of the plan
+      var t = game.tour; if (!t || t.busy || planWant()) return;
+      var n = planOf(OPEN[game.lesson]).length;
+      t.step++; t.idx = 0; t.wrong = 0; hint = null; sel = null; targets = [];
       if (t.step < n) { showPlanStep(); return; }
       var done = t.done; game.tour = null;
       coachSays('🗺️ That’s the plan! Remember it when you play this opening for real.'); render();
@@ -19340,7 +19402,7 @@
       load: function (fen, you, botId) { cancelThinking(); closeCard(); game = { mode: botId ? 'bot' : 'friend', bot: botId || null, pick: you || 'w', you: botId ? you || 'w' : null, orient: you || 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false, fen: fen }; G.load(fen); orient = game.orient; last = null; sel = null; targets = []; hint = null; save(); showGame(); },
       bots: CHESS_BOTS, book: CHESS_BOOK, engine: function () { return G; }, worker: function () { return worker; },
       openings: CHESS_OPENINGS, mates: CHESS_MATES, lesson: function (kind, id) { startLesson(kind, id); },
-      test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); },
+      test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); }, planWant: function () { return planWant(); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); }
     };
