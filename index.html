@@ -673,6 +673,8 @@
   .lf-bar .lo { background: var(--bad); }
   .lf-bar .fame { background: linear-gradient(90deg, var(--lf-a), var(--lf-b)); }
   .lf-bar .magic { background: linear-gradient(90deg, #6f5cff, #c86bff); }   /* 🔮 Magic */
+  .lf-fstats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-top: 8px; }   /* 🥊 fighting stats (Re:Zero world) */
+  .lf-fstats .lf-stat { grid-template-columns: 78px 1fr 24px; gap: 6px; font-size: 0.8rem; }
   .lf-nav { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; gap: 6px; align-items: center; margin-top: 16px; }
   .lf-tab { font: inherit; font-size: 0.74rem; font-weight: 700; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 8px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
   .lf-tab b { font-size: 1.3rem; line-height: 1.15; }
@@ -10335,8 +10337,12 @@
     function rand(a) { return a && a.length ? pick(a) : null; }
     function chance(p) { return Math.random() < p; }
     function clamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
-    var MAGIC_MAX = 100000;   // 🔮 Magic goes all the way up to 100,000
+    var MAGIC_MAX = 1000000;   // 🔮 Magic goes all the way up to 1,000,000 (but it grows slower and slower: see magGain)
     function clampM(v) { return Math.max(0, Math.min(MAGIC_MAX, Math.round(v))); }
+    function magGain(cur, n) {   // 🔮 the higher your Magic, the harder it is to grow: ×1 under 100,000, then ×0.6, ×0.45, and ×0.35 past 600,000
+      if (!(n > 0)) return n;
+      return Math.max(1, Math.round(n * (cur < 100000 ? 1 : cur < 300000 ? 0.6 : cur < 600000 ? 0.45 : 0.35)));
+    }
     function magN(n) { return Math.round(n || 0).toLocaleString('en-US'); }   // 12345 → "12,345"
     function capOf(k) {   // brain implants let Smarts go past 100%, and body implants do the same for Health
       if (k === 'magic') return MAGIC_MAX;
@@ -10384,7 +10390,7 @@
       adultPlaces: ['at a noodle bar', 'at the gym', 'at a drone race', 'on the canal boardwalk', 'at karaoke night'],
       datePlaces: ['at a rooftop noodle bar', 'at the holo-cinema', 'at a drone race', 'at the Glow Market', 'at a hacking meetup', 'at a robot-pet show', 'on the canal boardwalk']
     };
-    var STAT = { happy: ['😊', 'Happy'], health: ['❤️', 'Health'], smarts: ['🧠', 'Smarts'], style: ['😎', 'Style'], magic: ['🔮', 'Magic'] };   // 🔮 Magic is only in the Re:Zero world, and it goes up to 100,000
+    var STAT = { happy: ['😊', 'Happy'], health: ['❤️', 'Health'], smarts: ['🧠', 'Smarts'], style: ['😎', 'Style'], magic: ['🔮', 'Magic'] };   // 🔮 Magic is only in the Re:Zero world, and it goes up to 1,000,000
     var JOBS = [
       { id: 'helper', e: '🍜', t: 'Noodle Bar Helper', pay: 2500, pt: 1, min: 14 },
       { id: 'washer', e: '🧽', t: 'Hover-Car Washer', pay: 2200, pt: 1, min: 14 },
@@ -10975,6 +10981,7 @@
         L.uni = null;
       }
       if (L && L.world === 'rezero' && !L.elems) { L.elems = rollElems(); L.gate = 100; }   // 🌀 everyone has an element now
+      if (L && L.world === 'rezero' && !L.fs) L.fs = fsStart();   // 🥊 lives from before get fighting stats too
       if (L && L.world === 'rezero' && L.spirit) { L.spirits = (L.spirits || []).concat([{ n: L.spirit, el: pick(['fire', 'water', 'earth', 'air']) }]); delete L.spirit; }
       if (L && L.world === 'rezero') degrees().forEach(function (d) { L.mastered = L.mastered || []; if (TUT[d.major] && L.mastered.indexOf(d.major) < 0) L.mastered.push(d.major); });
       if (L && L.world === 'rezero' && L.st && L.st.magic == null) { L.st.magic = clampM((R(10, 30) + (L.magic || 0) * 10 + ((L.mastered || []).indexOf('magic') >= 0 ? 15 : 0) + (hasDP('mana') || hasDP('sorcery') ? 15 : 0)) * 1000 + R(0, 999)); L.mk = 1; }   // 🔮 lives from before get a Magic stat too
@@ -11055,12 +11062,18 @@
       else log((L.elems[0] === 'light' ? '☀️ SUPER RARE! ' : L.elems[0] === 'dark' ? '🌑 RARE! ' : '🌀 ') + 'Your magic element is ' + elemName(L.elems[0]) + '. It’s the only kind of magic you can use: ' + ELEMS[L.elems[0]].d + '.');
       if (L.elems.some(function (x) { return ELEMS[x].rare; })) award('rzrare');
       if (hasDP('mana')) L.magic = Math.max(L.magic || 0, 1);
+      if (yinYang()) { log('☯️ LEGENDARY!!! You have ☀️ Light AND 🌑 Dark magic: the powers of YIN AND YANG! Light and dark keep each other in balance, so magic strains your gate half as much, your gate heals all the way every year, and your 🔮 Magic grows by itself. Someday you’ll learn the ☯️ Yin and Yang spell!'); award('rzyinyang'); }
+      L.fs = fsStart();   // 🥊 your fighting stats
     }
     function dpLine() {   // under your stats: what makes you special
       var bits = [L.reinhard ? '⚔️ Reinhard’s divine protections: ' + L.dp.map(function (id) { return DP[id].e; }).join('') : (L.dp || []).length ? L.dp.map(function (id) { return DP[id].e + ' Divine Protection of ' + DP[id].t; }).join(' · ') : '🌫️ No divine protection'];
       if (L.rbd) bits.push('💜 Return by Death' + (L.rbdCount ? ' (used ' + L.rbdCount + (L.rbdCount === 1 ? ' time)' : ' times)') : ''));
       var me = magicEls();
-      if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of 3 spells)' : ' (no spells yet)'));
+      if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of ' + MAXSPELL + ' spells)' : ' (no spells yet)'));
+      var sh = subsHave(); if (sh.length) bits.push(sh.map(function (x) { return SUBEL[x].e + ' ' + SUBEL[x].t; }).join(' + ') + ' magic');   // ❄️ sub-elements
+      var cb = combosHave().filter(function (k) { return k !== 'dark+light'; }); if (cb.length) bits.push(cb.length === 1 ? COMBO[cb[0]].e + ' ' + COMBO[cb[0]].t : '🔥🌪️ ' + cb.length + ' combo spells');
+      if (yinYang()) bits.push('☯️ Yin and Yang');
+      if (L.curse) bits.push('☠️ Cursed by ' + L.curse.n + ': ' + curseLeft());
       if (L.great) bits.push(L.great.e + ' ' + L.great.n + ' (great spirit)'); else if ((L.spirits || []).length) bits.push('🧚 ' + L.spirits.length + (L.spirits.length === 1 ? ' spirit' : ' spirits'));
       return bits.join(' · ');
     }
@@ -11072,13 +11085,14 @@
       var n = (L.rbdCount || 0) + 1, why = L.cause, at = L.age;
       travel(x, true);
       L.rbdCount = n; L.rbd = true;
+      if (L.curse && L.done) delete L.done.rzcurse;   // ☠️ this time, you can hunt down the mabeast that cursed you again
       log('💜 “I love you…” ↩️ RETURN BY DEATH! You died at age ' + at + ' (' + why + ')… and then you woke up back at age ' + L.age + ', right before that year started. You remember everything!' + (n > 1 ? ' (That’s ' + n + ' times now.)' : ''));
       award('rzrbd'); if (n >= 5) award('rzloop');
       save(); render();
       outcome('💜', '“I love you…” ↩️ RETURN BY DEATH! You’re back at age ' + L.age + ', right before the year you died (' + why + '). This time, you know what’s coming!', []);
     }
     function phoenix(cause) {   // 🔥 the Divine Protection of the Phoenix. Reinhard's can never be lost, so it comes back every time!
-      L.phoenixUsed = true; L.phoenixN = (L.phoenixN || 0) + 1; L.st.health = Math.max(L.st.health, 60); L.ill = null; L.doom = null;
+      L.phoenixUsed = true; L.phoenixN = (L.phoenixN || 0) + 1; L.st.health = Math.max(L.st.health, 60); L.ill = null; L.doom = null; L.curse = null;   // (🔥 the flames burn a ☠️ curse away, too)
       var t = L.phoenixN === 1 ? '🔥 You died (' + cause + ')… but then flames swirled all around you, and the Divine Protection of the Phoenix brought you back to life!' + (L.reinhard ? ' Reinhard’s divine protections can never be lost, so the Phoenix will bring you back EVERY time. You can’t die!' : '')
         : '🔥 You died (' + cause + ')… and the Phoenix brought you back AGAIN! That’s ' + L.phoenixN + ' times now. You just can’t die!';
       log(t); award('rzphoenix'); if (L.phoenixN >= 3) award('rzimmortal'); save(); render();
@@ -11094,12 +11108,12 @@
     ];
     var SWORD = byId(SWORDS);
     var ELEMS = {   // 🌀 everyone has ONE element (two is super rare), and you can only use magic of your own element
-      fire: { e: '🔥', t: 'Fire', spells: ['Goa', 'El Goa', 'Ul Goa'], d: 'big damage, and it sets them on fire' },
-      water: { e: '💧', t: 'Water', spells: ['Huma', 'El Huma', 'Ul Huma'], d: 'damage, and it heals you a little' },
-      earth: { e: '🪨', t: 'Earth', spells: ['Dona', 'El Dona', 'Ul Dona'], d: 'damage, and it might stun them' },
-      air: { e: '🌪️', t: 'Air', spells: ['Fula', 'El Fula', 'Ul Fula'], d: 'damage they can’t dodge' },
-      dark: { e: '🌑', t: 'Dark', rare: 1, spells: ['Shamak', 'El Shamak', 'Al Shamak'], d: 'damage, and darkness that makes them miss you' },
-      light: { e: '☀️', t: 'Light', rare: 1, spells: ['Lux', 'El Lux', 'Ul Lux'], d: 'damage, and it heals you a lot' }
+      fire: { e: '🔥', t: 'Fire', spells: ['Goa', 'El Goa', 'Ul Goa', 'Al Goa', 'Inferno Nova'], d: 'big damage, and it sets them on fire' },
+      water: { e: '💧', t: 'Water', spells: ['Huma', 'El Huma', 'Ul Huma', 'Al Huma', 'Tidal Wrath'], d: 'damage, and it heals you a little' },
+      earth: { e: '🪨', t: 'Earth', spells: ['Dona', 'El Dona', 'Ul Dona', 'Al Dona', 'Titan Quake'], d: 'damage, and it might stun them' },
+      air: { e: '🌪️', t: 'Air', spells: ['Fula', 'El Fula', 'Ul Fula', 'Al Fula', 'Sky Splitter'], d: 'damage they can’t dodge' },
+      dark: { e: '🌑', t: 'Dark', rare: 1, spells: ['Shamak', 'El Shamak', 'Ul Shamak', 'Al Shamak', 'Eclipse'], d: 'damage, and darkness that makes them miss you' },
+      light: { e: '☀️', t: 'Light', rare: 1, spells: ['Lux', 'El Lux', 'Ul Lux', 'Al Lux', 'Sunburst'], d: 'damage, and it heals you a lot' }
     };
     function rollElem() { var r = Math.random(); return r < 0.02 ? 'light' : r < 0.06 ? 'dark' : pick(['fire', 'water', 'earth', 'air']); }   // ☀️ 2% · 🌑 4%
     function rollElems() {   // ✨✨ 3%: two elements
@@ -11114,16 +11128,17 @@
       return a;
     }
     function elemName(el) { return ELEMS[el].e + ' ' + ELEMS[el].t; }
-    function spellOf(el, lv) { return ELEMS[el].e + ' ' + ELEMS[el].spells[Math.max(1, Math.min(3, lv || L.magic || 1)) - 1]; }
+    function spellOf(el, lv) { return ELEMS[el].e + ' ' + ELEMS[el].spells[Math.max(1, Math.min(MAXSPELL, lv || L.magic || 1)) - 1]; }
     function newSpells() { return listAnd(magicEls().map(function (el) { return spellOf(el, L.magic); })); }
-    var SPELL_NEED = [0, 0, 30000, 60000];   // 🔮 your 1st spell is free, your 2nd needs Magic 30,000+, your 3rd needs Magic 60,000+
-    function spellReady() { var nx = (L.magic || 0) + 1; return nx <= 3 && (L.st.magic || 0) >= SPELL_NEED[nx]; }
-    function spellNeedTxt() { var nx = (L.magic || 0) + 1; return nx > 3 || spellReady() ? '' : 'To learn your next spell, you need 🔮 Magic ' + magN(SPELL_NEED[nx]) + '+ (you have ' + magN(L.st.magic) + ').'; }
-    function magicMult() { return 0.75 + (L.st.magic || 0) / 200000; }   // 🔮 more Magic = stronger spells (0.75× at 0, 1.25× at 100,000)
+    var MAXSPELL = 5, SPELL_NEED = [0, 0, 30000, 60000, 150000, 400000];   // 🔮 your 1st spell is free; the 2nd needs Magic 30,000+, then 60,000+, 150,000+, and the 5th (ancient!) 400,000+
+    function spellReady() { var nx = (L.magic || 0) + 1; return nx <= MAXSPELL && (L.st.magic || 0) >= SPELL_NEED[nx]; }
+    function spellNeedTxt() { var nx = (L.magic || 0) + 1; return nx > MAXSPELL || spellReady() ? '' : 'To learn your next spell, you need 🔮 Magic ' + magN(SPELL_NEED[nx]) + '+ (you have ' + magN(L.st.magic) + ').'; }
+    function magicMult() { var m = L.st.magic || 0; return 0.75 + Math.min(m, 100000) / 200000 + Math.max(0, m - 100000) / 1200000; }   // 🔮 more Magic = stronger spells (0.75× at 0, 1.25× at 100,000, 2× at 1,000,000)
     function gateNow() { return L.gate == null ? 100 : L.gate; }
-    function gateCost(lv) { return Math.max(2, Math.round([0, 6, 8, 11][lv || 1] * (hasDP('mana') ? 0.6 : 1))); }
+    function gateCost(lv) { return Math.max(2, Math.round([0, 6, 8, 11, 14, 18][Math.min(MAXSPELL, lv || 1)] * (hasDP('mana') ? 0.6 : 1))); }
     function strainGate(n) {   // 🌀 too much magic breaks your gate, and a broken gate never heals
       if (L.gateBroken) return '';
+      if (yinYang()) n = Math.ceil(n / 2);   // ☯️ light and dark keep your gate in balance
       L.gate = Math.max(0, gateNow() - n);
       if (L.gate <= 0) { L.gateBroken = true; award('rzbroken'); return ' 💥 YOUR GATE BROKE from using too much magic! It can never be fixed. You can still use magic, but now every spell hurts your body.'; }
       if (L.gate < 30) return ' ⚠️ Your gate is straining (' + L.gate + '%)! Take a break from magic, or it might break for good.';
@@ -11140,7 +11155,7 @@
       { n: 'Aurora', e: '🦌', t: 'the Great Light Stag', el: 'light' }
     ];
     function spiritMax() { return hasDP('spirits') ? 8 : 6; }
-    function rzPower() { return isRZ() ? dpPower() + (L.swordXP || 0) + (L.sword ? SWORD[L.sword].power : 0) + (hasDegree('sword') ? 15 : 0) + (L.magic || 0) * 4 + (L.magic ? Math.round((L.st.magic || 0) / 4000) : 0) + (L.great ? 20 : (L.spirits || []).length * 3) : 0; }
+    function rzPower() { return isRZ() ? dpPower() + (L.swordXP || 0) + (L.sword ? SWORD[L.sword].power : 0) + (hasDegree('sword') ? 15 : 0) + (L.magic || 0) * 4 + (L.magic ? Math.round(Math.min(L.st.magic || 0, 100000) / 4000 + Math.max(0, (L.st.magic || 0) - 100000) / 20000) : 0) + fsPower() + (L.great ? 20 : (L.spirits || []).length * 3) : 0; }
     function swordSheet() {
       sheet('⚒️ Blacksmith', function (c) {
         note(c, '⚒️ ' + (L.sword ? 'Your sword: ' + SWORD[L.sword].e + ' ' + SWORD[L.sword].t + '. ' : 'You don’t have a sword yet! ') + 'A better sword hits harder in battles and makes you tougher.');
@@ -11156,23 +11171,27 @@
       });
     }
     function rzPracticeMagic() {
-      var lv = L.magic || 0, fx = { magic: [2000, 4000], smarts: [0, 1] }, extra = '';
+      var lv = L.magic || 0, pc = Math.round((L.st.magic || 0) * 0.01), fx = { magic: [2000 + pc, 4000 + pc], smarts: [0, 1] }, extra = '';   // 🔮 strong mages grow a bit more (1% of your Magic)
       if (L.gateBroken) { fx.health = -R(4, 8); extra = ' 💔 Your broken gate made your whole body ache.'; }
       else extra = strainGate(Math.max(2, gateCost(Math.max(1, lv)) - 2));
-      if (lv < 3 && spellReady() && chance(hasDP('mana') ? 1 : 0.25 + (L.st.magic || 0) / 200000)) {   // 🔮 more Magic = learn spells faster
-        L.magic = lv + 1; fx.magic = [4000, 7000]; fx.smarts = [1, 2]; fx.happy = 4;
-        return [fx, '✨ You practiced magic and learned a new spell: ' + newSpells() + '! ' + (lv === 0 ? 'Now you can use magic in battles.' : 'Your magic got stronger.') + extra];
+      if (lv < MAXSPELL && spellReady() && chance(hasDP('mana') ? 1 : 0.25 + Math.min(L.st.magic || 0, 100000) / 200000)) {   // 🔮 more Magic = learn spells faster
+        L.magic = lv + 1; fx.magic = [4000 + pc, 7000 + pc]; fx.smarts = [1, 2]; fx.happy = 4;
+        if (L.magic >= MAXSPELL) award('rzancient');
+        return [fx, (L.magic >= 4 ? '📜 You practiced for days and days, and unlocked an ANCIENT spell: ' : '✨ You practiced magic and learned a new spell: ') + newSpells() + '! ' + (lv === 0 ? 'Now you can use magic in battles.' : 'Your magic got stronger.') + extra];
       }
-      return [fx, pick(['✨ You practiced magic all afternoon. You made a candle flicker. Progress!', '✨ Your spell fizzled and made a sound like a sneezing cat.', '✨ You practiced magic until your mana ran out and you needed a nap.']) + (lv >= 3 ? ' (You already know every spell!)' : spellReady() ? '' : ' ' + spellNeedTxt()) + extra];
+      var sn = subNext(), cn = comboNext();
+      if (sn && chance(0.35)) { fx.happy = 6; return [fx, subAwaken(sn) + extra]; }   // ❄️ a sub-element wakes up
+      if (cn && chance(0.4)) { fx.happy = 6; return [fx, comboLearn(cn) + extra]; }   // 🔥🌪️ two elements become a combo spell
+      return [fx, pick(['✨ You practiced magic all afternoon. You made a candle flicker. Progress!', '✨ Your spell fizzled and made a sound like a sneezing cat.', '✨ You practiced magic until your mana ran out and you needed a nap.']) + (lv >= MAXSPELL ? ' (You already know every spell!)' : spellReady() ? '' : ' ' + spellNeedTxt()) + extra];
     }
     function spiritHunt() {
       var boost = (hasDP('mana') ? 1 : 0) + (hasDP('beasts') ? 1 : 0) + (hasDP('spirits') ? 2 : 0), sp = L.spirits || (L.spirits = []);
-      if (!L.great && chance(0.03 * (1 + boost) * (1 + (L.st.magic || 0) / 100000))) {   // 🌟 a super strong great spirit (rare!)
+      if (!L.great && chance(0.03 * (1 + boost) * (1 + Math.min(L.st.magic || 0, 200000) / 100000))) {   // 🌟 a super strong great spirit (rare!)
         var G = pick(GREAT), fled = sp.length; L.great = G; L.spirits = [];
         award('rzspirit'); award('rzgreat');
         return [{ happy: 15, fame: 5, magic: 10000 }, '🌟 WOW! ' + G.e + ' ' + G.n + ', ' + G.t + ', came out of the spirit forest and made a contract with you! It’s a super strong great spirit. ' + (fled ? 'Your ' + (fled === 1 ? 'little spirit was' : fled + ' little spirits were') + ' SO scared of it that ' + (fled === 1 ? 'it' : 'they') + ' flew away!' : 'Little spirits will be way too scared to come near you now.')];
       }
-      if (!chance(Math.min(0.9, 0.3 + boost * 0.15 + (L.st.magic || 0) / 400000))) return [{ happy: 2 }, '🧚 You searched the spirit forest all day. You saw a glowing butterfly, but no spirit wanted to make a contract this time.'];
+      if (!chance(Math.min(0.9, 0.3 + boost * 0.15 + Math.min(L.st.magic || 0, 100000) / 400000))) return [{ happy: 2 }, '🧚 You searched the spirit forest all day. You saw a glowing butterfly, but no spirit wanted to make a contract this time.'];
       var el = pick(['fire', 'water', 'earth', 'air']), left = LESSER.filter(function (n) { return !sp.some(function (x) { return x.n === n; }); }), nm = pick(left.length ? left : LESSER);
       sp.push({ n: nm, el: el }); award('rzspirit');
       return [{ happy: 8, magic: [2000, 4000] }, '🧚 A tiny ' + ELEMS[el].t.toLowerCase() + ' spirit named ' + nm + ' floated out of the forest and made a contract with you! You have ' + sp.length + (sp.length === 1 ? ' spirit' : ' spirits') + ' now. Spirits fight with you in battles, and they don’t use your gate.'];
@@ -11185,22 +11204,190 @@
       { id: 'rzwolf', e: '🐺', t: 'Mabeast Wolf', who: 'the mabeast wolf', hp: 75, atk: [8, 12], hits: [2, 3], dodge: 0.25, power: 45, speed: 1.2, weapon: '🦷', feint: 0.1, combo: 0.25, noRing: 1 },
       { id: 'rzcultist', e: '🧙', t: 'Witch Cultist', who: 'the Witch Cultist', hp: 100, atk: [9, 13], hits: [2, 3], dodge: 0.3, power: 62, speed: 1.2, weapon: '🔪', feint: 0.3, combo: 0.3, noRing: 1 },
       { id: 'rzarch', e: '😈', t: 'Witch Cult Archbishop', who: 'the Witch Cult Archbishop', hp: 230, atk: [11, 15], hits: [2, 4], dodge: 0.3, power: 110, speed: 1.3, boss: 1, weapon: '🖐️', feint: 0.35, combo: 0.35, enrage: 1, noRing: 1, bossFight: 'A Witch Cult Archbishop with invisible shadow hands!' },
-      { id: 'rzwhale', e: '🐋', t: 'The White Whale', who: 'the White Whale', hp: 320, atk: [14, 20], hits: [2, 4], dodge: 0.15, power: 125, speed: 1.15, boss: 1, weapon: '🌫️', feint: 0.15, combo: 0.25, heavy: 0.3, enrage: 1, noRing: 1, bossFight: 'A giant flying whale, hidden in magic fog. Red ❗ hits can’t be parried!' },
+      { id: 'rzwhale', e: '🐋', t: 'The White Whale', who: 'the White Whale', hp: 320, atk: [14, 20], hits: [2, 4], dodge: 0.15, power: 125, speed: 1.15, boss: 1, weapon: '🌫️', feint: 0.15, combo: 0.25, heavy: 0.3, enrage: 1, noRing: 1, bossFight: 'A giant flying whale, hidden in magic fog. Red ❗ hits can’t be parried!', hello: '🌫️ A thick fog rolled in… and out of it swam THE WHITE WHALE! ☠️ If it beats you, you die!' },
       { id: 'rzwarden', e: '💂', t: 'Dungeon Guard', who: 'the dungeon guard', hp: 110, atk: [10, 14], hits: [2, 3], dodge: 0.2, power: 68, speed: 1.15, weapon: '🔨', feint: 0.1, combo: 0.1, noRing: 1 }
     ];
     function rzEnemy(id) { return RZ_ENEMIES.filter(function (x) { return x.id === id; })[0]; }
-    function rzFight(id, onWin) {
-      var en = rzEnemy(id);
+    function rzFight(id, onWin, onLose, after) {   // onLose: what happens if you lose (🐋 the White Whale: you die!) · after: extra words for any ending (☠️ a curse)
+      var en = typeof id === 'string' ? rzEnemy(id) : id;
       return fight(en, function (res) {
-        var h = hurt(res);
-        if (res.win) return onWin(h);
-        if (res.fled) return [{ happy: -2, health: h }, '🏃 You got away from ' + en.who + '. Live to fight another day!'];
-        return [{ happy: -6, health: h }, '🤕 ' + cap(en.who) + ' beat you. You limped home to rest.'];
+        var h = hurt(res), xp = fsBattle(res), r;
+        if (res.win) { r = onWin(h); r[1] += xp; }
+        else if (res.fled) r = [{ happy: -2, health: h }, '🏃 You got away from ' + en.who + '. Live to fight another day!'];
+        else if (onLose) r = onLose(h);
+        else r = [{ happy: -6, health: h }, '🤕 ' + cap(en.who) + ' beat you. You limped home to rest.' + xp];
+        if (after) r[1] += after(res);
+        return r;
       });
     }
-    function rzFightOpt(c, key, e, t, sub, id, onWin) {
+    function rzFightOpt(c, key, e, t, sub, id, onWin, onLose, after) {
       var en = rzEnemy(id), dn = doneYet(key);
-      opt(c, e, t, dn ? 'Done this year ✓' : (premium ? (isHard(en) || en.bossFight ? '⚔️ Real battle! · ' : odds(winChance(en), 'chance to win') + ' · ') : '') + sub, function () { L.done[key] = L.age; play(e, rzFight(id, onWin)); }, dn);
+      opt(c, e, t, dn ? 'Done this year ✓' : (premium ? (isHard(en) || en.bossFight ? '⚔️ Real battle! · ' : odds(winChance(en), 'chance to win') + ' · ') : '') + sub, function () { L.done[key] = L.age; play(e, rzFight(id, onWin, onLose, after)); }, dn);
+    }
+    // ---- 🐋 the White Whale: REALLY hard to find, and if it beats you, you die ----
+    function whaleOdds() { return Math.min(0.6, (hasDP('mist') ? 0.35 : 0.08) + (hasDP('fortune') ? 0.04 : 0)); }   // most hunts find NOTHING (🌫️ Mist can see through its fog)
+    function whaleLose() { L.doom = 'the White Whale'; return [{ health: -999 }, '🐋 The White Whale’s fog swallowed you whole… and the whole kingdom forgot you were ever there.']; }
+    function whaleHunt() {
+      L.whaleHunts = (L.whaleHunts || 0) + 1;
+      if (!chance(whaleOdds())) return [{ happy: -2 }, pick(['🌫️ You searched the foggy skies for weeks… but the White Whale was nowhere to be found. Some people hunt it their whole lives and never see it.',
+        '🐋 You followed rumors of strange fog from village to village, but every time you got there, the fog was already gone.',
+        '🔭 You climbed the tallest tower and watched the sky for a whole month. You saw clouds. Lots of clouds. No whale.',
+        '🌫️ A fog rolled in, and your heart pounded… but it was just regular fog. The White Whale is REALLY hard to find.'])];
+      award('rzwhalefind');
+      return rzFight('rzwhale', whaleWin, whaleLose);
+    }
+
+    // ---- ☠️ mabeast curses: a bite can leave a curse that kills you in a few years… unless you defeat the beast that cursed you ----
+    var CURSE_NAMES = ['Greyfang', 'Nightclaw', 'Ashmaw', 'Redeye', 'Grimtooth', 'Frostfang', 'Gloomhowl', 'Bonegnaw', 'Shadowpelt', 'Mudpaw'], CURSE_YEARS = 3;
+    function curseChance(res) { if (!isRZ() || L.curse || hasDP('beasts')) return 0; return res.win ? 0.15 : res.fled ? 0.2 : 0.4; }   // (🗣️ Soul Language: mabeasts never curse you)
+    function maybeCurse(res) {   // after a fight with mabeasts: one of them might bite you and leave a curse
+      if (!chance(curseChance(res))) return '';
+      L.curse = { n: pick(CURSE_NAMES), left: CURSE_YEARS, at: L.age }; award('rzcursed');
+      return ' ☠️ But before it ran off, a mabeast called ' + L.curse.n + ' BIT you, and a dark curse mark spread across your arm! The curse will kill you in ' + CURSE_YEARS + ' years… unless you hunt down ' + L.curse.n + ' and defeat it (⚡ Do → Adventure).';
+    }
+    function curseLeft() { return L.curse.left + (L.curse.left === 1 ? ' year left!' : ' years left'); }
+    function curseFoe() { return { id: 'rzalpha', e: '🐺', t: L.curse.n, who: L.curse.n, hp: 95, atk: [9, 13], hits: [2, 3], dodge: 0.25, power: 55, speed: 1.25, weapon: '🦷', feint: 0.15, combo: 0.3, always: 1, noRing: 1, hello: '☠️ You tracked ' + L.curse.n + ' to its den. It growled at you, and your curse mark burned!' }; }
+    function curseHunt() {   // 🐺 defeat the mabeast that cursed you, and the curse breaks
+      var n = L.curse.n;
+      return rzFight(curseFoe(), function (h) { L.curse = null; award('rzcurebreak'); return [{ money: 2000, happy: 15, fame: 3, good: 2, health: h }, '✨ You defeated ' + n + '! The curse mark on your arm faded away like smoke. You’re FREE! (The village gave you 2,000 gold, too.)']; },
+        function (h) { return [{ happy: -6, health: h }, '🤕 ' + n + ' beat you and ran back into the forest. The curse mark is still there…' + (L.curse ? ' (' + curseLeft() + ')' : '')]; });
+    }
+
+    // ---- 🥊 fighting stats (Re:Zero world): Strength, Defense, Speed and Skill, 0–100 ----
+    var FS = [['str', '🥊', 'Strength', 'your hits do more damage'], ['def', '🛡️', 'Defense', 'you take less damage'], ['spd', '💨', 'Speed', 'easier to dodge, and to run away'], ['skl', '🎯', 'Skill', 'critical hits, and they dodge less']];
+    var FSE = { str: '🥊', def: '🛡️', spd: '💨', skl: '🎯' };
+    function fsOf(k) { return (L && L.fs && L.fs[k]) || 0; }
+    function fsStart() {   // how strong you are at the start (a grown-up kid starts stronger)
+      var base = Math.min(25, Math.round(Math.max(0, (L.age || 0) - 3) * 1.5)), f = {};
+      FS.forEach(function (x) { f[x[0]] = clamp(base + R(1, 8)); });
+      if (L.swordXP) { f.str = clamp(f.str + L.swordXP); f.skl = clamp(f.skl + L.swordXP); }
+      if (hasDP('strength')) { f.str = clamp(f.str + 20); f.skl = clamp(f.skl + 10); }   // ⚔️ the War God
+      if (hasDP('saint')) FS.forEach(function (x) { f[x[0]] = clamp(f[x[0]] + 30); });   // 🗡️ the Sword Saint
+      if (hasDP('swift')) f.spd = clamp(f.spd + 25);
+      if (hasDP('arrow')) f.spd = clamp(f.spd + 10);
+      if (hasDP('earthsp')) f.def = clamp(f.def + 15);
+      if (hasDP('night')) f.spd = clamp(f.spd + 5);
+      return f;
+    }
+    function fsUp(k, n) { if (!L.fs) L.fs = fsStart(); var o = L.fs[k] || 0; L.fs[k] = clamp(o + n); return L.fs[k] - o; }
+    function fsTrain(gains) {   // 🏋️ gains = { str: [1, 3], … } → “ (🥊 +2 💨 +1)”
+      var bits = [];
+      Object.keys(gains).forEach(function (k) { var g = fsUp(k, val(gains[k])); if (g > 0) bits.push(FSE[k] + ' +' + g); });
+      return bits.length ? ' (' + bits.join(' ') + ')' : '';
+    }
+    function fsBattle(res) {   // ⚔️ a real battle makes you a better fighter
+      if (!isRZ() || res.auto || !(res.win || res.lost)) return '';
+      var ks = ['str', 'def', 'spd', 'skl'].sort(function () { return Math.random() - 0.5; }).slice(0, res.win ? 2 : 1), g = {};
+      ks.forEach(function (k) { g[k] = 1; });
+      var t = fsTrain(g);
+      return t ? ' Battle experience: ' + t.slice(2, -1) + '.' : '';
+    }
+    function fsPower() { return isRZ() && L.fs ? Math.round((fsOf('str') + fsOf('def') + fsOf('spd') + fsOf('skl')) * 0.2) : 0; }
+
+    // ---- ⛲ the mana spring: Magic grows by 1–2% (so strong mages grow more), and your gate gets a rest ----
+    function rzSpring() {
+      var m = L.st.magic || 0, g = Math.max(2000, Math.round(m * R(10, 20) / 1000)), gb = L.gateBroken ? 0 : Math.min(100 - gateNow(), 25);
+      if (gb > 0) L.gate = gateNow() + gb;
+      return [{ magic: g, happy: [1, 3] }, pick(['⛲ You sat by the glowing mana spring and breathed in the magic.', '⛲ You meditated at the mana spring until the fireflies came out.', '⛲ The mana spring hummed while you meditated. You could feel your magic growing.']) + (gb > 0 ? ' 🌀 Your gate feels rested (+' + gb + '%).' : '')];
+    }
+
+    // ---- ❄️ sub-elements: once your magic is strong, your element grows a new kind of magic ----
+    var SUBEL = {
+      water: { e: '❄️', t: 'Ice', spell: 'Frost Lance', d: 'it can freeze them solid, so they skip a turn' },
+      fire: { e: '💥', t: 'Explosion', spell: 'Blast Bloom', d: 'HUGE damage, but it strains your gate more' },
+      earth: { e: '💎', t: 'Crystal', spell: 'Crystal Spikes', d: 'a crystal shield blocks their next hit' },
+      air: { e: '⚡', t: 'Lightning', spell: 'Thunder Spear', d: 'it never misses, and it can stun them' },
+      dark: { e: '🪐', t: 'Gravity', spell: 'Gravity Crush', d: 'they can’t dodge your next 3 attacks' },
+      light: { e: '💖', t: 'Holy', spell: 'Holy Light', d: 'it heals you a LOT, and it hurts the Witch Cult and mabeasts extra' }
+    };
+    var SUB_NEED = 100000;   // 🔮 sub-elements wake up at Magic 100,000 (once you know 3 spells)
+    function subsHave() { var me = magicEls(); return (L.subs || []).filter(function (el) { return me.indexOf(el) >= 0; }); }
+    function subNext() { var me = magicEls(); if ((L.st.magic || 0) < SUB_NEED || (L.magic || 0) < 3) return null; for (var i = 0; i < me.length; i++) if ((L.subs || []).indexOf(me[i]) < 0) return me[i]; return null; }
+    function subAwaken(el) {
+      (L.subs = L.subs || []).push(el); award('rzsub');
+      var S = SUBEL[el];
+      return S.e + ' SUB-ELEMENT AWAKENED! Your ' + ELEMS[el].t.toLowerCase() + ' magic turned into something new: ' + S.e + ' ' + S.t + ' magic! You learned ' + S.e + ' ' + S.spell + ': ' + S.d + '.';
+    }
+
+    // ---- 🔥🌪️ combo spells: mix two of your elements (you need two elements, 2 spells, and Magic 50,000) ----
+    var COMBO = {
+      'air+fire': { e: '🔥🌪️', t: 'Fire Tornado', m: 1.6, burn: 3, sure: 1, d: 'a spinning tornado of fire: it can’t be dodged, and it burns them' },
+      'fire+water': { e: '♨️', t: 'Steam Burst', m: 1.3, blind: 2, d: 'a cloud of boiling steam: they can barely see' },
+      'earth+fire': { e: '🌋', t: 'Lava Burst', m: 1.5, burn: 2, d: 'melted rock: big damage, and it burns' },
+      'earth+water': { e: '🟤', t: 'Mudslide', m: 1.3, cripple: 3, d: 'a wave of mud: they can’t dodge your next 3 attacks' },
+      'air+water': { e: '⛈️', t: 'Thunderstorm', m: 1.4, stun: 0.5, d: 'a storm cloud full of lightning: it can stun them' },
+      'air+earth': { e: '🏜️', t: 'Sandstorm', m: 1.3, blind: 2, sure: 1, d: 'a sandstorm: it can’t be dodged, and they can barely see' },
+      'dark+fire': { e: '🟣', t: 'Shadow Flame', m: 1.5, burn: 2, blind: 1, d: 'purple fire made of shadows: it burns AND blinds' },
+      'fire+light': { e: '🌞', t: 'Solar Flare', m: 1.8, d: 'a blast as bright as the sun: HUGE damage' },
+      'dark+water': { e: '🌊', t: 'Abyss Tide', m: 1.4, blind: 2, d: 'dark water from the deepest sea: they can barely see' },
+      'light+water': { e: '🌈', t: 'Rainbow Mist', m: 1.1, heal: [30, 40], d: 'a sparkly rainbow mist: it heals you a lot' },
+      'dark+earth': { e: '🕳️', t: 'Shadow Quake', m: 1.4, stun: 0.45, d: 'the ground cracks open into darkness: it can stun them' },
+      'earth+light': { e: '🔆', t: 'Prism Spikes', m: 1.6, d: 'shining crystal spikes: big damage' },
+      'air+dark': { e: '🌑🌪️', t: 'Shadow Cyclone', m: 1.4, blind: 1, sure: 1, d: 'a whirlwind of shadows: it can’t be dodged, and it blinds them' },
+      'air+light': { e: '🌬️', t: 'Light Gale', m: 1.5, sure: 1, d: 'a wind made of light: it can’t be dodged' },
+      'dark+light': { e: '☯️', t: 'Yin and Yang', m: 1.9, heal: [25, 35], pct: 1, blind: 2, sure: 1, d: 'light and dark in perfect balance: HUGE damage, it heals you, it can’t be dodged, and they can barely see' }
+    };
+    var COMBO_NEED = 50000;
+    function comboKey(a, b) { return [a, b].sort().join('+'); }
+    function combosHave() { var me = magicEls(); return (L.combos || []).filter(function (k) { var p = k.split('+'); return COMBO[k] && me.indexOf(p[0]) >= 0 && me.indexOf(p[1]) >= 0; }); }
+    function comboNext() {   // a combo spell you could figure out now (☯️ Yin and Yang comes first!)
+      var me = magicEls(); if (me.length < 2 || (L.magic || 0) < 2 || (L.st.magic || 0) < COMBO_NEED) return null;
+      var out = [];
+      for (var i = 0; i < me.length; i++) for (var j = i + 1; j < me.length; j++) { var k = comboKey(me[i], me[j]); if (COMBO[k] && (L.combos || []).indexOf(k) < 0) out.push(k); }
+      return out.indexOf('dark+light') >= 0 ? 'dark+light' : out.length ? pick(out) : null;
+    }
+    function comboLearn(k) {
+      (L.combos = L.combos || []).push(k); award('rzcombo');
+      var C = COMBO[k], p = k.split('+');
+      return C.e + ' COMBO SPELL! You mixed your ' + ELEMS[p[0]].t.toLowerCase() + ' and ' + ELEMS[p[1]].t.toLowerCase() + ' magic together and made ' + C.e + ' ' + C.t.toUpperCase() + ': ' + C.d + '!';
+    }
+    function yinYang() { var me = isRZ() ? magicEls() : []; return me.indexOf('light') >= 0 && me.indexOf('dark') >= 0; }   // ☯️ light AND dark: the powers of Yin and Yang
+
+    // ---- ✨ casting spells in a battle ----
+    var SPELL_DMG = [[0, 0], [14, 20], [18, 26], [24, 32], [32, 42], [42, 56]];   // damage for spells 1–5
+    var DARK_FOES = ['rzcultist', 'rzarch', 'rzwolf', 'rzalpha'];   // 💖 holy magic hurts the Witch Cult and mabeasts extra
+    function rzSpellMoves() {   // every spell you can cast: your element(s), your sub-elements, and your combo spells
+      if (!L.magic) return [];
+      return magicEls().map(function (el) { return 'rzm-' + el; }).concat(subsHave().map(function (el) { return 'rzs-' + el; }), combosHave().map(function (k) { return 'rzc-' + k; }));
+    }
+    function spellInfo(id) {   // a spell's button: its name, what it does, and how much it strains your gate
+      var kind = id.slice(0, 4), key = id.slice(4), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1));
+      if (kind === 'rzm-') return { e: ELEMS[key].e, t: ELEMS[key].spells[lv - 1], d: cap(ELEMS[key].d), cost: gateCost(lv) };
+      if (kind === 'rzs-') return { e: SUBEL[key].e, t: SUBEL[key].spell, d: SUBEL[key].t + ' magic: ' + SUBEL[key].d, cost: gateCost(lv) + (key === 'fire' ? 5 : 2) };
+      return { e: COMBO[key].e, t: COMBO[key].t, d: 'Combo: ' + COMBO[key].d, cost: gateCost(lv) + 4 };
+    }
+    function rzSpell(id) {   // ✨ roll a spell: its damage, healing, and what it does when it hits
+      var kind = id.slice(0, 4), key = id.slice(4);
+      if (kind !== 'rzm-' && kind !== 'rzs-' && kind !== 'rzc-') return null;
+      var I = spellInfo(id), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1)), o = { nm: [I.e, I.t], cost: I.cost, sure: false, fx: {} };
+      var base = R(SPELL_DMG[lv][0], SPELL_DMG[lv][1]) * magicMult() * (hasDP('mana') ? 1.25 : 1) * (hasDegree('magic') ? 1.2 : 1);
+      if (kind === 'rzm-') {
+        o.dmg = Math.round(base * (key === 'dark' ? 0.85 : key === 'water' ? (hasDP('water') ? 1.2 : 0.9) : 1));
+        o.sure = key === 'air';   // 🌪️ air magic can’t be dodged
+        if (key === 'water' || key === 'light') o.heal = key === 'light' ? R(15, 22) : R(8, 12) + (hasDP('water') ? 6 : 0);
+        o.fx = key === 'fire' ? { burn: 2 } : key === 'earth' ? { stun: 0.4, icon: '🪨' } : key === 'dark' ? { blind: 2 } : {};
+      } else if (kind === 'rzs-') {
+        o.dmg = Math.round(base * { water: 0.95, fire: 1.5, earth: 0.9, air: 1.1, dark: 0.9, light: 0.9 }[key] * (key === 'light' && DARK_FOES.indexOf(B.en.id) >= 0 ? 1.5 : 1));
+        o.sure = key === 'air';
+        if (key === 'light') o.heal = R(25, 35);
+        o.fx = { water: { freeze: 0.5 }, earth: { shield: 1 }, air: { stun: 0.35, icon: '⚡' }, dark: { cripple: 3 }, fire: {}, light: {} }[key];
+      } else {
+        var C = COMBO[key];
+        o.dmg = Math.round(base * C.m); o.sure = !!C.sure;
+        if (C.heal) o.heal = C.pct ? Math.round(B.max * R(C.heal[0], C.heal[1]) / 100) : R(C.heal[0], C.heal[1]);
+        o.fx = { burn: C.burn, blind: C.blind, cripple: C.cripple, stun: C.stun };
+      }
+      return o;
+    }
+    function spellFx(f) {   // what a spell does when it hits
+      var t = '';
+      if (f.burn) { B.burn = Math.max(B.burn || 0, f.burn); t += ' 🔥 They’re on fire!'; }
+      if (f.blind) { B.blind = Math.max(B.blind || 0, f.blind); t += ' 🌑 They can barely see!'; }
+      if (f.cripple) { B.cripple = Math.max(B.cripple || 0, f.cripple); t += ' 🪐 They can’t dodge your next ' + f.cripple + ' attacks!'; }
+      if (f.stun && chance(f.stun)) { B.stun = true; t += ' ' + (f.icon || '⚡') + ' They’re stunned!'; }
+      if (f.freeze && chance(f.freeze)) { B.stun = true; t += ' ❄️ They’re frozen solid!'; }
+      if (f.shield) { B.shield = 1; t += ' 💎 A crystal shield will block their next hit!'; }
+      return t;
     }
     function whaleWin(h) { award('rzwhale'); return [{ money: 80000, happy: 15, fame: 25, health: h }, '🐋 YOU DEFEATED THE WHITE WHALE! The fog lifted, the sun came out, and the whole kingdom threw you a parade. The king sent you 80,000 gold!']; }
 
@@ -11249,6 +11436,7 @@
       var T = TUT[L.tutor], fx = T.stat === 'magic' ? { magic: [2000, 4000], happy: -1 } : { smarts: [1, 3], happy: -1 }, extra = '';
       if (T.id === 'magic' && spellReady() && chance(0.35)) { L.magic = (L.magic || 0) + 1; extra = ' You learned a new spell: ' + newSpells() + '!'; }
       if (T.id === 'sword' && (L.swordXP || 0) < 20) { L.swordXP = Math.min(20, (L.swordXP || 0) + 2); fx.health = [1, 3]; extra = ' (+2 fight power)'; }
+      if (T.id === 'sword') extra += fsTrain({ str: 1, skl: 1 });
       if (T.stat === 'style') fx.style = [1, 3];
       return [fx, '📖 You studied extra hard with ' + L.tutorName + '.' + extra];
     }
@@ -11257,13 +11445,13 @@
       var fee = tutorFee(T);
       if (fee && L.money < fee) { log('📚 You couldn’t pay ' + L.tutorName + ' for your ' + T.t + ' lessons, so they stopped coming.'); L.tutor = null; return; }
       L.money -= fee; L.tutorY = L.tutorY || {}; L.tutorY[T.id] = (L.tutorY[T.id] || 0) + 1;
-      s[T.stat] = capStat(T.stat, (s[T.stat] || 0) + (T.stat === 'magic' ? R(2000, 4000) : R(1, 3)));
+      s[T.stat] = capStat(T.stat, (s[T.stat] || 0) + (T.stat === 'magic' ? magGain(s[T.stat] || 0, R(2000, 4000)) : R(1, 3)));
       if (T.id === 'magic' && spellReady() && chance(0.5)) { L.magic = (L.magic || 0) + 1; log('🔮 ' + L.tutorName + ' taught you a new spell: ' + newSpells() + '!'); }
-      if (T.id === 'sword') L.swordXP = Math.min(20, (L.swordXP || 0) + 2);
+      if (T.id === 'sword') { L.swordXP = Math.min(20, (L.swordXP || 0) + 2); fsUp('str', 2); fsUp('skl', 2); }
       if (L.tutorY[T.id] >= T.years) {
         (L.mastered = L.mastered || []).push(T.id); L.tutor = null;
         if (T.major && !hasDegree(T.major)) degrees().push({ major: T.major, school: 'tutor' });
-        s.happy = clamp(s.happy + 8); if (T.id === 'magic') s.magic = clampM((s.magic || 0) + 10000);
+        s.happy = clamp(s.happy + 8); if (T.id === 'magic') s.magic = clampM((s.magic || 0) + magGain(s.magic || 0, 10000));
         log('🎓 You mastered ' + T.t + '! ' + L.tutorName + ' says you don’t need lessons anymore. ' + T.done);
         award('rzpupil');
       }
@@ -11323,11 +11511,15 @@
     // ---- ⚡ activities and mischief ----
     var RZ_ACTS = [
       { id: 'rzlib', e: '📚', t: 'Visit the royal library', min: 5, sub: 'Get smarter', run: function () { return [{ smarts: [3, 6] }, pick(['📚 You read a book about the history of the kingdom and its dragon.', '📚 You read a book about every kind of mabeast. Some of them have SO many teeth.', '📚 You learned to read old spell runes. They mostly say “don’t touch.”'])]; } },
-      { id: 'rzsword', e: '⚔️', t: 'Sword training', min: 8, sub: 'Get healthier and stronger in fights', run: function () { var up = (L.swordXP || 0) < 20; if (up) L.swordXP = (L.swordXP || 0) + 2; return [{ health: [3, 7] }, pick(['⚔️ You practiced sword swings until your arms felt like jelly.', '⚔️ You sparred with a retired knight. He beat you with a broom.', '⚔️ You practiced on a training dummy. The dummy is losing.']) + (up ? ' (+2 fight power)' : '')]; } },
+      { id: 'rzsword', e: '⚔️', t: 'Sword training', min: 8, sub: 'Get healthier · 🥊 Strength and 🎯 Skill', run: function () { var up = (L.swordXP || 0) < 20; if (up) L.swordXP = (L.swordXP || 0) + 2; return [{ health: [3, 7] }, pick(['⚔️ You practiced sword swings until your arms felt like jelly.', '⚔️ You sparred with a retired knight. He beat you with a broom.', '⚔️ You practiced on a training dummy. The dummy is losing.']) + (up ? ' (+2 fight power)' : '') + fsTrain({ str: [1, 3], skl: [0, 2] })]; } },
+      { id: 'rzrun', e: '🏃', t: 'Run the obstacle course', min: 8, sub: 'Get faster: 💨 Speed', run: function () { return [{ health: [1, 3] }, pick(['🏃 You ran the obstacle course, jumped every fence, and only fell in the mud once.', '🏃 You raced a land dragon around the field. It won, but not by much!', '🏃 You climbed the rope wall so fast the knights started a timer.']) + fsTrain({ spd: [2, 4] })]; } },
+      { id: 'rzshield', e: '🛡️', t: 'Shield drills', min: 10, sub: 'Get tougher: 🛡️ Defense', run: function () { return [{ health: [1, 2] }, pick(['🛡️ You held up your shield while a knight bonked it with a wooden sword. 200 times.', '🛡️ You practiced blocking flying apples with a shield. Most of them.', '🛡️ You learned to stand your ground when something big charges at you.']) + fsTrain({ def: [2, 4], str: [0, 1] })]; } },
+      { id: 'rztarget', e: '🎯', t: 'Target practice', min: 8, sub: 'Get more skilled: 🎯 Skill', run: function () { return [{ happy: [1, 3] }, pick(['🎯 You threw knives at a target and hit the middle three times in a row!', '🎯 You practiced hitting tiny targets with a wooden sword until you never missed.', '🎯 You hit the bullseye from across the whole training yard.']) + fsTrain({ skl: [2, 4] })]; } },
       { id: 'rzmagic', e: '✨', t: 'Practice magic', min: 6, sub: 'More 🔮 Magic, and learn spells for battles', run: rzPracticeMagic },
+      { id: 'rzspring', e: '⛲', t: 'Meditate at the mana spring', min: 15, cost: 500, sub: '+🔮 Magic (more when your magic is strong) · rests your gate', run: rzSpring },
       { id: 'rzfest', e: '🎪', t: 'Go to the festival', min: 5, cost: 20, sub: 'Have fun', run: function () { return [{ happy: [5, 10] }, pick(['🎪 You won a stuffed land dragon at the ring toss!', '🎪 You watched fire-dancers and ate three honey cakes.', '🎪 You rode the spirit-powered merry-go-round until you were dizzy.'])]; } },
       { id: 'rzmarket', e: '🛍️', t: 'Shop at the market', min: 10, cost: 300, sub: 'Look cooler', run: function () { return [{ style: [4, 8], happy: [1, 3] }, pick(['🛍️ You bought a cloak that sparkles in the moonlight.', '🛍️ You got boots made by the best cobbler in the kingdom. Super stylish.', '🛍️ You bought a hat with a feather so big it bumps into doorways.'])]; } },
-      { id: 'rzheal', e: '🩺', t: 'Visit a healer', min: 0, cost: 200, sub: 'Feel better (free for kids)', run: function () { if (L.ill) { var t = '🩺 The healer’s glowing hands cured your ' + L.ill + '!'; L.ill = null; return [{ health: [6, 12] }, t]; } return [{ health: [1, 3] }, '🩺 The healer waved a glowing hand over you and said you’re doing great.']; } },
+      { id: 'rzheal', e: '🩺', t: 'Visit a healer', min: 0, cost: 200, sub: 'Feel better (free for kids)', run: function () { var cu = L.curse ? ' But when she saw your curse mark, she shook her head: “Healing magic can’t break a mabeast’s curse. Only defeating ' + L.curse.n + ' can do that!”' : ''; if (L.ill) { var t = '🩺 The healer’s glowing hands cured your ' + L.ill + '!' + cu; L.ill = null; return [{ health: [6, 12] }, t]; } return [{ health: [1, 3] }, cu ? '🩺 The healer waved a glowing hand over you.' + cu : '🩺 The healer waved a glowing hand over you and said you’re doing great.']; } },
       { id: 'rzstars', e: '🌌', t: 'Stargazing on the hill', min: 5, sub: 'Relax and feel happier', run: function () { return [{ happy: [3, 7], smarts: [0, 1] }, pick(['🌌 You lay on the hill and counted shooting stars. You got to 41.', '🌌 You watched the stars over the castle and made a wish.'])]; } },
       { id: 'rzride', e: '🦎', t: 'Ride a land dragon', min: 10, cost: 60, sub: 'Zoom across the fields', run: function () { return chance(0.15) ? [{ health: -2, happy: 3 }, '🦎 Your land dragon got excited and you fell into a haystack. Still fun!'] : [{ happy: [6, 10] }, pick(['🦎 You rode a land dragon across the fields so fast the wind couldn’t keep up.', '🦎 You raced a land dragon along the river and won. (The dragon did most of the work.)'])]; } },
       { id: 'rzsing', e: '🎵', t: 'Sing in the town square', min: 8, sub: 'Get famous (maybe)', run: function () { if (chance(hasDP('song') ? 0.3 : 0.06)) return [{ fame: [10, 20], happy: 8 }, '🎵 You sang in the town square, and the WHOLE crowd cried happy tears. Everyone is talking about you!' + (hasDP('song') ? ' (Divine Protection of Telepathy!)' : '')]; var cash = L.fame >= 30 ? L.fame * 20 : 0; return [{ fame: [1, 4], money: cash, happy: 2 }, pick(['🎵 You sang a song about a brave knight in the town square.', '🎵 You sang a funny song about a land dragon who hates baths.', '🎵 You sang in the town square, and a dog howled along.']) + (cash ? ' People threw ' + cr(cash) + ' into your hat.' : '')]; } },
@@ -11348,7 +11540,7 @@
         RZ_ACTS.forEach(function (a) {
           if (L.age < a.min) return;
           var cost = actCost(a), done = doneYet(a.id), broke = cost && L.money < cost;
-          opt(c, a.e, a.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough gold' : (a.id === 'rzmagic' ? '+🔮 Magic · ' + ((L.magic || 0) >= 3 ? 'you know every spell' : spellReady() ? 'learn spells' : 'next spell needs 🔮 Magic ' + magN(SPELL_NEED[(L.magic || 0) + 1]) + '+') + ' · ' + (L.gateBroken ? '💔 your gate is broken, so it hurts you' : 'strains your gate a little (🌀 ' + gateNow() + '%)') : a.sub) + (cost ? ' · ' + cr(cost) : ''), function () {
+          opt(c, a.e, a.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough gold' : (a.id === 'rzmagic' ? '+🔮 Magic · ' + ((L.magic || 0) >= MAXSPELL ? 'you know every spell' : spellReady() ? 'learn spells' : 'next spell needs 🔮 Magic ' + magN(SPELL_NEED[(L.magic || 0) + 1]) + '+') + ' · ' + (L.gateBroken ? '💔 your gate is broken, so it hurts you' : 'strains your gate a little (🌀 ' + gateNow() + '%)') : a.sub) + (cost ? ' · ' + cr(cost) : ''), function () {
             L.done[a.id] = L.age;
             var r = a.run(); if (cost) r[0].money = (r[0].money || 0) - cost;
             doThing(a.e, r);
@@ -11375,13 +11567,14 @@
           sec(c, '⚔️ Adventure (dangerous!)');
           opt(c, '⚒️', 'Blacksmith', L.sword ? 'Your sword: ' + SWORD[L.sword].e + ' ' + SWORD[L.sword].t : 'Buy a sword for your battles', swordSheet);
           rzFightOpt(c, 'rzspar', '🤺', 'Spar at the knights’ training yard', 'A friendly duel · 300 gold if you win', 'rztrainee', function (h) { return [{ money: 300, happy: 5, fame: 1, health: h }, '🤺 You won a sparring match at the knights’ training yard! The knights clapped and gave you 300 gold.']; });
-          if (L.age >= 16) rzFightOpt(c, 'rzhunt', '🐺', 'Hunt mabeasts', 'Protect the villages · 1,500 gold reward', 'rzwolf', function (h) { return [{ money: 1500, happy: 6, fame: 2, good: 1, health: h }, '🐺 You hunted down a mabeast wolf that was scaring the villages. The lord paid you 1,500 gold!']; });
+          if (L.age >= 16) rzFightOpt(c, 'rzhunt', '🐺', 'Hunt mabeasts', 'Protect the villages · 1,500 gold reward · ☠️ a bite can curse you!', 'rzwolf', function (h) { return [{ money: 1500, happy: 6, fame: 2, good: 1, health: h }, '🐺 You hunted down a mabeast wolf that was scaring the villages. The lord paid you 1,500 gold!']; }, null, maybeCurse);
+          if (L.curse) { var cdn = doneYet('rzcurse'); opt(c, '☠️', 'Hunt down ' + L.curse.n, cdn ? 'Done this year ✓' : 'The mabeast that cursed you! Defeat it to break the curse · ' + curseLeft(), function () { L.done.rzcurse = L.age; play('🐺', curseHunt()); }, cdn); }
           if (L.age >= 18) rzFightOpt(c, 'rzcult', '🧙', 'Fight the Witch Cult', 'Super dangerous · 5,000 gold reward', 'rzcultist', function (h) { L.cultWins = (L.cultWins || 0) + 1; return [{ money: 5000, happy: 8, fame: 4, good: 3, health: h }, '🧙 You fought a Witch Cultist and won! The knights paid you 5,000 gold. (Cultists stopped: ' + L.cultWins + ')']; });
           if (L.age >= 18) {
             if ((L.cultWins || 0) >= 3) rzFightOpt(c, 'rzarch', '😈', 'Face a Witch Cult Archbishop', '👑 Boss fight! · 40,000 gold', 'rzarch', function (h) { award('rzcult'); return [{ money: 40000, happy: 15, fame: 15, good: 5, health: h }, '😈 You beat a Witch Cult Archbishop! The whole kingdom is cheering your name, and the king sent you 40,000 gold!']; });
             else note(c, '😈 Stop 3 Witch Cultists (you’ve stopped ' + (L.cultWins || 0) + ') and an Archbishop will come after you…');
           }
-          if (L.age >= 20) rzFightOpt(c, 'rzwhalehunt', '🐋', 'Hunt the White Whale', '👑 Boss fight! · 80,000 gold', 'rzwhale', whaleWin);
+          if (L.age >= 20) { var wdn = doneYet('rzwhalehunt'); opt(c, '🐋', 'Hunt the White Whale', wdn ? 'Done this year ✓' : '👑 Boss fight! · 80,000 gold · 🌫️ Super rare: most hunts find NOTHING · ☠️ If it beats you, you die!', function () { L.done.rzwhalehunt = L.age; play('🐋', whaleHunt()); }, wdn); }
         }
       });
     }
@@ -11404,11 +11597,20 @@
       if (hasDP('song') && a >= 10) L.fame = clamp(L.fame + R(0, 2));
       if (hasDP('fortune') && a >= 6 && chance(0.15)) { var g = R(2, 20) * 25 * (a >= 18 ? 4 : 1); L.money += g; log('🍀 Lucky you! You found a little pouch with ' + cr(g) + ' in it. (Divine Protection of Fortune!)'); }
       if (!L.gateBroken && gateNow() < 100) L.gate = Math.min(100, gateNow() + 15);   // 🌀 your gate heals a little every year (unless it’s broken)
+      if (yinYang()) { if (!L.gateBroken) L.gate = 100; s.magic = clampM((s.magic || 0) + magGain(s.magic || 0, 5000)); }   // ☯️ balance: your gate heals all the way, and your magic grows
+      var sn = subNext(); if (sn && chance(0.12)) log(subAwaken(sn));   // ❄️ sometimes it just… happens
+      var cn = comboNext(); if (cn && chance(0.08)) log(comboLearn(cn));
+      if (L.fs) { if (a >= 4 && a <= 19) FS.forEach(function (x) { fsUp(x[0], R(1, 2)); }); if (a >= 55) { fsUp('spd', -R(0, 2)); fsUp('str', -R(0, 1)); } }   // 🥊 you get stronger as a kid, and slower when you’re old
       if (hasDP('earthsp')) s.health = capStat('health', s.health + R(1, 3));
       if (hasDP('clothing')) s.style = clamp(s.style + 1);
       if (a === 18) log('🎉 You’re 18 now: all grown up! Find work in 💼 Job, or learn something new from a tutor.');
       rzTutorYear(s);
       if (hasDP('beasts') && a === 6 && !L.people.some(function (p) { return p.rel === 'pet'; })) { var pt = addPet('rzkitten'); log('🐾 A stray kitten followed you home and decided you’re its person now. You named it ' + pt.first + '! (Divine Protection of Soul Language!)'); }
+      if (L.curse) {   // ☠️ the curse counts down (last, so nothing heals you back up after it gets you)
+        L.curse.left -= 1;
+        if (L.curse.left <= 0) { L.doom = 'a mabeast’s curse (' + L.curse.n + ')'; s.health = 0; log('☠️ The curse mark from ' + L.curse.n + ' spread all the way to your heart…'); }
+        else { s.health = capStat('health', s.health - R(3, 6)); log('☠️ The curse mark from ' + L.curse.n + ' is spreading. ' + (L.curse.left === 1 ? 'Only 1 year left! Hunt down ' + L.curse.n + ' NOW (⚡ Do → Adventure)!' : 'You have ' + L.curse.left + ' years left to hunt down ' + L.curse.n + '.')); }
+      }
     }
     function befriend() { var f = addPerson('friend', Math.max(5, L.age + R(-1, 1))); return f.first; }
     var RZ_EVENTS = [
@@ -11438,7 +11640,7 @@
       { id: 'rzapples', a: [5, 14], w: 3, e: '🍎', t: 'The fruit seller dropped a whole crate of apples in the street!', c: [
         ['Help pick them up', [[1, { happy: 3, good: 2 }, 'You helped the fruit seller pick up every apple. He gave you the shiniest one!']]],
         ['Grab a few and run', function () { L.mischief += 1; L.good -= 1; return chance(hasDP('night') ? 0.15 : 0.4) ? [{ happy: -4, bond: { parents: -4 } }, 'You grabbed some apples and ran, but the fruit seller told your parents. Busted!'] : [{ happy: 4 }, 'You grabbed three apples and ran. They were extra crunchy. (Sneaky!)']; }]] },
-      { id: 'rzgate', a: [6, 8], w: 6, once: 1, auto: function () { return [{ smarts: 2 }, '🔮 A healer checked your mana gate (the thing that lets you use magic). She said your magic is ' + listAnd(magicEls().map(elemName)) + (magicEls().some(function (x) { return ELEMS[x].rare; }) ? ', which is really rare!' : '.') + (hasDP('mana') ? ' Then she gasped: “This kid’s gate is HUGE!”' : '') + ' Then she measured your 🔮 Magic: ' + magN(L.st.magic) + ' out of 100,000. ' + ((L.st.magic || 0) >= 60000 ? '“Wow, that’s REALLY strong!”' : (L.st.magic || 0) >= 35000 ? '“That’s pretty good!”' : '“A little weak, but practice will make it stronger.”') + ' “Just don’t use too much magic at once,” she said, “or your gate could break forever.”']; } },
+      { id: 'rzgate', a: [6, 8], w: 6, once: 1, auto: function () { return [{ smarts: 2 }, '🔮 A healer checked your mana gate (the thing that lets you use magic). She said your magic is ' + listAnd(magicEls().map(elemName)) + (magicEls().some(function (x) { return ELEMS[x].rare; }) ? ', which is really rare!' : '.') + (hasDP('mana') ? ' Then she gasped: “This kid’s gate is HUGE!”' : '') + ' Then she measured your 🔮 Magic: ' + magN(L.st.magic) + ' out of ' + magN(MAGIC_MAX) + '. ' + ((L.st.magic || 0) >= 60000 ? '“Wow, that’s REALLY strong!”' : (L.st.magic || 0) >= 35000 ? '“That’s pretty good!”' : '“A little weak, but practice will make it stronger.”') + ' “Just don’t use too much magic at once,” she said, “or your gate could break forever.”']; } },
       { id: 'rzmagictest', a: [9, 14], w: 5, once: 1, e: '🔮', t: 'The court mage came to your town to test every kid’s magic!', c: [
         ['Show them your best magic', function () {
           var m = L.st.magic || 0, el = magicEls()[0], big = L.magic ? spellOf(el, L.magic) : 'a ' + ELEMS[el].t.toLowerCase() + ' sparkle';
@@ -11473,7 +11675,7 @@
         ['Pretend you didn’t see it', [[1, { happy: 2, style: 1 }, 'You pretended you didn’t see it… but you kept the flower in a book forever.']]]] },
       { id: 'rzwitchtale', a: [8, 16], w: 3, once: 1, auto: function () { return [{ happy: -1, smarts: 2 }, '📖 Your grandma told you the old legend of the Witch of Envy, who swallowed half the world in shadows. You slept with a candle on for a week.' + (L.rbd ? ' …For some reason, the story felt weirdly familiar.' : '')]; } },
       { id: 'rzsquire', a: [14, 17], w: 3, e: '⚔️', t: 'The Royal Guard is looking for young squires to train!', c: [
-        ['Try out', function () { if (L.st.health >= 55 || hasDP('strength') || hasDP('saint')) { L.swordXP = Math.min(20, (L.swordXP || 0) + 4); return [{ happy: 8, health: 3, fame: 1 }, 'You tried out and made it! The knights taught you real sword moves. (+4 fight power)']; } return [{ happy: -3, health: 1 }, 'You tried out, but you tripped over your own sword. Keep training!']; }],
+        ['Try out', function () { if (L.st.health >= 55 || hasDP('strength') || hasDP('saint')) { L.swordXP = Math.min(20, (L.swordXP || 0) + 4); return [{ happy: 8, health: 3, fame: 1 }, 'You tried out and made it! The knights taught you real sword moves. (+4 fight power)' + fsTrain({ str: 3, skl: 2 })]; } return [{ happy: -3, health: 1 }, 'You tried out, but you tripped over your own sword. Keep training!']; }],
         ['No thanks', [[1, { happy: 1 }, 'You decided being a squire isn’t for you. Polishing armor all day? No thanks.']]]] },
       { id: 'rzbook', a: [12, 30], w: 2, e: '📕', t: 'You found an old book in the library with no title. It’s… humming.', c: [
         ['Open it', function () { if (hasDP('mana') || chance(0.5)) { L.magic = Math.max(L.magic || 0, 1); return [{ smarts: 2, magic: 5000, happy: 4 }, 'You opened the humming book, and a spell jumped right into your head: ' + newSpells() + '!']; } return [{ happy: -2, health: -2 }, 'You opened the humming book, and it snapped shut on your nose. Some books don’t want to be read.']; }],
@@ -11483,7 +11685,7 @@
         ['No thanks', [[1, { smarts: 1 }, 'You said no thanks. The merchant grumbled and went to bug someone else.']]]] },
       // grown-ups
       { id: 'rzwolves', a: [16, 75], w: 3, e: '🐺', t: 'Mabeast wolves are howling outside the village tonight!', c: [
-        ['Grab a sword and fight them', function () { if (hasDP('beasts')) return [{ happy: 8, fame: 3, good: 2 }, '🐾 You walked out to the wolves, and they… sat down. Then they wagged their tails and trotted away. (Divine Protection of Soul Language!)']; return rzFight('rzwolf', function (h) { return [{ happy: 8, fame: 3, good: 2, money: 800, health: h }, '🐺 You fought off the mabeast wolves! The village gave you 800 gold as a thank-you.']; }); }],
+        ['Grab a sword and fight them', function () { if (hasDP('beasts')) return [{ happy: 8, fame: 3, good: 2 }, '🐾 You walked out to the wolves, and they… sat down. Then they wagged their tails and trotted away. (Divine Protection of Soul Language!)']; return rzFight('rzwolf', function (h) { return [{ happy: 8, fame: 3, good: 2, money: 800, health: h }, '🐺 You fought off the mabeast wolves! The village gave you 800 gold as a thank-you.']; }, null, maybeCurse); }],
         ['Stay inside', [[1, { happy: -1 }, 'You stayed inside and pulled the blanket over your head. The howling stopped by morning.']]],
         ['Help the guards at the gate', [[1, { good: 2, fame: 1 }, 'You helped the guards hold the village gate all night. The wolves gave up at sunrise.']]]] },
       { id: 'rzcult', a: [18, 75], w: 2, e: '🧙', t: 'Creepy people in black robes are whispering in an alley about “the Witch’s love”…', c: [
@@ -11494,9 +11696,9 @@
         ['Cheer for them', [[1, { happy: 5 }, 'You cheered so loud the candidate waved right at you!']]],
         ['Volunteer to help their camp', [[1, { good: 3, fame: 2, happy: 3 }, 'You volunteered to help the candidate’s camp. They remembered your name!']]],
         ['Ask how YOU could join the Royal Selection', [[1, { smarts: 1, happy: 2 }, 'The guards laughed, but the candidate smiled: “Get famous and be kind, and maybe someday!” (You can try for 👑 Ruler of Lugunica in 💼 Job when you’re 25.)']]]] },
-      { id: 'rzfog', a: [18, 80], w: 1, e: '🌫️', t: 'A thick, strange fog rolled into town, and someone shouted: “THE WHITE WHALE!”', c: [
+      { id: 'rzfog', a: [18, 80], w: 0.3, e: '🌫️', t: 'A thick, strange fog rolled into town, and someone shouted: “THE WHITE WHALE!”', c: [
         ['Run!', function () { if (hasDP('mist')) return [{ happy: 2 }, '🌫️ You can see right through the fog (Divine Protection of Mist!), so you just walked out of it. Easy.']; return hasDP('arrow') || chance(0.7) ? [{ happy: -2 }, 'You ran out of the fog just in time. Behind you, something HUGE swam through the sky.'] : [{ health: -12, happy: -4 }, 'You ran, but the fog was so thick you smacked right into a wall. The whale passed by.']; }],
-        ['Fight it', function () { return rzFight('rzwhale', whaleWin); }],
+        ['Fight it (if it beats you, you die!)', function () { return rzFight('rzwhale', whaleWin, whaleLose); }],
         ['Hide in a cellar', [[1, { happy: -3 }, 'You hid in a cellar with three cats and a very nervous baker until the fog was gone.']]]] },
       { id: 'rzfoodfight', a: [16, 70], w: 2, e: '🥧', t: 'A food fight broke out at the tavern!', c: [
         ['Join in', [[1, { happy: 7, style: -2 }, 'You joined the food fight and threw a perfect pie. You got covered in stew, but it was worth it.']]],
@@ -11554,7 +11756,17 @@
       { id: 'rzrare', e: '🌑', t: 'Rare Element', d: 'Be born with Dark or Light magic.' },
       { id: 'rzdouble', e: '✨', t: 'Double Element', d: 'Be born with TWO magic elements (super rare!).' },
       { id: 'rzgreat', e: '🌟', t: 'Great Spirit', d: 'Make a contract with a super strong great spirit.' },
-      { id: 'rzarchmage', e: '🔮', t: 'Archmage', d: 'Get your 🔮 Magic all the way to 100,000!' },
+      { id: 'rzarchmage', e: '🔮', t: 'Archmage', d: 'Get your 🔮 Magic to 100,000.' },
+      { id: 'rzlegend', e: '🌟', t: 'Legendary Mage', d: 'Get your 🔮 Magic to 500,000. (It grows slower and slower!)' },
+      { id: 'rzmagicmax', e: '👑', t: 'Mana Master', d: 'Get your 🔮 Magic all the way to 1,000,000!' },
+      { id: 'rzancient', e: '📜', t: 'Ancient Magic', d: 'Learn your 5th spell (it needs 🔮 Magic 400,000).' },
+      { id: 'rzsub', e: '❄️', t: 'Sub-Element', d: 'Awaken a sub-element, like ❄️ Ice from 💧 Water.' },
+      { id: 'rzcombo', e: '🌪️', t: 'Fusion Magic', d: 'Mix two elements into a combo spell, like a 🔥🌪️ Fire Tornado.' },
+      { id: 'rzyinyang', e: '☯️', t: 'Yin and Yang', d: 'Have both ☀️ Light and 🌑 Dark magic.' },
+      { id: 'rzfighter', e: '🥊', t: 'Battle Ready', d: 'Get all four fighting stats to 75 or more.' },
+      { id: 'rzwhalefind', e: '🌫️', t: 'Into the Fog', d: 'Actually FIND the White Whale when you hunt for it (most hunts find nothing!).' },
+      { id: 'rzcurebreak', e: '🐺', t: 'Curse Breaker', d: 'Break a mabeast’s curse by defeating the mabeast that cursed you.' },
+      { id: 'rzcursed', e: '☠️', t: 'Cursed', d: 'Get cursed by a mabeast.', secret: 1 },
       { id: 'rzbroken', e: '💔', t: 'Broken Gate', d: 'Use so much magic that your gate breaks.', secret: 1 },
       { id: 'rztaboo', e: '🤫', t: 'Taboo', d: 'Try to tell someone about Return by Death. (Bad idea.)', secret: 1 }
     ];
@@ -11565,7 +11777,12 @@
         '✨ Half of all people are born with a divine protection, but not all of them are useful! You might get 🌬️ Wind Reading (nobody can fool you) or 👁️ First Sight… or 🧂 Salt Reasoning (you can tell salt from sugar by looking. That’s it.). And 1 in 1000 are born with ALL of Reinhard’s divine protections, like 🗡️ the Sword Saint and 🔥 the Phoenix! His divine protections can never be lost, so the Phoenix keeps bringing him back: he can’t die!',
         '🌀 Everyone has ONE magic element: 🔥 Fire, 💧 Water, 🪨 Earth or 🌪️ Air. 🌑 Dark and ☀️ Light are rare, and two elements is super rare. You can only use magic of your own element. Practice magic, or get a magic tutor, to learn stronger spells.',
         '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate (it heals a little every year). If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
-        '🔮 Magic is a stat that goes all the way up to 100,000! Practice magic, take magic lessons, make spirit contracts, and cast spells in battles to make it grow. More Magic makes your spells stronger, and your 2nd spell needs 🔮 Magic 30,000+ (your 3rd needs 60,000+).',
+        '🔮 Magic is a stat that goes all the way up to 1,000,000, but the higher it gets, the slower it grows! Practice magic, meditate at the ⛲ mana spring, take magic lessons, make spirit contracts, and cast spells in battles. More Magic makes your spells stronger. Each element has 5 spells: the 2nd needs 🔮 Magic 30,000+, then 60,000+, 150,000+, and the 5th (an ancient spell!) needs 400,000+.',
+        '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy.',
+        '🔥🌪️ Two elements? Mix them into combo spells once your 🔮 Magic reaches 50,000, like 🔥🌪️ Fire Tornado, 🌋 Lava Burst or ⛈️ Thunderstorm. And if you have ☀️ Light AND 🌑 Dark, you get the powers of ☯️ Yin and Yang!',
+        '🥊 Fighting stats: Strength (harder hits), Defense (less damage), Speed (easier dodging and running away) and Skill (critical hits). Train them in ⚡ Do, and win real battles to get better.',
+        '☠️ Careful: a mabeast’s bite can curse you! The curse kills you in 3 years… unless you hunt down the mabeast that cursed you and defeat it.',
+        '🐋 The White Whale is SUPER rare: most hunts find nothing at all. And if it beats you, you die!',
         '🧚 Make contracts with spirits in ⚡ Do. Little spirits fight with you in battles, and they don’t use your gate. A super strong great spirit is rare, and it scares all the little spirits away!',
         '💜 0.5% of people are Satella’s crush, so they get ↩️ Return by Death: when you die, you can wake up again at the start of that year. Just don’t try to tell anyone about it…',
         '📚 In the kingdom, you learn from tutors (in 💼 Job): reading, math, noble manners, magic, swordsmanship, music, healing magic, and business. Master a subject to unlock jobs, from Bakery Helper all the way up to 👑 Ruler of Lugunica (win the Royal Selection!). Master 📊 Business to start your own businesses.',
@@ -11901,7 +12118,12 @@
       if ((L.gen || 1) >= 3) award('dynasty');
       if (L.job && L.job.id === 'mayor') award('mayor');
       if (L.job && L.job.id === 'rzking') award('rzruler');
-      if (isRZ() && (L.st.magic || 0) >= MAGIC_MAX) award('rzarchmage');   // 🔮
+      if (isRZ()) {   // 🔮 magic, ☯️ yin and yang, 🥊 fighting
+        var mm = L.st.magic || 0;
+        if (mm >= 100000) award('rzarchmage'); if (mm >= 500000) award('rzlegend'); if (mm >= MAGIC_MAX) award('rzmagicmax');
+        if (yinYang()) award('rzyinyang');
+        if (L.fs && FS.every(function (x) { return fsOf(x[0]) >= 75; })) award('rzfighter');
+      }
       if (has('exo')) award('exo');
       if (!achs.capri && L.netrunner && netAll()) giveCapri();
       if (L.edu === 'uni') award('grad');
@@ -12019,7 +12241,8 @@
       if (!fx) return d;
       statKeys().forEach(function (k) {
         if (fx[k] == null) return;
-        var old = L.st[k] || 0; L.st[k] = capStat(k, old + val(fx[k]));
+        var old = L.st[k] || 0, add = val(fx[k]); if (k === 'magic') add = magGain(old, add);   // 🔮 high Magic grows slower
+        L.st[k] = capStat(k, old + add);
         if (L.st[k] !== old) d.push(STAT[k][0] + ' ' + (k === 'magic' ? (L.st[k] > old ? '+' : '−') + magN(Math.abs(L.st[k] - old)) : sign(L.st[k] - old)));
       });
       if (fx.money) {
@@ -12131,7 +12354,7 @@
         s.smarts = capStat('smarts', s.smarts + R(0, 2));
       }
       if ((L.school || isRZ()) && L.club) {   // 🎨 school clubs (or your hobby in the Re:Zero world)
-        var k = { hacker: isRZ() ? 'magic' : 'smarts', drone: 'happy', art: 'style', dance: 'health' }[L.club]; if (k) s[k] = k === 'magic' ? clampM((s[k] || 0) + R(0, 2000)) : clamp((s[k] || 0) + R(0, 2)); }
+        var k = { hacker: isRZ() ? 'magic' : 'smarts', drone: 'happy', art: 'style', dance: 'health' }[L.club]; if (k) s[k] = k === 'magic' ? clampM((s[k] || 0) + magGain(s[k] || 0, R(0, 2000))) : clamp((s[k] || 0) + R(0, 2)); }
       if (a + (L.ahead || 0) >= 18 && L.school && L.pending.indexOf('graduate') < 0) L.pending.push('graduate');   // skipped grades = graduate early
       // university
       if (L.uni) {
@@ -12227,7 +12450,7 @@
       if (chrome() >= 51) return 'chrome';
       if (L.mischief >= 8) return 'rebel';
       if ((L.bestPay || 0) >= 150000) return 'boss';
-      if (isRZ() && (L.st.magic || 0) >= 95000) return 'mage';
+      if (isRZ() && (L.st.magic || 0) >= 250000) return 'mage';
       if (L.st.smarts >= 95) return 'genius';
       if (kidsEver >= 3) return 'family';
       if (L.st.style >= 92) return 'style';
@@ -13441,7 +13664,7 @@
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
       smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], psyfight: ['⚔️', 'Fight them', ''], calm: ['🧘', 'Calm down', ''], psyrun: ['🏃', 'Run from them', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', ''],
-      rzsword: ['⚔️', 'Sword strike', 'Hard to dodge'], rzmagic: ['✨', 'Magic', 'Hard to dodge'], 'rzm-fire': ['🔥', 'Fire magic', ''], 'rzm-water': ['💧', 'Water magic', ''], 'rzm-earth': ['🪨', 'Earth magic', ''], 'rzm-air': ['🌪️', 'Air magic', ''], 'rzm-dark': ['🌑', 'Dark magic', ''], 'rzm-light': ['☀️', 'Light magic', ''], rzspirit: ['🧚', 'Spirit arts', ''], rzsaint: ['⚔️', 'Sword Saint strike', 'Can’t be dodged · huge damage']
+      rzsword: ['⚔️', 'Sword strike', 'Hard to dodge'], rzmagic: ['✨', 'Magic', 'Hard to dodge'], 'rzm-fire': ['🔥', 'Fire magic', ''], 'rzm-water': ['💧', 'Water magic', ''], 'rzm-earth': ['🪨', 'Earth magic', ''], 'rzm-air': ['🌪️', 'Air magic', ''], 'rzm-dark': ['🌑', 'Dark magic', ''], 'rzm-light': ['☀️', 'Light magic', ''], rzspirit: ['🧚', 'Spirit arts', ''], rzsaint: ['⚔️', 'Sword Saint strike', 'Can’t be dodged · huge damage'], rzspells: ['✨', 'Spells', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -13745,7 +13968,7 @@
       var en = foeOf(id);
       if (mode === 'fight') en = hardFoe(en);   // hard mode: tougher enemies
       var D = deckOf(), ram = D ? D.ram + (has('ramup') ? 3 : 0) : 0, hm = humanityMax();
-      var max = 60 + Math.round(L.st.health * 0.6) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0) + xtra('hp');
+      var max = 60 + Math.round(L.st.health * 0.6) + (isRZ() ? Math.round((fsOf('def') + fsOf('str')) / 8) : 0) + (has('lungs') ? 10 : 0) + (has('armor') ? 10 : 0) + (has('exo') ? 20 : 0) + (has('bones') ? 15 : 0) + (has('chassis') ? 40 : 0) + xtra('hp');
       B = { en: en, mode: mode, done: done, enHP: en.hp, hp: max, max: max, hum: hm, humMax: hm, sandy: 0, rage: 0, stun: false, glide: false, glideAll: false, camo: false, yank: false,
         ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
         parries: 0, hitsTaken: 0, wave: 0, hits: [], lock: 0, phase: 'wait', over: false, timer: 0 };
@@ -13753,7 +13976,7 @@
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
       if (mode === 'escape') { msgF('🚨 The Chrome Patrol is here! Tap DODGE right as they strike. If they hit you 3 times, they catch you!'); B.timer = setTimeout(enemyTurn, 1600); }
-      else { msgF(en.intro ? en.intro + ' Wave 1: ' + en.t + '. Your turn!' : en.waveOf ? '🚨 ' + en.waveOf + ' attackers are coming, one after another! Wave 1: ' + en.t + '. Your turn: pick a move.' : '⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
+      else { msgF(en.hello ? en.hello + ' Your turn: pick a move.' : en.intro ? en.intro + ' Wave 1: ' + en.t + '. Your turn!' : en.waveOf ? '🚨 ' + en.waveOf + ' attackers are coming, one after another! Wave 1: ' + en.t + '. Your turn: pick a move.' : '⚔️ ' + en.t + ' wants to fight! Your turn: pick a move.'); B.phase = 'player'; }
       renderF(); buildMoves();
       requestAnimationFrame(tick);
       setTimeout(function () { var f = $('moves').querySelector('button'); if (f) { try { f.focus({ preventScroll: true }); } catch (e) {} } }, 50);
@@ -13792,12 +14015,16 @@
       if (B.phase === 'choose') list = ['psyfight', 'psyrun'];   // 🧠 humanity zero: run, or fight?
       else if (B.menu === 'hack' && D) { list = QHACKS.filter(function (q) { return q.tier <= D.tier; }).map(function (q) { return q.id; }); list.push('back'); }
       else if (isRZ()) {   // 🔁 Re:Zero moves: your fists, your sword, your magic (and the Sword Saint strike!)
-        list = ['punch'];
-        if (L.sword) list.push('rzsword');
-        if (L.magic) magicEls().forEach(function (el) { list.push('rzm-' + el); });   // 🌀 only YOUR element(s)
-        if (L.great || (L.spirits || []).length) list.push('rzspirit');
-        if (hasDP('saint')) list.push('rzsaint');
-        list.push('run');
+        var sps = rzSpellMoves();   // 🌀 only YOUR element(s), plus ❄️ sub-elements and 🔥🌪️ combo spells
+        if (B.menu === 'spells') list = sps.concat(['back']);   // ✨ lots of spells get their own menu
+        else {
+          list = ['punch'];
+          if (L.sword) list.push('rzsword');
+          if (sps.length > 4) list.push('rzspells'); else list = list.concat(sps);
+          if (L.great || (L.spirits || []).length) list.push('rzspirit');
+          if (hasDP('saint')) list.push('rzsaint');
+          list.push('run');
+        }
       }
       else {
         list = ['punch', 'shoot'];
@@ -13822,10 +14049,11 @@
       }
       box.classList.toggle('many', list.length > 10);
       list.forEach(function (id) {
-        var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody && !B.psycho ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
+        var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody && !B.psycho ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id] || ['✨', 'Spell', ''], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (id === 'shoot' && gunOf().id !== 'zap') { M = [gunOf().e, gunOf().id === 'chip' ? 'Chip' : gunOf().t, gunOf().sub]; sub = M[2]; }   // 🔫 your gun
         if (id === 'rzsword' && L.sword) { M = [SWORD[L.sword].e, SWORD[L.sword].t, SWORD[L.sword].dmg[0] + '–' + SWORD[L.sword].dmg[1] + ' damage · hard to dodge']; sub = M[2]; }
-        if (id.indexOf('rzm-') === 0) { var zel = id.slice(4); M = [ELEMS[zel].e, ELEMS[zel].spells[L.magic - 1], cap(ELEMS[zel].d) + ' · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + gateCost(L.magic))]; sub = M[2]; }
+        if (/^rz[msc]-/.test(id)) { var zi = spellInfo(id); M = [zi.e, zi.t, zi.d + ' · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; }
+        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().length + ' spells · pick one']; sub = M[2]; }
         if (id === 'rzspirit') { M = L.great ? [L.great.e, L.great.n, 'Your great spirit attacks · no gate needed'] : ['🧚', 'Spirit arts', L.spirits.length + (L.spirits.length === 1 ? ' spirit attacks' : ' spirits attack') + ' · no gate needed']; sub = M[2]; }
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
         else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
@@ -13888,6 +14116,7 @@
       var en = B.en, st = sandyTier(), mult = B.sandy ? [1, 2, 2.5, 3, 3.5][st] : 1, X = rageOf(), rg = (B.rage ? (X && X.tier >= 2 ? 1.9 : 1.6) : 1) * (B.psycho ? 1.25 : 1), dmg = 0, extra = '';
       if (id === 'netrun') { B.menu = 'hack'; msgF('💻 Pick a quickhack. You have ' + B.ram + ' RAM' + (has('capri') ? ', and with Capri they’re all free!' : '.')); buildMoves(); return; }
       if (id === 'back') { B.menu = null; msgF('Your turn! Pick a move.'); buildMoves(); return; }
+      if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a spell! You know ' + rzSpellMoves().length + '.'); buildMoves(); return; }
       if (id === 'sandy') {   // free action: it doesn't use up your turn
         B.sandy = 33; award('timebender'); sfx('slow');
         if (spend(heavyCost('sandy'))) return;
@@ -13922,7 +14151,7 @@
         return;
       }
       if (id === 'run') {
-        if (B.sandy || hasDP('swift') || chance(en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0))) {   // 💨 Swiftness: always get away
+        if (B.sandy || hasDP('swift') || chance((en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0)) + (isRZ() ? fsOf('spd') / 400 : 0))) {   // 💨 Swiftness: always get away (and 💨 Speed helps)
           if (B.pillT && !L.smasherBody) { pillCrash('🏃 You got away… but you didn’t finish the fight, and your military pills crashed HARD. CYBERPSYCHOSIS! The Chrome Patrol is on you. Run, or fight them?'); return; }
           msgF('🏃 You got away!'); endBattle({ fled: true }); return;
         }
@@ -13955,16 +14184,14 @@
       if (id === 'shoot') dmg = R(8, 12) + (has('eyes') ? 3 : 0);
       if (id === 'aim') dmg = R(14, 18);
       if (id === 'rzsword') dmg = Math.round(R(SWORD[L.sword].dmg[0], SWORD[L.sword].dmg[1]) * (hasDegree('sword') ? 1.2 : 1) * mult * rg);
-      var zel = id.indexOf('rzm-') === 0 ? id.slice(4) : null, zonHit = null;
-      if (zel) {   // 🌀 your own magic (only your element!) strains your gate, or hurts you once it's broken
-        var zlv = L.magic;
-        NM = [ELEMS[zel].e, ELEMS[zel].spells[zlv - 1]];
-        dmg = Math.round(R([0, 14, 18, 24][zlv], [0, 20, 26, 32][zlv]) * magicMult() * (hasDP('mana') ? 1.25 : 1) * (hasDegree('magic') ? 1.2 : 1) * (zel === 'dark' ? 0.85 : zel === 'water' ? (hasDP('water') ? 1.2 : 0.9) : 1));
+      var SPX = isRZ() ? rzSpell(id) : null, zel = SPX ? id : null, zonHit = null;   // ✨ a spell: your element, a ❄️ sub-element, or a 🔥🌪️ combo
+      if (SPX) {   // 🌀 your magic strains your gate, or hurts you once it's broken
+        NM = SPX.nm; dmg = SPX.dmg;
         if (L.gateBroken) { var zow = Math.round(B.max * 0.12); B.hp = Math.max(1, B.hp - zow); extra += ' 💔 Your broken gate hurt you (−' + zow + ' HP).'; }
-        else extra += strainGate(gateCost(zlv));
-        if ((B.magUp || 0) < 3 && (L.st.magic || 0) < MAGIC_MAX && chance(0.5)) { var mgu = R(500, 1000); B.magUp = (B.magUp || 0) + 1; L.st.magic = clampM((L.st.magic || 0) + mgu); extra += ' 🔮 Magic +' + magN(mgu) + '.'; }   // using magic makes it stronger
-        if (zel === 'water' || zel === 'light') { var zhl = zel === 'light' ? R(15, 22) : R(8, 12) + (hasDP('water') ? 6 : 0); B.hp = Math.min(B.max, B.hp + zhl); extra += ' 💚 +' + zhl + ' HP.'; }
-        zonHit = function () { if (zel === 'fire') { B.burn = 2; return ' 🔥 They’re on fire!'; } if (zel === 'earth' && chance(0.4)) { B.stun = true; return ' 🪨 They’re stunned!'; } if (zel === 'dark') { B.blind = 2; return ' 🌑 They can barely see!'; } return ''; };
+        else extra += strainGate(SPX.cost);
+        if ((B.magUp || 0) < 3 && (L.st.magic || 0) < MAGIC_MAX && chance(0.5)) { var mgu = magGain(L.st.magic || 0, R(500, 1000)); B.magUp = (B.magUp || 0) + 1; L.st.magic = clampM((L.st.magic || 0) + mgu); extra += ' 🔮 Magic +' + magN(mgu) + '.'; }   // using magic makes it stronger
+        if (SPX.heal) { B.hp = Math.min(B.max, B.hp + SPX.heal); extra += ' 💚 +' + SPX.heal + ' HP.'; }
+        zonHit = function () { return spellFx(SPX.fx); };
         renderF();
       }
       if (id === 'rzspirit') dmg = L.great ? R(40, 55) : R(5, 8) * L.spirits.length + 4;   // 🧚 spirits don't use your gate
@@ -13973,7 +14200,12 @@
       if (id === 'yank') { dmg = 3; B.yank = true; extra = ' Their next attack will have fewer hits.'; }
       if (B.sandy && st >= 4 && (CX || ['punch', 'kick', 'slash', 'shoot', 'aim'].indexOf(id) >= 0)) { apyleeFlurry(id, CX, NM, rg); return; }   // the Apylee Sandy hits 3 times
       var dodge = B.cripple ? 0 : CX ? en.dodge * 0.3 : { punch: en.dodge, kick: en.dodge + 0.1, slash: en.dodge * 0.4, rocket: en.dodge * 0.5, shoot: en.dodge * 0.25, smash: en.dodge * 0.5, cannon: 0, pull: 0, slam: en.dodge * 0.3, hack: en.dodge * 0.3, yank: en.dodge * 0.3, aim: 0, rzsword: en.dodge * 0.4, rzmagic: en.dodge * 0.3, rzspirit: en.dodge * 0.3, rzsaint: 0 }[id] || 0;
-      if (zel) dodge = B.cripple || zel === 'air' ? 0 : en.dodge * 0.3;   // 🌪️ air magic can’t be dodged
+      if (SPX) dodge = B.cripple || SPX.sure ? 0 : en.dodge * 0.3;   // 🌪️ air magic (and ⚡ lightning, and some combos) can’t be dodged
+      else if (isRZ()) dodge *= 1 - fsOf('skl') / 250;   // 🎯 Skill: they dodge less
+      if (isRZ() && (id === 'punch' || id === 'rzsword' || id === 'rzsaint')) {   // 🥊 Strength hits harder, and 🎯 Skill lands critical hits
+        dmg = Math.round(dmg * (1 + fsOf('str') / 200));
+        if (chance(fsOf('skl') / 400)) { dmg = Math.round(dmg * 1.5); extra += ' 💥 CRIT!'; }
+      }
       if (B.cripple) B.cripple -= 1;
       if (chance(dodge)) { B.stun = false; B.yank = false; popF('MISS', 'bad'); msgF('💨 ' + en.t + ' dodged your ' + (zel ? NM[1] : NM[1].toLowerCase()) + '!' + (zel ? extra : '')); enemySoon(); return; }
       if (B.float > 0 && (CX || ['punch', 'kick', 'smash', 'pull', 'slash', 'cannon'].indexOf(id) >= 0)) { dmg = Math.round(dmg * 1.5); extra += ' (🪐 from above!)'; }
@@ -14059,7 +14291,7 @@
       renderF(); buildMoves();
     }
     function slowF() { return B.sandy ? (sandyTier() >= 4 ? 2 : 1.6) : 1; }   // how much the Sandy slows their attacks down
-    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = (has('reflex') ? 1.25 : 1) * (has('xreflex') ? 1.45 : 1); return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf * (L.mode === 'hard' ? 0.8 : 1) }; }
+    function wins() { var st = sandyTier(), k = B.sandy ? [1, 2.2, 2.6, 3, 3.3][st] : 1, rf = (has('reflex') ? 1.25 : 1) * (has('xreflex') ? 1.45 : 1) * (isRZ() ? 1 + fsOf('spd') / 250 : 1) /* (💨 Speed: more time to dodge) */; return { pre: 190 * k * rf, post: 120 * k * rf, parry: 50 * (B.sandy ? [1, 2, 2.3, 2.6, 3][st] : 1) * rf * (L.mode === 'hard' ? 0.8 : 1) }; }
     function swing(parried) {   // their weapon swings across the arena (swords leave a slash)
       if (!B || !B.en.weapon) return;
       var w = $('weapon'), k = $('streak');
@@ -14080,7 +14312,7 @@
       h.done = true;
       if (!h.heavy && Math.abs(d) <= w.parry) {
         B.parries += 1; sfx('parry');
-        if (B.mode === 'fight') { var cd = Math.round((R(6, 10) + (has('arm') ? 4 : 0) + (has('blades') ? 4 : 0)) * (B.sandy ? [1, 2, 2.5, 3, 3.5][sandyTier()] : 1) * (B.rage ? 1.3 : 1)); B.enHP = Math.max(0, B.enHP - cd);
+        if (B.mode === 'fight') { var cd = Math.round((R(6, 10) + (has('arm') ? 4 : 0) + (has('blades') ? 4 : 0)) * (B.sandy ? [1, 2, 2.5, 3, 3.5][sandyTier()] : 1) * (B.rage ? 1.3 : 1) * (isRZ() ? 1 + fsOf('str') / 200 : 1)); B.enHP = Math.max(0, B.enHP - cd);
           if (B.sandy && sandyTier() >= 4 && !L.smasherBody && B.hum < B.humMax) { B.hum += 1; popF('PARRY! −' + cd + ' · +1 🧠', 'great'); }   // Apylee: parries give back humanity
           else popF('PARRY! −' + cd, 'great'); }
         else popF('PARRY!', 'great');
@@ -14095,6 +14327,7 @@
       var en = B.en, f = $('fight'), X = rageOf();
       swing(false);
       if (B.mode === 'fight' && has('ice') && ((h && h.hack) || chance(0.25))) { sfx('parry'); popF(h && h.hack ? '🧊 ICE STOPPED THE HACK!' : '🧊 ICE BLOCK!', 'good'); $('enemy').style.transform = ''; renderF(); return; }
+      if (B.mode === 'fight' && B.shield) { B.shield = 0; sfx('parry'); popF('💎 CRYSTAL SHIELD!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 💎 a crystal shield blocks one hit
       if (B.mode === 'fight' && hasDP('first') && !B.firstSeen) { B.firstSeen = true; sfx('parry'); popF('👁️ FIRST SIGHT: MISSED!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 👁️ First Sight
       if (B.mode === 'fight' && hasDP('arrow') && chance(0.25)) { sfx('parry'); popF('🏹 MISSED YOU!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 🏹 Arrow Evasion
       B.hitsTaken += 1; sfx('hit');
@@ -14103,6 +14336,7 @@
       else {
         var dmg = R(en.atk[0], en.atk[1]);
         if (hasDP('earthsp')) dmg = Math.round(dmg * 0.8);   // 🪨 Earth Spirits
+        if (isRZ()) dmg = Math.max(1, Math.round(dmg * (1 - fsOf('def') / 250)));   // 🛡️ Defense
         if (has('armor')) dmg = Math.round(dmg * 0.75);
         if (has('exo')) dmg = Math.round(dmg * 0.85);
         if (has('chassis')) dmg = Math.round(dmg * 0.7);
@@ -14226,6 +14460,7 @@
       var tip = '';
       if (premium && L.alive) {
         if (chrome() > limitOf()) tip = '😇 Guardian Angel: you’re over your cyberware tolerance! ' + Math.round(overloadP(L.done.cool === L.age) * 100) + '% chance of a chrome overload next year' + (L.st.happy < 50 ? ' (being sad makes it worse!)' : '') + '. A cooldown treatment or a rescue plan could save you.';
+        else if (isRZ() && L.curse) tip = '😇 Guardian Angel: a mabeast’s curse will kill you in ' + L.curse.left + (L.curse.left === 1 ? ' year' : ' years') + '! Hunt down ' + L.curse.n + ' in ⚡ Do → Adventure to break it.';
         else if (L.ill) tip = '😇 Guardian Angel: you have ' + L.ill + '. A clinic checkup in ⚡ Do can cure it.';
         else if (L.st.health < 25) tip = '😇 Guardian Angel: your health is low! Try the gym or a clinic checkup in ⚡ Do.';
         else if (L.st.happy < 20) tip = '😇 Guardian Angel: you seem sad. Spend time with people you love, or relax in the zen garden.';
@@ -14235,8 +14470,9 @@
       $('money').textContent = cr(L.money);
       $('money').classList.toggle('neg', L.money < 0);
       var box = $('stats'); box.innerHTML = '';
-      var rows = statKeys().map(function (k) { return k === 'magic' ? ['🔮 Magic', (L.st.magic || 0) / MAGIC_MAX * 100, 'magic', magN(L.st.magic)] : [STAT[k][0] + ' ' + STAT[k][1], L.st[k], L.st[k] > 100 ? 'fame' : null]; });   // 🔮 Magic is a number out of 100,000
+      var rows = statKeys().map(function (k) { return k === 'magic' ? ['🔮 Magic', Math.sqrt((L.st.magic || 0) / MAGIC_MAX) * 100, 'magic', magN(L.st.magic)] : [STAT[k][0] + ' ' + STAT[k][1], L.st[k], L.st[k] > 100 ? 'fame' : null]; });   // 🔮 Magic is a number out of 1,000,000 (the bar fills fast at first, then slower and slower)
       if (isRZ()) rows.push(L.gateBroken ? ['💔 Gate', 0, 'lo', 'Broken'] : ['🌀 Gate', gateNow(), null]);   // 🌀 your gate's health (if it breaks, it's broken forever)
+      if (isRZ() && L.curse) rows.push(['☠️ Curse', L.curse.left / CURSE_YEARS * 100, 'lo', L.curse.left + (L.curse.left === 1 ? ' yr' : ' yrs')]);   // ☠️ how long until the curse gets you
       if (L.fame > 0) rows.push(['⭐ Fame', L.fame, 'fame']);
       var chr = chrome(), lim = limitOf();
       var pw = fightPower(); rows.push(['💪 Power', pw / 2, 'fame', String(pw)]);   // fight power (it can go way past 100)
@@ -14248,6 +14484,11 @@
         row.appendChild(mk('span', 'lf-stat-v', r[3] || r[1] + '%'));
         box.appendChild(row);
       });
+      if (isRZ() && L.fs) {   // 🥊 fighting stats
+        var fb = mk('div', 'lf-fstats');
+        FS.forEach(function (x) { var row = mk('div', 'lf-stat'); row.appendChild(mk('span', 'lf-stat-l', x[1] + ' ' + x[2])); row.appendChild(barEl(fsOf(x[0]))); row.appendChild(mk('span', 'lf-stat-v', String(fsOf(x[0])))); fb.appendChild(row); });
+        box.appendChild(fb);
+      }
       if (isRZ()) box.appendChild(mk('p', 'lf-dp', dpLine()));   // ✨ your divine protections, Return by Death, magic
       var logBox = $('log'), frag = document.createDocumentFragment(), shownAge = null;
       L.log.forEach(function (en) {
@@ -14409,7 +14650,7 @@
       L.tier = Math.min(2, old.tier + (worth + bizWorth >= 500000 ? 1 : 0));
       L.biz = (old.biz || []).map(function (bz) { return Object.assign({}, bz); }); L.bizN = old.bizN || 0;
       L.st.smarts = clamp((old.st.smarts + R(10, 90)) / 2); L.st.style = clamp((old.st.style + R(10, 90)) / 2);
-      if (old.world === 'rezero') L.st.magic = clampM(((old.st.magic != null ? old.st.magic : 20000) + R(5000, 35000)) / 2);   // 🔮 strong mages have kids with strong magic
+      if (old.world === 'rezero') L.st.magic = clampM(Math.min(150000, ((old.st.magic != null ? old.st.magic : 20000) + R(5000, 35000)) / 2));   // 🔮 strong mages have kids with strong magic
       var me = addPerson('parent', old.age, old.first, old.last); me.alive = false; me.bond = k.bond;
       if (mate) { var pp = addPerson('parent', mate.age, mate.first, mate.last); pp.bond = R(60, 90); pp.job = mate.job; }
       old.people.forEach(function (p) { if (p.rel === 'kid' && p.id !== k.id && p.alive) { var sb = addPerson('sib', p.age, p.first, p.last); sb.bond = R(50, 85); } });
@@ -14523,14 +14764,14 @@
     function godSheet() {
       sheet('🧬 God Mode', function (c) {
         note(c, 'Change anything about yourself. You still make all the choices!');
-        [['happy', '😊 Happy'], ['health', '❤️ Health'], ['smarts', '🧠 Smarts'], ['style', '😎 Style']].concat(isRZ() ? [['magic', '🔮 Magic']].concat(L.gateBroken ? [] : [['gate', '🌀 Gate']]) : [], [['fame', '⭐ Fame']]).forEach(function (s) {
-          var k = s[0], row = mk('label', 'lf-god'), out = mk('b'), inp = mk('input'), show = function () { out.textContent = k === 'magic' ? magN(+inp.value) : inp.value + '%'; };
-          inp.type = 'range'; inp.min = k === 'gate' ? '1' : '0'; inp.max = String(capOf(k)); inp.step = '1';
-          inp.value = String(k === 'fame' ? L.fame : k === 'gate' ? gateNow() : L.st[k]);
+        [['happy', '😊 Happy'], ['health', '❤️ Health'], ['smarts', '🧠 Smarts'], ['style', '😎 Style']].concat(isRZ() ? [['magic', '🔮 Magic']].concat(L.gateBroken ? [] : [['gate', '🌀 Gate']], FS.map(function (x) { return ['fs-' + x[0], x[1] + ' ' + x[2]]; })) : [], [['fame', '⭐ Fame']]).forEach(function (s) {
+          var k = s[0], fk = k.indexOf('fs-') === 0 ? k.slice(3) : null, row = mk('label', 'lf-god'), out = mk('b'), inp = mk('input'), show = function () { out.textContent = k === 'magic' ? magN(+inp.value) : fk ? inp.value : inp.value + '%'; };
+          inp.type = 'range'; inp.min = k === 'gate' ? '1' : '0'; inp.max = String(fk ? 100 : capOf(k)); inp.step = '1';
+          inp.value = String(k === 'fame' ? L.fame : k === 'gate' ? gateNow() : fk ? fsOf(fk) : L.st[k]);
           inp.setAttribute('data-stat', k);
           show();
           inp.addEventListener('input', show);
-          inp.addEventListener('change', function () { var v = k === 'fame' ? clamp(+inp.value) : k === 'gate' ? Math.max(1, clamp(+inp.value)) : capStat(k, +inp.value); if (k === 'fame') L.fame = v; else if (k === 'gate') L.gate = v; else L.st[k] = v; godUsed(); save(); render(); });
+          inp.addEventListener('change', function () { if (fk) { L.fs = L.fs || fsStart(); L.fs[fk] = clamp(+inp.value); godUsed(); save(); render(); return; } var v = k === 'fame' ? clamp(+inp.value) : k === 'gate' ? Math.max(1, clamp(+inp.value)) : capStat(k, +inp.value); if (k === 'fame') L.fame = v; else if (k === 'gate') L.gate = v; else L.st[k] = v; godUsed(); save(); render(); });
           row.appendChild(mk('span', null, s[1])); row.appendChild(inp); row.appendChild(out);
           c.appendChild(row);
         });
@@ -14559,6 +14800,8 @@
           if (!L.reinhard) opt(c, '⚔️', 'Get Reinhard’s divine protections', 'ALL of them, like the Sword Saint and the Phoenix', function () { L.reinhard = true; L.dp = L.dp || []; REIN.forEach(function (id) { if (L.dp.indexOf(id) < 0) L.dp.push(id); }); award('rzsaint'); godUsed(); doThing('⚔️', [{}, '⚔️ You have Reinhard’s divine protections now! ' + listAnd(REIN.map(function (id) { return DP[id].e + ' ' + DP[id].t; })) + '.'], null, godSheet); });
           var left = DPS.filter(function (x) { return !x.rein && (L.dp || []).indexOf(x.id) < 0; });
           opt(c, '✨', 'Get a divine protection', left.length ? 'A random one you don’t have yet' : 'You have every one already!', function () { var X = pick(left); L.dp = L.dp || []; L.dp.push(X.id); if (X.id === 'mana') L.magic = Math.max(1, L.magic || 0); award('rzblessed'); godUsed(); doThing('✨', [{}, '✨ You got ' + dpName(X.id) + '! ' + X.e + ' ' + X.d], null, godSheet); }, !left.length);
+          if (!yinYang()) opt(c, '☯️', 'Get the powers of Yin and Yang', 'Your magic turns into ☀️ Light AND 🌑 Dark', function () { L.elems = ['light', 'dark']; award('rzyinyang'); godUsed(); doThing('☯️', [{}, '☯️ You used God Mode to get ☀️ Light AND 🌑 Dark magic: the powers of Yin and Yang!'], null, godSheet); });
+          if (L.curse) opt(c, '☠️', 'Break your mabeast curse', 'No need to hunt down ' + L.curse.n, function () { var n = L.curse.n; L.curse = null; godUsed(); doThing('🧬', [{}, '🧬 You used God Mode, and the curse mark from ' + n + ' faded away.'], null, godSheet); });
           if ((L.elems || []).length < 2 && !hasDP('sorcery')) opt(c, '🌀', 'Get a second magic element', 'Usually that’s super rare!', function () { var e2 = pick(Object.keys(ELEMS).filter(function (x) { return L.elems.indexOf(x) < 0; })); L.elems.push(e2); award('rzdouble'); godUsed(); doThing('🌀', [{}, '🌀 Now you can use ' + elemName(e2) + ' magic too!'], null, godSheet); });
         }
         opt(c, '✏️', 'Change your name', L.first + ' ' + L.last, nameSheet);
