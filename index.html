@@ -794,6 +794,7 @@
   .lf-move small { display: block; margin-top: 2px; font-weight: 600; font-size: 0.72rem; color: #cfc8ee; }
   .lf-move.heavy { border-color: #ff3ea5; background: rgba(255, 62, 165, 0.16); }
   .lf-move.net { border-color: #22d3ee; background: rgba(34, 211, 238, 0.13); }
+  .lf-move.subel { border-color: #a5b4fc; background: linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(196, 181, 253, 0.18)); }   /* ❄️ sub-element spells */
   .lf-moves.many { grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .lf-moves.many .lf-move { font-size: 0.8rem; padding: 9px 4px; }
   .lf-moves.many .lf-move small { font-size: 0.66rem; }
@@ -11224,7 +11225,7 @@
       { n: 'Aurora', e: '🦌', t: 'the Great Light Stag', el: 'light' }
     ];
     function spiritMax() { return hasDP('spirits') ? 8 : 6; }
-    function rzPower() { return isRZ() ? dpPower() + (L.swordXP || 0) + (L.sword ? SWORD[L.sword].power : 0) + (hasDegree('sword') ? 15 : 0) + (L.magic || 0) * 4 + (L.magic ? Math.round(Math.min(L.st.magic || 0, 100000) / 4000 + Math.max(0, (L.st.magic || 0) - 100000) / 20000) : 0) + fsPower() + (L.great ? 20 : (L.spirits || []).length * 3) : 0; }
+    function rzPower() { return isRZ() ? dpPower() + (L.swordXP || 0) + (L.sword ? SWORD[L.sword].power : 0) + (hasDegree('sword') ? 15 : 0) + (L.magic || 0) * 4 + (L.magic ? Math.round(Math.min(L.st.magic || 0, 100000) / 4000 + Math.max(0, (L.st.magic || 0) - 100000) / 20000) : 0) + fsPower() + subsHave().length * 8 + (L.great ? 20 : (L.spirits || []).length * 3) : 0; }
     function swordSheet() {
       sheet('⚒️ Blacksmith', function (c) {
         note(c, '⚒️ ' + (L.sword ? 'Your sword: ' + SWORD[L.sword].e + ' ' + SWORD[L.sword].t + '. ' : 'You don’t have a sword yet! ') + 'A better sword hits harder in battles and makes you tougher.');
@@ -11281,7 +11282,7 @@
       var en = typeof id === 'string' ? rzEnemy(id) : id;
       return fight(en, function (res) {
         var h = hurt(res), xp = fsBattle(res), r;
-        if (res.win) { r = onWin(h); r[1] += xp; }
+        if (res.win) { r = onWin(h); if (res.subLine) { r[1] += res.subLine; res.subUsed = true; } r[1] += xp; }   // (❄️ right after the win)
         else if (res.fled) r = [{ happy: -2, health: h }, '🏃 You got away from ' + en.who + '. Live to fight another day!'];
         else if (onLose) r = onLose(h);
         else r = [{ happy: -6, health: h }, '🤕 ' + cap(en.who) + ' beat you. You limped home to rest.' + xp];
@@ -11396,16 +11397,19 @@
 
     // ---- ❄️ sub-elements: once your magic is strong, your element grows a new kind of magic ----
     var SUBEL = {
-      water: { e: '❄️', t: 'Ice', spell: 'Frost Lance', d: 'it can freeze them solid, so they skip a turn' },
-      fire: { e: '💥', t: 'Explosion', spell: 'Blast Bloom', d: 'HUGE damage, but it strains your gate more' },
-      earth: { e: '💎', t: 'Crystal', spell: 'Crystal Spikes', d: 'a crystal shield blocks their next hit' },
-      air: { e: '⚡', t: 'Lightning', spell: 'Thunder Spear', d: 'it never misses, and it can stun them' },
-      dark: { e: '🪐', t: 'Gravity', spell: 'Gravity Crush', d: 'they can’t dodge your next 3 attacks' },
-      light: { e: '💖', t: 'Holy', spell: 'Holy Light', d: 'it heals you a LOT, and it hurts the Witch Cult and mabeasts extra' }
+      water: { e: '❄️', t: 'Ice', spell: 'Frost Lance', d: 'it can freeze them solid, so they skip a turn', win: '❄️ Your Frost Lance froze them solid!' },
+      fire: { e: '💥', t: 'Explosion', spell: 'Blast Bloom', d: 'HUGE damage, but it strains your gate more', win: '💥 Your Blast Bloom blew them right off their feet!' },
+      earth: { e: '💎', t: 'Crystal', spell: 'Crystal Spikes', d: 'a crystal shield blocks their next hit', win: '💎 Your crystal shield blocked every hit!' },
+      air: { e: '⚡', t: 'Lightning', spell: 'Thunder Spear', d: 'it never misses, and it can stun them', win: '⚡ Your Thunder Spear zapped them before they could even move!' },
+      dark: { e: '🪐', t: 'Gravity', spell: 'Gravity Crush', d: 'they can’t dodge your next 3 attacks', win: '🪐 Your Gravity Crush pinned them to the ground!' },
+      light: { e: '💖', t: 'Holy', spell: 'Holy Light', d: 'it heals you a LOT, and it hurts the Witch Cult and mabeasts extra', win: '💖 Your Holy Light healed every bruise!' }
     };
     var SUB_NEED = 100000;   // 🔮 sub-elements wake up at Magic 100,000 (once you know 3 spells)
-    function subsHave() { var me = magicEls(); return (L.subs || []).filter(function (el) { return me.indexOf(el) >= 0; }); }
-    function subNext() { var me = magicEls(); if ((L.st.magic || 0) < SUB_NEED || (L.magic || 0) < 3) return null; for (var i = 0; i < me.length; i++) if ((L.subs || []).indexOf(me[i]) < 0) return me[i]; return null; }
+    function ownEls() { return (L.elems || []).filter(function (el) { return ELEMS[el]; }); }   // YOUR element(s): not the extra magic a divine protection lets you use (🔮 Sorcery, 💧 Water)
+    function subsHave() { var me = ownEls(); return (L.subs || []).filter(function (el) { return me.indexOf(el) >= 0; }); }   // ❄️ only your own element(s) grow sub-elements
+    function subNext() { var me = ownEls(); if ((L.st.magic || 0) < SUB_NEED || (L.magic || 0) < 3) return null; for (var i = 0; i < me.length; i++) if ((L.subs || []).indexOf(me[i]) < 0) return me[i]; return null; }
+    function isSubMove(id) { return id.slice(0, 4) === 'rzs-'; }
+    function subWinLine() { var sh = isRZ() && L.magic ? subsHave() : []; return sh.length ? ' ' + SUBEL[pick(sh)].win : ''; }   // ❄️ your sub-element magic helps in quick fights too
     function subAwaken(el) {
       (L.subs = L.subs || []).push(el); award('rzsub');
       var S = SUBEL[el];
@@ -11883,7 +11887,8 @@
         '🌀 Everyone has ONE magic element: 🔥 Fire, 💧 Water, 🪨 Earth or 🌪️ Air. 🌑 Dark and ☀️ Light are rare, and two elements is super rare. You can only use magic of your own element. Practice magic, or get a magic tutor, to learn stronger spells.',
         '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate. It heals every year, and 🍽️ mana food in ⚡ Do heals it too. If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
         '🔮 Magic is a stat that goes all the way up to 1,000,000, but the higher it gets, the slower it grows! Practice magic, meditate at the ⛲ mana spring, take magic lessons, make spirit contracts, and cast spells in battles. More Magic makes your spells stronger. Each element has 5 spells: the 2nd needs 🔮 Magic 30,000+, then 60,000+, 150,000+, and the 5th (an ancient spell!) needs 400,000+.',
-        '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy.',
+        '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy. You only get the sub-elements of YOUR element(s): extra magic from a divine protection (like 🔮 Sorcery) doesn’t count.',
+        '⚔️ In battles, your sub-element spells get their own buttons, right next to Punch. They help you win quick fights too. Super strong? Easy fights end right away, so turn on ⚔️ Battles: Every fight in ☰ Menu to battle for real and use your spells every time!',
         '🔥🌪️ Two elements? Mix them into combo spells once your 🔮 Magic reaches 50,000, like 🔥🌪️ Fire Tornado, 🌋 Lava Burst or ⛈️ Thunderstorm. And if you have ☀️ Light AND 🌑 Dark, you get the powers of ☯️ Yin and Yang!',
         '🥊 Fighting stats: Strength (harder hits), Defense (less damage), Speed (easier dodging and running away) and Skill (critical hits). Train them in ⚡ Do, and win real battles to get better.',
         '☠️ Careful: a mabeast’s bite can curse you! The curse kills you in 3 years… unless you hunt down the mabeast that cursed you and defeat it.',
@@ -13895,12 +13900,18 @@
       p += rzPower();   // 🔁 swords, magic and divine protections
       return Math.round(p);
     }
-    function isHard(en) { return en.power > fightPower() * 0.85; }
+    function isHard(en) { return realAll || en.power > fightPower() * 0.85; }   // (⚔️ Battles: Every fight → every fight is a real battle)
     function winChance(en) { return Math.max((L.mode === 'hard' ? 0.4 : 0.55), Math.min(0.95, 0.5 + (fightPower() - en.power) / 100 - (L.mode === 'hard' ? 0.1 : 0))); }
     function foeOf(x) { return typeof x === 'string' ? ENEMY[x] : x; }
     function fight(id, then) {   // easy fights end right away (like BitLife); hard ones start a battle
       var en = foeOf(id);
-      if (!isHard(en) && !en.bossFight && !en.always) return then(chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) });
+      if (!isHard(en) && !en.bossFight && !en.always) {
+        var qr = chance(winChance(en)) ? { win: true, auto: true, healthLoss: R(0, 5) } : { lost: true, auto: true, healthLoss: R(8, 15) };
+        if (qr.win) qr.subLine = subWinLine();   // ❄️ your sub-element magic helps in quick fights too
+        var out = then(qr);
+        if (qr.subLine && !qr.subUsed && out && typeof out[1] === 'string') out[1] += qr.subLine;
+        return out;
+      }
       return { battle: en, then: then };
     }
     function hurt(res) { return -Math.min(res.healthLoss || 0, Math.max(0, L.st.health - 5)); }
@@ -14087,6 +14098,9 @@
         return [{ money: got, perf: -8, happy: -6, health: h }, '😵 ' + cap(list[beat].n) + ' knocked you down and got away. Your boss is NOT happy.' + part];
       });
     }
+    var BTKEY = 'funvault-lifetimes-battles-v1', realAll = false;   // ⚔️ Battles: Every fight (a ☰ Menu switch)
+    try { realAll = localStorage.getItem(BTKEY) === '1'; } catch (e) {}
+    function setRealAll(on) { realAll = on; try { localStorage.setItem(BTKEY, on ? '1' : '0'); } catch (e) {} }
     var B = null, quickFights = false, AC = null, PILL_PACK = 9000, PILL_MAX = 9, HUM_COST = 2500, HUM_MAX = 3;
     function pillTurns() { return L.mode === 'hard' ? 4 : 5; }   // 💊 how long military pills last in a battle
     function sfx(kind) {
@@ -14171,12 +14185,13 @@
       if (B.phase === 'choose') list = ['psyfight', 'psyrun'];   // 🧠 humanity zero: run, or fight?
       else if (B.menu === 'hack' && D) { list = QHACKS.filter(function (q) { return q.tier <= D.tier; }).map(function (q) { return q.id; }); list.push('back'); }
       else if (isRZ()) {   // 🔁 Re:Zero moves: your fists, your sword, your magic (and the Sword Saint strike!)
-        var sps = rzSpellMoves();   // 🌀 only YOUR element(s), plus ❄️ sub-elements and 🔥🌪️ combo spells
+        var sps = rzSpellMoves().filter(function (x) { return !isSubMove(x); }), subB = rzSpellMoves().filter(isSubMove);   // 🌀 your element spells and 🔥🌪️ combos (❄️ sub-elements get their own buttons)
         if (B.menu === 'spells') list = sps.concat(['back']);   // ✨ lots of spells get their own menu
         else {
           list = ['punch'];
           if (L.sword) list.push('rzsword');
           if (sps.length > 4) list.push('rzspells'); else list = list.concat(sps);
+          list = list.concat(subB);   // ❄️ your sub-element magic: always right on the battle screen
           if (L.great || (L.spirits || []).length) list.push('rzspirit');
           if (hasDP('saint')) list.push('rzsaint');
           if ((L.berries || 0) > 0 && B.manaMax) list.push('rzberry');   // 🍓
@@ -14210,7 +14225,7 @@
         if (id === 'shoot' && gunOf().id !== 'zap') { M = [gunOf().e, gunOf().id === 'chip' ? 'Chip' : gunOf().t, gunOf().sub]; sub = M[2]; }   // 🔫 your gun
         if (id === 'rzsword' && L.sword) { M = [SWORD[L.sword].e, SWORD[L.sword].t, SWORD[L.sword].dmg[0] + '–' + SWORD[L.sword].dmg[1] + ' damage · hard to dodge']; sub = M[2]; }
         if (/^rz[msc]-/.test(id)) { var zi = spellInfo(id), low = B.manaMax && (B.mana || 0) < zi.mana; M = [zi.e, zi.t, low ? '🔮 Not enough mana: it needs ' + zi.mana + ' (you have ' + B.mana + ')' : zi.d + ' · 🔮 ' + zi.mana + ' mana · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; if (low) off = true; }
-        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
+        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().filter(function (x) { return !isSubMove(x); }).length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
         if (id === 'rzberry') { M = ['🍓', 'Eat a mana berry', (B.mana >= B.manaMax ? '🔮 your mana is full' : '🔮 +' + Math.min(berryMana(), B.manaMax - B.mana) + ' mana') + ' · 🌀 +10 · ' + L.berries + ' left · uses your turn']; sub = M[2]; }
         if (id === 'rzspirit') { M = L.great ? [L.great.e, L.great.n, 'Your great spirit attacks · no gate needed'] : ['🧚', 'Spirit arts', L.spirits.length + (L.spirits.length === 1 ? ' spirit attacks' : ' spirits attack') + ' · no gate needed']; sub = M[2]; }
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
@@ -14222,7 +14237,7 @@
         if (id === 'psyrun') { off = false; sub = 'Dodge them 3 times to get away'; }
         if (id === 'calm') sub = '+2 humanity (uses your turn)';
         if (heavy) sub = (cost ? '−' + cost + ' humanity' : B.psycho ? 'Free (cyberpsycho!)' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
-        var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : ''));
+        var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : isSubMove(id) ? ' subel' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
         b.appendChild(document.createTextNode(M[0] + ' ' + M[1]));
         if (sub) b.appendChild(mk('small', null, sub));
@@ -14274,7 +14289,7 @@
       var en = B.en, st = sandyTier(), mult = B.sandy ? [1, 2, 2.5, 3, 3.5][st] : 1, X = rageOf(), rg = (B.rage ? (X && X.tier >= 2 ? 1.9 : 1.6) : 1) * (B.psycho ? 1.25 : 1), dmg = 0, extra = '';
       if (id === 'netrun') { B.menu = 'hack'; msgF('💻 Pick a quickhack. You have ' + B.ram + ' RAM' + (has('capri') ? ', and with Capri they’re all free!' : '.')); buildMoves(); return; }
       if (id === 'back') { B.menu = null; msgF('Your turn! Pick a move.'); buildMoves(); return; }
-      if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a spell! You know ' + rzSpellMoves().length + '.'); buildMoves(); return; }
+      if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a spell! You know ' + rzSpellMoves().length + (subsHave().length ? ' (your ❄️ sub-element magic is on the main battle screen)' : '') + '.'); buildMoves(); return; }
       if (id === 'sandy') {   // free action: it doesn't use up your turn
         B.sandy = 33; award('timebender'); sfx('slow');
         if (spend(heavyCost('sandy'))) return;
@@ -14853,6 +14868,7 @@
         sec(c, 'Game');
         opt(c, '🏆', 'Achievements', ACH.filter(function (a) { return hasAch(a.id); }).length + ' of ' + ACH.length + ' unlocked' + (allAch ? ' (🍀 lucky guess)' : ''), function () { achSheet(menuSheet); });
         opt(c, '🔑', 'Codes & starting over', premiumOwned ? (premium ? 'Premium is on ✓ · turn it off or start over' : 'Premium is off · turn it back on or start over') : 'Secret codes, or start over from scratch', function () { codeSheet(menuSheet); });
+        opt(c, '⚔️', 'Battles: ' + (realAll ? 'Every fight ✓' : 'Only hard fights'), realAll ? 'Every fight is a real battle, so you can use your spells and moves. Tap to make easy fights quick again.' : 'Easy fights end right away. Tap to make EVERY fight a real battle, so you can use your spells!', function () { setRealAll(!realAll); menuSheet(); });
         opt(c, '🌍', 'Worlds & new life', 'Pick a world and start over', worldsView);
         opt(c, '❓', 'How to play', '', howSheet);
         note(c, isRZ() ? 'Inspired by BitLife by Candywriter, and by Re:Zero by Tappei Nagatsuki. This is a fan-made game and isn’t connected to either one.' : 'Inspired by BitLife by Candywriter. This is a fan-made game and isn’t connected to BitLife.');
@@ -15039,7 +15055,8 @@
       outcome('🍀', on ? 'Every achievement and reward is unlocked again! 🍀' : 'Lucky guess is off. You’re back to the achievements you really earned.', [], function () { refresh(); codeSheet(back); });
     }
     function wipeAll() {   // a totally fresh start: no premium, no achievements, no rewards, no past lives
-      [KEY, GKEY, PKEY, OKEY, TKEY, AKEY, LKEY, CUKEY, CSKEY, 'funvault-lifetimes-auto-v1'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+      [KEY, GKEY, PKEY, OKEY, TKEY, AKEY, LKEY, CUKEY, CSKEY, BTKEY, 'funvault-lifetimes-auto-v1'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+      realAll = false;
       L = null; graves = []; snaps = []; achs = {}; AUTO = {}; premium = false; premiumOwned = false; allAch = false; allAchOwned = false; toastQ = [];
       customOn = false; customOwned = false; CSET = { cyber: {}, rezero: {} };
       worldsView();
