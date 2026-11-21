@@ -674,6 +674,7 @@
   .lf-bar .fame { background: linear-gradient(90deg, var(--lf-a), var(--lf-b)); }
   .lf-bar .magic { background: linear-gradient(90deg, #6f5cff, #c86bff); }   /* 🔮 Magic */
   .lf-bar .mana { background: linear-gradient(90deg, #3d7bff, #9a6bff); }   /* 🔮 mana in battles */
+  .lf-custombtn { margin: 2px 0 10px; border-style: dashed; }   /* 🎨 Custom life */
   .lf-rzbars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
   .lf-rzbars[hidden] { display: none; }
   .lf-rzbars .lf-frow { font-size: 0.8rem; }
@@ -1189,6 +1190,26 @@
   .chs-friend:disabled { opacity: 0.6; cursor: default; }
   .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
   .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1377,6 +1398,7 @@
   .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
   .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
   .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
 </style>
 </head>
 <body>
@@ -10377,7 +10399,7 @@
   // ============ Lifetimes: a life simulator, inspired by BitLife (by Candywriter) ============
   (function () {
     var KEY = 'funvault-lifetimes-v1', GKEY = 'funvault-lifetimes-graves-v1', PKEY = 'funvault-lifetimes-premium-v1', TKEY = 'funvault-lifetimes-timemachine-v1', AKEY = 'funvault-lifetimes-achievements-v1', OKEY = 'funvault-lifetimes-premium-off-v1', LKEY = 'funvault-lifetimes-luckyguess-v1';
-    var LOG_MAX = 700, TUITION = 6000, SNAP_MAX = 25, CODES = { cyberpunk: 'premium', smasher: 'smasher', luckyguess: 'allach', crome: 'allchrome', chrome: 'allchrome' };
+    var LOG_MAX = 700, TUITION = 6000, SNAP_MAX = 25, CODES = { cyberpunk: 'premium', smasher: 'smasher', luckyguess: 'allach', crome: 'allchrome', chrome: 'allchrome', ilovechess: 'custom' };
     function $(id) { return document.getElementById('lf-' + id); }
     function R(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
     function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
@@ -10646,6 +10668,7 @@
       { id: 'legend', e: '💔', t: 'Nothing Left to Lose', d: 'Before you turn 18, lose your parents or run away from home, then join a street crew. (Try the Street Kid start!)', reward: 'Makes it way easier to sneak into the Kumo-Tek armory and steal a 🦾 Titan Exoskeleton (+15%).', secret: 1 },
       { id: 'exo', e: '🤖', t: 'Walking Tank', d: 'Wear the Titan Exoskeleton.' },
       { id: 'premium', e: '👑', t: 'Code Breaker', d: 'Unlock premium with a secret code.' },
+      { id: 'ilovechess', e: '♟️', t: 'I Love Chess', d: 'Type the secret code that unlocks 🎨 Custom Life.', secret: 1 },
       { id: 'smasher', e: '🤖', t: 'The Smasher', d: 'Become 96% cyberware or more (96 tolerance used)… or find the secret code.', reward: 'Unlocks 🤖 Smasher Body (MAX cyberware tolerance with no drawbacks: turn it on in the ☰ menu or the Chrome Clinic) and the 🤖 Smasher Chassis at the Chrome Clinic.', secret: 1 }
     ];
     var ACHBY = byId(ACH);
@@ -11094,14 +11117,13 @@
       L.dp = r.dp; L.reinhard = r.rein; L.rbd = r.rbd;
       if (r.rein) {
         L.dp.forEach(function (id) { applyFx(DP[id].birth, {}); });
-        log('⚔️✨ 1 IN 1000!!! You were born with REINHARD’S DIVINE PROTECTIONS: ' + L.dp.slice(0, 7).map(function (id) { return DP[id].e + ' ' + DP[id].t; }).join(', ') + ', and ' + (L.dp.length - 7) + ' more! People are already whispering that you’ll be the next Sword Saint.');
+        log('⚔️✨ ' + (r.picked ? '🎨 ' : '1 IN 1000!!! ') + 'You were born with REINHARD’S DIVINE PROTECTIONS: ' + L.dp.slice(0, 7).map(function (id) { return DP[id].e + ' ' + DP[id].t; }).join(', ') + ', and ' + (L.dp.length - 7) + ' more! People are already whispering that you’ll be the next Sword Saint.');
         award('rzsaint');
       } else if (L.dp.length) {
-        var X = DP[L.dp[0]]; applyFx(X.birth, {});
-        log('✨ You were born with ' + dpName(X.id) + '! ' + X.e + ' ' + X.d);
+        L.dp.forEach(function (id) { var X = DP[id]; applyFx(X.birth, {}); log('✨ You were born with ' + dpName(X.id) + '! ' + X.e + ' ' + X.d); });   // (🎨 a custom life can have several)
         award('rzblessed');
       } else log('🌫️ You weren’t born with a divine protection. That’s okay: about half of all people aren’t!');
-      if (L.rbd) { log('💜 0.5% CHANCE!!! When you were born, a shadowy hand touched your forehead, and a soft voice whispered, “I love you.” You are Satella’s crush, so you have ↩️ RETURN BY DEATH! If you die, you wake up again at the start of that year.'); award('rzsatella'); }
+      if (L.rbd) { log('💜 ' + (r.pickedRbd ? '' : '0.5% CHANCE!!! ') + 'When you were born, a shadowy hand touched your forehead, and a soft voice whispered, “I love you.” You are Satella’s crush, so you have ↩️ RETURN BY DEATH! If you die, you wake up again at the start of that year.'); award('rzsatella'); }
       L.elems = r.elems || rollElems(); L.gate = 100; L.gateBroken = false;
       var me = magicEls();
       if (hasDP('sorcery')) log('🔮 Your Divine Protection of Sorcery lets you use ALL SIX kinds of magic: ' + me.map(elemName).join(', ') + '!');
@@ -14705,6 +14727,7 @@
       });
       story = 'normal'; bodyPick = 'normal';
       markDistrict();
+      customBtn();   // 🎨
       view('new');
     }
     function markDistrict() {
@@ -14717,8 +14740,10 @@
     function startLife() {
       var first = clean($('first').value) || pick(NH.first), last = clean($('last').value) || pick(NH.last);
       L = blank(first, last, district, newWorld);
+      var cs = customOn ? cset() : null;   // 🎨 Custom life: what you chose to be born with
       L.mode = bodyPick === 'hard' ? 'hard' : bodyPick === 'smasher' && hasAch('smasher') ? 'easy' : 'normal';
       if (L.mode === 'hard') L.chromeLimit = Math.max(20, L.chromeLimit - 10);   // hard mode: less tolerance
+      if (cs && cs.smasher && newWorld !== 'rezero') L.mode = 'easy';   // 🎨 🤖
       var d = NH.districts[district], tier = d.tier;
       L.street = story === 'street';
       var mom = addPerson('parent', R(22, 40), null, last, 'Mom'), dad = addPerson('parent', R(22, 42), null, last, 'Dad');
@@ -14726,16 +14751,18 @@
       // the poorer the family, the more likely someone is missing
       var miss = [[0.35, 0.18], [0.15, 0.07], [0.05, 0.03]][tier] || [0.15, 0.07];
       var noDad = L.street || chance(miss[0]), noMom = !L.street && chance(miss[1]), guard = null;
+      if (cs && cs.family && !L.street) { noDad = cs.family === 'mom' || cs.family === 'grand'; noMom = cs.family === 'dad' || cs.family === 'grand'; }   // 🎨 👪
       if (noDad) { dad.alive = false; dad.away = !L.street && chance(0.55); }
       if (noMom) { mom.alive = false; mom.away = chance(0.4); }
       if (L.street) mom.bond = R(85, 100);
       if (noDad && noMom) {
-        var gl = pick(['Grandma', 'Grandpa', 'Aunt', 'Uncle']);
+        var gl = pick(cs && cs.family === 'grand' ? ['Grandma', 'Grandpa'] : ['Grandma', 'Grandpa', 'Aunt', 'Uncle']);
         guard = addPerson('parent', gl.indexOf('Grand') === 0 ? R(55, 72) : R(28, 45), null, last, gl);
         guard.job = pick(NH.parentJobs); guard.bond = R(70, 95);
       }
       var sw = [[60, 30, 10], [45, 40, 15], [35, 45, 20]][tier] || [45, 40, 15];
       var sibs = L.street || guard ? 0 : pickWeighted([0, 1, 2], function (n) { return sw[n]; }), sibNames = [];
+      if (cs && cs.sibs != null) sibs = cs.sibs;   // 🎨 🧒
       for (var i = 0; i < sibs; i++) sibNames.push(addPerson('sib', R(1, 9)).first);
       snaps = []; saveSnaps();
       push({ a: 0, h: 1 });
@@ -14748,9 +14775,10 @@
       else if (noMom) log('👨 Your dad is ' + dad.first + ' ' + last + ', a ' + dad.job + '. ' + (mom.away ? 'Your mom left when you were a baby.' : 'Your mom, ' + mom.first + ', passed away when you were a baby.') + ' It’s just you and your dad.');
       else log('👪 Your mom is ' + mom.first + ' ' + last + ', a ' + mom.job + '. Your dad is ' + dad.first + ' ' + last + ', a ' + dad.job + '.');
       if (sibNames.length) log(sibNames.length === 1 ? '🧒 You have an older sibling, ' + sibNames[0] + '.' : '🧒 You have two older siblings, ' + sibNames[0] + ' and ' + sibNames[1] + '.');
-      if (isRZ()) rzBless(rzRolls()); else log(tolLine());   // 🎲 divine protections and Satella's crush
+      if (isRZ()) rzBless(customRolls(cs)); else { if (cs && cs.tol != null) L.chromeLimit = cs.tol; log(tolLine()); }   // 🎲 divine protections and Satella's crush (🎨 or what you chose)
       if (L.mode === 'easy') { L.smasherBody = true; log('🤖 You started life with a Smasher Body: MAX cyberware tolerance, with no drawbacks at all!'); }
       if (L.mode === 'hard') log(isRZ() ? '🔴 HARD MODE! Tougher fights, less pay, and more risk. Good luck!' : '🔴 HARD MODE! Lower tolerance, tougher fights, less pay, and more risk. Good luck!');
+      if (cs) customBirth(cs);   // 🎨
       log('Welcome to the world, ' + first + '! Tap ＋ Age to grow up.');
       save(); view('life'); render();
     }
@@ -14831,6 +14859,110 @@
       });
     }
 
+    // ---- 🎨 Custom life (the secret code "ilovechess"): choose what you're born with ----
+    // CSET.rezero / CSET.cyber: what you picked for each world. A missing key = 🎲 random, like a normal life.
+    var CUKEY = 'funvault-lifetimes-custom-v1', CSKEY = 'funvault-lifetimes-customset-v1';
+    var customOwned = false, customOn = false, CSET = { cyber: {}, rezero: {} };
+    try {
+      var cu0 = localStorage.getItem(CUKEY); customOwned = cu0 === '1' || cu0 === '0'; customOn = cu0 === '1';
+      var cs0 = JSON.parse(localStorage.getItem(CSKEY) || 'null'); if (cs0 && typeof cs0 === 'object') CSET = { cyber: cs0.cyber || {}, rezero: cs0.rezero || {} };
+    } catch (e) {}
+    function cset() { return CSET[newWorld === 'rezero' ? 'rezero' : 'cyber']; }
+    function saveCset() { try { localStorage.setItem(CSKEY, JSON.stringify(CSET)); } catch (e) {} }
+    function customCount() { var s = cset(); return Object.keys(s).filter(function (k) { return s[k] != null; }).length; }
+    function setCustom(on, back) {
+      customOn = on;
+      try { localStorage.setItem(CUKEY, on ? '1' : '0'); } catch (e) {}
+      outcome('🎨', on ? 'Custom life is back on! 🎨 Start a new life to choose what you’re born with.' : 'Custom life is off, so new lives are random again. You can turn it back on in 🔑 Codes anytime.', [], function () { refresh(); codeSheet(back); });
+    }
+    function customBtn() {   // 🎨 on the new-life screen
+      var b = $('customBtn');
+      if (!b) { b = mk('button', 'btn ghost lf-custombtn'); b.type = 'button'; b.id = 'lf-customBtn'; b.addEventListener('click', customSheet); $('new').insertBefore(b, $('start')); }
+      b.hidden = !customOn;
+      var n = customCount();
+      b.textContent = '🎨 Choose what you’re born with' + (n ? ' (' + n + ' chosen)' : '');
+    }
+    function customSheet() {
+      var s = cset(), rz = newWorld === 'rezero', money = function (n) { return bigNum(n) + (rz ? ' gold' : ' cr'); };
+      var redo = function () { var y = $('card').scrollTop; customSheet(); $('card').scrollTop = y; };
+      sheet('🎨 Custom life', function (c) {
+        note(c, '♟️ I love chess! Choose what you’re born with. Anything you leave on 🎲 is random, just like a normal life.');
+        var row = function (title, key, opts) {   // opts: [[value, label], …]; the value null means 🎲 random
+          sec(c, title);
+          var box = mk('div', 'lf-pills');
+          opts.forEach(function (o) {
+            var b = mk('button', 'lf-pill', o[1]); b.type = 'button'; b.dataset.ck = key; b.dataset.cv = JSON.stringify(o[0]);
+            b.setAttribute('aria-pressed', JSON.stringify(s[key] == null ? null : s[key]) === JSON.stringify(o[0]) ? 'true' : 'false');
+            b.addEventListener('click', function () { if (o[0] == null) delete s[key]; else s[key] = o[0]; saveCset(); redo(); });
+            box.appendChild(b);
+          });
+          c.appendChild(box);
+        };
+        var many = function (title, key, list, max) {   // pick several (max: how many at once)
+          sec(c, title);
+          var box = mk('div', 'lf-pills'), cur = s[key] || null;
+          var rb = mk('button', 'lf-pill', '🎲 Random'); rb.type = 'button'; rb.dataset.ck = key; rb.dataset.cv = 'null'; rb.setAttribute('aria-pressed', cur ? 'false' : 'true');
+          rb.addEventListener('click', function () { delete s[key]; saveCset(); redo(); }); box.appendChild(rb);
+          if (key === 'dp') { var nb = mk('button', 'lf-pill', '🚫 None'); nb.type = 'button'; nb.dataset.ck = key; nb.dataset.cv = '[]'; nb.setAttribute('aria-pressed', cur && !cur.length ? 'true' : 'false'); nb.addEventListener('click', function () { s[key] = []; saveCset(); redo(); }); box.appendChild(nb); }
+          list.forEach(function (o) {
+            var on = !!cur && cur.indexOf(o[0]) >= 0, b = mk('button', 'lf-pill', o[1]); b.type = 'button'; b.dataset.ck = key; b.dataset.cv = JSON.stringify(o[0]);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            b.addEventListener('click', function () {
+              var a = (s[key] || []).slice(), i = a.indexOf(o[0]);
+              if (i >= 0) a.splice(i, 1); else { a.push(o[0]); if (max && a.length > max) a.shift(); }
+              s[key] = a; saveCset(); redo();
+            });
+            box.appendChild(b);
+          });
+          c.appendChild(box);
+        };
+        var lv = [[null, '🎲'], [10, '10'], [30, '30'], [50, '50'], [70, '70'], [90, '90'], [100, '100']];
+        row('😊 Happy', 'happy', lv); row('❤️ Health', 'health', lv); row('🧠 Smarts', 'smarts', lv); row('😎 Style', 'style', lv);
+        row('⭐ Fame', 'fame', [[null, '🎲 None'], [25, '25'], [50, '50'], [100, '100 (super famous!)']]);
+        row('💰 Money', 'money', [[null, '🎲 None'], [1000, money(1000)], [100000, money(100000)], [10000000, money(10000000)], [1000000000, money(1000000000)]]);
+        row('👪 Family', 'family', [[null, '🎲 Random'], ['both', '👪 Mom and Dad'], ['mom', '👩 Just Mom'], ['dad', '👨 Just Dad'], ['grand', '👵 A grandparent']]);
+        row('🧒 Older brothers and sisters', 'sibs', [[null, '🎲 Random'], [0, 'None'], [1, '1'], [2, '2']]);
+        if (rz) {
+          row('⚔️ Reinhard’s divine protections (ALL of them)', 'rein', [[null, '🎲 Random (1 in 1000)'], [true, '⚔️ Yes!'], [false, 'No']]);
+          if (s.rein === true) note(c, '⚔️ You get every divine protection Reinhard has, so the list below doesn’t matter.');
+          else many('✨ Divine protections (pick as many as you like)', 'dp', DPS.map(function (x) { return [x.id, x.e + ' ' + x.t]; }));
+          many('🌀 Magic element (pick 1 or 2)', 'elems', Object.keys(ELEMS).map(function (k) { return [k, ELEMS[k].e + ' ' + ELEMS[k].t]; }), 2);
+          if ((s.elems || []).indexOf('light') >= 0 && (s.elems || []).indexOf('dark') >= 0) note(c, '☯️ Light AND Dark: you’ll have the powers of Yin and Yang!');
+          row('🔮 Magic', 'magic', [[null, '🎲 Random'], [10000, '10,000'], [50000, '50,000'], [100000, '100,000'], [500000, '500,000'], [1000000, '1,000,000 (max!)']]);
+          row('🥊 Fighting stats (all four)', 'fs', [[null, '🎲 Random'], [25, '25'], [50, '50'], [75, '75'], [100, '100']]);
+          row('💜 Return by Death (Satella’s crush)', 'rbd', [[null, '🎲 Random (1 in 200)'], [true, '💜 Yes'], [false, 'No']]);
+        } else {
+          row('🦾 Cyberware tolerance', 'tol', [[null, '🎲 Random'], [30, '30'], [50, '50'], [70, '70'], [92, '92 (max!)']]);
+          row('🤖 Smasher Body (any cyberware, no drawbacks)', 'smasher', [[null, '🎲 Normal rules'], [true, '🤖 Yes!']]);
+        }
+        sec(c, '🎨 All done?');
+        opt(c, '✅', 'Done', customCount() ? customCount() + ' things chosen · now tap Start life' : 'Everything is random right now', function () { closeCard(); customBtn(); });
+        opt(c, '🎲', 'Make everything random again', '', function () { CSET[rz ? 'rezero' : 'cyber'] = {}; saveCset(); redo(); }, !customCount());
+      });
+    }
+    function customRolls(cs) {   // 🎨 Re:Zero: a normal roll, then your choices on top
+      var r = rzRolls();
+      if (!cs) return r;
+      if (cs.rein === true) { r.dp = REIN.slice(); r.rein = true; r.picked = true; }
+      else {
+        if (cs.rein === false && r.rein) { r.rein = false; r.dp = []; }
+        if (cs.dp) { r.dp = cs.dp.filter(function (id) { return DP[id]; }); r.rein = false; }
+      }
+      if (cs.rbd != null) { r.rbd = !!cs.rbd; r.pickedRbd = r.rbd; }
+      if (cs.elems && cs.elems.length) r.elems = cs.elems.filter(function (e) { return ELEMS[e]; }).slice(0, 2);
+      return r;
+    }
+    function customBirth(cs) {   // 🎨 the rest of your choices (last, so they win over everything else)
+      ['happy', 'health', 'smarts', 'style'].forEach(function (k) { if (cs[k] != null) L.st[k] = clamp(cs[k]); });
+      if (cs.fame != null) L.fame = clamp(cs.fame);
+      if (cs.money != null) L.money = cs.money;
+      if (isRZ()) {
+        if (cs.magic != null) L.st.magic = clampM(cs.magic);
+        if (cs.fs != null) L.fs = { str: cs.fs, def: cs.fs, spd: cs.fs, skl: cs.fs };
+      }
+      L.custom = 1;
+      log('🎨 Custom life! You chose what you were born with.');
+    }
     // ---- 🔑 codes and 👑 premium ----
     function codeSheet(back) {
       sheet('🔑 Codes', function (c) {
@@ -14843,6 +14975,7 @@
         f.addEventListener('submit', function (e) { e.preventDefault(); redeem(inp.value, back); });
         c.appendChild(f);
         if (allAchOwned) opt(c, '🍀', 'All achievements: ' + (allAch ? 'ON ✓' : 'OFF'), allAch ? 'Tap to go back to the achievements you really earned' : 'Tap to unlock every achievement again (no code needed)', function () { setAllAch(!allAch, back); });
+        if (customOwned) opt(c, '🎨', 'Custom life: ' + (customOn ? 'ON ✓' : 'OFF'), customOn ? 'Tap to make new lives random again' : 'Tap to choose what you’re born with again (no code needed)', function () { setCustom(!customOn, back); });
         if (premiumOwned) opt(c, '👑', 'Premium: ' + (premium ? 'ON ✓' : 'OFF'), premium ? 'Tap to turn off God Mode, the Time Machine, the Guardian Angel, and premium stuff' : 'Tap to turn premium back on (no code needed)', function () { setPremium(!premium, back); });
         opt(c, '🔄', 'Start over from scratch', 'Erase premium, achievements, codes, rewards, and past lives, then replay with no benefits', function () {
           confirmBox('🔄', 'Start over from scratch? This erases premium, every achievement and its rewards (like the Smasher Body and the Smasher Chassis), your past lives, and your current life. You can’t undo it!', 'Yes, erase everything', wipeAll);
@@ -14884,6 +15017,14 @@
         outcome('🤖', had ? 'You already have The Smasher achievement! Turn on 🤖 Smasher Body from the ☰ menu or the Chrome Clinic.' : 'Secret achievement unlocked: 🤖 The Smasher! It unlocks 🤖 Smasher Body: MAX cyberware tolerance with no drawbacks at all. Turn it on from the ☰ menu or the Chrome Clinic. (The hard way to get it is to become 96% cyberware…)', [], refresh);
         return;
       }
+      if (CODES[code] === 'custom') {   // 🎨 ♟️
+        var hadC = customOn;
+        customOn = true; customOwned = true;
+        try { localStorage.setItem(CUKEY, '1'); } catch (e) {}
+        award('ilovechess');
+        outcome('🎨', hadC ? 'Custom life is already on! 🎨' : '♟️ I LOVE CHESS! 🎨 Custom Life unlocked! When you start a new life, tap “🎨 Choose what you’re born with” to pick your stats, money, family and more. In the Re:Zero world, you can even pick your divine protections, magic and Return by Death!', [], refresh);
+        return;
+      }
       outcome('❌', 'That code didn’t work. Check the spelling and try again!', [], function () { codeSheet(back); });
     }
     function setPremium(on, back) {
@@ -14898,8 +15039,9 @@
       outcome('🍀', on ? 'Every achievement and reward is unlocked again! 🍀' : 'Lucky guess is off. You’re back to the achievements you really earned.', [], function () { refresh(); codeSheet(back); });
     }
     function wipeAll() {   // a totally fresh start: no premium, no achievements, no rewards, no past lives
-      [KEY, GKEY, PKEY, OKEY, TKEY, AKEY, LKEY, 'funvault-lifetimes-auto-v1'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+      [KEY, GKEY, PKEY, OKEY, TKEY, AKEY, LKEY, CUKEY, CSKEY, 'funvault-lifetimes-auto-v1'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
       L = null; graves = []; snaps = []; achs = {}; AUTO = {}; premium = false; premiumOwned = false; allAch = false; allAchOwned = false; toastQ = [];
+      customOn = false; customOwned = false; CSET = { cyber: {}, rezero: {} };
       worldsView();
       toast('🔄 Fresh start!', 'Everything is erased: no premium, no achievements, no rewards. Good luck!');
     }
@@ -17082,7 +17224,7 @@
           ['b1c3', 'Other knight to c3. Both knights watch the center.'],
           ['e7e6', 'Black pushes e6.'],
           ['e2e3', 'Push e3 to free your bishop. Next: Bd3 and castle!']] }] },
-      { id: 'london', e: '🏰', n: 'London System', side: 'w', d: 'An easy setup you can play almost every game.', plan: [['Bishop to d3, aiming at Black’s king side.', 'f1d3'], ['Castle to keep your king safe.', 'e1g1'], ['Jump your knight to e5. It’s super strong there, and you can support it with f4 later.', 'f3e5'], ['Later, swing your queen to f3 or h5 and attack Black’s king!', 'd1f3']], line: [
+      { id: 'london', e: '🏰', n: 'London System', side: 'w', sys: 1, d: 'An easy setup you can play almost every game.', plan: [['Bishop to d3, aiming at Black’s king side.', 'f1d3'], ['Castle to keep your king safe.', 'e1g1'], ['Jump your knight to e5. It’s super strong there, and you can support it with f4 later.', 'f3e5'], ['Later, swing your queen to f3 or h5 and attack Black’s king!', 'd1f3']], line: [
         ['d2d4', 'Push your queen’s pawn to d4.'],
         ['d7d5', 'Black plays d5.'],
         ['c1f4', 'The London bishop: bring it to f4 early, before you play e3.'],
@@ -17109,7 +17251,7 @@
           ['e2e3', 'Push e3, like always.'],
           ['f8g7', 'Black’s bishop goes to g7.'],
           ['g1f3', 'Knight to f3. Next: h3, Be2 and castle. Same plan as always!']] }] },
-      { id: 'hippoatk', e: '🦛', n: 'Hippo Attack', side: 'w', any: 1, d: 'The Hippo, but for White! Same easy setup: little pawns on a3, b3, d3, e3, g3 and h3, with your pieces hiding behind them. Works against almost anything, in almost any order.', plan: [['Castle! Your king hides behind the bishop on g2.', 'e1g1'], ['Get ready to break out: push f4 to hit Black’s big center.', 'f2f4'], ['Or push d4 to hit e5. When the center opens, your bishops on b2 and g2 come alive!', 'd3d4']], line: [
+      { id: 'hippoatk', e: '🦛', n: 'Hippo Attack', side: 'w', sys: 1, any: 1, d: 'The Hippo, but for White! Same easy setup: little pawns on a3, b3, d3, e3, g3 and h3, with your pieces hiding behind them. Works against almost anything, in almost any order.', plan: [['Castle! Your king hides behind the bishop on g2.', 'e1g1'], ['Get ready to break out: push f4 to hit Black’s big center.', 'f2f4'], ['Or push d4 to hit e5. When the center opens, your bishops on b2 and g2 come alive!', 'd3d4']], line: [
         ['g2g3', 'Start the Hippo Attack with g3. It makes a home for your bishop, just like in the Hippo Defense!'],
         ['e7e5', 'Black takes the center with e5.'],
         ['f1g2', 'Fianchetto your bishop on g2. It looks down the long diagonal, across the whole board.'],
@@ -17220,7 +17362,7 @@
           ['f1g2', 'Keep going with your setup: bishop to g2.'],
           ['e8g8', 'Black castles.'],
           ['g1f3', 'Knight to f3, then castle too. If Black takes your knight with Bxc3, take back with a pawn: your two bishops will be strong!']] }] },
-      { id: 'kia', e: '🏯', n: 'King’s Indian Attack', side: 'w', any: 1, d: 'A setup you can play against almost anything, in almost any order, just like the Hippo. Then you attack with e4!', plan: [['Rook to e1, to back up your e4 pawn.', 'f1e1'], ['Push e5! It kicks Black’s knight away from the king.', 'e4e5'], ['Then go for Black’s king: knight to f1, then h2 and g4, and push your h-pawn. That’s the King’s Indian Attack plan!', 'd2f1 h2h4']], line: [
+      { id: 'kia', e: '🏯', n: 'King’s Indian Attack', side: 'w', sys: 1, any: 1, d: 'A setup you can play against almost anything, in almost any order, just like the Hippo. Then you attack with e4!', plan: [['Rook to e1, to back up your e4 pawn.', 'f1e1'], ['Push e5! It kicks Black’s knight away from the king.', 'e4e5'], ['Then go for Black’s king: knight to f1, then h2 and g4, and push your h-pawn. That’s the King’s Indian Attack plan!', 'd2f1 h2h4']], line: [
         ['g1f3', 'Knight to f3. The King’s Indian Attack starts quietly.'],
         ['d7d5', 'Black takes the center with d5.'],
         ['g2g3', 'Pawn to g3, to make a home for your bishop.'],
@@ -17261,6 +17403,148 @@
           ['b1d2', 'Knight to d2.'],
           ['g8e7', 'Black’s other knight goes to e7.'],
           ['e2e4', 'Push e4. Same setup as always: it works against almost anything!']] }] },
+      { id: 'stonewall', e: '🧱', n: 'Stonewall Attack', side: 'w', sys: 1, d: 'Build a wall of pawns on d4, e3 and f4, then attack the king! Works against almost anything, especially when Black plays d5.', plan: [['Swing your queen to e1, then to h4, right next to Black’s king!', 'd1e1 e1h4'], ['Lift your rook to f3, then to h3. Now your rook AND queen aim at h7!', 'f1f3 f3h3'], ['Bring your last knight to f3 to join the attack.', 'd2f3']], line: [
+        ['d2d4', 'Push your queen’s pawn to d4. The first brick of your wall!'],
+        ['d7d5', 'Black plays d5.'],
+        ['e2e3', 'Push e3. It guards d4 and opens a path for your bishop.'],
+        ['g8f6', 'Black brings out a knight.'],
+        ['f1d3', 'Bishop to d3, aiming right at Black’s king side.'],
+        ['e7e6', 'Black plays e6.'],
+        ['f2f4', 'Push f4! Your pawns on d4, e3 and f4 make a stone wall 🧱'],
+        ['f8e7', 'Black develops its bishop.'],
+        ['g1f3', 'Knight to f3.'],
+        ['e8g8', 'Black castles.'],
+        ['e1g1', 'Castle too. Your king hides behind the wall.'],
+        ['b7b6', 'Black gets ready to put a bishop on b7.'],
+        ['b1d2', 'Your other knight goes to d2.'],
+        ['c8b7', 'Black’s bishop goes to b7.'],
+        ['f3e5', 'Knight to e5! It sits on a super strong square, guarded by your wall. Next: attack the king!']],
+      alts: [
+        { at: 1, line: [
+          ['g8f6', 'Black plays Nf6 instead of d5.'],
+          ['e2e3', 'Push e3, the same as always.'],
+          ['g7g6', 'Black wants its bishop on g7.'],
+          ['f2f4', 'Push f4 to build your wall.'],
+          ['f8g7', 'Black’s bishop goes to g7.'],
+          ['g1f3', 'Knight to f3.'],
+          ['e8g8', 'Black castles.'],
+          ['f1d3', 'Bishop to d3.'],
+          ['d7d6', 'Black plays d6.'],
+          ['e1g1', 'Castle! Same setup, same plan: queen to e1, then h4.']] },
+        { at: 3, line: [
+          ['c8f5', 'Black brings its bishop to f5 to fight yours.'],
+          ['f1d3', 'Bishop to d3 anyway: offer the trade.'],
+          ['f5d3', 'Black trades bishops.'],
+          ['d1d3', 'Take back with your queen.'],
+          ['e7e6', 'Black plays e6.'],
+          ['f2f4', 'Push f4. The wall is still the plan!'],
+          ['g8f6', 'Black brings out a knight.'],
+          ['g1f3', 'Knight to f3.'],
+          ['f8e7', 'Black develops its bishop.'],
+          ['e1g1', 'Castle! Next: knight to e5.']] }] },
+      { id: 'colle', e: '🧩', n: 'Colle-Zukertort System', side: 'w', sys: 1, d: 'A quiet setup you can play every game: knights on f3 and d2, bishops on d3 and b2… then jump into e5 and attack!', plan: [['Push f4! Now your knight on e5 can’t be kicked out by a pawn.', 'f2f4'], ['Queen to f3, aiming at Black’s king side.', 'd1f3'], ['Then queen to h3. Your bishops on d3 and b2 both help the attack!', 'f3h3']], line: [
+        ['d2d4', 'Push your queen’s pawn to d4.'],
+        ['d7d5', 'Black plays d5.'],
+        ['g1f3', 'Knight to f3.'],
+        ['g8f6', 'Black brings out a knight too.'],
+        ['e2e3', 'Push e3. Nice and solid.'],
+        ['e7e6', 'Black plays e6.'],
+        ['f1d3', 'Bishop to d3, aiming at Black’s king side.'],
+        ['c7c5', 'Black hits your center with c5.'],
+        ['b2b3', 'Push b3. It makes a home for your other bishop.'],
+        ['b8c6', 'Black brings out its other knight.'],
+        ['e1g1', 'Castle! Your king is safe.'],
+        ['f8d6', 'Black develops its bishop.'],
+        ['c1b2', 'Bishop to b2. Now both bishops aim at Black’s king side!'],
+        ['e8g8', 'Black castles.'],
+        ['b1d2', 'Your last knight goes to d2.'],
+        ['b7b6', 'Black gets ready for Bb7.'],
+        ['f3e5', 'Knight to e5! Next, push f4 to support it, and attack.']],
+      alts: [
+        { at: 1, line: [
+          ['g8f6', 'Black plays Nf6 instead.'],
+          ['g1f3', 'Knight to f3.'],
+          ['g7g6', 'Black wants its bishop on g7.'],
+          ['e2e3', 'Push e3, the same as always.'],
+          ['f8g7', 'Black’s bishop goes to g7.'],
+          ['f1d3', 'Bishop to d3.'],
+          ['e8g8', 'Black castles.'],
+          ['e1g1', 'Castle your king to safety!'],
+          ['d7d6', 'Black plays d6.'],
+          ['b2b3', 'Push b3, then Bb2. The same setup, against anything!']] },
+        { at: 7, line: [
+          ['f8d6', 'Black develops its bishop first.'],
+          ['b2b3', 'Push b3, to make room for your bishop.'],
+          ['e8g8', 'Black castles.'],
+          ['e1g1', 'Castle your king to safety!'],
+          ['b7b6', 'Black plays b6.'],
+          ['c1b2', 'Bishop to b2.'],
+          ['c8b7', 'Black’s bishop goes to b7.'],
+          ['b1d2', 'Knight to d2. Next: Ne5 and f4!']] }] },
+      { id: 'torre', e: '🎯', n: 'Torre Attack', side: 'w', sys: 1, d: 'Pin Black’s knight with Bg5 early, then build a big center with e4. Works against almost every setup where Black plays Nf6.', plan: [['Castle to keep your king safe.', 'e1g1'], ['Queen to e2, getting ready to push e4.', 'd1e2'], ['Push e4! Now you have a big center.', 'e3e4']], line: [
+        ['d2d4', 'Push your queen’s pawn to d4.'],
+        ['g8f6', 'Black plays Nf6.'],
+        ['g1f3', 'Knight to f3.'],
+        ['e7e6', 'Black plays e6.'],
+        ['c1g5', 'Bishop to g5! It pins Black’s knight to the queen. That’s the Torre Attack 🎯'],
+        ['c7c5', 'Black hits your center with c5.'],
+        ['e2e3', 'Push e3. It guards d4.'],
+        ['f8e7', 'Black breaks the pin with Be7.'],
+        ['b1d2', 'Knight to d2. It will help you push e4 later.'],
+        ['b7b6', 'Black gets ready for Bb7.'],
+        ['c2c3', 'Push c3. Your center is rock solid now.'],
+        ['c8b7', 'Black’s bishop goes to b7.'],
+        ['f1d3', 'Bishop to d3. Next: castle, then push e4!']],
+      alts: [
+        { at: 3, line: [
+          ['g7g6', 'Black wants its bishop on g7.'],
+          ['c1g5', 'Bishop to g5, the Torre move!'],
+          ['f8g7', 'Black’s bishop goes to g7.'],
+          ['b1d2', 'Knight to d2.'],
+          ['e8g8', 'Black castles.'],
+          ['c2c3', 'Push c3 to guard d4.'],
+          ['d7d6', 'Black plays d6.'],
+          ['e2e4', 'Push e4! A big center, against anything.']] },
+        { at: 3, line: [
+          ['d7d5', 'Black plays d5.'],
+          ['c1g5', 'Bishop to g5, like always.'],
+          ['e7e6', 'Black plays e6.'],
+          ['e2e3', 'Push e3 to guard d4.'],
+          ['f8e7', 'Black develops its bishop.'],
+          ['b1d2', 'Knight to d2.'],
+          ['e8g8', 'Black castles.'],
+          ['f1d3', 'Bishop to d3. Same setup!']] }] },
+      { id: 'jobava', e: '🐴', n: 'Jobava London', side: 'w', sys: 1, d: 'The London System’s wild cousin: knight to c3 and bishop to f4, then jump to b5 to scare Black’s c7 pawn!', plan: [['Castle to keep your king safe.', 'e1g1'], ['Knight to e5: a super strong square!', 'f3e5'], ['Queen to f3, then to h3, aiming at Black’s king!', 'd1f3 f3h3']], line: [
+        ['d2d4', 'Push your queen’s pawn to d4.'],
+        ['d7d5', 'Black plays d5.'],
+        ['b1c3', 'Knight to c3. That’s the Jobava twist on the London!'],
+        ['g8f6', 'Black brings out a knight.'],
+        ['c1f4', 'Bishop to f4, just like in the London System.'],
+        ['e7e6', 'Black plays e6.'],
+        ['e2e3', 'Push e3 to guard d4.'],
+        ['f8e7', 'Black develops its bishop.'],
+        ['c3b5', 'Knight to b5! Now Nxc7+ would fork Black’s king and rook.'],
+        ['b8a6', 'Black guards c7 with Na6.'],
+        ['g1f3', 'Knight to f3.'],
+        ['e8g8', 'Black castles.'],
+        ['f1d3', 'Bishop to d3. Next: castle, and jump into e5!']],
+      alts: [
+        { at: 7, line: [
+          ['f8d6', 'Black puts its bishop on d6 to trade with your f4 bishop.'],
+          ['c3b5', 'Knight to b5 anyway!'],
+          ['d6f4', 'Black trades bishops.'],
+          ['e3f4', 'Take back with your e-pawn. Your new pawn on f4 guards e5!']] },
+        { at: 1, line: [
+          ['g8f6', 'Black plays Nf6 instead of d5.'],
+          ['b1c3', 'Knight to c3.'],
+          ['g7g6', 'Black wants its bishop on g7.'],
+          ['c1f4', 'Bishop to f4.'],
+          ['f8g7', 'Black’s bishop goes to g7.'],
+          ['e2e3', 'Push e3 to guard d4.'],
+          ['d7d6', 'Black plays d6.'],
+          ['d1d2', 'Queen to d2.'],
+          ['e8g8', 'Black castles.'],
+          ['e1c1', 'Castle the long way! Next, push h4 and attack Black’s king.']] }] },
       { id: 'sicilian', e: '🌋', n: 'Sicilian Defense', side: 'b', d: 'Fight back against e4 from the side. The most popular defense in the world.', plan: [['Push e5 to fight for the center.', 'e7e5'], ['Bishop to e7, then castle.', 'f8e7 e8g8'], ['Queen to c7 and push b5. Your queenside pawns go on the attack!', 'd8c7 b7b5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['c7c5', 'The Sicilian: push your c-pawn to c5. It fights for the center from the side.'],
@@ -17481,7 +17765,7 @@
           ['e8g8', 'Castle first. Your king is safe.'],
           ['f1g2', 'White’s bishop goes to g2.'],
           ['d7d5', 'Now push d5! It’s still a Grünfeld: you fight for the center.']] }] },
-      { id: 'hippo', e: '🦛', n: 'Hippo Defense', side: 'b', any: 1, d: 'Build a wall of little pawns and hide your pieces behind it, like a hippo in the water. It works against almost anything, in almost any order!', plan: [['Castle! Your king hides behind the bishop on g7.', 'e8g8'], ['Break out with e5, hitting White’s center.', 'e6e5'], ['Or push c5. When the center opens, your bishops on b7 and g7 come alive!', 'c7c5']], line: [
+      { id: 'hippo', e: '🦛', n: 'Hippo Defense', side: 'b', sys: 1, any: 1, d: 'Build a wall of little pawns and hide your pieces behind it, like a hippo in the water. It works against almost anything, in almost any order!', plan: [['Castle! Your king hides behind the bishop on g7.', 'e8g8'], ['Break out with e5, hitting White’s center.', 'e6e5'], ['Or push c5. When the center opens, your bishops on b7 and g7 come alive!', 'c7c5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['g7g6', 'The Hippo starts small: push your g-pawn just one square, to g6. It makes a home for your bishop.'],
         ['d2d4', 'White grabs the center with d4.'],
@@ -17543,6 +17827,76 @@
           ['a7a6', 'Pawn to a6.'],
           ['f1g3', 'The knight arrives on g3.'],
           ['h7h6', 'Pawn to h6. Hippo complete! Same setup, whatever White does.']] }] },
+      { id: 'modern', e: '🎩', n: 'Modern Defense', side: 'b', sys: 1, d: 'Play g6, Bg7 and d6 against ANY first move. Let White build a big center… then attack it!', plan: [['Bishop to b7. Now both your bishops aim at the center!', 'c8b7'], ['Knight to f6, attacking e4.', 'g8f6'], ['Push c5 to hit White’s center!', 'c7c5']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['g7g6', 'Push g6. That’s the Modern Defense! You can play it against almost any first move.'],
+        ['d2d4', 'White grabs the center with d4.'],
+        ['f8g7', 'Fianchetto your bishop on g7. It aims down the long diagonal at White’s center.'],
+        ['b1c3', 'White brings out a knight.'],
+        ['d7d6', 'Push d6. Your pawn guards e5 and c5.'],
+        ['c1e3', 'White develops its bishop to e3.'],
+        ['a7a6', 'Push a6, getting ready for b5.'],
+        ['d1d2', 'White’s queen goes to d2.'],
+        ['b8d7', 'Knight to d7. It can jump to b6 or f6 later.'],
+        ['f2f3', 'White pushes f3 to guard e4.'],
+        ['b7b5', 'Push b5! You grab space on the queen side, where White likes to castle.']],
+      alts: [
+        { at: 0, line: [
+          ['d2d4', 'White starts with d4 this time.'],
+          ['g7g6', 'Push g6, the same as always!'],
+          ['c2c4', 'White pushes c4.'],
+          ['f8g7', 'Bishop to g7.'],
+          ['b1c3', 'White brings out a knight.'],
+          ['d7d6', 'Push d6, like always.'],
+          ['e2e4', 'White builds a big center.'],
+          ['b8c6', 'Knight to c6, hitting d4.'],
+          ['c1e3', 'White guards d4 with Be3.'],
+          ['e7e5', 'Push e5! Now you fight for the center too.']] },
+        { at: 0, line: [
+          ['g1f3', 'White starts with Nf3.'],
+          ['g7g6', 'Push g6, like always.'],
+          ['c2c4', 'White pushes c4.'],
+          ['f8g7', 'Bishop to g7.'],
+          ['b1c3', 'White brings out a knight.'],
+          ['d7d6', 'Push d6, like always.'],
+          ['d2d4', 'White pushes d4.'],
+          ['g8f6', 'Knight to f6.'],
+          ['e2e4', 'White builds a big center.'],
+          ['e8g8', 'Castle! The same setup against everything: g6, Bg7 and d6.']] }] },
+      { id: 'lion', e: '🦁', n: 'Lion Defense', side: 'b', sys: 1, d: 'Pawns on d6 and e5, knights on f6 and d7: a sturdy setup that works against 1.e4 AND 1.d4.', plan: [['Push c6 to make room for your queen.', 'c7c6'], ['Queen to c7. It guards your e5 pawn.', 'd8c7'], ['Rook to e8, behind your e5 pawn.', 'f8e8'], ['Later, push b5 to grab space on the queen side!', '~b7b5']], line: [
+        ['e2e4', 'White pushes e4.'],
+        ['d7d6', 'Push d6. The Lion Defense starts quietly!'],
+        ['d2d4', 'White grabs the center with d4.'],
+        ['g8f6', 'Knight to f6, attacking e4.'],
+        ['b1c3', 'White guards e4 with a knight.'],
+        ['b8d7', 'Knight to d7. It supports e5, the Lion’s big pawn push.'],
+        ['g1f3', 'White brings out its other knight.'],
+        ['e7e5', 'Push e5! Now you have a strong pawn in the center too 🦁'],
+        ['f1e2', 'White develops its bishop to e2.'],
+        ['f8e7', 'Bishop to e7.'],
+        ['e1g1', 'White castles.'],
+        ['e8g8', 'Castle! Your Lion is ready to roar.']],
+      alts: [
+        { at: 8, line: [
+          ['f1c4', 'White puts its bishop on c4, aiming at f7.'],
+          ['c7c6', 'Push c6 first! It gives your queen room, so White can’t trick you on f7.'],
+          ['a2a4', 'White pushes a4.'],
+          ['f8e7', 'Bishop to e7.'],
+          ['e1g1', 'White castles.'],
+          ['e8g8', 'Castle! You’re safe.']] },
+        { at: 0, line: [
+          ['d2d4', 'White starts with d4 this time.'],
+          ['g8f6', 'Knight to f6.'],
+          ['c2c4', 'White pushes c4.'],
+          ['d7d6', 'Push d6, the same Lion setup!'],
+          ['b1c3', 'White brings out a knight.'],
+          ['b8d7', 'Knight to d7.'],
+          ['e2e4', 'White builds a big center.'],
+          ['e7e5', 'Push e5! The Lion works against d4 too.'],
+          ['g1f3', 'White brings out its other knight.'],
+          ['f8e7', 'Bishop to e7.'],
+          ['f1e2', 'White develops its bishop.'],
+          ['e8g8', 'Castle! Same Lion, same plan.']] }] },
       { id: 'qgd', e: '🙅', n: 'Queen’s Gambit Declined', side: 'b', d: 'Say “no thanks” to White’s pawn offer and build an unbreakable center.', plan: [['Push c6 to make your center rock solid.', 'c7c6'], ['When White’s bishop moves, take on c4 (dxc4) and jump your knight to d5 to trade pieces. That frees your position!', 'd5c4 f6d5'], ['Then push e5 (or c5) to let your bishop on c8 out.', 'e6e5']], line: [
         ['d2d4', 'White starts with d4.'],
         ['d7d5', 'Pawn to d5. Grab your share of the center!'],
@@ -19539,10 +19893,19 @@
         '<div class="chs-big">♚</div><h2>Checkmates</h2><p>Learn famous checkmate patterns, then find the checkmate yourself! At the end, practice checkmating a lone king.</p>') +
         '<p class="chs-lnote">🧪 After each lesson, 🤖 Test Bot tests you with no hints. ' + (view === 'mate' ? 'Make a mistake and you try again.' : 'It plays 3 rounds: the main line and 2 surprises 😮. Get 2 of 3 right!') + ' Pass to earn your ⭐<br><b>' + esc(learnedText(view)) + '</b></p>';
       m.appendChild(head);
-      var list = mk('div', 'chs-lessons');
-      lessonList(view).forEach(function (L) {
+      var list = mk('div', 'chs-lessons'), grp = view === 'op' ? '' : null;
+      (view === 'op' ? lessonList(view).filter(function (L) { return L.sys; }).concat(lessonList(view).filter(function (L) { return !L.sys; })) : lessonList(view)).forEach(function (L) {
+        if (grp !== null && grp !== (L.sys ? 's' : 'o')) {   // 📖 Openings: 🔁 the ones you can play in almost every game come first
+          grp = L.sys ? 's' : 'o';
+          if (list.children.length) m.appendChild(list), list = mk('div', 'chs-lessons');
+          var all = lessonList(view).filter(function (x) { return !!x.sys === !!L.sys; }), th = mk('div', 'chs-tier');
+          th.innerHTML = L.sys ? '<h3>🔁 Play these in almost every game</h3><small>' + all.filter(function (x) { return S.learn['op:' + x.id] >= 2; }).length + ' of ' + all.length + ' learned</small>' : '<h3>📖 More great openings</h3><small>' + all.filter(function (x) { return S.learn['op:' + x.id] >= 2; }).length + ' of ' + all.length + ' learned</small>';
+          if (L.sys) th.title = 'Setups that work against almost anything your opponent plays';
+          m.appendChild(th);
+          if (L.sys) m.appendChild(mk('p', 'chs-lnote chs-sysnote', '🔁 These work against almost anything your opponent plays, so you can use the same opening game after game!'));
+        }
         var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
-        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') + (lv && !S.seen['op:' + L.id] ? ' to play' : '') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
+        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.sys && kind === 'op' ? ' · 🔁 Every game' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') + (lv && !S.seen['op:' + L.id] ? ' to play' : '') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
         b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
           (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
         b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
