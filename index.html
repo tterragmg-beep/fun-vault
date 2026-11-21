@@ -673,6 +673,11 @@
   .lf-bar .lo { background: var(--bad); }
   .lf-bar .fame { background: linear-gradient(90deg, var(--lf-a), var(--lf-b)); }
   .lf-bar .magic { background: linear-gradient(90deg, #6f5cff, #c86bff); }   /* 🔮 Magic */
+  .lf-bar .mana { background: linear-gradient(90deg, #3d7bff, #9a6bff); }   /* 🔮 mana in battles */
+  .lf-rzbars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
+  .lf-rzbars[hidden] { display: none; }
+  .lf-rzbars .lf-frow { font-size: 0.8rem; }
+  .lf-rzbar { height: 8px; }
   .lf-fstats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-top: 8px; }   /* 🥊 fighting stats (Re:Zero world) */
   .lf-fstats .lf-stat { grid-template-columns: 78px 1fr 24px; gap: 6px; font-size: 0.8rem; }
   .lf-nav { display: grid; grid-template-columns: 1fr 1fr auto 1fr 1fr; gap: 6px; align-items: center; margin-top: 16px; }
@@ -1148,6 +1153,42 @@
   .chs-friend:disabled { opacity: 0.6; cursor: default; }
   .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
   .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1334,6 +1375,8 @@
   .chs-friend:disabled { opacity: 0.6; cursor: default; }
   .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
   .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
 </style>
 </head>
 <body>
@@ -2199,6 +2242,10 @@
         </div>
         <div class="lf-frow"><b>You</b><span id="lf-fHp"></span></div>
         <div class="lf-bar lf-fbar"><span id="lf-fBar" class="hi"></span></div>
+        <div class="lf-rzbars" id="lf-rzbars" hidden>
+          <div><div class="lf-frow"><span id="lf-fMana"></span></div><div class="lf-bar lf-fbar lf-rzbar"><span id="lf-fManaBar" class="mana"></span></div></div>
+          <div><div class="lf-frow"><span id="lf-fGate"></span></div><div class="lf-bar lf-fbar lf-rzbar"><span id="lf-fGateBar" class="hi"></span></div></div>
+        </div>
         <div class="lf-frow lf-hum"><span id="lf-hum"></span><span id="lf-sandy"></span><span id="lf-ram"></span></div>
         <p class="lf-fmsg" id="lf-fMsg" role="status" aria-live="polite"></p>
         <div class="lf-moves" id="lf-moves"></div>
@@ -11144,7 +11191,7 @@
       if (L.gate < 30) return ' ⚠️ Your gate is straining (' + L.gate + '%)! Take a break from magic, or it might break for good.';
       return '';
     }
-    function rzBattleLine() { var b = []; if ((L.dp || []).length) b.push('✨ ' + (L.reinhard ? 'Reinhard’s divine protections' : cap(dpName(L.dp[0])))); if (L.magic) b.push(L.gateBroken ? '💔 Gate broken: magic hurts you' : '🌀 Gate ' + gateNow() + '%'); return b.join(' · '); }
+    function rzBattleLine() { var b = []; if ((L.dp || []).length) b.push('✨ ' + (L.reinhard ? 'Reinhard’s divine protections' : cap(dpName(L.dp[0])))); if (L.magic && !(B && B.manaMax)) b.push(L.gateBroken ? '💔 Gate broken: magic hurts you' : '🌀 Gate ' + gateNow() + '%'); return b.join(' · '); }   // (with mana, the gate gets its own bar)
     var LESSER = ['Ember', 'Pip', 'Wisp', 'Nimbus', 'Spark', 'Bubbles', 'Sprout', 'Glimmer', 'Mote', 'Puff'];
     var GREAT = [   // super strong great spirits: RARE, and they scare little spirits away
       { n: 'Blaze', e: '🦊', t: 'the Great Fire Fox', el: 'fire' },
@@ -11228,6 +11275,7 @@
     function whaleOdds() { return Math.min(0.6, (hasDP('mist') ? 0.35 : 0.08) + (hasDP('fortune') ? 0.04 : 0)); }   // most hunts find NOTHING (🌫️ Mist can see through its fog)
     function whaleLose() { L.doom = 'the White Whale'; return [{ health: -999 }, '🐋 The White Whale’s fog swallowed you whole… and the whole kingdom forgot you were ever there.']; }
     function whaleHunt() {
+      if (L.whaleDead) return [{}, '🐋 The White Whale is gone forever. You already defeated it!'];
       L.whaleHunts = (L.whaleHunts || 0) + 1;
       if (!chance(whaleOdds())) return [{ happy: -2 }, pick(['🌫️ You searched the foggy skies for weeks… but the White Whale was nowhere to be found. Some people hunt it their whole lives and never see it.',
         '🐋 You followed rumors of strange fog from village to village, but every time you got there, the fog was already gone.',
@@ -11291,6 +11339,39 @@
       return [{ magic: g, happy: [1, 3] }, pick(['⛲ You sat by the glowing mana spring and breathed in the magic.', '⛲ You meditated at the mana spring until the fireflies came out.', '⛲ The mana spring hummed while you meditated. You could feel your magic growing.']) + (gb > 0 ? ' 🌀 Your gate feels rested (+' + gb + '%).' : '')];
     }
 
+    // ---- 🍓 mana food: eat it to heal your 🌀 gate (and pack mana berries to eat in battles) ----
+    var FOODS = [
+      { id: 'eatberries', e: '🍓', t: 'Bowl of mana berries', cost: 50, gate: 15, fx: { happy: [1, 2] }, say: '🍓 You ate a bowl of glowing mana berries. They fizzed on your tongue!' },
+      { id: 'eatcake', e: '🍯', t: 'Spirit honey cake', cost: 200, gate: 30, fx: { happy: [3, 5] }, say: '🍯 You ate a slice of spirit honey cake. It was so sweet that a tiny spirit tried to steal a bite!' },
+      { id: 'eatstew', e: '🍲', t: 'Dragon-fruit mana stew', cost: 800, gate: 60, fx: { health: [3, 5] }, say: '🍲 You ate a big bowl of dragon-fruit mana stew. The magic warmed you up from the inside!' }
+    ];
+    var BERRY_MAX = 9, BERRY_PACK = 3, BERRY_COST = 150;
+    function foodCost(F) { return L.age < 18 ? 0 : F.cost; }   // (your family pays while you’re a kid)
+    function eatFood(F) {
+      var g = L.gateBroken ? 0 : Math.min(100 - gateNow(), F.gate), fx = Object.assign({ money: -foodCost(F) }, F.fx);
+      if (g > 0) L.gate = gateNow() + g;
+      return [fx, F.say + (L.gateBroken ? ' (💔 Your gate is broken forever, so food can’t fix it. Still yummy, though!)' : g > 0 ? ' 🌀 Your gate healed +' + g + '% (now ' + gateNow() + '%).' : ' 🌀 Your gate was already all better.')];
+    }
+    function rzFoodSec(c) {   // 🍽️ in ⚡ Do
+      if (L.age < 3) return;
+      sec(c, '🍽️ Mana food (heals your 🌀 gate)');
+      FOODS.forEach(function (F) {
+        var cost = foodCost(F), done = doneYet(F.id), broke = cost && L.money < cost;
+        opt(c, F.e, F.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough gold' : (L.gateBroken ? '💔 food can’t fix a broken gate' : gateNow() >= 100 ? '🌀 your gate is full right now' : '🌀 Gate +' + F.gate + '%') + ' · ' + (cost ? cr(cost) : 'free for kids'), function () { L.done[F.id] = L.age; doThing(F.e, eatFood(F)); }, done || broke);
+      });
+      if (L.age >= 10) {
+        var have = L.berries || 0, full = have >= BERRY_MAX, broke2 = L.money < BERRY_COST;
+        opt(c, '🎒', 'Pack mana berries for battles', full ? 'Your pouch is full (' + have + '/' + BERRY_MAX + ' berries)' : BERRY_PACK + ' berries for ' + cr(BERRY_COST) + ' · eat one in a battle to get 🔮 mana back · you have ' + have + '/' + BERRY_MAX + (broke2 ? ' · not enough gold' : ''), function () {
+          var add = Math.min(BERRY_PACK, BERRY_MAX - (L.berries || 0)); L.berries = (L.berries || 0) + add;
+          doThing('🎒', [{ money: -BERRY_COST }, '🎒 You packed ' + add + ' mana berries for your next battles. You have ' + L.berries + ' now. (In a battle, tap 🍓 Eat a mana berry.)']);
+        }, full || broke2);
+      }
+    }
+    // ---- 🔮 mana in battles: every spell costs mana, and it comes back a little every turn ----
+    function manaMax() { return Math.round((40 + Math.sqrt(Math.min(L.st.magic || 0, MAGIC_MAX)) / 8) * (hasDP('mana') ? 1.5 : 1)); }   // (20,000 Magic: 58 · 100,000: 80 · 1,000,000: 165)
+    function manaRegen() { return yinYang() ? 10 : 6; }
+    function berryMana() { return Math.max(15, Math.round((B && B.manaMax || 0) * 0.4)); }
+
     // ---- ❄️ sub-elements: once your magic is strong, your element grows a new kind of magic ----
     var SUBEL = {
       water: { e: '❄️', t: 'Ice', spell: 'Frost Lance', d: 'it can freeze them solid, so they skip a turn' },
@@ -11352,14 +11433,14 @@
     }
     function spellInfo(id) {   // a spell's button: its name, what it does, and how much it strains your gate
       var kind = id.slice(0, 4), key = id.slice(4), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1));
-      if (kind === 'rzm-') return { e: ELEMS[key].e, t: ELEMS[key].spells[lv - 1], d: cap(ELEMS[key].d), cost: gateCost(lv) };
-      if (kind === 'rzs-') return { e: SUBEL[key].e, t: SUBEL[key].spell, d: SUBEL[key].t + ' magic: ' + SUBEL[key].d, cost: gateCost(lv) + (key === 'fire' ? 5 : 2) };
-      return { e: COMBO[key].e, t: COMBO[key].t, d: 'Combo: ' + COMBO[key].d, cost: gateCost(lv) + 4 };
+      if (kind === 'rzm-') return { e: ELEMS[key].e, t: ELEMS[key].spells[lv - 1], d: cap(ELEMS[key].d), cost: gateCost(lv), mana: 8 + 4 * lv };   // (🔮 mana: 12 for your 1st spell, up to 28 for your 5th)
+      if (kind === 'rzs-') return { e: SUBEL[key].e, t: SUBEL[key].spell, d: SUBEL[key].t + ' magic: ' + SUBEL[key].d, cost: gateCost(lv) + (key === 'fire' ? 5 : 2), mana: 14 + 4 * lv };
+      return { e: COMBO[key].e, t: COMBO[key].t, d: 'Combo: ' + COMBO[key].d, cost: gateCost(lv) + 4, mana: 18 + 4 * lv };
     }
     function rzSpell(id) {   // ✨ roll a spell: its damage, healing, and what it does when it hits
       var kind = id.slice(0, 4), key = id.slice(4);
       if (kind !== 'rzm-' && kind !== 'rzs-' && kind !== 'rzc-') return null;
-      var I = spellInfo(id), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1)), o = { nm: [I.e, I.t], cost: I.cost, sure: false, fx: {} };
+      var I = spellInfo(id), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1)), o = { nm: [I.e, I.t], cost: I.cost, mana: I.mana, sure: false, fx: {} };
       var base = R(SPELL_DMG[lv][0], SPELL_DMG[lv][1]) * magicMult() * (hasDP('mana') ? 1.25 : 1) * (hasDegree('magic') ? 1.2 : 1);
       if (kind === 'rzm-') {
         o.dmg = Math.round(base * (key === 'dark' ? 0.85 : key === 'water' ? (hasDP('water') ? 1.2 : 0.9) : 1));
@@ -11389,7 +11470,7 @@
       if (f.shield) { B.shield = 1; t += ' 💎 A crystal shield will block their next hit!'; }
       return t;
     }
-    function whaleWin(h) { award('rzwhale'); return [{ money: 80000, happy: 15, fame: 25, health: h }, '🐋 YOU DEFEATED THE WHITE WHALE! The fog lifted, the sun came out, and the whole kingdom threw you a parade. The king sent you 80,000 gold!']; }
+    function whaleWin(h) { award('rzwhale'); L.whaleDead = true; return [{ money: 80000, happy: 15, fame: 25, health: h }, '🐋 YOU DEFEATED THE WHITE WHALE! The fog lifted, the sun came out, and the whole kingdom threw you a parade. The king sent you 80,000 gold! The White Whale is gone forever.']; }   // (🐋 only once!)
 
     // ---- 💼 jobs, schools, stuff ----
     var RZ_JOBS = [
@@ -11410,7 +11491,7 @@
       { id: 'rzadvisor', e: '💼', t: 'Royal Advisor', pay: 200000, flat: 1, need: { major: 'biz', smarts: 60, style: 50 } },
       { id: 'rzlord', e: '🏰', t: 'Lord of a Territory', pay: 180000, fame: 500, flat: 1, need: { age: 35, fame: 40, smarts: 55 } },
       { id: 'rzswordsaint', e: '⚔️', t: 'Sword Saint of the Kingdom', pay: 300000, fame: 1000, flat: 1, need: { saint: 1 } },
-      { id: 'rzking', e: '👑', t: 'Ruler of Lugunica', pay: 500000, fame: 2000, flat: 1, need: { age: 25, fame: 70, smarts: 60, style: 60 } }
+      { id: 'rzking', e: '👑', t: 'Ruler of Lugunica', pay: 500000, fame: 2000, flat: 1, need: { age: 25, fame: 100, smarts: 60, style: 80 } }
     ];
     RZ_JOBS.forEach(function (j) { JOB[j.id] = j; });
     MAJORS.magic = ['🔮', 'Magic']; MAJORS.sword = ['⚔️', 'Swordsmanship']; MAJORS.heal = ['🩺', 'Healing Magic']; MAJORS.bard = ['🎵', 'Music'];
@@ -11479,8 +11560,8 @@
       { id: 'rzcottage', e: '🛖', t: 'Little cottage', cost: 18000, joy: 1 },
       { id: 'rztownhouse', e: '🏠', t: 'Town house', cost: 75000, joy: 2 },
       { id: 'rzcanal', e: '🏘️', t: 'Canal house', cost: 220000, joy: 3 },
-      { id: 'rzmansion', e: '🏰', t: 'Noble’s mansion', cost: 1200000, joy: 5 },
-      { id: 'rzskycastle', e: '🏯', t: 'Castle in the clouds', cost: 5000000, joy: 6, prem: 1 }
+      { id: 'rzmansion', e: '🏛️', t: 'Noble’s mansion', cost: 1200000, joy: 5 },
+      { id: 'rzskycastle', e: '🏰', t: 'Castle with a moat', cost: 5000000, joy: 6, prem: 1 }   // (no floating castles in the kingdom!)
     ];
     var RZ_RIDES = [
       { id: 'rzpony', e: '🐴', t: 'Pony', cost: 1500, min: 12, joy: 1 },
@@ -11546,6 +11627,7 @@
             doThing(a.e, r);
           }, done || broke);
         });
+        rzFoodSec(c);   // 🍽️ mana food
         if (L.age >= 10) {
           var sps = L.spirits || [], sd = doneYet('rzspirit');
           if (L.great) note(c, L.great.e + ' Your great spirit, ' + L.great.n + ' (' + L.great.t + '), never leaves your side. Little spirits are way too scared to come near you!');
@@ -11574,7 +11656,8 @@
             if ((L.cultWins || 0) >= 3) rzFightOpt(c, 'rzarch', '😈', 'Face a Witch Cult Archbishop', '👑 Boss fight! · 40,000 gold', 'rzarch', function (h) { award('rzcult'); return [{ money: 40000, happy: 15, fame: 15, good: 5, health: h }, '😈 You beat a Witch Cult Archbishop! The whole kingdom is cheering your name, and the king sent you 40,000 gold!']; });
             else note(c, '😈 Stop 3 Witch Cultists (you’ve stopped ' + (L.cultWins || 0) + ') and an Archbishop will come after you…');
           }
-          if (L.age >= 20) { var wdn = doneYet('rzwhalehunt'); opt(c, '🐋', 'Hunt the White Whale', wdn ? 'Done this year ✓' : '👑 Boss fight! · 80,000 gold · 🌫️ Super rare: most hunts find NOTHING · ☠️ If it beats you, you die!', function () { L.done.rzwhalehunt = L.age; play('🐋', whaleHunt()); }, wdn); }
+          if (L.age >= 20 && L.whaleDead) opt(c, '🐋', 'Hunt the White Whale', '🎉 You already defeated it! The White Whale is gone forever.', null, true);
+          else if (L.age >= 20) { var wdn = doneYet('rzwhalehunt'); opt(c, '🐋', 'Hunt the White Whale', wdn ? 'Done this year ✓' : '👑 Boss fight! · 80,000 gold · 🌫️ Super rare: most hunts find NOTHING · ☠️ If it beats you, you die!', function () { L.done.rzwhalehunt = L.age; play('🐋', whaleHunt()); }, wdn); }
         }
       });
     }
@@ -11596,7 +11679,7 @@
       if (hasDP('sleep')) s.happy = clamp(s.happy + 2);
       if (hasDP('song') && a >= 10) L.fame = clamp(L.fame + R(0, 2));
       if (hasDP('fortune') && a >= 6 && chance(0.15)) { var g = R(2, 20) * 25 * (a >= 18 ? 4 : 1); L.money += g; log('🍀 Lucky you! You found a little pouch with ' + cr(g) + ' in it. (Divine Protection of Fortune!)'); }
-      if (!L.gateBroken && gateNow() < 100) L.gate = Math.min(100, gateNow() + 15);   // 🌀 your gate heals a little every year (unless it’s broken)
+      if (!L.gateBroken && gateNow() < 100) L.gate = Math.min(100, gateNow() + 30);   // 🌀 your gate heals every year (unless it’s broken)
       if (yinYang()) { if (!L.gateBroken) L.gate = 100; s.magic = clampM((s.magic || 0) + magGain(s.magic || 0, 5000)); }   // ☯️ balance: your gate heals all the way, and your magic grows
       var sn = subNext(); if (sn && chance(0.12)) log(subAwaken(sn));   // ❄️ sometimes it just… happens
       var cn = comboNext(); if (cn && chance(0.08)) log(comboLearn(cn));
@@ -11696,7 +11779,7 @@
         ['Cheer for them', [[1, { happy: 5 }, 'You cheered so loud the candidate waved right at you!']]],
         ['Volunteer to help their camp', [[1, { good: 3, fame: 2, happy: 3 }, 'You volunteered to help the candidate’s camp. They remembered your name!']]],
         ['Ask how YOU could join the Royal Selection', [[1, { smarts: 1, happy: 2 }, 'The guards laughed, but the candidate smiled: “Get famous and be kind, and maybe someday!” (You can try for 👑 Ruler of Lugunica in 💼 Job when you’re 25.)']]]] },
-      { id: 'rzfog', a: [18, 80], w: 0.3, e: '🌫️', t: 'A thick, strange fog rolled into town, and someone shouted: “THE WHITE WHALE!”', c: [
+      { id: 'rzfog', a: [18, 80], w: 0.3, if: function () { return !L.whaleDead; }, e: '🌫️', t: 'A thick, strange fog rolled into town, and someone shouted: “THE WHITE WHALE!”', c: [
         ['Run!', function () { if (hasDP('mist')) return [{ happy: 2 }, '🌫️ You can see right through the fog (Divine Protection of Mist!), so you just walked out of it. Easy.']; return hasDP('arrow') || chance(0.7) ? [{ happy: -2 }, 'You ran out of the fog just in time. Behind you, something HUGE swam through the sky.'] : [{ health: -12, happy: -4 }, 'You ran, but the fog was so thick you smacked right into a wall. The whale passed by.']; }],
         ['Fight it (if it beats you, you die!)', function () { return rzFight('rzwhale', whaleWin, whaleLose); }],
         ['Hide in a cellar', [[1, { happy: -3 }, 'You hid in a cellar with three cats and a very nervous baker until the fog was gone.']]]] },
@@ -11776,19 +11859,20 @@
       return ['Tap ＋ Age to live one year. Things happen every year, and you choose what to do.',
         '✨ Half of all people are born with a divine protection, but not all of them are useful! You might get 🌬️ Wind Reading (nobody can fool you) or 👁️ First Sight… or 🧂 Salt Reasoning (you can tell salt from sugar by looking. That’s it.). And 1 in 1000 are born with ALL of Reinhard’s divine protections, like 🗡️ the Sword Saint and 🔥 the Phoenix! His divine protections can never be lost, so the Phoenix keeps bringing him back: he can’t die!',
         '🌀 Everyone has ONE magic element: 🔥 Fire, 💧 Water, 🪨 Earth or 🌪️ Air. 🌑 Dark and ☀️ Light are rare, and two elements is super rare. You can only use magic of your own element. Practice magic, or get a magic tutor, to learn stronger spells.',
-        '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate (it heals a little every year). If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
+        '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate. It heals every year, and 🍽️ mana food in ⚡ Do heals it too. If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
         '🔮 Magic is a stat that goes all the way up to 1,000,000, but the higher it gets, the slower it grows! Practice magic, meditate at the ⛲ mana spring, take magic lessons, make spirit contracts, and cast spells in battles. More Magic makes your spells stronger. Each element has 5 spells: the 2nd needs 🔮 Magic 30,000+, then 60,000+, 150,000+, and the 5th (an ancient spell!) needs 400,000+.',
         '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy.',
         '🔥🌪️ Two elements? Mix them into combo spells once your 🔮 Magic reaches 50,000, like 🔥🌪️ Fire Tornado, 🌋 Lava Burst or ⛈️ Thunderstorm. And if you have ☀️ Light AND 🌑 Dark, you get the powers of ☯️ Yin and Yang!',
         '🥊 Fighting stats: Strength (harder hits), Defense (less damage), Speed (easier dodging and running away) and Skill (critical hits). Train them in ⚡ Do, and win real battles to get better.',
         '☠️ Careful: a mabeast’s bite can curse you! The curse kills you in 3 years… unless you hunt down the mabeast that cursed you and defeat it.',
-        '🐋 The White Whale is SUPER rare: most hunts find nothing at all. And if it beats you, you die!',
+        '🐋 The White Whale is SUPER rare: most hunts find nothing at all. If it beats you, you die… and if you beat it, it’s gone forever (you can only defeat it once).',
         '🧚 Make contracts with spirits in ⚡ Do. Little spirits fight with you in battles, and they don’t use your gate. A super strong great spirit is rare, and it scares all the little spirits away!',
         '💜 0.5% of people are Satella’s crush, so they get ↩️ Return by Death: when you die, you can wake up again at the start of that year. Just don’t try to tell anyone about it…',
         '📚 In the kingdom, you learn from tutors (in 💼 Job): reading, math, noble manners, magic, swordsmanship, music, healing magic, and business. Master a subject to unlock jobs, from Bakery Helper all the way up to 👑 Ruler of Lugunica (win the Royal Selection!). Master 📊 Business to start your own businesses.',
         '🏠 Stuff: pets, ponies, land dragons, and homes.',
         '❤️ People: your family, friends, partner, and kids. Spend time with them so they stay close.',
         '⚡ Do: activities, magic, spirits, mischief, and adventure: spar with knights, hunt mabeasts, fight the Witch Cult, and even hunt the White Whale!',
+        '🔮 In battles, every spell costs mana (the blue bar), and your 🌀 gate has its own bar too. Mana comes back a little every turn, and a 🍓 mana berry (pack them in ⚡ Do) gives you a lot back. More 🔮 Magic = more mana!',
         '⚔️ Easy fights are over fast, but tough ones start a real battle. Buy a sword from the ⚒️ Blacksmith and practice magic to get better moves. When they attack, tap DODGE right as each hit lands (perfect timing = PARRY, which hits back).',
         'Keep your bars up! If your health hits zero, your life ends. If you have kids, you can keep playing as one of them.',
         'Inspired by Re:Zero by Tappei Nagatsuki. This is a fan-made world and isn’t connected to Re:Zero.'];
@@ -12624,30 +12708,70 @@
       if (!list.length) note(c, wz('📊 You have a Business degree', '📊 You mastered Business') + ', so you can start your own company! The more you sell and the more ⭐ famous you are, the more money it makes.');
       if (list.length > 1) note(c, '💰 All together, your ' + list.length + ' businesses make ' + cr(list.reduce(function (t, bz) { return t + bizProfit(bz); }, 0)) + ' a year.');
       list.forEach(function (bz) { var BT = BIZT[bz.type]; opt(c, BT.e, bz.name, numTxt(bz.sales) + ' ' + BT.unit + ' a year · ' + cr(bizProfit(bz)) + ' profit a year', function () { bizSheet(bz.id); }); });
-      if (can) opt(c, '➕', 'Start a new business', wz('No limit! Noodles, sneakers, robo-toys, video games, hover-cars, or 🦾 cyberware', 'No limit! Bakeries, tailor shops, toys, potions, land dragons, or 💎 magic crystals'), newBizSheet);
+      if (list.length > 1) bizAllSec(c, list);   // ⚡ all of them at once
+      if (can) opt(c, '➕', 'Start a new business', wz('No limit, and you can start lots at once! Noodles, sneakers, robo-toys, video games, hover-cars, or 🦾 cyberware', 'No limit, and you can start lots at once! Bakeries, tailor shops, toys, potions, land dragons, or 💎 magic crystals'), newBizSheet);
     }
+    var BIZQ = 1;   // ➕ how many businesses to start at once
     function newBizSheet() {
       sheet('➕ Start a business', function (c) {
         note(c, '💡 Every year your business sells stuff. Your profit = sales × your ⭐ fame bonus (×' + fameMult().toFixed(1) + ' right now). Bigger businesses cost more to start, but they can make WAY more.');
+        sec(c, '🔢 How many do you want to start at once?');
+        var pills = mk('div', 'lf-pills');
+        [1, 2, 3, 5, 10].forEach(function (n) {
+          var b = mk('button', 'lf-pill', '×' + n); b.type = 'button'; b.setAttribute('aria-pressed', BIZQ === n ? 'true' : 'false'); b.dataset.q = String(n);
+          b.addEventListener('click', function () { BIZQ = n; var y = $('card').scrollTop; newBizSheet(); $('card').scrollTop = y; });
+          pills.appendChild(b);
+        });
+        c.appendChild(pills);
         bizTypes().forEach(function (BT) {
-          var own = bizList().filter(function (x) { return x.type === BT.id; }).length, locked = BT.need && !hasDegree(BT.need);
+          var own = bizList().filter(function (x) { return x.type === BT.id; }).length, locked = BT.need && !hasDegree(BT.need), q = BIZQ, cost = BT.cost * q;
           if (BT.best) sec(c, '⭐ The best business');
-          opt(c, BT.e, BT.t, locked ? (isRZ() ? 'You need to master ' + MAJORS[BT.need][0] + ' ' + MAJORS[BT.need][1] + ' with a tutor too' : 'Needs a ' + MAJORS[BT.need][0] + ' ' + MAJORS[BT.need][1] + ' degree too') + ' (plus ' + cr(BT.cost) + ')' : (own ? 'You have ' + own + ' · ' : '') + cr(BT.cost) + ' to start' + (L.money < BT.cost ? ' · not enough credits' : ' · about ' + cr(BT.sales * BT.per * fameMult()) + ' a year at first') + (BT.boost ? ' · grows ' + BT.boost * 100 + '% faster every year!' : ''), function () { startBiz(BT); }, locked || L.money < BT.cost);
+          opt(c, BT.e, BT.t + (q > 1 ? ' ×' + q : ''), locked ? (isRZ() ? 'You need to master ' + MAJORS[BT.need][0] + ' ' + MAJORS[BT.need][1] + ' with a tutor too' : 'Needs a ' + MAJORS[BT.need][0] + ' ' + MAJORS[BT.need][1] + ' degree too') + ' (plus ' + cr(BT.cost) + ')' : (own ? 'You have ' + own + ' · ' : '') + cr(cost) + (q > 1 ? ' to start ' + q + ' of them' : ' to start') + (L.money < cost ? ' · not enough credits' : ' · about ' + cr(BT.sales * BT.per * fameMult() * q) + ' a year at first') + (BT.boost ? ' · grows ' + BT.boost * 100 + '% faster every year!' : ''), function () { startBiz(BT, q); }, locked || L.money < cost);
         });
         opt(c, '←', 'Back to school & work', '', jobSheet);
       });
     }
-    function startBiz(BT) {
-      if (L.money < BT.cost || (BT.need && !hasDegree(BT.need))) return;
-      var k = 1, nm = function (n) { return L.first + '’s ' + BT.brand + (n > 1 ? ' ' + n : ''); };
-      while (bizList().some(function (x) { return x.name === nm(k); })) k += 1;   // Jules’s Noodles, Jules’s Noodles 2…
-      L.bizN = (L.bizN || 0) + 1;
-      var bz = { id: BT.id + '-' + L.bizN, type: BT.id, name: nm(k), sales: BT.sales, hype: 40, level: 1, years: 0, best: 0 };
-      bizList().push(bz); award('founder');
+    function startBiz(BT, n) {   // ➕ start a business (or n of them at once)
+      n = Math.max(1, n || 1);
+      if (L.money < BT.cost * n || (BT.need && !hasDegree(BT.need))) return;
+      var made = [];
+      for (var q = 0; q < n; q++) {
+        var k = 1, nm = function (j) { return L.first + '’s ' + BT.brand + (j > 1 ? ' ' + j : ''); };
+        while (bizList().some(function (x) { return x.name === nm(k); })) k += 1;   // Jules’s Noodles, Jules’s Noodles 2…
+        L.bizN = (L.bizN || 0) + 1;
+        var bz = { id: BT.id + '-' + L.bizN, type: BT.id, name: nm(k), sales: BT.sales, hype: 40, level: 1, years: 0, best: 0 };
+        bizList().push(bz); made.push(bz);
+      }
+      award('founder');
       if (bizTypes().every(function (T) { return T.need || bizList().some(function (x) { return x.type === T.id; }); })) award('tycoon');   // the 5 regular kinds
       if (BT.id === 'chrome') award('chromeco');
       if (BT.id === 'rzcrystal') award('rzcrystalco');
-      doThing(BT.e, [{ money: -BT.cost, happy: 10, fame: 1 }, BT.e + ' You started ' + bz.name + '! You’ll sell about ' + numTxt(bz.sales) + ' ' + BT.unit + ' this year. Run ads and launch new products to sell even more.']);
+      doThing(BT.e, [{ money: -BT.cost * n, happy: n > 1 ? 14 : 10, fame: n > 1 ? 2 : 1 }, n === 1 ? BT.e + ' You started ' + made[0].name + '! You’ll sell about ' + numTxt(made[0].sales) + ' ' + BT.unit + ' this year. Run ads and launch new products to sell even more.' :
+        BT.e + ' You started ' + n + ' at once: ' + listAnd(made.map(function (x) { return x.name; })) + '! Each one will sell about ' + numTxt(BT.sales) + ' ' + BT.unit + ' this year. Run them all at once from ⚡ All your businesses at once.']);
+    }
+    // ---- ⚡ all your businesses at once: ads, new products, or growing, for every one of them in one tap ----
+    function bizKey(kind, bz) { return { ads: 'bad-', launch: 'bnew-', expand: 'bexp-' }[kind] + bz.id; }
+    function bizCostOf(kind, bz) { var BT = BIZT[bz.type]; return kind === 'ads' ? adCost(BT) : kind === 'launch' ? launchCost(BT) : expandCost(bz); }
+    function bizAllSec(c, list) {
+      sec(c, '⚡ All your businesses at once');
+      [['ads', '📣', 'Run ads at all of them', '+35 hype each'], ['launch', '🧪', 'Launch a new product at all of them', 'hits sell a LOT more, flops kill the hype'], ['expand', '🏬', 'Build all of them bigger', '+50% sales each']].forEach(function (k) {
+        var todo = list.filter(function (bz) { return !doneYet(bizKey(k[0], bz)); }), cost = todo.reduce(function (t, bz) { return t + bizCostOf(k[0], bz); }, 0), cheap = todo.length ? Math.min.apply(null, todo.map(function (bz) { return bizCostOf(k[0], bz); })) : 0;
+        opt(c, k[1], k[2], !todo.length ? 'Done this year ✓' : todo.length + (todo.length === 1 ? ' business' : ' businesses') + ' · ' + cr(cost) + ' in all · ' + k[3] + (L.money < cheap ? ' · not enough credits' : L.money < cost ? ' · you can only afford some of them' : ''), function () { play(k[1], bizAll(k[0])); }, !todo.length || L.money < cheap);
+      });
+    }
+    function bizAll(kind) {   // ⚡ do it at every business that hasn't had it this year (cheapest first, until the money runs out)
+      var todo = bizList().filter(function (bz) { return !doneYet(bizKey(kind, bz)); }).sort(function (a, b) { return bizCostOf(kind, a) - bizCostOf(kind, b); });
+      var fx = { money: 0 }, did = [], skip = 0;
+      todo.forEach(function (bz) {
+        if (L.money + fx.money < bizCostOf(kind, bz)) { skip += 1; return; }
+        L.done[bizKey(kind, bz)] = L.age;
+        var r = kind === 'ads' ? bizAds(bz) : kind === 'launch' ? bizLaunch(bz) : bizExpand(bz);
+        Object.keys(r[0]).forEach(function (k) { fx[k] = (fx[k] || 0) + r[0][k]; });
+        did.push(bz.name + (kind === 'expand' ? ' (now level ' + bz.level + ')' : kind === 'launch' ? (r[1].indexOf('HIT') >= 0 ? ' (a HIT! ⭐)' : ' (a flop)') : ''));
+      });
+      if (!did.length) return [{}, '💸 You don’t have enough credits for that right now.'];
+      var n = did.length, head = { ads: '📣 You ran ads at ', launch: '🧪 You launched new products at ', expand: '🏬 You made ' }[kind];
+      return [fx, head + n + (n === 1 ? ' business' : ' businesses') + (kind === 'expand' ? ' bigger' : '') + ' all at once: ' + listAnd(did) + '.' + (skip ? ' (You didn’t have enough credits for ' + skip + ' more.)' : '')];
     }
     function bizSheet(id) {
       var bz = bizOf(id); if (!bz) { jobSheet(); return; }
@@ -13664,7 +13788,7 @@
       hack: ['🔌', 'Jack-in stun', 'Might stun them'], netrun: ['💻', 'Quickhack', ''], yank: ['🧲', 'Yank', 'Fewer hits next turn'],
       heal: ['💓', 'Second wind', 'Heal up (once)'], glide: ['🌈', 'Glide', 'Skip their next attack (once)'], camo: ['👻', 'Optical camo', 'Vanish from their next attack (once)'],
       smash: ['🦾', 'Titan smash', ''], cannon: ['💥', 'Smasher cannon', ''], float: ['🪐', 'Anti-gravity', ''], pull: ['🌌', 'Gravity pull', ''], slam: ['☄️', 'Gravity slam', 'Huge hit from above · ends your float'], berserk: ['😤', 'Berserk', ''], pill: ['💊', 'Military pill', ''], psyfight: ['⚔️', 'Fight them', ''], calm: ['🧘', 'Calm down', ''], psyrun: ['🏃', 'Run from them', ''], sandy: ['⏱️', 'Sandy', ''], back: ['↩️', 'Back', 'Other moves'], run: ['🏃', 'Run away', ''],
-      rzsword: ['⚔️', 'Sword strike', 'Hard to dodge'], rzmagic: ['✨', 'Magic', 'Hard to dodge'], 'rzm-fire': ['🔥', 'Fire magic', ''], 'rzm-water': ['💧', 'Water magic', ''], 'rzm-earth': ['🪨', 'Earth magic', ''], 'rzm-air': ['🌪️', 'Air magic', ''], 'rzm-dark': ['🌑', 'Dark magic', ''], 'rzm-light': ['☀️', 'Light magic', ''], rzspirit: ['🧚', 'Spirit arts', ''], rzsaint: ['⚔️', 'Sword Saint strike', 'Can’t be dodged · huge damage'], rzspells: ['✨', 'Spells', '']
+      rzsword: ['⚔️', 'Sword strike', 'Hard to dodge'], rzmagic: ['✨', 'Magic', 'Hard to dodge'], 'rzm-fire': ['🔥', 'Fire magic', ''], 'rzm-water': ['💧', 'Water magic', ''], 'rzm-earth': ['🪨', 'Earth magic', ''], 'rzm-air': ['🌪️', 'Air magic', ''], 'rzm-dark': ['🌑', 'Dark magic', ''], 'rzm-light': ['☀️', 'Light magic', ''], rzspirit: ['🧚', 'Spirit arts', ''], rzsaint: ['⚔️', 'Sword Saint strike', 'Can’t be dodged · huge damage'], rzspells: ['✨', 'Spells', ''], rzberry: ['🍓', 'Eat a mana berry', '']
     };
     var QHACKS = [   // a cyberdeck's quickhacks: they use RAM (Capri makes them free)
       { id: 'qzap', e: '⚡', t: 'Short Circuit', ram: 2, tier: 1, d: 'Shock damage, never misses' },
@@ -13973,6 +14097,7 @@
         ram: ram, ramMax: ram, blind: 0, burn: 0, cripple: 0, virus: 0, sleep: 0, mirror: false, wiped: false, usedQ: {}, menu: null, hacked: 0,
         parries: 0, hitsTaken: 0, wave: 0, hits: [], lock: 0, phase: 'wait', over: false, timer: 0 };
       B.psycho = !!en.psycho;   // 🤖 cyberpsycho fights: no humanity limits, +25% damage
+      if (isRZ() && mode === 'fight' && L.magic) { B.manaMax = manaMax(); B.mana = B.manaMax; }   // 🔮 your mana for this battle
       $('fight').hidden = false; document.body.classList.add('lf-lock'); $('toast').classList.add('low');   // banners move out of the way
       $('pop').className = 'lf-pop'; $('glint').classList.remove('on'); $('enemy').style.transform = '';
       if (mode === 'escape') { msgF('🚨 The Chrome Patrol is here! Tap DODGE right as they strike. If they hit you 3 times, they catch you!'); B.timer = setTimeout(enemyTurn, 1600); }
@@ -14003,6 +14128,15 @@
       $('sandy').textContent = on.join('   ');
       $('ram').textContent = B.ramMax ? '💾 RAM ' + '▰'.repeat(B.ram) + '▱'.repeat(Math.max(0, B.ramMax - B.ram)) + ' ' + B.ram + '/' + B.ramMax + (has('capri') ? ' · 💠 hacks are free' : '') : '';
       $('arena').classList.toggle('slow', !!B.sandy);
+      var rb = $('rzbars');   // 🔮 mana and 🌀 gate bars (Re:Zero battles, once you know a spell)
+      if (rb) {
+        var showRb = isRZ() && B.mode === 'fight' && !!B.manaMax; rb.hidden = !showRb;
+        if (showRb) {
+          var gn = L.gateBroken ? 0 : gateNow();
+          $('fMana').textContent = '🔮 Mana ' + B.mana + '/' + B.manaMax; $('fManaBar').style.width = (B.mana / B.manaMax * 100) + '%';
+          $('fGate').textContent = L.gateBroken ? '💔 Gate broken' : '🌀 Gate ' + gn + '%'; $('fGateBar').style.width = gn + '%'; $('fGateBar').className = gn >= 60 ? 'hi' : gn >= 30 ? 'mid' : 'lo';
+        }
+      }
     }
     function buildMoves() {
       var box = $('moves');
@@ -14023,6 +14157,7 @@
           if (sps.length > 4) list.push('rzspells'); else list = list.concat(sps);
           if (L.great || (L.spirits || []).length) list.push('rzspirit');
           if (hasDP('saint')) list.push('rzsaint');
+          if ((L.berries || 0) > 0 && B.manaMax) list.push('rzberry');   // 🍓
           list.push('run');
         }
       }
@@ -14052,8 +14187,9 @@
         var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody && !B.psycho ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id] || ['✨', 'Spell', ''], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (id === 'shoot' && gunOf().id !== 'zap') { M = [gunOf().e, gunOf().id === 'chip' ? 'Chip' : gunOf().t, gunOf().sub]; sub = M[2]; }   // 🔫 your gun
         if (id === 'rzsword' && L.sword) { M = [SWORD[L.sword].e, SWORD[L.sword].t, SWORD[L.sword].dmg[0] + '–' + SWORD[L.sword].dmg[1] + ' damage · hard to dodge']; sub = M[2]; }
-        if (/^rz[msc]-/.test(id)) { var zi = spellInfo(id); M = [zi.e, zi.t, zi.d + ' · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; }
-        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().length + ' spells · pick one']; sub = M[2]; }
+        if (/^rz[msc]-/.test(id)) { var zi = spellInfo(id), low = B.manaMax && (B.mana || 0) < zi.mana; M = [zi.e, zi.t, low ? '🔮 Not enough mana: it needs ' + zi.mana + ' (you have ' + B.mana + ')' : zi.d + ' · 🔮 ' + zi.mana + ' mana · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; if (low) off = true; }
+        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
+        if (id === 'rzberry') { M = ['🍓', 'Eat a mana berry', (B.mana >= B.manaMax ? '🔮 your mana is full' : '🔮 +' + Math.min(berryMana(), B.manaMax - B.mana) + ' mana') + ' · 🌀 +10 · ' + L.berries + ' left · uses your turn']; sub = M[2]; }
         if (id === 'rzspirit') { M = L.great ? [L.great.e, L.great.n, 'Your great spirit attacks · no gate needed'] : ['🧚', 'Spirit arts', L.spirits.length + (L.spirits.length === 1 ? ' spirit attacks' : ' spirits attack') + ' · no gate needed']; sub = M[2]; }
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
         else if (Q) { var rc = hackCost(Q); sub = (rc ? rc + ' RAM · ' : 'Free · ') + Q.d; if (rc > B.ram) { off = true; sub = 'Needs ' + rc + ' RAM'; } }
@@ -14150,6 +14286,15 @@
         renderF(); buildMoves();
         return;
       }
+      if (id === 'rzberry') {   // 🍓 eat a mana berry (it uses your turn)
+        if (!((L.berries || 0) > 0) || !B.manaMax) return;
+        L.berries -= 1;
+        var bm = Math.min(berryMana(), B.manaMax - B.mana), bg = L.gateBroken ? 0 : Math.min(10, 100 - gateNow());
+        B.mana += bm; if (bg > 0) L.gate = gateNow() + bg;
+        sfx('glint'); popF('🍓 +' + bm + ' MANA', 'good');
+        msgF('🍓 You ate a mana berry: 🔮 +' + bm + ' mana' + (bg > 0 ? ' and 🌀 +' + bg + '% gate' : '') + '. (' + L.berries + (L.berries === 1 ? ' berry' : ' berries') + ' left)');
+        renderF(); enemySoon(); return;
+      }
       if (id === 'run') {
         if (B.sandy || hasDP('swift') || chance((en.boss ? 0.35 : 0.55 + (has('legs') ? 0.15 : 0)) + (isRZ() ? fsOf('spd') / 400 : 0))) {   // 💨 Swiftness: always get away (and 💨 Speed helps)
           if (B.pillT && !L.smasherBody) { pillCrash('🏃 You got away… but you didn’t finish the fight, and your military pills crashed HARD. CYBERPSYCHOSIS! The Chrome Patrol is on you. Run, or fight them?'); return; }
@@ -14186,6 +14331,8 @@
       if (id === 'rzsword') dmg = Math.round(R(SWORD[L.sword].dmg[0], SWORD[L.sword].dmg[1]) * (hasDegree('sword') ? 1.2 : 1) * mult * rg);
       var SPX = isRZ() ? rzSpell(id) : null, zel = SPX ? id : null, zonHit = null;   // ✨ a spell: your element, a ❄️ sub-element, or a 🔥🌪️ combo
       if (SPX) {   // 🌀 your magic strains your gate, or hurts you once it's broken
+        if (B.manaMax && (B.mana || 0) < SPX.mana) { msgF('🔮 Not enough mana for ' + SPX.nm[1] + '! Try another move' + ((L.berries || 0) > 0 ? ', or eat a 🍓 mana berry' : '') + '.'); buildMoves(); return; }
+        if (B.manaMax) B.mana -= SPX.mana;   // 🔮
         NM = SPX.nm; dmg = SPX.dmg;
         if (L.gateBroken) { var zow = Math.round(B.max * 0.12); B.hp = Math.max(1, B.hp - zow); extra += ' 💔 Your broken gate hurt you (−' + zow + ' HP).'; }
         else extra += strainGate(SPX.cost);
@@ -14392,6 +14539,7 @@
       if (B.sandy) { B.sandy -= 1; if (!B.sandy) t = '⏱️ Your Sandy wore off. ' + t; }
       if (B.rage) { B.rage -= 1; if (!B.rage) t = '😤 Your berserk wore off. ' + t; }
       if (B.ramMax && B.ram < B.ramMax) B.ram = Math.min(B.ramMax, B.ram + (has('ramregen') ? 2 : 1));   // RAM refills a little every turn
+      if (B.manaMax && B.mana < B.manaMax) B.mana = Math.min(B.manaMax, B.mana + manaRegen());   // 🔮 so does your mana
       msgF(t); renderF(); buildMoves();
     }
     function tick() {
@@ -14650,6 +14798,7 @@
       L.tier = Math.min(2, old.tier + (worth + bizWorth >= 500000 ? 1 : 0));
       L.biz = (old.biz || []).map(function (bz) { return Object.assign({}, bz); }); L.bizN = old.bizN || 0;
       L.st.smarts = clamp((old.st.smarts + R(10, 90)) / 2); L.st.style = clamp((old.st.style + R(10, 90)) / 2);
+      if (old.whaleDead) L.whaleDead = true;   // 🐋 the kingdom remembers: the White Whale stays gone
       if (old.world === 'rezero') L.st.magic = clampM(Math.min(150000, ((old.st.magic != null ? old.st.magic : 20000) + R(5000, 35000)) / 2));   // 🔮 strong mages have kids with strong magic
       var me = addPerson('parent', old.age, old.first, old.last); me.alive = false; me.bond = k.bond;
       if (mate) { var pp = addPerson('parent', mate.age, mate.first, mate.last); pp.bond = R(60, 90); pp.job = mate.job; }
@@ -17649,7 +17798,7 @@
         ['d1g4', 'Take back with your queen. You’re a pawn ahead, and Black’s king can never castle. Out of this world! 👽']],
       alts: [
         { at: 7, line: [
-          ['c8f5', 'Black plays Bf5 instead of Nf6, attacking your knight. Now the Alien Gambit can’t happen.'],
+          ['c8f5', 'Black plays Bf5 instead of Nf6, attacking your knight. Now the Alien Gambit can’t happen… but the 🛸 Martian Gambit can (it’s in Deadly Openings)!'],
           ['e4g3', 'Move your knight to g3, attacking the bishop.'],
           ['f5g6', 'Black’s bishop steps back.'],
           ['h2h4', 'Push h4! It threatens h5, trapping the bishop.'],
@@ -17667,6 +17816,164 @@
           ['f1d3', 'You’re a knight down, so attack fast! Bishop to d3, aiming at Black’s king.'],
           ['c6c5', 'Black hits back in the center.'],
           ['e1g1', 'Castle, then bring your rook to e1. Black’s king is still stuck on f7: go after it!']] }] },
+      { id: 'alienq', e: '👽', n: 'Alien Gambit: Queen Trap', side: 'w', deadly: 1, mate: 1, d: 'The Alien Gambit with a twist: let Black grab your QUEEN… then checkmate with a bishop and a knight!', plan: [['Black dodged the trap, but its king is stuck in the middle and can never castle. Go after it!', ''], ['Castle your king, then put a rook on e1. Open lines are great for attacking!', ''], ['Keep your bishop aiming at f7 and your knight on e5. Look for checks!', '']], line: [
+        ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
+        ['c7c6', 'Black plays c6: the Caro-Kann Defense.'],
+        ['d2d4', 'Grab even more of the center with d4.'],
+        ['d7d5', 'Black hits your e4 pawn with d5.'],
+        ['b1c3', 'Protect e4 with your knight on c3.'],
+        ['d5e4', 'Black takes your pawn on e4.'],
+        ['c3e4', 'Take it back with your knight.'],
+        ['g8f6', 'Black attacks your knight with Nf6.'],
+        ['e4g5', 'Alien time 👽 Jump your knight to g5. It eyes f7!'],
+        ['h7h6', 'Black kicks your knight with h6.'],
+        ['g5f7', 'Sacrifice your knight on f7! It attacks Black’s queen AND rook.'],
+        ['e8f7', 'Black’s king takes it. Now it can never castle!'],
+        ['g1f3', 'Bring out your other knight to f3.'],
+        ['c8g4', 'Black pins your knight to your queen with Bg4.'],
+        ['f3e5', 'Ne5, check! It also attacks the bishop on g4.'],
+        ['f7e8', 'Black’s king runs back to e8.'],
+        ['f1c4', 'Here’s the twist: DON’T take the bishop. Play Bc4! Now your queen is hanging… on purpose 😈'],
+        ['g4d1', 'Black grabs your queen! Big mistake…'],
+        ['c4f7', 'Bf7: CHECKMATE! Your knight guards the bishop, and Black’s king has nowhere to go. Out of this world! 👽']],
+      alts: [
+        { at: 17, line: [
+          ['e7e6', 'Black blocks your bishop with e6. No checkmate this time!'],
+          ['e5g4', 'Then take the bishop on g4 with your knight.'],
+          ['f6g4', 'Black takes your knight.'],
+          ['d1g4', 'Take back with your queen. You won your piece back, and Black’s king is stuck in the middle!']] },
+        { at: 17, line: [
+          ['d8c8', 'Black spots the trap! Qc8 protects the bishop on g4.'],
+          ['c4f7', 'Check anyway with Bf7+! Black’s king has to walk to d8.'],
+          ['e8d8', 'The king steps to d8.'],
+          ['e5g4', 'Now take the bishop on g4. Black’s king is stuck in the middle, far away from safety.']] },
+        { at: 15, line: [
+          ['f7g8', 'Black’s king runs to g8 instead.'],
+          ['f1c4', 'Check with Bc4+!'],
+          ['g8h7', 'The king hides on h7… or does it?'],
+          ['d1d3', 'Qd3+! Your queen checks along the diagonal.'],
+          ['g7g6', 'Black blocks with g6.'],
+          ['d3g6', 'Qxg6: CHECKMATE! Your knight on e5 guards your queen. 👽']] }] },
+      { id: 'alienpawn', e: '👽', n: 'Alien Gambit: Pawn Mate', side: 'w', deadly: 1, mate: 1, d: 'When Black plays Bf5, march your g-pawn up the board. If Black grabs your rook, a tiny pawn gives checkmate!', plan: [['Black dodged the trap. Keep pushing pawns at Black’s king: they open lines for your pieces!', ''], ['Bring your queen to d3, aiming at h7, where Black’s king likes to hide.', ''], ['Black’s king can never castle. Get every piece into the attack!', '']], line: [
+        ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
+        ['c7c6', 'Black plays c6: the Caro-Kann Defense.'],
+        ['d2d4', 'Grab even more of the center with d4.'],
+        ['d7d5', 'Black hits your e4 pawn with d5.'],
+        ['b1c3', 'Protect e4 with your knight on c3.'],
+        ['d5e4', 'Black takes your pawn on e4.'],
+        ['c3e4', 'Take it back with your knight.'],
+        ['g8f6', 'Black attacks your knight with Nf6.'],
+        ['e4g5', 'Alien time 👽 Jump your knight to g5!'],
+        ['h7h6', 'Black kicks your knight with h6.'],
+        ['g5f7', 'Sacrifice your knight on f7!'],
+        ['e8f7', 'Black’s king takes it. It can never castle now!'],
+        ['g1f3', 'Bring out your other knight to f3.'],
+        ['c8f5', 'This time Black plays Bf5, so there’s no Bg4 fork.'],
+        ['f3e5', 'Ne5, check anyway!'],
+        ['f7g8', 'Black’s king runs to g8.'],
+        ['f1c4', 'Bishop check: Bc4+! It also guards g8 and f7.'],
+        ['g8h7', 'The king hides in the corner on h7.'],
+        ['g2g4', 'Push g4! It attacks Black’s bishop.'],
+        ['f5e4', 'Black’s bishop jumps to e4… and now it attacks your rook on h1!'],
+        ['g4g5', 'Push again: g5! Let Black take your rook. It’s a trap!'],
+        ['e4h1', 'Black grabs your rook. Uh-oh… for Black!'],
+        ['g5g6', 'g6: CHECKMATE with a pawn! Your knight protects it, your bishop guards g8, and Black’s own rook blocks h8. 👽']],
+      alts: [
+        { at: 17, line: [
+          ['e7e6', 'Black blocks the check with e6. Smart!'],
+          ['g2g4', 'Push g4 anyway! It chases Black’s bishop.'],
+          ['f5g6', 'The bishop steps back to g6.'],
+          ['h2h4', 'Push h4! Next, h5 would trap the bishop.'],
+          ['g6h7', 'The bishop hides on h7.'],
+          ['h4h5', 'Push h5! Black’s bishop is stuck behind its own pawns. It might never get out!']] },
+        { at: 19, line: [
+          ['f5g4', 'Black takes your pawn on g4. It’s a trap… for Black!'],
+          ['d1d3', 'Qd3+! Your queen checks Black’s king on h7.'],
+          ['g7g6', 'Black blocks with g6.'],
+          ['d3g6', 'Qxg6: CHECKMATE! Your knight on e5 guards your queen. 👽']] },
+        { at: 21, line: [
+          ['h6g5', 'Black doesn’t take your rook. It takes your pawn with hxg5 instead.'],
+          ['e5f7', 'Knight to f7! It attacks Black’s queen AND the rook on h8.'],
+          ['d8e8', 'Black’s queen runs to e8.'],
+          ['f7g5', 'Knight takes g5, with check! Black’s king is in big trouble.']] }] },
+      { id: 'alienknight', e: '👽', n: 'Alien Gambit: Knight Trap', side: 'w', deadly: 1, mate: 1, d: 'When Black plays Nbd7, castle and set a sneaky trap. If Black grabs your queen, it’s checkmate with Bg6!', plan: [['Black dodged the trap. Check with Bg6+ when you can: Black’s king has to run!', ''], ['Look for Nf7+, a knight fork of Black’s king and rook.', ''], ['Black’s king can never castle. Bring your rooks to the middle and attack!', '']], line: [
+        ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
+        ['c7c6', 'Black plays c6: the Caro-Kann Defense.'],
+        ['d2d4', 'Grab even more of the center with d4.'],
+        ['d7d5', 'Black hits your e4 pawn with d5.'],
+        ['b1c3', 'Protect e4 with your knight on c3.'],
+        ['d5e4', 'Black takes your pawn on e4.'],
+        ['c3e4', 'Take it back with your knight.'],
+        ['g8f6', 'Black attacks your knight with Nf6.'],
+        ['e4g5', 'Alien time 👽 Jump your knight to g5!'],
+        ['h7h6', 'Black kicks your knight with h6.'],
+        ['g5f7', 'Sacrifice your knight on f7!'],
+        ['e8f7', 'Black’s king takes it. It can never castle now!'],
+        ['g1f3', 'Bring out your other knight to f3.'],
+        ['b8d7', 'This time Black plays Nbd7, getting ready to fight back.'],
+        ['f1c4', 'Check with Bc4+!'],
+        ['f7e8', 'Black’s king runs back to e8.'],
+        ['e1g1', 'Castle! Your king is safe, and Black’s king is still stuck in the middle.'],
+        ['d7b6', 'Black attacks your bishop with Nb6.'],
+        ['c4d3', 'Move your bishop to d3. It aims at g6, right next to Black’s king!'],
+        ['c8g4', 'Black pins your knight to your queen with Bg4.'],
+        ['f3e5', 'Ignore the pin! Jump to e5. Yes, now Black can take your queen…'],
+        ['g4d1', 'Black grabs your queen!'],
+        ['d3g6', 'Bg6: CHECKMATE! Your knight on e5 guards d7 and f7, so Black’s king has nowhere to go. 👽']],
+      alts: [
+        { at: 15, line: [
+          ['f7g6', 'Black’s king runs to g6 instead. Very brave… and very dangerous!'],
+          ['d1d3', 'Check with Qd3+!'],
+          ['g6h5', 'The king runs to h5.'],
+          ['d3f5', 'Qf5+! The king is surrounded.'],
+          ['g7g5', 'Black blocks with g5.'],
+          ['c4f7', 'Bf7: CHECKMATE! 👽']] },
+        { at: 15, line: [
+          ['e7e6', 'Black blocks the check with e6.'],
+          ['e1g1', 'Castle! Your king is safe.'],
+          ['d7b6', 'Black attacks your bishop.'],
+          ['c4d3', 'Bishop to d3. Next, put a rook on e1 and attack the weak e6 pawn!']] },
+        { at: 21, line: [
+          ['d8c8', 'Black spots the trap and protects the bishop with Qc8.'],
+          ['d3g6', 'Check with Bg6+!'],
+          ['e8d8', 'The king has to go to d8.'],
+          ['e5f7', 'Nf7+! A fork: your knight attacks Black’s king AND the rook on h8.']] }] },
+      { id: 'martian', e: '🛸', n: 'Martian Gambit', side: 'w', deadly: 1, mate: 1, d: 'The Alien Gambit’s cousin! When Black plays Bf5, sacrifice a knight on e6 instead. Then a sneaky queen move can checkmate on g6!', plan: [['Black dodged the trap. Attack the weak e6 pawn: Black has no f-pawn to protect it anymore!', ''], ['Castle, then bring your queen to e2 and a rook to e1.', ''], ['Look for Qg6+ or Qh5+. Black’s king is stuck in the middle!', '']], line: [
+        ['e2e4', 'Push your king’s pawn to e4. Take the center!'],
+        ['c7c6', 'Black plays c6: the Caro-Kann Defense.'],
+        ['d2d4', 'Grab even more of the center with d4.'],
+        ['d7d5', 'Black hits your e4 pawn with d5.'],
+        ['b1c3', 'Protect e4 with your knight on c3.'],
+        ['d5e4', 'Black takes your pawn on e4.'],
+        ['c3e4', 'Take it back with your knight.'],
+        ['c8f5', 'Black attacks your knight with Bf5. No Nf6, so no Alien Gambit… but there IS a Martian Gambit! 🛸'],
+        ['e4g5', 'Jump your knight to g5 anyway!'],
+        ['f5g6', 'Black’s bishop steps back to g6.'],
+        ['g1f3', 'Bring out your other knight to f3.'],
+        ['h7h6', 'Black kicks your knight with h6.'],
+        ['g5e6', 'The Martian Gambit: sacrifice your knight on e6! 🛸'],
+        ['f7e6', 'Black takes it with the f-pawn. Now the squares next to Black’s king are weak!'],
+        ['f3e5', 'Jump your other knight to e5. It attacks the bishop on g6.'],
+        ['g6h7', 'Black’s bishop runs to h7.'],
+        ['f1d3', 'Offer a bishop trade with Bd3.'],
+        ['h7d3', 'Black trades.'],
+        ['d1d3', 'Take back with your queen. Now your queen aims at g6!'],
+        ['g8f6', 'Black brings out a knight… and forgets about g6!'],
+        ['d3g6', 'Qg6: CHECKMATE! Your knight guards f7 and d7, and Black’s king has nowhere to go. 🛸']],
+      alts: [
+        { at: 19, line: [
+          ['d8d5', 'Black plays Qd5, so its king can escape to d8.'],
+          ['d3g6', 'Check with Qg6+ anyway!'],
+          ['e8d8', 'The king runs to d8.'],
+          ['e5f7', 'Nf7+! A fork: your knight attacks Black’s king AND the rook on h8.']] },
+        { at: 17, line: [
+          ['g8f6', 'Black doesn’t trade bishops. It brings out a knight first.'],
+          ['e1g1', 'Castle! Next, bring your queen to e2 and a rook to e1. The e6 pawn is weak!']] },
+        { at: 15, line: [
+          ['g6f5', 'Black’s bishop runs to f5 instead.'],
+          ['g2g4', 'Push g4! Kick the bishop.'],
+          ['f5h7', 'The bishop hides on h7.'],
+          ['f1d3', 'Offer a trade with Bd3. If Black takes, your queen lands on d3, aiming at g6!']] }] },
       { id: 'kingsgambit', e: '🤴', n: 'King’s Gambit (Muzio)', side: 'w', deadly: 1, d: 'Sacrifice a pawn AND a knight to blast open the f-file and hunt the king. One of the wildest attacks ever!', plan: [['Push d3 to free your other bishop, then take on f4 with it.', 'd2d3 c1f4'], ['Knight to c3. Every piece joins the attack!', 'b1c3'], ['Aim everything at f7. You’re a piece down, so attack fast before Black gets its pieces out!', '~c4f7']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -19244,6 +19551,40 @@
       m.appendChild(list);
       window.scrollTo(0, 0);
     }
+    // ---- 🗺️ What to Do After the Opening: the opening is already played, and you learn the plan (it plays like 🗺️ After the Opening) ----
+    // S.learn['after:italian'] = 1: you played its whole plan (a trap: you played on after they didn't fall for it)
+    function afterAll() { return CHESS_OPENINGS.filter(function (L) { return planOf(L).length; }); }
+    function afterDoneN(list) { return list.filter(function (L) { return S.learn['after:' + L.id] >= 1; }).length; }
+    function afterText() { var all = afterAll(); return afterDoneN(all) + ' of ' + all.length + ' done'; }
+    function showAfterList() {
+      cancelThinking(); clearTimeout(lessonTm); dropGhost(); down = null; closeCard();
+      $('game').hidden = true; $('menu').hidden = false;
+      var m = $('menu'); m.innerHTML = '';
+      var back = mk('button', 'chs-pill', '← Back'); back.type = 'button'; back.id = 'chs-afterListBack'; back.addEventListener('click', showMenu); m.appendChild(back);
+      var head = mk('div', 'panel chs-lhead');
+      head.innerHTML = '<div class="chs-big">🗺️</div><h2>What to Do After the Opening</h2><p>The opening is already played for you. Now learn what comes next! Pick one, pick a bot, and Coach Hoot 🦉 shows you the plan one move at a time (green arrows)… and what to do when the bot surprises you (red arrows).</p>' +
+        '<p class="chs-lnote">✅ Play the whole plan to finish one (' + afterText() + ').<br>💡 Tip: learn the opening first, so you know how you got there!</p>';
+      m.appendChild(head);
+      [['op', '📖 Openings'], ['dead', '💀 Deadly Openings'], ['counter', '🛡️ Counters']].forEach(function (g) {
+        var list = lessonList(g[0]).filter(function (L) { return planOf(L).length; });
+        if (!list.length) return;
+        var th = mk('div', 'chs-tier'); th.innerHTML = '<h3>' + g[1] + '</h3><small>' + afterDoneN(list) + ' of ' + list.length + ' done</small>'; m.appendChild(th);
+        var box = mk('div', 'chs-lessons');
+        list.forEach(function (L) {
+          var ok = S.learn['after:' + L.id] >= 1, st = planOf(L), b = mk('button', 'chs-lesson' + (ok ? ' done' : '')); b.type = 'button'; b.setAttribute('data-after', L.id);
+          b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + esc(L.n) + '</b><small>' + (L.mate ? '😮 If they don’t fall for it: ' : '🗺️ Step 1: ') + esc(st[0][0]) + '</small><i>' + (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + ' · ' + st.length + ' steps' + (S.learn['op:' + L.id] >= 2 ? ' · ⭐ you know this opening' : '') + '</i></span>' + (ok ? '<span class="chs-ldone" title="Done!">✅</span>' : '');
+          b.addEventListener('click', function () { openAfter(L.id); });
+          box.appendChild(b);
+        });
+        m.appendChild(box);
+      });
+      window.scrollTo(0, 0);
+    }
+    function afterLearn(a) {   // ✅ you learned what to do after this opening
+      if (S.learn['after:' + a.id] >= 1) return false;
+      S.learn['after:' + a.id] = 1; save();
+      return true;
+    }
     function lessonChoice(kind, L) {   // a lesson you already did: take the test, or learn it again
       var lv = S.learn[kind + ':' + L.id] || 0;
       openCard(function (c) {
@@ -19871,7 +20212,7 @@
       var L = OPEN[id], start = L && afterStart(L); if (!start || !BOT[botId]) return;
       S.afterId = id; S.afterBot = botId;
       newGame('bot', botId, L.side, true, null, start);
-      game.after = { id: id, moves: afterMoves(L, start), shown: -1, want: null, mode: '', text: '', sup: 0, ok: 0, done: false, trap: !!L.mate, bot: null, prev: null, doneText: '' };
+      game.after = { id: id, n0: start.length, moves: afterMoves(L, start), shown: -1, want: null, mode: '', text: '', sup: 0, ok: 0, done: false, trap: !!L.mate, bot: null, prev: null, doneText: '' };
       game.pr.note = '🗺️ This is the end of the ' + L.n + '. What comes next? Coach Hoot will show you!';
       save(); render();
       if (G.turn() === game.you) adviseNow();
@@ -19898,11 +20239,12 @@
       var a = game && game.after, p = game && game.pr;
       if (!a || !p || p.state || game.over || G.turn() !== game.you) return;
       var nx = afterNext();
+      if (a.trap && a.done && game.moves.length - (a.n0 || 0) >= 12 && afterLearn(a)) a.doneText = '✅ You learned what to do after the ' + OPEN[a.id].n + '! Keep playing.';   // (a trap: 6 good moves after they dodged it)
       if (!nx && !a.done) {   // 🎉 the whole plan is done (a trap: they didn't fall for it, so here's what to do instead)
         a.done = true;
-        var L = OPEN[a.id], h = afterHead(null);
+        var L = OPEN[a.id], h = afterHead(null), fresh = !a.trap && afterLearn(a);
         a.doneText = a.trap ? '😮 ' + botName() + ' didn’t fall for the ' + L.n + '! Here’s what to do now:\n' + h.t :
-          h.t + '🎉 That’s the whole plan! Keep playing: Coach Hoot will still warn you when ' + botName() + ' surprises you.';
+          h.t + '🎉 That’s the whole plan!' + (fresh ? ' ✅ You learned what to do after the ' + L.n + '!' : '') + ' Keep playing: Coach Hoot will still warn you when ' + botName() + ' surprises you.';
         a.doneIdeas = h.ideas;
       }
       var legal = !!nx && G.moves().some(function (m) { return m.uci.slice(0, 4) === nx.u; });
@@ -20184,8 +20526,9 @@
       learn.innerHTML = '<button type="button" class="chs-lbtn" data-learn="op"><span class="chs-lic">📖</span><b>Openings</b><small>' + learnedText('op') + '</small></button>' +
         '<button type="button" class="chs-lbtn" data-learn="mate"><span class="chs-lic">♚</span><b>Checkmates</b><small>' + learnedText('mate') + '</small></button>' +
         '<button type="button" class="chs-lbtn chs-ldead" data-learn="dead"><span class="chs-lic">💀</span><b>Deadly Openings</b><small>Gambits and traps that win fast · ' + learnedText('dead') + '</small></button>' +
-        '<button type="button" class="chs-lbtn chs-lctr" data-learn="counter"><span class="chs-lic">🛡️</span><b>Counters</b><small>Beat tricky gambits and traps · ' + learnedText('counter') + '</small></button>';
-      learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (b) showLessons(b.getAttribute('data-learn')); });
+        '<button type="button" class="chs-lbtn chs-lctr" data-learn="counter"><span class="chs-lic">🛡️</span><b>Counters</b><small>Beat tricky gambits and traps · ' + learnedText('counter') + '</small></button>' +
+        '<button type="button" class="chs-lbtn chs-lafter" data-learn="after"><span class="chs-lic">🗺️</span><b>What to Do After the Opening</b><small>The opening is already played: learn the plan · ' + afterText() + '</small></button>';
+      learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (!b) return; if (b.getAttribute('data-learn') === 'after') showAfterList(); else showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var prh = mk('div', 'chs-tier'); prh.innerHTML = '<h3>🎯 Practice</h3><small>Fix your mistakes 🦉</small>'; m.appendChild(prh);
       var pb = mk('button', 'chs-friend chs-prac'); pb.type = 'button'; pb.id = 'chs-pracBtn';
