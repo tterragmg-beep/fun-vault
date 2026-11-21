@@ -794,6 +794,7 @@
   .lf-move small { display: block; margin-top: 2px; font-weight: 600; font-size: 0.72rem; color: #cfc8ee; }
   .lf-move.heavy { border-color: #ff3ea5; background: rgba(255, 62, 165, 0.16); }
   .lf-move.net { border-color: #22d3ee; background: rgba(34, 211, 238, 0.13); }
+  .lf-move.gambit { border-color: #f59e0b; background: linear-gradient(135deg, rgba(245, 158, 11, 0.24), rgba(239, 68, 68, 0.24)); }   /* 🎲 All or Nothing */
   .lf-move.subel { border-color: #a5b4fc; background: linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(196, 181, 253, 0.18)); }   /* ❄️ sub-element spells */
   .lf-moves.many { grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .lf-moves.many .lf-move { font-size: 0.8rem; padding: 9px 4px; }
@@ -10410,6 +10411,7 @@
     var MAGIC_MAX = 1000000;   // 🔮 Magic goes all the way up to 1,000,000 (but it grows slower and slower: see magGain)
     function clampM(v) { return Math.max(0, Math.min(MAGIC_MAX, Math.round(v))); }
     function magGain(cur, n) {   // 🔮 the higher your Magic, the harder it is to grow: ×1 under 100,000, then ×0.6, ×0.45, and ×0.35 past 600,000
+      if (L && L.magicLost) return 0;   // 🎲 the All or Nothing Gambit took your magic forever
       if (!(n > 0)) return n;
       return Math.max(1, Math.round(n * (cur < 100000 ? 1 : cur < 300000 ? 0.6 : cur < 600000 ? 0.45 : 0.35)));
     }
@@ -11139,7 +11141,8 @@
       var bits = [L.reinhard ? '⚔️ Reinhard’s divine protections: ' + L.dp.map(function (id) { return DP[id].e; }).join('') : (L.dp || []).length ? L.dp.map(function (id) { return DP[id].e + ' Divine Protection of ' + DP[id].t; }).join(' · ') : '🌫️ No divine protection'];
       if (L.rbd) bits.push('💜 Return by Death' + (L.rbdCount ? ' (used ' + L.rbdCount + (L.rbdCount === 1 ? ' time)' : ' times)') : ''));
       var me = magicEls();
-      if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of ' + MAXSPELL + ' spells · ' + rzSpellMoves().length + ' battle spells)' : ' (no spells yet)'));
+      if (L.magicLost) bits.push('💀 No more magic (you used the 🎲 All or Nothing Gambit)');
+      else if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of ' + MAXSPELL + ' spells · ' + rzSpellMoves().length + ' battle spells)' : ' (no spells yet)'));
       var sh = subsHave(); if (sh.length) bits.push(sh.map(function (x) { return SUBEL[x].e + ' ' + SUBEL[x].t; }).join(' + ') + ' magic');   // ❄️ sub-elements
       var cb = combosHave().filter(function (k) { return k !== 'dark+light'; }); if (cb.length) bits.push(cb.length === 1 ? COMBO[cb[0]].e + ' ' + COMBO[cb[0]].t : '🔥🌪️ ' + cb.length + ' combo spells');
       if (yinYang()) bits.push('☯️ Yin and Yang');
@@ -11201,7 +11204,7 @@
     function spellOf(el, lv) { return ELEMS[el].e + ' ' + ELEMS[el].spells[Math.max(1, Math.min(MAXSPELL, lv || L.magic || 1)) - 1]; }
     function newSpells() { var nx = xNew(L.magic); return listAnd(magicEls().map(function (el) { return spellOf(el, L.magic); })) + (nx.length ? ', plus ' + (nx.length === 1 ? 'a new battle spell: ' : 'new battle spells: ') + listAnd(nx) : ''); }   // 📖
     var MAXSPELL = 5, SPELL_NEED = [0, 0, 30000, 60000, 150000, 400000];   // 🔮 your 1st spell is free; the 2nd needs Magic 30,000+, then 60,000+, 150,000+, and the 5th (ancient!) 400,000+
-    function spellReady() { var nx = (L.magic || 0) + 1; return nx <= MAXSPELL && (L.st.magic || 0) >= SPELL_NEED[nx]; }
+    function spellReady() { if (L.magicLost) return false; var nx = (L.magic || 0) + 1; return nx <= MAXSPELL && (L.st.magic || 0) >= SPELL_NEED[nx]; }
     function spellNeedTxt() { var nx = (L.magic || 0) + 1; return nx > MAXSPELL || spellReady() ? '' : 'To learn your next spell, you need 🔮 Magic ' + magN(SPELL_NEED[nx]) + '+ (you have ' + magN(L.st.magic) + ').'; }
     function magicMult() { var m = L.st.magic || 0; return 0.75 + Math.min(m, 100000) / 200000 + Math.max(0, m - 100000) / 1200000; }   // 🔮 more Magic = stronger spells (0.75× at 0, 1.25× at 100,000, 2× at 1,000,000)
     function gateNow() { return L.gate == null ? 100 : L.gate; }
@@ -11449,7 +11452,7 @@
       var C = COMBO[k], p = k.split('+');
       return C.e + ' COMBO SPELL! You mixed your ' + ELEMS[p[0]].t.toLowerCase() + ' and ' + ELEMS[p[1]].t.toLowerCase() + ' magic together and made ' + C.e + ' ' + C.t.toUpperCase() + ': ' + C.d + '!';
     }
-    function yinYang() { var me = isRZ() ? magicEls() : []; return me.indexOf('light') >= 0 && me.indexOf('dark') >= 0; }   // ☯️ light AND dark: the powers of Yin and Yang
+    function yinYang() { var me = isRZ() && !L.magicLost ? magicEls() : []; return me.indexOf('light') >= 0 && me.indexOf('dark') >= 0; }   // ☯️ light AND dark: the powers of Yin and Yang
 
     // ---- 📖 more battle spells for every kind of magic ----
     // each element: a new battle spell every time you learn a spell (spells 2–5), so a master mage has 5 per element.
@@ -11503,6 +11506,14 @@
       subsHave().forEach(function (el) { gs.push({ key: 's' + el, e: SUBEL[el].e, t: SUBEL[el].t + ' magic', sub: 1, moves: ['rzs-' + el].concat(xsFor(el, 1)) }); });
       var cs = combosHave(); if (cs.length) gs.push({ key: 'combo', e: '🔥🌪️', t: 'Combo spells', moves: cs.map(function (k) { return 'rzc-' + k; }) });
       return gs;
+    }
+    function gambitShown() { return isRZ() && !L.magicLost && (L.st.magic || 0) >= MAGIC_MAX; }   // 🎲 at 🔮 Magic 1,000,000
+    function gambitReady() { return gambitShown() && !L.gateBroken && gateNow() >= 100; }   // …and your 🌀 gate at 100%
+    function loseMagic() {   // 🎲 after the All or Nothing Gambit: your magic is gone forever
+      L.magicLost = 1; L.st.magic = 0; L.magic = 0; L.subs = []; L.combos = [];
+      if (L.tutor === 'magic') L.tutor = null;
+      award('rzgambit');
+      log('🎲 You used the ALL OR NOTHING GAMBIT! You won in one hit… but your magic is gone forever.');
     }
     function groupOf(key) { var gs = spellGroups(); for (var i = 0; i < gs.length; i++) if (gs[i].key === key) return gs[i]; return null; }
 
@@ -11647,6 +11658,7 @@
       if (L.club && HOBBY[L.club]) note(c, '🎨 Your hobby: ' + HOBBY[L.club] + ' (it gives you a little boost every year).');
       RZ_TUTORS.forEach(function (T) {
         if ((cur && cur.id === T.id) || done.indexOf(T.id) >= 0) return;
+        if (T.id === 'magic' && L.magicLost) { opt(c, T.e, T.t + ' tutor', '💀 Your magic is gone forever (All or Nothing Gambit)', function () {}, true); return; }
         var y = (L.tutorY || {})[T.id] || 0, fee = tutorFee(T), young = L.age < T.min, broke = fee && L.money < fee;
         opt(c, T.e, T.t + ' tutor', young ? 'Age ' + T.min + '+' : (fee ? cr(fee) + ' a year' : 'Free (your family pays)') + ' · ' + T.years + (T.years === 1 ? ' year' : ' years') + ' · ' + T.d + (y ? ' · ' + y + ' of ' + T.years + ' years done' : '') + (broke ? ' · not enough gold' : ''), function () { hireTutor(T); }, young || broke);
       });
@@ -11716,11 +11728,11 @@
         RZ_ACTS.forEach(function (a) {
           if (L.age < a.min) return;
           var cost = actCost(a), done = doneYet(a.id), broke = cost && L.money < cost;
-          opt(c, a.e, a.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough gold' : (a.id === 'rzmagic' ? '+🔮 Magic · ' + ((L.magic || 0) >= MAXSPELL ? 'you know every spell' : spellReady() ? 'learn spells' : 'next spell needs 🔮 Magic ' + magN(SPELL_NEED[(L.magic || 0) + 1]) + '+') + ' · ' + (L.gateBroken ? '💔 your gate is broken, so it hurts you' : 'strains your gate a little (🌀 ' + gateNow() + '%)') : a.sub) + (cost ? ' · ' + cr(cost) : ''), function () {
+          opt(c, a.e, a.t, done ? 'Done this year ✓' : broke ? cr(cost) + ' · not enough gold' : (a.id === 'rzmagic' && L.magicLost ? '💀 Your magic is gone forever (All or Nothing Gambit)' : a.id === 'rzmagic' ? '+🔮 Magic · ' + ((L.magic || 0) >= MAXSPELL ? 'you know every spell' : spellReady() ? 'learn spells' : 'next spell needs 🔮 Magic ' + magN(SPELL_NEED[(L.magic || 0) + 1]) + '+') + ' · ' + (L.gateBroken ? '💔 your gate is broken, so it hurts you' : 'strains your gate a little (🌀 ' + gateNow() + '%)') : a.sub) + (cost ? ' · ' + cr(cost) : ''), function () {
             L.done[a.id] = L.age;
             var r = a.run(); if (cost) r[0].money = (r[0].money || 0) - cost;
             doThing(a.e, r);
-          }, done || broke);
+          }, done || broke || (a.id === 'rzmagic' && !!L.magicLost));
         });
         rzFoodSec(c);   // 🍽️ mana food
         if (L.age >= 10) {
@@ -11855,7 +11867,7 @@
       { id: 'rzsquire', a: [14, 17], w: 3, e: '⚔️', t: 'The Royal Guard is looking for young squires to train!', c: [
         ['Try out', function () { if (L.st.health >= 55 || hasDP('strength') || hasDP('saint')) { L.swordXP = Math.min(20, (L.swordXP || 0) + 4); return [{ happy: 8, health: 3, fame: 1 }, 'You tried out and made it! The knights taught you real sword moves. (+4 fight power)' + fsTrain({ str: 3, skl: 2 })]; } return [{ happy: -3, health: 1 }, 'You tried out, but you tripped over your own sword. Keep training!']; }],
         ['No thanks', [[1, { happy: 1 }, 'You decided being a squire isn’t for you. Polishing armor all day? No thanks.']]]] },
-      { id: 'rzbook', a: [12, 30], w: 2, e: '📕', t: 'You found an old book in the library with no title. It’s… humming.', c: [
+      { id: 'rzbook', a: [12, 30], w: 2, if: function () { return !L.magicLost; }, e: '📕', t: 'You found an old book in the library with no title. It’s… humming.', c: [
         ['Open it', function () { if (hasDP('mana') || chance(0.5)) { L.magic = Math.max(L.magic || 0, 1); return [{ smarts: 2, magic: 5000, happy: 4 }, 'You opened the humming book, and a spell jumped right into your head: ' + newSpells() + '!']; } return [{ happy: -2, health: -2 }, 'You opened the humming book, and it snapped shut on your nose. Some books don’t want to be read.']; }],
         ['Put it back very carefully', [[1, { smarts: 1 }, 'You put the humming book back. Smart. Very smart.']]]] },
       { id: 'rzcrystal', a: [13, 80], w: 2, e: '🔮', t: 'A traveling merchant offers you a “super rare magic crystal” for 200 gold.', c: [
@@ -11890,7 +11902,7 @@
       { id: 'rzdice', a: [16, 90], w: 2, e: '🎲', t: 'A sneaky-looking dice player at the market wants to bet you 100 gold.', c: [
         ['Bet 100 gold', function () { if (hasDP('wind')) return [{ smarts: 2, happy: 3 }, '🌬️ You could feel the dice player was a cheater. (Divine Protection of Wind Reading!) You walked away.']; if (L.money < 100) return [{}, 'You don’t have 100 gold to bet. Phew!']; return chance(0.35) ? [{ money: 100, happy: 5 }, 'You rolled a six and won 100 gold!'] : [{ money: -100, happy: -4 }, 'You lost. Later you found out the dice were loaded. Grrr!']; }],
         ['Walk away', [[1, { smarts: 1 }, 'You walked away. Good call.']]]] },
-      { id: 'rzmentor', a: [15, 40], w: 2, if: function () { return (L.magic || 0) < 3; }, e: '🔮', t: 'A famous mage noticed your mana and offered to teach you!', c: [
+      { id: 'rzmentor', a: [15, 40], w: 2, if: function () { return (L.magic || 0) < 3 && !L.magicLost; }, e: '🔮', t: 'A famous mage noticed your mana and offered to teach you!', c: [
         ['Become their apprentice', function () { L.magic = Math.min(3, (L.magic || 0) + 1); return [{ magic: [6000, 10000], smarts: [1, 3], happy: 4 }, 'You became a famous mage’s apprentice and learned ' + newSpells() + '!']; }],
         ['No thanks', [[1, {}, 'You said no thanks. The mage shrugged and turned into a crow. (Show-off.)']]]] },
       { id: 'rzballad', a: [16, 100], w: 2, if: function () { return L.fame >= 30; }, auto: function () { return [{ happy: 6, fame: 2 }, '🎵 A bard wrote a song about you! Now kids sing it in the streets.']; } },
@@ -11940,6 +11952,7 @@
       { id: 'rzancient', e: '📜', t: 'Ancient Magic', d: 'Learn your 5th spell (it needs 🔮 Magic 400,000).' },
       { id: 'rzsub', e: '❄️', t: 'Sub-Element', d: 'Awaken a sub-element, like ❄️ Ice from 💧 Water.' },
       { id: 'rzcombo', e: '🌪️', t: 'Fusion Magic', d: 'Mix two elements into a combo spell, like a 🔥🌪️ Fire Tornado.' },
+      { id: 'rzgambit', e: '🎲', t: 'All or Nothing', d: 'Use the All or Nothing Gambit: win in one hit, and lose your magic forever.' },
       { id: 'rzyinyang', e: '☯️', t: 'Yin and Yang', d: 'Have both ☀️ Light and 🌑 Dark magic.' },
       { id: 'rzfighter', e: '🥊', t: 'Battle Ready', d: 'Get all four fighting stats to 75 or more.' },
       { id: 'rzwhalefind', e: '🌫️', t: 'Into the Fog', d: 'Actually FIND the White Whale when you hunt for it (most hunts find nothing!).' },
@@ -11957,6 +11970,7 @@
         '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate. It heals every year, and 🍽️ mana food in ⚡ Do heals it too. If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
         '🔮 Magic is a stat that goes all the way up to 1,000,000, but the higher it gets, the slower it grows! Practice magic, meditate at the ⛲ mana spring, take magic lessons, make spirit contracts, and cast spells in battles. More Magic makes your spells stronger. Each element has 5 spells: the 2nd needs 🔮 Magic 30,000+, then 60,000+, 150,000+, and the 5th (an ancient spell!) needs 400,000+.',
         '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy. You only get the sub-elements of YOUR element(s): extra magic from a divine protection (like 🔮 Sorcery) doesn’t count.',
+        '🎲 The All or Nothing Gambit: once your 🔮 Magic hits 1,000,000, a new battle move shows up. With your 🌀 gate at 100%, it knocks out ANYTHING in one hit (even the White Whale)… but then your magic is gone forever: no spells, and your Magic can never grow back.',
         '📖 Every kind of magic has more than one battle spell! Each time you learn a spell, you get a new one for each of your elements (shields, healing, stuns, sleep and more), so a master mage has 5 per element. Sub-elements get 2 more at 4 and 5 spells. With lots of spells, tap a kind of magic in battle (like 🔥 Fire magic) to see them all.',
         '⚔️ In battles, your sub-element spells get their own buttons, right next to Punch. They help you win quick fights too. Super strong? Easy fights end right away, so turn on ⚔️ Battles: Every fight in ☰ Menu to battle for real and use your spells every time!',
         '🔥🌪️ Two elements? Mix them into combo spells once your 🔮 Magic reaches 50,000, like 🔥🌪️ Fire Tornado, 🌋 Lava Burst or ⛈️ Thunderstorm. And if you have ☀️ Light AND 🌑 Dark, you get the powers of ☯️ Yin and Yang!',
@@ -14261,6 +14275,7 @@
         var gm = B.menu && B.menu.slice(0, 4) === 'grp:' ? groupOf(B.menu.slice(4)) : null;
         if (gm) list = gm.moves.concat(['back']);   // 📖 one kind of magic: all its spells
         else if (B.menu === 'spells') list = norm.map(function (g) { return 'rzg-' + g.key; }).concat(['back']);   // ✨ pick a kind of magic
+        else if (B.menu === 'gambit') list = ['rzgambitgo', 'back'];   // 🎲 are you sure?
         else {
           list = ['punch'];
           if (L.sword) list.push('rzsword');
@@ -14271,6 +14286,7 @@
           if (L.great || (L.spirits || []).length) list.push('rzspirit');
           if (hasDP('saint')) list.push('rzsaint');
           if ((L.berries || 0) > 0 && B.manaMax) list.push('rzberry');   // 🍓
+          if (gambitShown()) list.push('rzgambit');   // 🎲
           list.push('run');
         }
       }
@@ -14302,6 +14318,8 @@
         if (id === 'rzsword' && L.sword) { M = [SWORD[L.sword].e, SWORD[L.sword].t, SWORD[L.sword].dmg[0] + '–' + SWORD[L.sword].dmg[1] + ' damage · hard to dodge']; sub = M[2]; }
         if (id.slice(0, 4) === 'rzg-') { var zg = groupOf(id.slice(4)) || { e: '✨', t: 'Magic', moves: [] }; M = [zg.e, zg.t, zg.moves.length + (zg.moves.length === 1 ? ' spell' : ' spells') + (B.manaMax ? ' · 🔮 ' + (B.mana || 0) + '/' + B.manaMax + ' mana' : '')]; sub = M[2]; }   // 📖 a kind of magic
         if (/^rz[mscx]-/.test(id)) { var zi = spellInfo(id), low = B.manaMax && (B.mana || 0) < zi.mana; M = [zi.e, zi.t, low ? '🔮 Not enough mana: it needs ' + zi.mana + ' (you have ' + B.mana + ')' : zi.d + ' · 🔮 ' + zi.mana + ' mana · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; if (low) off = true; }
+        if (id === 'rzgambit') { var gok = gambitReady(); M = ['🎲', 'All or Nothing Gambit', gok ? 'ONE-SHOTS anything! But you lose ALL your magic forever' : L.gateBroken ? '💔 Your gate is broken' : '🌀 Needs your gate at 100% (it’s ' + gateNow() + '%)']; sub = M[2]; if (!gok) off = true; }
+        if (id === 'rzgambitgo') { M = ['💀', 'Yes! All or nothing!', 'Win this fight in one hit, and lose your magic forever']; sub = M[2]; }
         if (id === 'rzspells') { var zk = spellGroups().filter(function (g) { return !g.sub; }); M = ['✨', 'Spells', zk.length + ' kinds of magic · ' + rzSpellMoves().filter(function (x) { return !isSubMove(x); }).length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
         if (id === 'rzberry') { M = ['🍓', 'Eat a mana berry', (B.mana >= B.manaMax ? '🔮 your mana is full' : '🔮 +' + Math.min(berryMana(), B.manaMax - B.mana) + ' mana') + ' · 🌀 +10 · ' + L.berries + ' left · uses your turn']; sub = M[2]; }
         if (id === 'rzspirit') { M = L.great ? [L.great.e, L.great.n, 'Your great spirit attacks · no gate needed'] : ['🧚', 'Spirit arts', L.spirits.length + (L.spirits.length === 1 ? ' spirit attacks' : ' spirits attack') + ' · no gate needed']; sub = M[2]; }
@@ -14314,7 +14332,7 @@
         if (id === 'psyrun') { off = false; sub = 'Dodge them 3 times to get away'; }
         if (id === 'calm') sub = '+2 humanity (uses your turn)';
         if (heavy) sub = (cost ? '−' + cost + ' humanity' : B.psycho ? 'Free (cyberpsycho!)' : 'Free (Smasher Body)') + (id === 'sandy' ? ' · lasts 33 turns' : id === 'berserk' ? ' · ' + rageTurns() + ' turns' : id === 'float' ? ' · float over 2 attacks (once)' : id === 'pull' ? ' · can’t be dodged' : '') + (cost && B.hum <= cost ? ' · ⚠️ overload!' : '');
-        var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : isSubMove(id) ? ' subel' : ''));
+        var b = mk('button', 'lf-move' + (heavy || (CX && CX.hcost) ? ' heavy' : Q || id === 'netrun' ? ' net' : isSubMove(id) ? ' subel' : id.slice(0, 8) === 'rzgambit' ? ' gambit' : ''));
         b.type = 'button'; b.setAttribute('data-move', id);
         b.appendChild(document.createTextNode(M[0] + ' ' + M[1]));
         if (sub) b.appendChild(mk('small', null, sub));
@@ -14367,6 +14385,16 @@
       if (id === 'netrun') { B.menu = 'hack'; msgF('💻 Pick a quickhack. You have ' + B.ram + ' RAM' + (has('capri') ? ', and with Capri they’re all free!' : '.')); buildMoves(); return; }
       if (id === 'back') { B.menu = B.menu && B.menu.slice(0, 4) === 'grp:' && B.menuBack ? B.menuBack : null; B.menuBack = null; msgF(B.menu ? '✨ Pick a kind of magic!' : 'Your turn! Pick a move.'); buildMoves(); return; }
       if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a kind of magic, then pick a spell! You know ' + rzSpellMoves().length + ' spells' + (subsHave().length ? ' (your ❄️ sub-element magic is on the main battle screen)' : '') + '.'); buildMoves(); return; }
+      if (id === 'rzgambit') { if (!gambitReady()) return; B.menu = 'gambit'; msgF('🎲 ALL OR NOTHING! This knocks out ANYTHING in one hit, even the White Whale. But after it, your magic is gone FOREVER: no more spells, and your 🔮 Magic drops to 0 and can never grow back. Are you sure?'); buildMoves(); return; }
+      if (id === 'rzgambitgo') {   // 🎲 one hit… and no more magic
+        if (!gambitReady()) { B.menu = null; buildMoves(); return; }
+        var was = L.st.magic || 0;
+        B.menu = null; loseMagic(); B.mana = 0; B.manaMax = 0;
+        B.en = Object.assign({}, B.en, { waves: [] });   // it wipes out EVERYTHING (any waves left too)
+        hitFoe(B.enHP, '🎲 ALL OR NOTHING! You poured all ' + magN(was) + ' of your Magic into one giant blast of light! ' + en.t + ' is knocked out in ONE HIT! 💀 But your magic is gone forever.');
+        popF('🎲 ONE HIT!', 'great');
+        return;
+      }
       if (id.slice(0, 4) === 'rzg-') { var zg = groupOf(id.slice(4)); if (!zg) return; B.menuBack = B.menu === 'spells' ? 'spells' : null; B.menu = 'grp:' + zg.key; msgF(zg.e + ' ' + zg.t + '! Pick a spell. You know ' + zg.moves.length + '.'); buildMoves(); return; }   // 📖
       if (id === 'sandy') {   // free action: it doesn't use up your turn
         B.sandy = 33; award('timebender'); sfx('slow');
