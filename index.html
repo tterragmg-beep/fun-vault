@@ -11139,7 +11139,7 @@
       var bits = [L.reinhard ? '⚔️ Reinhard’s divine protections: ' + L.dp.map(function (id) { return DP[id].e; }).join('') : (L.dp || []).length ? L.dp.map(function (id) { return DP[id].e + ' Divine Protection of ' + DP[id].t; }).join(' · ') : '🌫️ No divine protection'];
       if (L.rbd) bits.push('💜 Return by Death' + (L.rbdCount ? ' (used ' + L.rbdCount + (L.rbdCount === 1 ? ' time)' : ' times)') : ''));
       var me = magicEls();
-      if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of ' + MAXSPELL + ' spells)' : ' (no spells yet)'));
+      if (me.length) bits.push(me.map(function (x) { return ELEMS[x].e; }).join('') + ' ' + (me.length === 6 ? 'All six kinds of magic' : me.map(function (x) { return ELEMS[x].t; }).join(' + ') + ' magic') + (L.magic ? ' (' + L.magic + ' of ' + MAXSPELL + ' spells · ' + rzSpellMoves().length + ' battle spells)' : ' (no spells yet)'));
       var sh = subsHave(); if (sh.length) bits.push(sh.map(function (x) { return SUBEL[x].e + ' ' + SUBEL[x].t; }).join(' + ') + ' magic');   // ❄️ sub-elements
       var cb = combosHave().filter(function (k) { return k !== 'dark+light'; }); if (cb.length) bits.push(cb.length === 1 ? COMBO[cb[0]].e + ' ' + COMBO[cb[0]].t : '🔥🌪️ ' + cb.length + ' combo spells');
       if (yinYang()) bits.push('☯️ Yin and Yang');
@@ -11199,7 +11199,7 @@
     }
     function elemName(el) { return ELEMS[el].e + ' ' + ELEMS[el].t; }
     function spellOf(el, lv) { return ELEMS[el].e + ' ' + ELEMS[el].spells[Math.max(1, Math.min(MAXSPELL, lv || L.magic || 1)) - 1]; }
-    function newSpells() { return listAnd(magicEls().map(function (el) { return spellOf(el, L.magic); })); }
+    function newSpells() { var nx = xNew(L.magic); return listAnd(magicEls().map(function (el) { return spellOf(el, L.magic); })) + (nx.length ? ', plus ' + (nx.length === 1 ? 'a new battle spell: ' : 'new battle spells: ') + listAnd(nx) : ''); }   // 📖
     var MAXSPELL = 5, SPELL_NEED = [0, 0, 30000, 60000, 150000, 400000];   // 🔮 your 1st spell is free; the 2nd needs Magic 30,000+, then 60,000+, 150,000+, and the 5th (ancient!) 400,000+
     function spellReady() { var nx = (L.magic || 0) + 1; return nx <= MAXSPELL && (L.st.magic || 0) >= SPELL_NEED[nx]; }
     function spellNeedTxt() { var nx = (L.magic || 0) + 1; return nx > MAXSPELL || spellReady() ? '' : 'To learn your next spell, you need 🔮 Magic ' + magN(SPELL_NEED[nx]) + '+ (you have ' + magN(L.st.magic) + ').'; }
@@ -11408,12 +11408,13 @@
     function ownEls() { return (L.elems || []).filter(function (el) { return ELEMS[el]; }); }   // YOUR element(s): not the extra magic a divine protection lets you use (🔮 Sorcery, 💧 Water)
     function subsHave() { var me = ownEls(); return (L.subs || []).filter(function (el) { return me.indexOf(el) >= 0; }); }   // ❄️ only your own element(s) grow sub-elements
     function subNext() { var me = ownEls(); if ((L.st.magic || 0) < SUB_NEED || (L.magic || 0) < 3) return null; for (var i = 0; i < me.length; i++) if ((L.subs || []).indexOf(me[i]) < 0) return me[i]; return null; }
-    function isSubMove(id) { return id.slice(0, 4) === 'rzs-'; }
+    function isSubMove(id) { return id.slice(0, 4) === 'rzs-' || (id.slice(0, 4) === 'rzx-' && !!XS[id.slice(4)] && !!XS[id.slice(4)].sub) || id.slice(0, 5) === 'rzg-s'; }   // ❄️ (rzg-s…: a sub-element's spell menu)
     function subWinLine() { var sh = isRZ() && L.magic ? subsHave() : []; return sh.length ? ' ' + SUBEL[pick(sh)].win : ''; }   // ❄️ your sub-element magic helps in quick fights too
     function subAwaken(el) {
       (L.subs = L.subs || []).push(el); award('rzsub');
       var S = SUBEL[el];
-      return S.e + ' SUB-ELEMENT AWAKENED! Your ' + ELEMS[el].t.toLowerCase() + ' magic turned into something new: ' + S.e + ' ' + S.t + ' magic! You learned ' + S.e + ' ' + S.spell + ': ' + S.d + '.';
+      var more = XSP.filter(function (x) { return x.sub && x.el === el && (L.magic || 0) >= x.need; }).map(function (x) { return x.e + ' ' + x.t; });   // 📖 already strong? you get its other spells right away
+      return S.e + ' SUB-ELEMENT AWAKENED! Your ' + ELEMS[el].t.toLowerCase() + ' magic turned into something new: ' + S.e + ' ' + S.t + ' magic! You learned ' + S.e + ' ' + S.spell + ': ' + S.d + '.' + (more.length ? ' You’re so strong that you learned ' + listAnd(more) + ' too!' : '');
     }
 
     // ---- 🔥🌪️ combo spells: mix two of your elements (you need two elements, 2 spells, and Magic 50,000) ----
@@ -11450,22 +11451,77 @@
     }
     function yinYang() { var me = isRZ() ? magicEls() : []; return me.indexOf('light') >= 0 && me.indexOf('dark') >= 0; }   // ☯️ light AND dark: the powers of Yin and Yang
 
+    // ---- 📖 more battle spells for every kind of magic ----
+    // each element: a new battle spell every time you learn a spell (spells 2–5), so a master mage has 5 per element.
+    // each ❄️ sub-element: 2 more (at 4 and 5 spells), so 3 in all. m: damage (× a normal spell). g: extra gate strain.
+    var XSP = [
+      { id: 'flamewall', el: 'fire', need: 2, e: '🔥', t: 'Flame Wall', m: 0.5, shield: 1, shieldT: '🔥 FLAME WALL!', burn: 1, d: 'a wall of fire: it blocks their next hit, and it burns them' },
+      { id: 'emberrain', el: 'fire', need: 3, e: '☄️', t: 'Ember Rain', m: 0.85, sure: 1, burn: 3, d: 'a rain of tiny fireballs: it can’t be dodged, and they burn for 3 turns' },
+      { id: 'firedragon', el: 'fire', need: 4, e: '🐉', t: 'Fire Dragon', m: 1.45, burn: 2, g: 4, d: 'a dragon made of fire: HUGE damage, and it burns them (it strains your gate more)' },
+      { id: 'phoenixflame', el: 'fire', need: 5, e: '🦅', t: 'Phoenix Flame', m: 0.9, heal: [20, 30], burn: 2, d: 'phoenix fire: it heals YOU and burns THEM' },
+      { id: 'bubble', el: 'water', need: 2, e: '🫧', t: 'Bubble Shield', m: 0.4, shield: 1, shieldT: '🫧 BUBBLE SHIELD!', heal: [8, 12], d: 'a giant bubble: it blocks their next hit, and it heals you a little' },
+      { id: 'healrain', el: 'water', need: 3, e: '🌧️', t: 'Healing Rain', m: 0.4, heal: [28, 38], d: 'a gentle magic rain: it heals you a LOT' },
+      { id: 'whirlpool', el: 'water', need: 4, e: '🌀', t: 'Whirlpool', m: 1.05, cripple: 3, d: 'a spinning whirlpool: big damage, and they can’t dodge your next 3 attacks' },
+      { id: 'mistveil', el: 'water', need: 5, e: '🌫️', t: 'Mist Veil', m: 0.7, glide: 1, glideT: '🌫️ LOST IN THE MIST!', d: 'a thick magic mist: their whole next attack goes right past you' },
+      { id: 'stonewall', el: 'earth', need: 2, e: '🧱', t: 'Stone Wall', m: 0.5, shield: 1, shieldT: '🧱 STONE WALL!', d: 'a wall of stone: it blocks their next hit' },
+      { id: 'boulder', el: 'earth', need: 3, e: '🪨', t: 'Boulder Smash', m: 1.25, stun: 0.5, d: 'a giant boulder: big damage, and it can stun them' },
+      { id: 'quicksand', el: 'earth', need: 4, e: '🏜️', t: 'Quicksand', m: 0.7, yank2: 1, cripple: 2, d: 'the ground swallows their feet: their next attack has 2 fewer hits, and they can’t dodge your next 2 attacks' },
+      { id: 'stoneskin', el: 'earth', need: 5, e: '🗿', t: 'Stone Skin', m: 0.5, stone: 2, d: 'your skin turns to stone: their next 2 attacks only do half damage' },
+      { id: 'windstep', el: 'air', need: 2, e: '💨', t: 'Wind Step', m: 0.4, sure: 1, glide: 1, glideT: '💨 WIND STEP!', d: 'you move like the wind: you dodge their whole next attack' },
+      { id: 'windblades', el: 'air', need: 3, e: '🌪️', t: 'Wind Blades', m: 1.2, sure: 1, d: 'sharp blades of wind: big damage, and they can’t be dodged' },
+      { id: 'galepush', el: 'air', need: 4, e: '🌬️', t: 'Gale Push', m: 0.8, sure: 1, yank2: 1, stun: 0.3, d: 'a giant gust of wind: their next attack has 2 fewer hits, and it can stun them' },
+      { id: 'cyclone', el: 'air', need: 5, e: '🌪️', t: 'Cyclone Cage', m: 1, sure: 1, stun: 1, g: 2, d: 'a tornado traps them: it can’t be dodged, and they’re stunned for sure' },
+      { id: 'shadowbind', el: 'dark', need: 2, e: '⛓️', t: 'Shadow Bind', m: 0.6, cripple: 3, d: 'shadows grab their feet: they can’t dodge your next 3 attacks' },
+      { id: 'lifedrain', el: 'dark', need: 3, e: '🖤', t: 'Life Drain', m: 1, sure: 1, drain: 0.5, d: 'steal their life: it can’t be dodged, and you heal half the damage you do' },
+      { id: 'nightmare', el: 'dark', need: 4, e: '💤', t: 'Nightmare', m: 0.4, sleep: 2, d: 'they fall into a deep, scary sleep: they miss their next 2 turns (bosses only 1)' },
+      { id: 'shadowmirror', el: 'dark', need: 5, e: '🪞', t: 'Shadow Mirror', m: 0.5, mirror: 1, d: 'a mirror made of shadows: their next attack bounces right back at them' },
+      { id: 'flash', el: 'light', need: 2, e: '✨', t: 'Blinding Flash', m: 0.6, sure: 1, blind: 3, d: 'a super bright flash: it can’t be dodged, and they can barely see for 3 turns' },
+      { id: 'lightbarrier', el: 'light', need: 3, e: '🛡️', t: 'Light Barrier', m: 0.4, shield: 1, shieldT: '🛡️ LIGHT BARRIER!', heal: [10, 15], d: 'a barrier of light: it blocks their next hit, and it heals you' },
+      { id: 'lightspears', el: 'light', need: 4, e: '🔱', t: 'Light Spears', m: 1.3, sure: 1, d: 'a rain of spears made of light: big damage, and they can’t be dodged' },
+      { id: 'sunblessing', el: 'light', need: 5, e: '🌅', t: 'Sun Blessing', m: 0.3, healPct: [45, 55], d: 'warm, magic sunlight: it heals about HALF your health' },
+      { id: 'icewall', el: 'water', sub: 1, need: 4, e: '🧊', t: 'Ice Wall', m: 0.6, shield: 1, shieldT: '🧊 ICE WALL!', cripple: 2, d: 'a wall of ice: it blocks their next hit, and they’re too cold to dodge your next 2 attacks' },
+      { id: 'abszero', el: 'water', sub: 1, need: 5, e: '❄️', t: 'Absolute Zero', m: 1.6, freeze: 1, g: 3, d: 'everything freezes: HUGE damage, and they’re frozen solid for sure' },
+      { id: 'chainblast', el: 'fire', sub: 1, need: 4, e: '🎆', t: 'Chain Blast', m: 1.3, sure: 1, d: 'explosions go off one after another: big damage, and it can’t be dodged' },
+      { id: 'megablast', el: 'fire', sub: 1, need: 5, e: '💥', t: 'Mega Explosion', m: 2.2, g: 8, d: 'the biggest boom ever: GIANT damage, but it strains your gate a LOT' },
+      { id: 'crystalarmor', el: 'earth', sub: 1, need: 4, e: '💠', t: 'Crystal Armor', m: 0.4, stone: 3, d: 'armor made of crystal: their next 3 attacks only do half damage' },
+      { id: 'prismbeam', el: 'earth', sub: 1, need: 5, e: '💎', t: 'Prism Beam', m: 1.6, blind: 2, d: 'light shines through your crystals: HUGE damage, and they can barely see' },
+      { id: 'chainlightning', el: 'air', sub: 1, need: 4, e: '⚡', t: 'Chain Lightning', m: 1.4, sure: 1, stun: 0.25, d: 'lightning that jumps 3 times: it can’t be dodged, and it can stun them' },
+      { id: 'thundergod', el: 'air', sub: 1, need: 5, e: '🌩️', t: 'Thunder God', m: 1.8, sure: 1, stun: 0.6, g: 3, d: 'you turn into lightning: HUGE damage, it can’t be dodged, and it can stun them' },
+      { id: 'zerogravity', el: 'dark', sub: 1, need: 4, e: '🪐', t: 'Zero Gravity', m: 0.4, float: 2, d: 'you float up high: their next 2 attacks can’t touch you' },
+      { id: 'blackhole', el: 'dark', sub: 1, need: 5, e: '⚫', t: 'Black Hole', m: 1.8, cripple: 3, g: 4, d: 'a black hole sucks them in: HUGE damage, and they can’t dodge your next 3 attacks' },
+      { id: 'holyshield', el: 'light', sub: 1, need: 4, e: '💖', t: 'Holy Shield', m: 0.4, shield: 1, shieldT: '💖 HOLY SHIELD!', heal: [15, 22], d: 'a holy barrier: it blocks their next hit, and it heals you' },
+      { id: 'judgment', el: 'light', sub: 1, need: 5, e: '👼', t: 'Holy Judgment', m: 2, sure: 1, darkx: 1.5, d: 'a pillar of holy light from the sky: GIANT damage, it can’t be dodged, and it hurts the Witch Cult and mabeasts even more' }
+    ];
+    var XS = {}; XSP.forEach(function (x) { XS[x.id] = x; });
+    function xsFor(el, sub) { return XSP.filter(function (x) { return x.el === el && !!x.sub === !!sub && (L.magic || 0) >= x.need; }).map(function (x) { return 'rzx-' + x.id; }); }
+    function xNew(lv) {   // the battle spells you get when you learn spell number lv
+      return XSP.filter(function (x) { return x.need === lv && (x.sub ? subsHave() : magicEls()).indexOf(x.el) >= 0; }).map(function (x) { return x.e + ' ' + x.t; });
+    }
+    function spellGroups() {   // ✨ your spells, by kind of magic: each element, each ❄️ sub-element, and 🔥🌪️ combos
+      if (!L.magic) return [];
+      var gs = magicEls().map(function (el) { return { key: el, e: ELEMS[el].e, t: ELEMS[el].t + ' magic', moves: ['rzm-' + el].concat(xsFor(el, 0)) }; });
+      subsHave().forEach(function (el) { gs.push({ key: 's' + el, e: SUBEL[el].e, t: SUBEL[el].t + ' magic', sub: 1, moves: ['rzs-' + el].concat(xsFor(el, 1)) }); });
+      var cs = combosHave(); if (cs.length) gs.push({ key: 'combo', e: '🔥🌪️', t: 'Combo spells', moves: cs.map(function (k) { return 'rzc-' + k; }) });
+      return gs;
+    }
+    function groupOf(key) { var gs = spellGroups(); for (var i = 0; i < gs.length; i++) if (gs[i].key === key) return gs[i]; return null; }
+
     // ---- ✨ casting spells in a battle ----
     var SPELL_DMG = [[0, 0], [14, 20], [18, 26], [24, 32], [32, 42], [42, 56]];   // damage for spells 1–5
     var DARK_FOES = ['rzcultist', 'rzarch', 'rzwolf', 'rzalpha'];   // 💖 holy magic hurts the Witch Cult and mabeasts extra
-    function rzSpellMoves() {   // every spell you can cast: your element(s), your sub-elements, and your combo spells
-      if (!L.magic) return [];
-      return magicEls().map(function (el) { return 'rzm-' + el; }).concat(subsHave().map(function (el) { return 'rzs-' + el; }), combosHave().map(function (k) { return 'rzc-' + k; }));
+    function rzSpellMoves() {   // every spell you can cast: your element(s) (📖 up to 5 each), your ❄️ sub-elements (up to 3 each), and your combo spells
+      var a = []; spellGroups().forEach(function (g) { a = a.concat(g.moves); }); return a;
     }
     function spellInfo(id) {   // a spell's button: its name, what it does, and how much it strains your gate
       var kind = id.slice(0, 4), key = id.slice(4), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1));
       if (kind === 'rzm-') return { e: ELEMS[key].e, t: ELEMS[key].spells[lv - 1], d: cap(ELEMS[key].d), cost: gateCost(lv), mana: 8 + 4 * lv };   // (🔮 mana: 12 for your 1st spell, up to 28 for your 5th)
       if (kind === 'rzs-') return { e: SUBEL[key].e, t: SUBEL[key].spell, d: SUBEL[key].t + ' magic: ' + SUBEL[key].d, cost: gateCost(lv) + (key === 'fire' ? 5 : 2), mana: 14 + 4 * lv };
+      if (kind === 'rzx-') { var X = XS[key]; return { e: X.e, t: X.t, d: (X.sub ? SUBEL[X.el].t + ' magic: ' : '') + cap(X.d), cost: gateCost(lv) + (X.sub ? 2 : 0) + (X.g || 0), mana: (X.sub ? 14 : 10) + 4 * lv }; }   // 📖
       return { e: COMBO[key].e, t: COMBO[key].t, d: 'Combo: ' + COMBO[key].d, cost: gateCost(lv) + 4, mana: 18 + 4 * lv };
     }
     function rzSpell(id) {   // ✨ roll a spell: its damage, healing, and what it does when it hits
       var kind = id.slice(0, 4), key = id.slice(4);
-      if (kind !== 'rzm-' && kind !== 'rzs-' && kind !== 'rzc-') return null;
+      if (kind !== 'rzm-' && kind !== 'rzs-' && kind !== 'rzc-' && !(kind === 'rzx-' && XS[key])) return null;
       var I = spellInfo(id), lv = Math.max(1, Math.min(MAXSPELL, L.magic || 1)), o = { nm: [I.e, I.t], cost: I.cost, mana: I.mana, sure: false, fx: {} };
       var base = R(SPELL_DMG[lv][0], SPELL_DMG[lv][1]) * magicMult() * (hasDP('mana') ? 1.25 : 1) * (hasDegree('magic') ? 1.2 : 1);
       if (kind === 'rzm-') {
@@ -11478,6 +11534,13 @@
         o.sure = key === 'air';
         if (key === 'light') o.heal = R(25, 35);
         o.fx = { water: { freeze: 0.5 }, earth: { shield: 1 }, air: { stun: 0.35, icon: '⚡' }, dark: { cripple: 3 }, fire: {}, light: {} }[key];
+      } else if (kind === 'rzx-') {   // 📖 the extra spells
+        var X = XS[key];
+        o.dmg = Math.round(base * X.m * (X.darkx && DARK_FOES.indexOf(B.en.id) >= 0 ? X.darkx : 1)); o.sure = !!X.sure;
+        if (X.heal) o.heal = R(X.heal[0], X.heal[1]);
+        if (X.healPct) o.heal = Math.round(B.max * R(X.healPct[0], X.healPct[1]) / 100);
+        if (X.drain) o.heal = Math.max(1, Math.round(o.dmg * X.drain));
+        o.fx = { burn: X.burn, blind: X.blind, cripple: X.cripple, stun: X.stun, icon: X.e, freeze: X.freeze, shield: X.shield, shieldT: X.shieldT, glide: X.glide, glideT: X.glideT, float: X.float, mirror: X.mirror, sleep: X.sleep, yank2: X.yank2, stone: X.stone };
       } else {
         var C = COMBO[key];
         o.dmg = Math.round(base * C.m); o.sure = !!C.sure;
@@ -11493,7 +11556,13 @@
       if (f.cripple) { B.cripple = Math.max(B.cripple || 0, f.cripple); t += ' 🪐 They can’t dodge your next ' + f.cripple + ' attacks!'; }
       if (f.stun && chance(f.stun)) { B.stun = true; t += ' ' + (f.icon || '⚡') + ' They’re stunned!'; }
       if (f.freeze && chance(f.freeze)) { B.stun = true; t += ' ❄️ They’re frozen solid!'; }
-      if (f.shield) { B.shield = 1; t += ' 💎 A crystal shield will block their next hit!'; }
+      if (f.shield) { B.shield = 1; B.shieldT = f.shieldT || ''; t += f.shieldT ? ' 🛡️ It will block their next hit!' : ' 💎 A crystal shield will block their next hit!'; }
+      if (f.glide) { B.glide = true; B.glideT = f.glideT || ''; t += ' ' + (f.icon || '💨') + ' Their whole next attack will miss you!'; }
+      if (f.float) { B.float = Math.max(B.float || 0, f.float); t += ' 🪐 You float up high: their next ' + f.float + ' attacks can’t touch you!'; }
+      if (f.mirror) { B.mirror = true; t += ' 🪞 If their next attack hits you, it bounces right back at them!'; }
+      if (f.sleep) { var zz = B.en.boss ? 1 : f.sleep; B.sleep = Math.max(B.sleep || 0, zz); t += ' 💤 They fell asleep! They’ll miss their next ' + (zz === 1 ? 'turn' : zz + ' turns') + '.'; }
+      if (f.yank2) { B.yank2 = true; t += ' 🌬️ Their next attack will have 2 fewer hits.'; }
+      if (f.stone) { B.stone = Math.max(B.stone || 0, f.stone); t += ' 🗿 Their next ' + f.stone + ' attacks will only do half damage!'; }
       return t;
     }
     function whaleWin(h) { award('rzwhale'); L.whaleDead = true; return [{ money: 80000, happy: 15, fame: 25, health: h }, '🐋 YOU DEFEATED THE WHITE WHALE! The fog lifted, the sun came out, and the whole kingdom threw you a parade. The king sent you 80,000 gold! The White Whale is gone forever.']; }   // (🐋 only once!)
@@ -11888,6 +11957,7 @@
         '🌀 The Gate bar under your stats shows how healthy your gate is. 💔 Careful: magic strains your gate. It heals every year, and 🍽️ mana food in ⚡ Do heals it too. If your gate breaks, it’s broken forever: you can still use magic, but every spell hurts your body.',
         '🔮 Magic is a stat that goes all the way up to 1,000,000, but the higher it gets, the slower it grows! Practice magic, meditate at the ⛲ mana spring, take magic lessons, make spirit contracts, and cast spells in battles. More Magic makes your spells stronger. Each element has 5 spells: the 2nd needs 🔮 Magic 30,000+, then 60,000+, 150,000+, and the 5th (an ancient spell!) needs 400,000+.',
         '❄️ Sub-elements: once your 🔮 Magic reaches 100,000 and you know 3 spells, your element can grow a new kind of magic: 💧 Water → ❄️ Ice, 🔥 Fire → 💥 Explosion, 🪨 Earth → 💎 Crystal, 🌪️ Air → ⚡ Lightning, 🌑 Dark → 🪐 Gravity, ☀️ Light → 💖 Holy. You only get the sub-elements of YOUR element(s): extra magic from a divine protection (like 🔮 Sorcery) doesn’t count.',
+        '📖 Every kind of magic has more than one battle spell! Each time you learn a spell, you get a new one for each of your elements (shields, healing, stuns, sleep and more), so a master mage has 5 per element. Sub-elements get 2 more at 4 and 5 spells. With lots of spells, tap a kind of magic in battle (like 🔥 Fire magic) to see them all.',
         '⚔️ In battles, your sub-element spells get their own buttons, right next to Punch. They help you win quick fights too. Super strong? Easy fights end right away, so turn on ⚔️ Battles: Every fight in ☰ Menu to battle for real and use your spells every time!',
         '🔥🌪️ Two elements? Mix them into combo spells once your 🔮 Magic reaches 50,000, like 🔥🌪️ Fire Tornado, 🌋 Lava Burst or ⛈️ Thunderstorm. And if you have ☀️ Light AND 🌑 Dark, you get the powers of ☯️ Yin and Yang!',
         '🥊 Fighting stats: Strength (harder hits), Defense (less damage), Speed (easier dodging and running away) and Skill (critical hits). Train them in ⚡ Do, and win real battles to get better.',
@@ -14152,7 +14222,8 @@
       $('fEnName').textContent = B.en.t + (B.en.waveOf && B.mode === 'fight' ? ' · wave ' + B.en.waveN + '/' + B.en.waveOf : '');
       if (B.mode === 'escape') { var left = Math.max(0, 3 - B.hitsTaken); $('fEnHp').textContent = 'Catches you in ' + left + (left === 1 ? ' hit' : ' hits'); $('fEnBar').style.width = (left / 3 * 100) + '%'; }
       else { $('fEnHp').textContent = (fx.length ? fx.join('') + ' ' : '') + B.enHP + ' / ' + B.en.hp + ' HP'; $('fEnBar').style.width = (B.enHP / B.en.hp * 100) + '%'; }
-      $('fHp').textContent = B.hp + ' / ' + B.max + ' HP';
+      var mine = B.mode === 'fight' ? (B.shield ? '🛡️' : '') + (B.stone ? '🗿' : '') + (B.glide ? '💨' : '') + (B.float > 0 ? '🪐' : '') : '';   // your shields and tricks
+      $('fHp').textContent = (mine ? mine + ' ' : '') + B.hp + ' / ' + B.max + ' HP';
       $('fBar').style.width = (B.hp / B.max * 100) + '%';
       $('fBar').className = B.hp / B.max >= 0.6 ? 'hi' : B.hp / B.max >= 0.3 ? 'mid' : 'lo';
       $('hum').textContent = isRZ() ? rzBattleLine() : L.smasherBody ? '🧠 Humanity: no limit (🤖 Smasher Body)' : B.psycho ? '🤖 CYBERPSYCHO: no humanity limits · +25% damage' : '🧠 Humanity ' + '●'.repeat(B.hum) + '○'.repeat(Math.max(0, B.humMax - B.hum)) + ' ' + B.hum + '/' + B.humMax;
@@ -14185,13 +14256,18 @@
       if (B.phase === 'choose') list = ['psyfight', 'psyrun'];   // 🧠 humanity zero: run, or fight?
       else if (B.menu === 'hack' && D) { list = QHACKS.filter(function (q) { return q.tier <= D.tier; }).map(function (q) { return q.id; }); list.push('back'); }
       else if (isRZ()) {   // 🔁 Re:Zero moves: your fists, your sword, your magic (and the Sword Saint strike!)
-        var sps = rzSpellMoves().filter(function (x) { return !isSubMove(x); }), subB = rzSpellMoves().filter(isSubMove);   // 🌀 your element spells and 🔥🌪️ combos (❄️ sub-elements get their own buttons)
-        if (B.menu === 'spells') list = sps.concat(['back']);   // ✨ lots of spells get their own menu
+        var gs = spellGroups(), norm = gs.filter(function (g) { return !g.sub; }), subG = gs.filter(function (g) { return g.sub; }), nm = [];   // 🌀 your elements and 🔥🌪️ combos (❄️ sub-elements get their own buttons)
+        norm.forEach(function (g) { nm = nm.concat(g.moves); });
+        var gm = B.menu && B.menu.slice(0, 4) === 'grp:' ? groupOf(B.menu.slice(4)) : null;
+        if (gm) list = gm.moves.concat(['back']);   // 📖 one kind of magic: all its spells
+        else if (B.menu === 'spells') list = norm.map(function (g) { return 'rzg-' + g.key; }).concat(['back']);   // ✨ pick a kind of magic
         else {
           list = ['punch'];
           if (L.sword) list.push('rzsword');
-          if (sps.length > 4) list.push('rzspells'); else list = list.concat(sps);
-          list = list.concat(subB);   // ❄️ your sub-element magic: always right on the battle screen
+          if (nm.length <= 5) list = list.concat(nm);   // just a few spells: right here
+          else if (norm.length <= 2) list = list.concat(norm.map(function (g) { return 'rzg-' + g.key; }));   // 🔥 a button for each kind of magic
+          else list.push('rzspells');   // lots of kinds: ✨ Spells → pick a kind → pick a spell
+          subG.forEach(function (g) { list = list.concat(g.moves.length === 1 ? g.moves : ['rzg-' + g.key]); });   // ❄️ your sub-element magic: always right on the battle screen
           if (L.great || (L.spirits || []).length) list.push('rzspirit');
           if (hasDP('saint')) list.push('rzsaint');
           if ((L.berries || 0) > 0 && B.manaMax) list.push('rzberry');   // 🍓
@@ -14224,8 +14300,9 @@
         var Q = QH[id], CX = IMP[id] && (IMP[id].custom || IMP[id].illegal) && IMP[id].dmg ? IMP[id] : null, M = Q ? [Q.e, Q.t, ''] : CX ? [CX.e, CX.t, (CX.illegal ? '☠️ ' : 'Your invention · ') + CX.dmg[0] + '–' + CX.dmg[1] + ' damage' + (CX.hcost && !L.smasherBody && !B.psycho ? ' · −' + CX.hcost + ' humanity' + (B.hum <= CX.hcost ? ' · ⚠️ overload!' : '') : '')] : MOVES[id] || ['✨', 'Spell', ''], heavy = HEAVY[id] != null, cost = heavy ? heavyCost(id) : 0, sub = M[2], off = B.phase !== 'player';
         if (id === 'shoot' && gunOf().id !== 'zap') { M = [gunOf().e, gunOf().id === 'chip' ? 'Chip' : gunOf().t, gunOf().sub]; sub = M[2]; }   // 🔫 your gun
         if (id === 'rzsword' && L.sword) { M = [SWORD[L.sword].e, SWORD[L.sword].t, SWORD[L.sword].dmg[0] + '–' + SWORD[L.sword].dmg[1] + ' damage · hard to dodge']; sub = M[2]; }
-        if (/^rz[msc]-/.test(id)) { var zi = spellInfo(id), low = B.manaMax && (B.mana || 0) < zi.mana; M = [zi.e, zi.t, low ? '🔮 Not enough mana: it needs ' + zi.mana + ' (you have ' + B.mana + ')' : zi.d + ' · 🔮 ' + zi.mana + ' mana · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; if (low) off = true; }
-        if (id === 'rzspells') { M = ['✨', 'Spells', rzSpellMoves().filter(function (x) { return !isSubMove(x); }).length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
+        if (id.slice(0, 4) === 'rzg-') { var zg = groupOf(id.slice(4)) || { e: '✨', t: 'Magic', moves: [] }; M = [zg.e, zg.t, zg.moves.length + (zg.moves.length === 1 ? ' spell' : ' spells') + (B.manaMax ? ' · 🔮 ' + (B.mana || 0) + '/' + B.manaMax + ' mana' : '')]; sub = M[2]; }   // 📖 a kind of magic
+        if (/^rz[mscx]-/.test(id)) { var zi = spellInfo(id), low = B.manaMax && (B.mana || 0) < zi.mana; M = [zi.e, zi.t, low ? '🔮 Not enough mana: it needs ' + zi.mana + ' (you have ' + B.mana + ')' : zi.d + ' · 🔮 ' + zi.mana + ' mana · ' + (L.gateBroken ? '💔 hurts you' : '🌀 gate −' + (yinYang() ? Math.ceil(zi.cost / 2) : zi.cost))]; sub = M[2]; if (low) off = true; }
+        if (id === 'rzspells') { var zk = spellGroups().filter(function (g) { return !g.sub; }); M = ['✨', 'Spells', zk.length + ' kinds of magic · ' + rzSpellMoves().filter(function (x) { return !isSubMove(x); }).length + ' spells · 🔮 ' + (B.mana || 0) + '/' + (B.manaMax || 0) + ' mana']; sub = M[2]; }
         if (id === 'rzberry') { M = ['🍓', 'Eat a mana berry', (B.mana >= B.manaMax ? '🔮 your mana is full' : '🔮 +' + Math.min(berryMana(), B.manaMax - B.mana) + ' mana') + ' · 🌀 +10 · ' + L.berries + ' left · uses your turn']; sub = M[2]; }
         if (id === 'rzspirit') { M = L.great ? [L.great.e, L.great.n, 'Your great spirit attacks · no gate needed'] : ['🧚', 'Spirit arts', L.spirits.length + (L.spirits.length === 1 ? ' spirit attacks' : ' spirits attack') + ' · no gate needed']; sub = M[2]; }
         if (Q && Q.once && B.usedQ[id]) { off = true; sub = 'Used this battle ✓'; }
@@ -14288,8 +14365,9 @@
       sfx('wake');
       var en = B.en, st = sandyTier(), mult = B.sandy ? [1, 2, 2.5, 3, 3.5][st] : 1, X = rageOf(), rg = (B.rage ? (X && X.tier >= 2 ? 1.9 : 1.6) : 1) * (B.psycho ? 1.25 : 1), dmg = 0, extra = '';
       if (id === 'netrun') { B.menu = 'hack'; msgF('💻 Pick a quickhack. You have ' + B.ram + ' RAM' + (has('capri') ? ', and with Capri they’re all free!' : '.')); buildMoves(); return; }
-      if (id === 'back') { B.menu = null; msgF('Your turn! Pick a move.'); buildMoves(); return; }
-      if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a spell! You know ' + rzSpellMoves().length + (subsHave().length ? ' (your ❄️ sub-element magic is on the main battle screen)' : '') + '.'); buildMoves(); return; }
+      if (id === 'back') { B.menu = B.menu && B.menu.slice(0, 4) === 'grp:' && B.menuBack ? B.menuBack : null; B.menuBack = null; msgF(B.menu ? '✨ Pick a kind of magic!' : 'Your turn! Pick a move.'); buildMoves(); return; }
+      if (id === 'rzspells') { B.menu = 'spells'; msgF('✨ Pick a kind of magic, then pick a spell! You know ' + rzSpellMoves().length + ' spells' + (subsHave().length ? ' (your ❄️ sub-element magic is on the main battle screen)' : '') + '.'); buildMoves(); return; }
+      if (id.slice(0, 4) === 'rzg-') { var zg = groupOf(id.slice(4)); if (!zg) return; B.menuBack = B.menu === 'spells' ? 'spells' : null; B.menu = 'grp:' + zg.key; msgF(zg.e + ' ' + zg.t + '! Pick a spell. You know ' + zg.moves.length + '.'); buildMoves(); return; }   // 📖
       if (id === 'sandy') {   // free action: it doesn't use up your turn
         B.sandy = 33; award('timebender'); sfx('slow');
         if (spend(heavyCost('sandy'))) return;
@@ -14461,6 +14539,8 @@
       var combo = !B.wiped && !!en.combo && chance(en.combo);   // ⚡ a combo: several hits, really close together
       var n = Math.max(1, (combo ? Math.max(3, R(en.hits[0], en.hits[1])) : R(en.hits[0], en.hits[1])) - (B.yank ? 1 : 0) - (B.yank2 ? 2 : 0) - (blind ? 1 : 0)), slow = slowF() * (blind ? 1.35 : 1), t = performance.now() + R(900, 1500) / en.speed * slow;
       B.floatNow = fm && B.float > 0; if (B.floatNow) B.float -= 1;
+      B.stoneNow = fm && B.stone > 0; if (B.stoneNow) B.stone -= 1;   // 🗿
+      B.glideTNow = B.glide ? B.glideT || '' : ''; B.glideT = '';   // 💨 Wind Step, 🌫️ Mist Veil
       B.yank = false; B.yank2 = false; B.glideAll = B.glide || B.floatNow; B.camoNow = B.camo; B.mirrorNow = B.mirror; B.glide = false; B.camo = false; B.mirror = false; B.hits = []; B.combo = combo;
       for (var i = 0; i < n; i++) {   // a fake-out winds up at `fake`, then the real hit comes a bit later
         var fk = !combo && !B.wiped && !!en.feint && chance(en.feint), at = t + (fk ? R(500, 750) / en.speed * slow : 0);
@@ -14511,7 +14591,7 @@
       var en = B.en, f = $('fight'), X = rageOf();
       swing(false);
       if (B.mode === 'fight' && has('ice') && ((h && h.hack) || chance(0.25))) { sfx('parry'); popF(h && h.hack ? '🧊 ICE STOPPED THE HACK!' : '🧊 ICE BLOCK!', 'good'); $('enemy').style.transform = ''; renderF(); return; }
-      if (B.mode === 'fight' && B.shield) { B.shield = 0; sfx('parry'); popF('💎 CRYSTAL SHIELD!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 💎 a crystal shield blocks one hit
+      if (B.mode === 'fight' && B.shield) { B.shield = 0; sfx('parry'); popF(B.shieldT || '💎 CRYSTAL SHIELD!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 💎 a crystal shield blocks one hit
       if (B.mode === 'fight' && hasDP('first') && !B.firstSeen) { B.firstSeen = true; sfx('parry'); popF('👁️ FIRST SIGHT: MISSED!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 👁️ First Sight
       if (B.mode === 'fight' && hasDP('arrow') && chance(0.25)) { sfx('parry'); popF('🏹 MISSED YOU!', 'good'); $('enemy').style.transform = ''; renderF(); return; }   // 🏹 Arrow Evasion
       B.hitsTaken += 1; sfx('hit');
@@ -14521,6 +14601,7 @@
         var dmg = R(en.atk[0], en.atk[1]);
         if (hasDP('earthsp')) dmg = Math.round(dmg * 0.8);   // 🪨 Earth Spirits
         if (isRZ()) dmg = Math.max(1, Math.round(dmg * (1 - fsOf('def') / 250)));   // 🛡️ Defense
+        if (B.stoneNow) dmg = Math.max(1, Math.round(dmg * 0.5));   // 🗿 Stone Skin and 💠 Crystal Armor
         if (has('armor')) dmg = Math.round(dmg * 0.75);
         if (has('exo')) dmg = Math.round(dmg * 0.85);
         if (has('chassis')) dmg = Math.round(dmg * 0.7);
@@ -14596,7 +14677,7 @@
               en.style.transform = ft < lunge ? 'scale(' + (1 + (lunge - Math.max(0, ft)) / lunge * 0.35).toFixed(3) + ')' : '';
             }
           }
-          else if (B.glideAll && tt <= 0) { h.done = true; swing(false); popF(B.floatNow ? '🪐 TOO HIGH!' : B.camoNow ? '👻 VANISHED!' : '🌈 GLIDE!', 'good'); en.style.transform = ''; afterHit(); }
+          else if (B.glideAll && tt <= 0) { h.done = true; swing(false); popF(B.glideTNow || (B.floatNow ? '🪐 TOO HIGH!' : B.camoNow ? '👻 VANISHED!' : '🌈 GLIDE!'), 'good'); en.style.transform = ''; afterHit(); }
           else if (tt < -w.post) { h.done = true; takeHit(h); afterHit(); }
           else {
             if (!h.glint && tt <= G) { h.glint = true; sfx('glint'); }
