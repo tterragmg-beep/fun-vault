@@ -1401,9 +1401,47 @@
   .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
   .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
   .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+  .fv-load { display: none; }
+  .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
+  .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
 </style>
 </head>
 <body>
+<div id="fvLoad" class="fv-load" role="status" aria-live="polite">⏳ Loading the games…</div>
+<div id="fvErr" class="fv-err" role="alert" hidden></div>
+<script>
+  (function () {
+    var d = document.documentElement, seen = {};
+    d.className += ' fv-loading';
+    document.addEventListener('click', function (e) {
+      var b = document.getElementById('fvErr');
+      if (b && e.target === b) { b.hidden = true; return; }
+      if (window.go || !e.target || !e.target.closest) return;
+      var el = e.target.closest('[data-goto]');
+      if (!el) return;
+      e.preventDefault();
+      window.__fvq = el.getAttribute('data-goto');
+      var p = document.getElementById('fvLoad'), h = el.querySelector('h2');
+      if (p) p.textContent = '⏳ Opening ' + (h ? h.textContent : 'your game') + ' as soon as it’s loaded…';
+    }, true);
+    document.addEventListener('DOMContentLoaded', function () {
+      d.className = d.className.replace(/\s*fv-loading/g, '');
+      var q = window.__fvq; window.__fvq = null;
+      if (q && window.go) { try { window.go(q); } catch (x) {} }
+    });
+    window.addEventListener('error', function (e) {
+      try {
+        var msg = String((e && e.message) || 'unknown error');
+        if (/ResizeObserver loop/i.test(msg) || seen[msg]) return;
+        seen[msg] = 1;
+        var b = document.getElementById('fvErr');
+        if (!b) return;
+        b.textContent = '🐛 Uh-oh, something in the Fun Vault broke: “' + msg + '”' + (e.lineno ? ' (line ' + e.lineno + ')' : '') + '. Send Claude a screenshot of this! (Tap to hide)';
+        b.hidden = false;
+      } catch (x) {}
+    });
+  })();
+</script>
 <div class="wrap">
 
   <!-- ================= HOME ================= -->
@@ -2513,6 +2551,8 @@
 </div>
 <script>
 
+</script>
+<script>
   // ============ shared data ============
   var POOL = [
       // --- 🧠 questions you added (they always show up in the Big Brain Quiz) ---
@@ -6230,6 +6270,8 @@
       "Octopuses can taste things just by touching them with their arms."
     ];
 
+</script>
+<script>
   // ============ router ============
   (function () {
     var screens = {};
@@ -6282,6 +6324,8 @@
     });
   })();
 
+</script>
+<script>
   // ============ Quizzes (two screens share one quiz engine) ============
   function makeQuiz(p, screen, RIG_CHANCE) {
     var PER_GAME = 50;
@@ -6353,6 +6397,8 @@
   makeQuiz('q', 'quiz', 0.3);   // Ultimate Fun Facts Quiz
   makeQuiz('h', 'honest', 0);   // Big Brain Quiz
 
+</script>
+<script>
   // ============ Amazing Fact ============
   (function () {
     var ZEN = "“if your heart is wavering don't move grow and once more, the door for a new path will open for you.”";
@@ -6420,6 +6466,8 @@
     window.registerHook('fact', function () { reset(); running = true; rafId = requestAnimationFrame(frame); }, function () { running = false; if (rafId) cancelAnimationFrame(rafId); });
   })();
 
+</script>
+<script>
   // ============ Calculator ============
   (function () {
     var mainEl = document.getElementById('c-main'), subEl = document.getElementById('c-sub');
@@ -6457,6 +6505,8 @@
     render();
   })();
 
+</script>
+<script>
   // ============ Speed Typer ============
   (function () {
     var START_WPM = 200;
@@ -6508,6 +6558,8 @@
     newGame();
   })();
 
+</script>
+<script>
   // ============ Don't Get Caught ============
   (function () {
     var KEY = 'funvault-cheat-v1';
@@ -7102,6 +7154,8 @@
       function () { if (run && !run.over) { run.over = true; stopRun(); } });
   })();
 
+</script>
+<script>
   // ============ Pink Slip ============
   (function () {
     var KEY = 'funvault-boss-v1';
@@ -7375,6 +7429,8 @@
     window.registerHook('boss', newGame, function () { if (emp && !emp.over) { emp.over = true; stopEmp(); } });
   })();
 
+</script>
+<script>
   // ============ Smooth Talker ============
   (function () {
     var KEY = 'funvault-trick-v1';
@@ -7622,6 +7678,8 @@
     window.registerHook('trick', meet, function () { if (tgt) tgt.over = true; busy = true; });
   })();
 
+</script>
+<script>
   // ============ Dumb Deals ============
   (function () {
     // ---- model (no DOM below this line until the view marker) ----
@@ -8066,6 +8124,8 @@
     });
   })();
 
+</script>
+<script>
   // ============ Wingman Racer ============
   (function () {
     // ---- model (no DOM until the view marker) ----
@@ -8617,6 +8677,8 @@
     window.registerHook('race', intro, stop);
   })();
 
+</script>
+<script>
   // ============ 20 Questions engine (used by the states and history games) ============
   function makeTwenty(cfg) {
     var P = cfg.p, MAX = 20;
@@ -8760,6 +8822,8 @@
     return e;
   }
 
+</script>
+<script>
   // ============ 20 Questions: USA ============
   (function () {
     var SQ_STATES = [
@@ -8877,6 +8941,8 @@
     });
   })();
 
+</script>
+<script>
   // ============ Who Am I? (history 20 questions) ============
   (function () {
     var HQ_EAST = ["Ching Shih", "Murasaki Shikibu", "Qin Shi Huang", "Sejong the Great", "Subutai", "Tokugawa Ieyasu", "Wang Zhenyi", "Wu Zetian", "Zheng He"];
@@ -8983,6 +9049,8 @@
     });
   })();
 
+</script>
+<script>
   // ============ Word games: Five Letters + Define It ============
   (function () {
     var WG_ANSWERS = "aboutaboveacornactoracuteadaptadmitadoptadoreadultafteragainagentagileagingaglowagonyagreeaheadaislealarmalbumalertalgaealienalignalikealivealleyallowalloyaloftalonealongaloudalphaaltaralteramazeamberambleamendaminoamongamuseangelangerangleangryanimeankleannexanvilapartappleapplyapronarborarenaarguearisearmoraromaarosearrayarrowasideassetatlasatticaudioauditavoidawakeawardawareawfulbaconbadgebadlybagelbakerbalmybanjobargebaronbasicbasilbasinbasisbatchbathebatonbeachbeardbeastbeganbeginbegunbeingbellebellybelowbenchberrybingobirchbirthblackbladeblameblandblankblareblastblazebleakblendblessblimpblindblinkblissbloatblockblondbloodbloomblownbluffbluntblurtblushboardboastbonusboostboothbossyboundbracebraidbrainbrakebrandbrassbravebravobrawlbreadbreakbriarbrickbridebriefbrinebringbrinkbriskbroadbroilbrokebrookbroombrothbrownbrushbrutebuddybudgebuggybuglebuildbuiltbulgebulkybullybunchbunnyburstbushybuyercabincablecacaocadetcamelcameocanalcandycanoecanoncapercargocarolcarrycarvecatchcatercauseceasecedarchainchairchalkchampchantcharmchartchasecheapcheatcheckcheekcheerchesschestchickchiefchildchilichillchimechimpchirpchoirchompchordchorechosechuckchunkcidercinchciviccivilclaimclampclankclashclaspclasscleanclearclerkclickcliffclimbclingclinkcloakclockclonecloseclothcloudcloveclowncluckclumpclungcoachcoastcobracocoacoloncolorcombocometcomiccommacondocoralcouchcoughcouldcountcourtcovercraftcrampcranecrankcrashcratecrawlcrazecrazycreakcreamcreekcreepcreptcrestcrimecrimpcrispcroakcrookcrosscrowdcrowncrudecruelcrumbcrushcrustcubiccurlycurrycurvecybercycledaddydailydairydaisydancedandydauntdealtdebutdecaldecaydecordecoydelaydeltadensedepotdepthderbydevildiarydiceydigitdimlydinerdingydirtydiscoditchdittodittydiverdizzydodgedodgydoingdonordonutdoubtdoughdowdydozendraftdraindramadrankdrapedrawndreaddreamdressdriftdrilldrinkdrivedrooldrovedrowndryerdummydunceduskydustydwarfdwelleagereagleearlyeartheaseleatenebonyeerieeightelbowelderelectelegyeliteelopeemailemberemptyenactenemyenjoyenterentryepochequalequiperaseerroreruptessayevadeeventeveryevokeexactexcelexileexistexpelextrafablefacetfairyfaithfalsefancyfattyfaultfavorfeastfeignfemurfenceferryfetchfeverfewerfiberfieldfieryfifthfiftyfightfinalfinchfirstfizzyflairflakeflakyflameflankflareflashflaskfleetfleshflickflingflintfloatflockfloodfloorfloraflossflourflownflufffluidflukeflungflushfluteflyerfoamyfocalfocusfoggyfollyforayforceforgeforthfortyforumfoundfrailframefrankfraudfreshfriedfrillfrontfrostfrownfrozefruitfudgefullyfunkyfunnyfurryfussyfuzzygammagaudygaugegawkygeckogeesegeniegenreghostghoulgiantgiddygivengizmoglareglassgleamglideglintgloatglobegloomgloryglossgloveglyphgnashgnomegoinggollygooeygoofygoosegorgegougegourdgracegradegrailgraingrandgrantgrapegraphgraspgrassgrategravegravygrazegreatgreengreetgriefgrillgrimegrimygrindgripegroangroomgrossgroupgrovegrowlgrowngruffgrumpgruntguardguessguestguideguildguiltgummyguppygustygutsyhabithaikuhairyhandyhappyhardyharshhastehastyhatchhaunthavenhavocheardheartheathheavyhedgeheftyheisthellohenceheronhikerhingehippohitchhobbyhoisthollyhoneyhonorhorsehotelhoundhousehoverhumanhumidhumorhunchhurryhuskyhyenaicingidealidiomiglooimageimplyindexineptinletinnerinputintroironyissueitchyivoryjauntjazzyjellyjerkyjeweljiffyjointjokerjollyjoustjudgejuicejuicyjumbojumpykarmakayakkebabkhakikioskkittyknackkneadkneelkneltknifeknockknownkoalalabellaborladenladlelancelankylapselargelaserlatchlaterlatexlaughlayerleafyleakylearnleaseleashleastleaveledgelegallemonlemurlevelleverlightlilaclimitlinenlinerlingolitheliverlividllamalobbylocallodgeloftylogiclooselotuslousyloverlowerloyalluckylumpylunarlunchlungelurchlyinglyricmacromagicmagmamaizemajormakermambomangamangomangymanicmanormaplemarchmarrymarshmasonmatchmaybemayormeantmedalmediamelonmercymergemeritmerrymessymetalmetermetromicromidstmightmimicminorminusmirthmixermochamodelmodemmoistmolarmoneymonthmoochmoosemoralmossymotelmotormottomoundmountmournmousemouthmoviemuckymuddymummymunchmuralmusicmustynachonaivenannynasalnavalneedynerdynervenevernewernewlyniftynightninjaninthnoblenoisenoisynorthnotchnovelnudgenursenuttynylonoasisoccuroceanofferoftenolderoliveomegaonionoperaopticorateorbitorderorganotherotteroughtounceoutdoouterowneroxideozonepaddypaintpandapanelpanicpaperparkaparsepartypastapastepatchpatiopausepeacepeachpearlpecanpedalpennyperchperilperkypeskypetalphasephonephotopianopickypiecepiggypilotpinchpitchpixelpizzaplaceplaidplainplaneplankplantplateplazapleadplierpluckplumbplumeplumpplushpoachpointpokerpolarpolkapoppyporchpossepouchpoundpoutypowerprankprawnpresspriceprideprimeprintpriorprismprizeprobepromoproneproofproseproudproveprowlproxyprunepudgypuffypulsepunchpupilpuppypursequackquailquakequartquashqueenquellqueryquestqueuequickquietquillquiltquirkquitequotaquoteradarradiorainyraiserallyranchrangerapidraspyratioravenrazorreachreactreadyrealmrebelrebusrecapreferrelaxrelayremixrenewrepayreplyresetretroreuserevelrhinorhymeriderridgerightrigidrinseripenriskyrivalriverroastrobinrobotrockyrodeorogueroomyroostrougeroughroundrouteroverrowdyroyalrugbyrulerrumorrupeeruralrustysadlysafersaintsaladsalonsalsasaltysambasandysassysatinsaucesaunasaversavorsavvyscaldscalescalpscarfscaryscenescentsconescoopscopescorescornscoutscowlscrapscrewscrubscubascuffseizesensesepiaserumservesetupsevenshackshadeshadyshaftshakeshakyshaleshallshameshapeshardsharesharksharpshaveshearsheepsheersheetshelfshellshiftshineshinyshirtshockshootshoreshortshoutshoveshownshowyshrewshrubshrugsiegesightsigmasilkysillysincesirensixthskateskillskimpskirtskullskunkslackslangslantslashslatesleeksleepsleetsliceslideslimeslimyslingslopesloshslothslumpslungslurpsmacksmallsmartsmashsmearsmellsmilesmirksmocksmokesmokysnacksnailsnakesnaresneaksniffsnoopsnoresnortsnoutsnowysoapysoggysolarsolidsolvesonicsorrysoundsouthspacespadesparesparkspasmspawnspeakspeckspeedspellspendspentspicespicyspikespillspinespinyspitesplatsplitspokespoonsporesportspoutsprayspreesprigspurtsquadsquatsquidstackstaffstagestainstairstakestalestalkstallstampstandstarestarkstartstashstatesteakstealsteamsteelsteepsteersternstickstiffstillstiltstingstinkstockstoicstompstonestonystoodstoolstoopstorestorkstormstorystoutstovestrapstrawstraystripstrutstuckstudystuffstumpstungstuntstylesugarsuitesunnysupersurgesurlyswampswarmswathsweatsweepsweetswellsweptswiftswingswirlswoonswoopswordsyruptabbytabletabootacittackytaffytakentallytalontangotangytapertapirtardytastetastytawnyteachtearyteaseteddyteethtempotenthtepidthankthefttheirthemetherethesethetathickthiefthingthinkthirdthornthosethreethrewthrowthumbthumpthymetiaratidaltigertighttimertimidtitantitletoasttodaytokentonaltonertonictoothtopaztopictorchtorsototaltotemtouchtoughtoweltowertoxictoxintracetracktracttradetrailtraintraittrashtrawltreadtreattrendtrialtribetricktripetritetrolltrooptrouttrucetrucktrulytrunktrusttruthtubbytubertuliptummytunertunicturbotutortweaktweettwicetwinetwirltwistudderultrauncleunderunfitunifyunionuniteunityuntieuntilunzipupperupseturbanusageusherusingusualuttervaguevalidvaluevalvevaporvaultveganvenomvenuevergeversevideovigilvigorvillavinylviolaviperviralvirusvisitvisorvistavitalvividvocalvoicevotervowelwackywaferwagerwagonwaistwaivewaltzwastewatchwaterwaverwearyweavewedgeweirdwhalewharfwheatwheelwherewhichwhilewhinewhirlwhiskwhitewholewhosewidenwiderwidthwincewindywiserwispywitchwittywokenwomanwordyworldworryworseworstworthwouldwoundwovenwrathwreckwringwristwritewrongwroteyachtyearnyeastyieldyodelyoungyouthyummyzebrazestyzippy";
@@ -9130,6 +9198,8 @@
     makeWordGame({ p: 'wg', screen: 'words', key: 'funvault-words-v1', title: 'Fun Vault · Five Letters', pick: function () { return [nextAnswer()]; } });
   })();
 
+</script>
+<script>
   // ============ Define It: see a word, pick what it means ============
   (function () {
     var KEY = 'funvault-meaning-v1', ROUND = 10;
@@ -9239,6 +9309,8 @@
     window.registerHook('define', function () { if (!r || r.done) intro(); });
   })();
 
+</script>
+<script>
   // ============ Emoji Sayings ============
   (function () {
     var KEY = 'funvault-emoji-v1', LIVES = 5;
@@ -9364,6 +9436,8 @@
     window.registerHook('emoji', function () { if (!g || g.over) newPuzzle(); });
   })();
 
+</script>
+<script>
   // ============ Perfect Parry ============
   (function () {
     var KEY = 'funvault-parry-v1';
@@ -9871,6 +9945,8 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden && B) lastReal = performance.now(); });
     window.registerHook('parry', intro, stop);
   })();
+</script>
+<script>
   // ============ Confuse the AI ============
   (function () {
     var KEY = 'funvault-confuse-v1', TURNS = 10, FREE_HINTS = 3;
@@ -10398,6 +10474,8 @@
     $('pickBot').addEventListener('click', intro);
     window.registerHook('confuse', function () { if (!g || g.over) intro(); });
   })();
+</script>
+<script>
   // ============ Lifetimes: a life simulator, inspired by BitLife (by Candywriter) ============
   (function () {
     var KEY = 'funvault-lifetimes-v1', GKEY = 'funvault-lifetimes-graves-v1', PKEY = 'funvault-lifetimes-premium-v1', TKEY = 'funvault-lifetimes-timemachine-v1', AKEY = 'funvault-lifetimes-achievements-v1', OKEY = 'funvault-lifetimes-premium-off-v1', LKEY = 'funvault-lifetimes-luckyguess-v1';
@@ -12004,6 +12082,7 @@
     var AUTO = {};   // 🔁 the yearly routine (kept across lives)
     try { var au = JSON.parse(localStorage.getItem('funvault-lifetimes-auto-v1') || '{}'); if (au && typeof au === 'object' && !Array.isArray(au)) AUTO = au; } catch (e) {}
     function saveAuto() { try { localStorage.setItem('funvault-lifetimes-auto-v1', JSON.stringify(AUTO)); } catch (e) {} }
+    if (L && L.custom != null && !Array.isArray(L.custom)) { if (L.custom) L.customLife = 1; L.custom = []; }   // 🐛 repair Custom Lives saved before the fix
     if (L) regCustom();
     if (L) { if (L.chromeLimit == null || L.chromeLimit < 20) L.chromeLimit = rollTolerance(); if (L.chips == null) L.chips = 0; if (L.plan === undefined) L.plan = null; if (L.crew === undefined) L.crew = null; }
     try { var tm = JSON.parse(localStorage.getItem(TKEY) || '[]'); if (Array.isArray(tm)) snaps = tm.filter(function (x) { return x && typeof x.s === 'string'; }); } catch (e) {}
@@ -13600,7 +13679,8 @@
     }
     function craftQ() { return Math.round((0.8 + L.st.smarts / 250) * 100) / 100; }   // your Smarts set how good your inventions are
     function craftGrade(q) { return q >= 1.2 ? 'Masterwork' : q >= 1.05 ? 'Great' : q >= 0.95 ? 'Solid' : 'Prototype'; }
-    function regCustom() { ((L && L.custom) || []).forEach(function (X) { IMP[X.id] = X; }); }   // your own inventions
+    function myInv() { return L && Array.isArray(L.custom) ? L.custom : []; }   // 🛠️ your own inventions (always a list)
+    function regCustom() { myInv().forEach(function (X) { if (X && X.id) IMP[X.id] = X; }); }   // your own inventions
     var WS = { name: '', e: '⚙️', kind: 'weapon', size: 1 };
     var CW_EMOJI = ['⚙️', '🔮', '💎', '🌟', '🔥', '❄️', '⚡', '🐍', '🦂', '🛸'];
     var CW_KIND = { weapon: ['⚔️', 'Battle weapon', null], brain: ['🧠', 'Brain booster', 'smarts'], body: ['❤️', 'Body booster', 'health'], style: ['😎', 'Style mod', 'style'], mood: ['😊', 'Mood chip', 'happy'] };
@@ -13623,16 +13703,16 @@
         Object.keys(CW_KIND).forEach(function (k) { var K = CW_KIND[k]; opt(c, K[0], K[1] + (WS.kind === k ? ' ✓' : ''), k === 'weapon' ? 'Adds your own move to battles' : 'Boosts ' + STAT[K[2]][1] + (k === 'brain' || k === 'body' ? ', and lets it go past 100%' : ''), function () { WS.kind = k; workshopSheet(); }); });
         sec(c, 'Size');
         [1, 2, 3].forEach(function (z) { var Z = CW_SIZE[z], K = CW_KIND[WS.kind]; opt(c, ['', '▫️', '◽', '⬜'][z], Z.t + (WS.size === z ? ' ✓' : ''), cr(Z.cost) + ' for parts · uses ' + Z.body + ' tolerance · ' + (K[2] ? '+' + Math.round(Z.boost * q) + ' ' + STAT[K[2]][1] : Math.round(Z.dmg[0] * q) + '–' + Math.round(Z.dmg[1] * q) + ' damage'), function () { WS.size = z; workshopSheet(); }); });
-        var Z = CW_SIZE[WS.size], mine = (L.custom || []).length;
+        var Z = CW_SIZE[WS.size], mine = myInv().length;
         opt(c, '🛠️', 'Build it!', mine >= 5 ? 'You can build up to 5 implants per life' : L.money < Z.cost ? cr(Z.cost) + ' · not enough credits' : cr(Z.cost) + ' · installs it right away', function () { WS.name = inp.value; doThing('🛠️', buildCustom()); }, mine >= 5 || L.money < Z.cost);
-        if (mine) note(c, 'Your inventions: ' + L.custom.map(function (X) { return X.e + ' ' + X.t + (has(X.id) ? '' : ' (removed)'); }).join(', '));
+        if (mine) note(c, 'Your inventions: ' + myInv().map(function (X) { return X.e + ' ' + X.t + (has(X.id) ? '' : ' (removed)'); }).join(', '));
         opt(c, '←', 'Back to the Chrome Clinic', '', clinicSheet);
       });
       try { $('cwName').focus({ preventScroll: true }); } catch (e) {}
     }
     function buildCustom() {
       var Z = CW_SIZE[WS.size], K = CW_KIND[WS.kind];
-      L.custom = L.custom || [];
+      L.custom = myInv();
       var nm = String(WS.name || '').replace(/\s+/g, ' ').trim().slice(0, 20) || (K[1] + ' Mk.' + (L.custom.length + 1));
       var X = { id: 'x' + Date.now().toString(36) + R(10, 99), e: WS.e, t: nm, cost: Z.cost, min: 0, body: Z.body, custom: 1, fx: {}, desc: 'Your own invention' };
       var q = craftQ(); X.grade = craftGrade(q); X.desc = 'Your own invention (' + X.grade + ')';
@@ -15085,7 +15165,7 @@
         if (cs.magic != null) L.st.magic = clampM(cs.magic);
         if (cs.fs != null) L.fs = { str: cs.fs, def: cs.fs, spd: cs.fs, skl: cs.fs };
       }
-      L.custom = 1;
+      L.customLife = 1;   // (not L.custom: that's your 🛠️ inventions)
       log('🎨 Custom life! You chose what you were born with.');
     }
     // ---- 🔑 codes and 👑 premium ----
@@ -15318,6 +15398,8 @@
       if (L && L.alive) { view('life'); render(); nextEvent(); } else worldsView();
     }, function () { abortBattle(); closeCard(); });
   })();
+</script>
+<script>
   // ============ Overclock: run a computer that earns money (and try not to set it on fire) ============
   (function () {
     // ---- model (no DOM below this line until the view marker) ----
@@ -15978,6 +16060,8 @@
     function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; if (race) { race = null; lastRace = null; say('🏁 You left in the middle of a race, so you forfeited it.', 'warn'); } save(); }
     window.registerHook('rig', enter, leave);
   })();
+</script>
+<script>
   // ============ Foul Play: sneak fouls on the other team while the ref isn't looking ============
   (function () {
     var KEY = 'funvault-foul-v1', AKEY = 'funvault-foul-ach-v1';
@@ -16438,6 +16522,8 @@
     function leave() { active = false; if (raf) cancelAnimationFrame(raf); raf = 0; keys = {}; fresh = []; }
     window.registerHook('foul', enter, leave);
   })();
+</script>
+<script>
   // ============ Chess: play 24 bots from 100 to 3200 Elo, or a friend on the same phone ============
   (function () {
   // ============ Chess: the rules + the bot brain (self-contained, so it can also run inside a Web Worker) ============
@@ -21125,15 +21211,19 @@
       review: function (list) { return new Promise(function (res) { askAt(game.moves.slice(), { review: list, time: 700 }, res); }); }
     };
   })();
+</script>
+<script>
   // ============ end Chess ============
 
 </script>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {});
-    });
-  }
+  try {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        try { navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {}); } catch (e) {}
+      });
+    }
+  } catch (e) {}
 </script>
 </body>
 </html>
