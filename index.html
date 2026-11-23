@@ -1212,6 +1212,27 @@
   .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
   .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
   .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -19262,6 +19283,93 @@
         { fen: '8/8/8/4k3/8/8/8/R3K3 w - - 0 1', drill: 1 }] }
     ];
 
+    // 😮🗺️ What to do after each surprise, when the normal plan doesn’t fit there (made by gen-altplans.js: the normal
+    // plan’s steps that still fit, plus the engine’s best quiet moves). A surprise with no plan here uses the normal plan.
+    var CHESS_ALT_PLANS = {
+      "italian:1": [["Push your pawn to c3 to attack the center from the side.","c2c3"], ["Send your other knight on a trip: d2, then f1, then g3. From g3 it helps attack Black’s king.","b1d2 d2f1 f1g3"], ["Play h3, so Black’s bishop can’t come to g4 and pin your knight.","h2h3"], ["When everything is ready, push d4 to take over the center!","d3d4"]],
+      "italian:2": [["Jump your knight to b3, closer to the action.","d4b3"], ["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Play h3, so Black’s bishop can’t come to g4 and pin your knight.","h2h3"]],
+      "ruy:1": [["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Push your pawn to d4 to fight for the center.","d3d4"], ["Play h3, so Black’s bishop can’t pin your knight from g4.","h2h3"]],
+      "ruy:2": [["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Push your pawn to d3 to fight for the center.","d2d3"], ["Bring your bishop out to g5, so it joins the game.","c1g5"]],
+      "scotch:1": [["Castle! Your king hides safely behind its pawns.","e1g1"], ["Jump your knight to b5, closer to the action.","d4b5"], ["Bring your knight out to a3. From there it can jump to better squares later.","b1a3"]],
+      "qgambit:1": [["Castle! Your king hides safely behind its pawns.","e1g1"], ["Bring your knight out to c3. Knights love the middle!","b1c3"], ["A great trick: trade pawns on d5 (cxd5), so Black’s light bishop stays stuck behind its own pawns.","c4d5"]],
+      "qgambit:2": [["Bring your bishop out to d2, so it joins the game.","c1d2"], ["Bishop to d3, then castle.","f1d3 e1g1"], ["A great trick: trade pawns on d5 (cxd5), so Black’s light bishop stays stuck behind its own pawns.","c4d5"]],
+      "london:1": [["Bring your knight out to d2. Knights love the middle!","b1d2"], ["Bring your knight out to f3. Knights love the middle!","g1f3"], ["Bishop to d3, aiming at Black’s king side.","f1d3"]],
+      "vienna:1": [["Push your pawn to d3 to fight for the center.","d2d3"], ["Move your queen to h3, where she does more.","h5h3"], ["Black’s bishop on c5 stops you from castling. Hit it with Na4, then trade it off: Nxc5 (or Nxb6 if it runs to b6)!","c3a4 a4c5"]],
+      "vienna:2": [["Bring your knight out to f3. Knights love the middle!","g1f3"], ["Move your bishop to b5, where it aims at more squares.","c4b5"], ["Castle! Your king hides safely behind its pawns.","e1g1"]],
+      "english:2": [["Castle! Your king hides safely behind its pawns.","e1g1"], ["Push d3 to open the door for your other bishop.","d2d3"], ["Bishop to e3 and rook to c1. The c-file is open for your rook.","c1e3 a1c1"]],
+      "kia:1": [["Bring your queen to e2. Now your rooks can see each other!","d1e2"], ["Rook to e1, to back up your e4 pawn.","f1e1"], ["Then go for Black’s king: knight to f1, then h2 and g4, and push your h-pawn. That’s the King’s Indian Attack plan!","d2f1 h2h4"]],
+      "stonewall:1": [["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Push your pawn to e4 to fight for the center.","e3e4"], ["Swing your queen to e1, then to h4, right next to Black’s king!","d1e1 e1h4"]],
+      "stonewall:2": [["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Jump your knight to e5, closer to the action.","f3e5"], ["Push your pawn to a3 to grab some space.","a2a3"]],
+      "colle:1": [["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Bring your bishop out to a3, so it joins the game.","c1a3"], ["Push your pawn to d5 to fight for the center.","d4d5"]],
+      "colle:2": [["Jump your knight to e5, closer to the action.","f3e5"], ["Push your pawn to a3 to grab some space.","a2a3"], ["Bring your queen to f3. Now your rooks can see each other!","d1f3"]],
+      "torre:1": [["Move your bishop to f4, where it aims at more squares.","g5f4"], ["Bring your bishop out to c4, so it joins the game.","f1c4"], ["Queen to e2, getting ready to push e4.","d1e2"]],
+      "jobava:1": [["Bring your knight out to f3. Knights love the middle!","g1f3"], ["Bring your bishop out to d3, so it joins the game.","f1d3"], ["Jump your knight to c3, closer to the action.","b5c3"]],
+      "jobava:2": [["Bring your knight out to f3. Knights love the middle!","g1f3"], ["Bring your bishop out to b5, so it joins the game.","f1b5"], ["Push your pawn to h3 to grab some space.","h2h3"]],
+      "sicilian:1": [["Push your pawn to d6 to fight for the center.","d7d6"], ["Push your pawn to e6 to fight for the center.","e7e6"], ["Queen to c7 and push b5. Your queenside pawns go on the attack!","d8c7 b7b5"]],
+      "sicilian:2": [["Bring your knight out to f6. Knights love the middle!","g8f6"], ["Push your pawn to a6 to grab some space.","a7a6"], ["Push e5 to fight for the center.","e7e5"]],
+      "dragon:2": [["Push your pawn to e5 to fight for the center.","e7e5"], ["Bring your bishop out to e7, so it joins the game.","f8e7"], ["Bring your knight out to f6. Knights love the middle!","g8f6"]],
+      "french:1": [["Bring your knight out to h6. From there it can jump to better squares later.","g8h6"], ["Bring your bishop out to d7, so it joins the game.","c8d7"], ["Bring your bishop out to e7, so it joins the game.","f8e7"]],
+      "french:2": [["Bring your bishop out to e6, so it joins the game.","c8e6"], ["Hit White’s pawn chain from the side with c5!","c7c5"], ["Bring your other knight to c6 to attack d4 again.","b8c6"]],
+      "caro:1": [["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Bring your knight out to e7. Knights love the middle!","g8e7"], ["If White pushes h4 to chase your bishop, play h6 and let it hide on h7.","h7h6"]],
+      "caro:2": [["Push your pawn to e6 to fight for the center.","e7e6"], ["Jump your knight to e4, closer to the action.","f6e4"], ["If White pushes h4 to chase your bishop, play h6 and let it hide on h7.","h7h6"]],
+      "scandi:1": [["Bring your knight out to d7. Knights love the middle!","b8d7"], ["Push your pawn to a6 to grab some space.","a7a6"], ["Bring your bishop out to e7, so it joins the game.","f8e7"]],
+      "scandi:2": [["Jump your knight to e4, closer to the action.","f6e4"], ["Move your queen to f5, where she does more.","d5f5"], ["Play c6, so your queen always has a safe way back home.","c7c6"]],
+      "alekhine:1": [["Bring your bishop out to f5, so it joins the game.","c8f5"], ["Push your pawn to e6 to fight for the center.","e7e6"], ["Bring your queen to d7. Now your rooks can see each other!","d8d7"]],
+      "alekhine:2": [["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Bring your bishop out to f5, so it joins the game.","c8f5"], ["Push your pawn to g6 to grab some space.","g7g6"]],
+      "kid:1": [["Push your pawn to d5 to fight for the center.","d7d5"], ["Strike the center with e5!","e7e5"], ["Knight to c6. If White pushes d5, jump to e7.","b8c6 c6e7"]],
+      "kid:2": [["Bring your bishop out to d7, so it joins the game.","c8d7"], ["Knight to c6. If White pushes d5, jump to e7.","b8c6 c6e7"], ["Move your bishop to h6, where it aims at more squares.","g7h6"]],
+      "grunfeld:1": [["Jump your knight to d7, closer to the action.","f6d7"], ["Push your pawn to c5 to attack the center from the side.","c7c5"], ["Bring your knight out to c6. Knights love the middle!","b8c6"]],
+      "grunfeld:2": [["Jump your knight to e4, closer to the action.","f6e4"], ["Bring your queen to d6. Now your rooks can see each other!","d8d6"], ["Pin White’s knight with Bg4, and bring your knight to c6. They both attack d4!","c8g4 b8c6"]],
+      "modern:1": [["Jump your knight to d4, closer to the action.","c6d4"], ["Bring your queen to f6. Now your rooks can see each other!","d8f6"], ["Push your pawn to c5 to attack the center from the side.","c7c5"]],
+      "modern:2": [["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Bring your bishop out to g4, so it joins the game.","c8g4"], ["Push your pawn to e5 to fight for the center.","e7e5"]],
+      "lion:1": [["Push your pawn to d5 to fight for the center.","d6d5"], ["Queen to c7. It guards your e5 pawn.","d8c7"], ["Rook to e8, behind your e5 pawn.","f8e8"]],
+      "qgd:1": [["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Bring your bishop out to g4, so it joins the game.","c8g4"], ["Jump your knight to b4, closer to the action.","c6b4"]],
+      "slav:1": [["Bring your queen to b6. Now your rooks can see each other!","d8b6"], ["Push your pawn to e6 to fight for the center.","e7e6"], ["Bring your bishop out to b4, so it joins the game.","f8b4"]],
+      "slav:2": [["Bring your bishop out to g4, so it joins the game.","c8g4"], ["Push your pawn to h5 to grab some space.","h7h5"], ["Bring your knight out to d7. Knights love the middle!","b8d7"]],
+      "nimzo:1": [["Castle! Your king hides safely behind its pawns.","e8g8"], ["Move your bishop to a6, where it aims at more squares.","b7a6"], ["Knight to c6, so all your pieces join the fight for the center.","b8c6"]],
+      "nimzo:2": [["Jump your knight to e4, closer to the action.","f6e4"], ["Push your pawn to g5 to grab some space.","g7g5"], ["Knight to c6, so all your pieces join the fight for the center.","b8c6"]],
+      "dutch:1": [["Push your pawn to d5 to fight for the center.","d7d5"], ["Bring your bishop out to d7, so it joins the game.","c8d7"], ["Jump your knight to e4. It’s a monster there, and your pawns protect it!","f6e4"]],
+      "dutch:2": [["Push your pawn to a5 to grab some space.","a7a5"], ["Jump your knight to e4. It’s a monster there, and your pawns protect it!","f6e4"], ["Bring your other knight to d7. Later, swing your queen or a rook over to attack White’s king!","b8d7"]],
+      "pirc:2": [["Jump your knight to d7, closer to the action.","f6d7"], ["Jump your knight to c5, closer to the action.","d7c5"], ["Push your pawn to a5 to grab some space.","a7a5"]],
+      "petrov:1": [["Push your pawn to d6 to fight for the center.","d7d6"], ["Jump your knight to e7, closer to the action.","c6e7"], ["Move your bishop to c5, where it aims at more squares.","b4c5"]],
+      "petrov:2": [["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Push your pawn to h6 to grab some space.","h7h6"], ["Bishop to f5, protecting your strong knight on e4.","c8f5"]],
+      "berlin:1": [["Move your bishop to b6, where it aims at more squares.","c5b6"], ["Bring your bishop out to g4, so it joins the game.","c8g4"], ["Walk your king to e8 (or c7), and push h6 so White’s pieces can’t use g5.","d8e8 h7h6"]],
+      "berlin:2": [["Move your bishop to f6, where it aims at more squares.","e7f6"], ["Put your rook on e8. Rooks love open lines!","f8e8"], ["Bring your queen to e6. Now your rooks can see each other!","e8e6"]],
+      "alien:2": [["Push your pawn to c3 to attack the center from the side.","c2c3"], ["Bring your bishop out to e3, so it joins the game.","c1e3"], ["Castle and put a rook on e1. Then push into the open lines!","e1g1 f1e1"]],
+      "alien:3": [["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Put your rook on e1. Rooks love open lines!","f1e1"], ["Move your bishop to b5, where it aims at more squares.","d3b5"]],
+      "kingsgambit:1": [["Bring your bishop out to d2, so it joins the game.","c1d2"], ["Bring your bishop out to d3, so it joins the game.","f1d3"], ["Castle! Your king hides safely behind its pawns.","e1g1"]],
+      "kingsgambit:2": [["Bring your bishop out to c4, so it joins the game.","f1c4"], ["Push your pawn to e5 to fight for the center.","e4e5"], ["Knight to c3. Every piece joins the attack!","b1c3"]],
+      "evans:1": [["Push your pawn to a5 to grab some space.","a4a5"], ["Castle! Your king hides safely behind its pawns.","e1g1"], ["Push your pawn to d3 to fight for the center.","d2d3"]],
+      "evans:2": [["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Queen to b3! With your bishop on c4, you attack f7 twice.","d1b3"], ["Bishop to a3 stops Black from castling. Then push e5 and attack!","c1a3 e4e5"]],
+      "danish:1": [["Bring your bishop out to e2, so it joins the game.","f1e2"], ["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Bring your bishop out to d2, so it joins the game.","c1d2"]],
+      "danish:2": [["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Bring your queen to d3. Now your rooks can see each other!","d1d3"], ["Castle and put your rooks in the middle.","e1g1"]],
+      "morra:1": [["Bring your bishop out to d3, so it joins the game.","f1d3"], ["Queen to e2, so your rooks can come to the middle.","d1e2"], ["Bishop to f4. It aims at Black’s weak d6 pawn.","c1f4"]],
+      "morra:2": [["Push your pawn to e5 to fight for the center.","e4e5"], ["Queen to e2, so your rooks can come to the middle.","d1e2"], ["Bishop to f4. It aims at Black’s weak d6 pawn.","c1f4"]],
+      "halloween:1": [["Bring your queen to d4. Now your rooks can see each other!","d1d4"], ["Bring your bishop out to d3, so it joins the game.","f1d3"], ["Castle! Your king hides safely behind its pawns.","e1g1"]],
+      "vsalien:1": [["Put your rook on h7. Rooks love open lines!","h8h7"], ["Push your pawn to c5 to attack the center from the side.","c6c5"], ["Knight to d7, then trade pieces when you can. The more you trade, the more your extra knight matters!","b8d7"]],
+      "vsfried:1": [["Bring your queen to e7. Now your rooks can see each other!","d8e7"], ["Castle to keep your king safe.","e8g8"], ["Rook to e8 or d8, and keep kicking White’s pieces. You have plenty of play for the pawn!","f8e8"]],
+      "vsfried:2": [["Bring your bishop out to f5, so it joins the game.","c8f5"], ["Queen to c7, behind your bishop. Together they aim at the knight on e5 and at White’s king side.","d8c7"], ["Rook to e8 or d8, and keep kicking White’s pieces. You have plenty of play for the pawn!","f8e8"]],
+      "vsstafford:1": [["Move your bishop to f3, where it aims at more squares.","e2f3"], ["Your bishop on f4 can also block the queen’s path to h2. Never play h3 while that’s possible!","c1f4"], ["Castle! Your king hides safely behind its pawns.","e1g1"]],
+      "vshalloween:1": [["Move your bishop to e7, where it aims at more squares.","d6e7"], ["Castle! Your king hides safely behind its pawns.","e8g8"], ["Bring your bishop out to d7, so it joins the game.","c8d7"]],
+      "vshalloween:2": [["Push your pawn to c6 to attack the center from the side.","c7c6"], ["Push your pawn to d6 to fight for the center.","d7d6"], ["Bring your queen to a5. Now your rooks can see each other!","d8a5"]],
+      "vsshilling:1": [["Push your pawn to b4 to grab some space.","b2b4"], ["Push d3 to open the door for your other bishop, then pin Black’s knight with Bg5.","d2d3 c1g5"], ["Knight to c3, and push e5 when you’re ready. Black’s king is still in the middle!","b1c3"]],
+      "vsshilling:2": [["Jump your knight to f3, closer to the action.","d2f3"], ["Put your rook on e1. Rooks love open lines!","f1e1"], ["Push your pawn to e5 to fight for the center.","e4e5"]],
+      "vsfishing:1": [["Bring your queen to e2. Now your rooks can see each other!","d1e2"], ["Bring your knight out to c3. Knights love the middle!","b1c3"], ["Bring your bishop out to d2, so it joins the game.","c1d2"]],
+      "vsfishing:2": [["Move your bishop to d3, where it aims at more squares.","b5d3"], ["Move your queen to e2, where she does more.","g4e2"], ["Then develop: Nc3 and Re1. You’re ahead!","b1c3 f1e1"]],
+      "vsenglund:1": [["Castle the long way! Your king hides, and your rook jumps to the middle.","e1c1"], ["Bring your bishop out to b5, so it joins the game.","f1b5"], ["Jump your knight to d5, closer to the action.","c3d5"]],
+      "vsenglund:2": [["Bring your bishop out to b5, so it joins the game.","f1b5"], ["Castle! Your king hides safely behind its pawns.","e1g1"], ["Bring out your last bishop and put your rooks in the middle. You’re way ahead!","c1e3"]],
+      "vsbudapest:1": [["Push your pawn to e3 to fight for the center.","e2e3"], ["Bring your bishop out to e2, so it joins the game.","f1e2"], ["Now kick the bishop with a3. If it takes your knight, take back with the queen.","a2a3"]],
+      "vsbudapest:2": [["Jump your knight to d5, closer to the action.","c3d5"], ["Move your bishop to g5, where it aims at more squares.","f4g5"], ["Now kick the bishop with a3. If it takes your knight, take back with the queen.","a2a3"]],
+      "vskg:1": [["Bring your queen to b6. Now your rooks can see each other!","d8b6"], ["Push your pawn to a5 to grab some space.","a7a5"], ["Castle! Your king is safe.","e8g8"]],
+      "vskg:2": [["Push your pawn to d5 to fight for the center.","d7d5"], ["Bring your bishop out to d6, so it joins the game.","f8d6"], ["Bring your bishop out to e6, so it joins the game.","c8e6"]],
+      "vsdanish:1": [["Move your queen to d6, where she does more.","d5d6"], ["Bring your bishop out to f5, so it joins the game.","c8f5"], ["Knight to c6, attacking White’s d4 pawn.","b8c6"]],
+      "vsdanish:2": [["Bring your bishop out to c5, so it joins the game.","f8c5"], ["Push your pawn to f5 to attack the center from the side.","f7f5"], ["Knight to c6, attacking White’s d4 pawn.","b8c6"]],
+      "vsmorra:2": [["Push your pawn to f6 to attack the center from the side.","f7f6"], ["Bring your knight out to c6. Knights love the middle!","b8c6"], ["Push e6, bishop to e7, and castle.","e7e6 f8e7 e8g8"]],
+      "vsalbin:1": [["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Bring your knight out to a3. From there it can jump to better squares later.","b1a3"], ["Bring your queen to d3. Now your rooks can see each other!","d1d3"]],
+      "vsalbin:2": [["Bring your queen to a4. Now your rooks can see each other!","d1a4"], ["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Push a3, then b4. Your pawns march at Black’s king!","a2a3 b2b4"]]
+    };
+    CHESS_OPENINGS.forEach(function (L) { (L.alts || []).forEach(function (a, i) { var p = CHESS_ALT_PLANS[L.id + ':' + (i + 1)]; if (p) a.plan = p; }); });
+
     // ---- ♟️ the game screen ----
     var KEY = 'funvault-chess-v1';
     var root = document.getElementById('chess');
@@ -19759,7 +19867,7 @@
     }
     function rematch() {
       if (game && game.mode === 'friend') { var nm = game.names || ['Player 1', 'Player 2']; newDuel([nm[1], nm[0]], game.clock ? game.clock.base / 60000 : 0, !!game.flip); return; }   // 1v1: switch colors
-      if (game && game.after && OPEN[game.after.id]) { startAfter(game.after.id, game.bot); return; }   // 🗺️ the same opening again
+      if (game && game.after && OPEN[game.after.id]) { startAfter(game.after.id, game.bot, game.after.r); return; }   // 🗺️ the same opening again
       if (game) newGame(game.mode, game.bot, game.pick, game.practice);
     }
 
@@ -20137,7 +20245,7 @@
       var m = $('menu'); m.innerHTML = '';
       var back = mk('button', 'chs-pill', '← Back'); back.type = 'button'; back.id = 'chs-afterListBack'; back.addEventListener('click', showMenu); m.appendChild(back);
       var head = mk('div', 'panel chs-lhead');
-      head.innerHTML = '<div class="chs-big">🗺️</div><h2>What to Do After the Opening</h2><p>The opening is already played for you. Now learn what comes next! Pick one, pick a bot, and Coach Hoot 🦉 shows you the plan one move at a time (green arrows)… and what to do when the bot surprises you (red arrows).</p>' +
+      head.innerHTML = '<div class="chs-big">🗺️</div><h2>What to Do After the Opening</h2><p>The opening is already played for you. Now learn what comes next! Pick one, pick a bot, and Coach Hoot 🦉 shows you the plan one move at a time (green arrows)… and what to do when the bot surprises you (red arrows).</p><p>😮 Openings have surprise lines too, for when they DON’T play the normal moves. Pick a surprise to learn the plan for that!</p>' +
         '<p class="chs-lnote">✅ Play the whole plan to finish one (' + afterText() + ').<br>💡 Tip: learn the opening first, so you know how you got there!</p>';
       m.appendChild(head);
       [['op', '📖 Openings'], ['dead', '💀 Deadly Openings'], ['counter', '🛡️ Counters']].forEach(function (g) {
@@ -20147,7 +20255,7 @@
         var box = mk('div', 'chs-lessons');
         list.forEach(function (L) {
           var ok = S.learn['after:' + L.id] >= 1, st = planOf(L), b = mk('button', 'chs-lesson' + (ok ? ' done' : '')); b.type = 'button'; b.setAttribute('data-after', L.id);
-          b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + esc(L.n) + '</b><small>' + (L.mate ? '😮 If they don’t fall for it: ' : '🗺️ Step 1: ') + esc(st[0][0]) + '</small><i>' + (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + ' · ' + st.length + ' steps' + (S.learn['op:' + L.id] >= 2 ? ' · ⭐ you know this opening' : '') + '</i></span>' + (ok ? '<span class="chs-ldone" title="Done!">✅</span>' : '');
+          b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + esc(L.n) + '</b><small>' + (L.mate ? '😮 If they don’t fall for it: ' : '🗺️ Step 1: ') + esc(st[0][0]) + '</small><i>' + (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + ' · ' + st.length + ' steps' + (afterRoutes(L).length ? ' · 😮 ' + afterSurDone(L) + ' of ' + afterRoutes(L).length + ' surprises' : '') + (S.learn['op:' + L.id] >= 2 ? ' · ⭐ you know this opening' : '') + '</i></span>' + (ok ? '<span class="chs-ldone" title="Done!">✅</span>' : '');
           b.addEventListener('click', function () { openAfter(L.id); });
           box.appendChild(b);
         });
@@ -20156,8 +20264,9 @@
       window.scrollTo(0, 0);
     }
     function afterLearn(a) {   // ✅ you learned what to do after this opening
-      if (S.learn['after:' + a.id] >= 1) return false;
-      S.learn['after:' + a.id] = 1; save();
+      var k = afterKey(a.id, a.r);
+      if (S.learn[k] >= 1) return false;
+      S.learn[k] = 1; save();
       return true;
     }
     function lessonChoice(kind, L) {   // a lesson you already did: take the test, or learn it again
@@ -20188,6 +20297,15 @@
 
     // ---- 🗺️ the game plan: what to do AFTER the opening (arrows on the board, one step at a time) ----
     function planOf(L) { return (L && L.plan) || []; }
+    function planFor(L, r) { var a = r && L && L.alts && L.alts[r - 1]; return (a && a.plan) || planOf(L); }   // 😮 a surprise's own plan (or the normal one, when it still fits)
+    function afterKey(id, r) { return 'after:' + id + (r ? ':' + r : ''); }   // (✅ the normal line: after:italian · a surprise: after:italian:1)
+    function afterRoutes(L) { return L && !L.mate && L.alts ? L.alts.map(function (a, i) { return i + 1; }) : []; }   // the surprises you can practice after
+    function surpriseSan(L, r) {   // 😮 the surprise move, like “1...Nf6”
+      var a = L.alts[r - 1], pre = L.line.slice(0, a.at).map(function (x) { return x[0]; }), E = scratch();
+      E.play(pre, null);
+      return Math.floor(a.at / 2) + 1 + (a.at % 2 ? '...' : '.') + (E.sanOf(a.line[0][0]) || a.line[0][0]);
+    }
+    function afterSurDone(L) { return afterRoutes(L).filter(function (r) { return S.learn[afterKey(L.id, r)] >= 1; }).length; }
     // An arrow that starts with ~ is just an IDEA for later (like a sacrifice on f7): it's dashed and orange, and you don't play it.
     function stepMoves(st) { return (st && st[1] ? st[1].split(' ') : []).filter(function (a) { return /^[a-h][1-8][a-h][1-8]$/.test(a); }); }
     function stepIdeas(st) { return !!(st && st[1] && /(^| )~/.test(st[1])); }
@@ -20762,18 +20880,18 @@
     // It's a 🎯 practice game too: blunders still stop the game, and it doesn't change your rating.
     var SCR = null, AFTERST = { plan: '🗺️ Your move: follow the plan!', surprise: '😮 Surprise! Your move', wait: 'Your move' };
     function scratch() { return SCR || (SCR = FVChessEngine(4)); }
-    function afterStart(L) {   // where to start: the end of the main line (a trap that ends in checkmate: a 😮 surprise line where they DON'T fall for it)
+    function afterStart(L, r) {   // where to start: the end of the main line (a trap that ends in checkmate: a 😮 surprise line where they DON'T fall for it)
       var line = function (r) { return routeOf(L, r).map(function (x) { return x[0]; }); };
-      if (!L.mate) return line(0);
+      if (!L.mate) return line(r || 0);   // (😮 r: the end of that surprise)
       var E = scratch(), ok = [];
       for (var r = 1; r < routes(L); r++) { var ln = line(r); E.play(ln, null); if (E.status() !== 'checkmate') ok.push(ln); }
       return ok.length ? pick(ok) : null;
     }
-    function afterMoves(L, start) {   // the plan's moves, each with the piece that makes it (so we know when one can't happen anymore)
+    function afterMoves(L, start, r) {   // the plan's moves, each with the piece that makes it (so we know when one can't happen anymore)
       var E = scratch(), out = [];
       if (L.mate) return out;   // (a trap's plan is just words)
       E.play(start, null);
-      planOf(L).forEach(function (st, i) {
+      planFor(L, r).forEach(function (st, i) {
         stepMoves(st).forEach(function (u) {
           var f = E.fen().split(' '); if (f[1] !== L.side) { f[1] = L.side; f[3] = '-'; E.load(f.join(' ')); }
           var pc = E.pieces()[(8 - +u.charAt(1)) * 8 + u.charCodeAt(0) - 97];
@@ -20783,12 +20901,13 @@
       return out;
     }
     function ideasOf(st) { return (st && st[1] ? st[1].split(' ') : []).filter(function (a) { return a.charAt(0) === '~'; }); }
-    function startAfter(id, botId) {   // ▶ 🗺️ After the Opening
-      var L = OPEN[id], start = L && afterStart(L); if (!start || !BOT[botId]) return;
-      S.afterId = id; S.afterBot = botId;
+    function startAfter(id, botId, r) {   // ▶ 🗺️ After the Opening (😮 r: after that surprise instead)
+      var L = OPEN[id]; r = L && afterRoutes(L).indexOf(+r) >= 0 ? +r : 0;
+      var start = L && afterStart(L, r); if (!start || !BOT[botId]) return;
+      S.afterId = id; S.afterBot = botId; S.afterRoute = r;
       newGame('bot', botId, L.side, true, null, start);
-      game.after = { id: id, n0: start.length, moves: afterMoves(L, start), shown: -1, want: null, mode: '', text: '', sup: 0, ok: 0, done: false, trap: !!L.mate, bot: null, prev: null, doneText: '' };
-      game.pr.note = '🗺️ This is the end of the ' + L.n + '. What comes next? Coach Hoot will show you!';
+      game.after = { id: id, r: r, n0: start.length, moves: afterMoves(L, start, r), shown: -1, want: null, mode: '', text: '', sup: 0, ok: 0, done: false, trap: !!L.mate, bot: null, prev: null, doneText: '' };
+      game.pr.note = r ? '😮 This is the ' + L.n + ', but they surprised you with ' + surpriseSan(L, r) + '! What now? Coach Hoot will show you!' : '🗺️ This is the end of the ' + L.n + '. What comes next? Coach Hoot will show you!';
       save(); render();
       if (G.turn() === game.you) adviseNow();
     }
@@ -20805,7 +20924,7 @@
     }
     function afterDid() { return game.after.moves.filter(function (m) { return m.done === true; }).length; }
     function afterHead(pend) {   // 💭 plan steps with nothing to play (just ideas) that come before this one
-      var a = game.after, steps = planOf(OPEN[a.id]), upto = pend ? pend.step : steps.length, t = '', ideas = [];
+      var a = game.after, steps = planFor(OPEN[a.id], a.r), upto = pend ? pend.step : steps.length, t = '', ideas = [];
       for (var i = a.shown + 1; i < upto; i++) if (!a.moves.some(function (m) { return m.step === i; })) { t += '💭 ' + steps[i][0] + '\n'; ideas = ideas.concat(ideasOf(steps[i])); }
       a.shown = Math.max(a.shown, upto - 1);
       return { t: t, ideas: ideas };
@@ -20819,7 +20938,7 @@
         a.done = true;
         var L = OPEN[a.id], h = afterHead(null), fresh = !a.trap && afterLearn(a);
         a.doneText = a.trap ? '😮 ' + botName() + ' didn’t fall for the ' + L.n + '! Here’s what to do now:\n' + h.t :
-          h.t + '🎉 That’s the whole plan!' + (fresh ? ' ✅ You learned what to do after the ' + L.n + '!' : '') + ' Keep playing: Coach Hoot will still warn you when ' + botName() + ' surprises you.';
+          h.t + '🎉 That’s the whole plan!' + (fresh ? ' ✅ You learned what to do after the ' + L.n + (a.r ? ' surprise ' + surpriseSan(L, a.r) : '') + '!' : '') + ' Keep playing: Coach Hoot will still warn you when ' + botName() + ' surprises you.';
         a.doneIdeas = h.ideas;
       }
       var legal = !!nx && G.moves().some(function (m) { return m.uci.slice(0, 4) === nx.u; });
@@ -20835,7 +20954,7 @@
       });
     }
     function afterAdvice(r, nx, pend) {   // decide what Coach Hoot says (and which arrows to draw)
-      var a = game.after, steps = planOf(OPEN[a.id]), who = botName(), bm = a.bot;
+      var a = game.after, steps = planFor(OPEN[a.id], a.r), who = botName(), bm = a.bot;
       a.want = null; a.mode = ''; a.text = ''; game.arrows = null;
       if (!r) return;
       var th = r.threat, pass = th ? cp(r.bestScore) - cp(-th.score) : 0, lossPlan = nx ? cp(r.bestScore) - cp(r.scores[0]) : 9999;
@@ -20895,12 +21014,23 @@
           os.appendChild(og);
         });
         l1.appendChild(os); c.appendChild(l1);
+        var l3 = mk('label', 'chs-dname chs-pick'); l3.appendChild(mk('span', null, '😮 Line'));   // the normal line, or after a surprise
+        var ls = mk('select'); ls.id = 'chs-aline'; l3.appendChild(ls); c.appendChild(l3);
+        var fillLines = function (keep) {
+          var L = OPEN[os.value], rs = afterRoutes(L);
+          ls.innerHTML = '';
+          var o0 = mk('option', null, '📖 The normal line' + (S.learn[afterKey(L.id, 0)] >= 1 ? ' ✅' : '')); o0.value = '0'; ls.appendChild(o0);
+          rs.forEach(function (r) { var o = mk('option', null, '😮 If they play ' + surpriseSan(L, r) + (S.learn[afterKey(L.id, r)] >= 1 ? ' ✅' : '')); o.value = String(r); if (keep === r) o.selected = true; ls.appendChild(o); });
+          l3.hidden = !rs.length;
+        };
+        fillLines(cur === S.afterId ? S.afterRoute : 0);
+        os.addEventListener('change', function () { fillLines(0); });
         var l2 = mk('label', 'chs-dname chs-pick'); l2.appendChild(mk('span', null, '🤖 Bot'));
         var bs = mk('select'); bs.id = 'chs-abot';
         CHESS_BOTS.forEach(function (b) { var o = mk('option', null, b.e + ' ' + b.n + ' (' + b.elo + ')' + (b === gm ? ' · good match' : '')); o.value = b.id; if (b.id === bot) o.selected = true; bs.appendChild(o); });
         l2.appendChild(bs); c.appendChild(l2);
         var go = mk('button', 'btn', '▶ Start'); go.type = 'button'; go.id = 'chs-ago';
-        go.addEventListener('click', function () { closeCard(); startAfter(os.value, bs.value); });
+        go.addEventListener('click', function () { closeCard(); startAfter(os.value, bs.value, +ls.value || 0); });
         c.appendChild(go);
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
       });
@@ -21207,7 +21337,7 @@
       test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); }, planWant: function () { return planWant(); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); },
-      after: function (id, botId) { startAfter(id, botId); }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
+      after: function (id, botId, r) { startAfter(id, botId, r); }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
       review: function (list) { return new Promise(function (res) { askAt(game.moves.slice(), { review: list, time: 700 }, res); }); }
     };
   })();
