@@ -1307,6 +1307,171 @@
   .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
   .chs-mini .chs-p { position: absolute; inset: 0; }
   .chs-mini .chs-p svg { width: 100%; height: 100%; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1528,6 +1693,40 @@
   .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
   .chs-mini .chs-p { position: absolute; inset: 0; }
   .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
   .fv-load { display: none; }
   .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
   .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
@@ -17396,6 +17595,12 @@
       { id: 'magma', e: '🌋', n: 'Magma', elo: 2800, hue: '#ff7a59', d: 'Hot, unstoppable, and never cools down.', book: 1, resign: true,
         hi: 'Feel the heat.', win: 'Melted.', lose: 'You… cooled me down. Wow.',
         s: { time: 2500 } },
+      { id: 'bulletking', e: '⚡', n: 'The Bullet King', elo: 2850, hue: '#38bdf8', fast: 1, d: 'Inspired by the speed-chess streamers. Plays lightning fast, attacks like crazy, and LOVES ⚡ bullet. Try him with a clock!', book: 1, resign: true,
+        hi: 'Bullet? LET’S GOOO!', win: 'Too fast! Gotta be quicker than that!', lose: 'Okay okay… you’re actually really good!',
+        s: { time: 1400 } },
+      { id: 'champ', e: '🐐', n: 'The Champion', elo: 2900, hue: '#e0b84a', d: 'Inspired by the world champions. Calm, patient, and squeezes every tiny advantage until you crack. Amazing in the endgame.', book: 1, resign: true,
+        hi: 'Let’s play a long, careful game.', win: 'A tiny edge was all I needed.', lose: 'That was world-champion chess. Respect!',
+        s: { time: 3200 } },
       { id: 'void', e: '🌌', n: 'The Void', elo: 3000, hue: '#7c6cff', d: 'Nobody has ever beaten it. Can you?', book: 1, resign: true,
         hi: 'I have been waiting for you.', win: 'Everything returns to the Void.', lose: 'Impossible… you have beaten the Void!',
         s: { time: 3500 } },
@@ -19488,6 +19693,7 @@
       { t: 'Beginner', e: '🐣', hi: 650, d: 'Just learning' }, { t: 'Casual', e: '🙂', hi: 1150, d: 'Knows the basics' },
       { t: 'Club', e: '🏅', hi: 1700, d: 'Pretty good!' }, { t: 'Expert', e: '🔥', hi: 2300, d: 'Really tough' },
       { t: 'Master', e: '🏆', hi: 2900, d: 'Super strong' }, { t: 'Legend', e: '🌌', hi: 1e9, d: 'Good luck…' }];
+    var TCS = [['none', '∞ No clock', 0, 0], ['bullet', '⚡ Bullet 1 min', 60000, 0], ['blitz', '🔥 Blitz 3+2', 180000, 2000], ['rapid', '⏱️ Rapid 10 min', 600000, 0]];   // id, name, start time, + seconds after each move
     var THEMES = [['wood', '🪵 Wood'], ['green', '🟩 Tournament'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night'], ['marble', '🏛️ Marble'], ['space', '🌌 Space'], ['alien', '👽 Alien Planet'], ['lava', '🌋 Lava'], ['ice', '❄️ Ice'], ['neon', '🌈 Neon'], ['forest', '🌲 Forest']];
     var SAY = {
       cap: ['Yoink!', 'Mine now!', 'Thanks for that!', 'Snack time!', 'Got one!'],
@@ -19503,7 +19709,7 @@
     function fix(s) {
       s = s && typeof s === 'object' ? s : {};
       s.rating = +s.rating || 400; s.games = +s.games || 0; s.rec = s.rec || {};
-      if (!s.theme) s.theme = 'wood'; if (!s.skin) s.skin = 'classic'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.seen = s.seen || {}; s.duel = s.duel || {}; if (!Array.isArray(s.mist)) s.mist = [];
+      if (!s.theme) s.theme = 'wood'; if (!s.skin) s.skin = 'classic'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.seen = s.seen || {}; s.duel = s.duel || {}; if (!Array.isArray(s.mist)) s.mist = []; if (!s.imp || typeof s.imp !== 'object') s.imp = {};
       return s;
     }
     function load() { try { return fix(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return fix(null); } }
@@ -19748,8 +19954,9 @@
       var av = bot ? bot.e : you ? '🙂' : c === 'w' ? '⚪' : '⚫', hue = bot ? bot.hue : you ? 'var(--accent-2)' : c === 'w' ? '#dfe3ea' : '#4b5568';
       var nm = bot ? bot.n + '<small>' + bot.elo + '</small>' : you ? 'You<small>' + (game.practice ? '🎯 Practice' : S.rating) + '</small>' : c === 'w' ? 'White' : 'Black';
       if (bot && thinking) nm += '<span class="chs-think" aria-label="thinking"><i></i><i></i><i></i></span>';
+      var clk = game.mode === 'bot' && clockOn() ? '<span class="chs-clock' + (!game.over && G.turn() === c ? ' on' : '') + (clockLeft(c) < 20000 ? ' low' : '') + '" data-c="' + c + '">' + fmtClock(clockLeft(c)) + '</span>' : '';
       return '<span class="chs-av" style="--hue:' + hue + '">' + av + '</span><div class="chs-pl-info"><div class="chs-pl-n">' + nm + '</div><div class="chs-capt">' + capturedBy(c) + '</div></div>' +
-        (bot ? '<div class="chs-say' + (chat.text && Date.now() < chat.t ? ' on' : '') + '" id="chs-say">' + esc(chat.text) + '</div>' : '');
+        (bot ? '<div class="chs-say' + (chat.text && Date.now() < chat.t ? ' on' : '') + '" id="chs-say">' + esc(chat.text) + '</div>' : '') + clk;
     }
     function esc(t) { return String(t || '').replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
     function renderSides() {
@@ -19765,7 +19972,7 @@
       var o = game.over, bot = game.mode === 'bot' ? BOT[game.bot] : null;
       if (o.reason === 'checkmate') return 'Checkmate!';
       if (o.reason === 'resign') return bot ? 'You resigned.' : (o.res === 'w' ? '⚫ ' + duelName('b') : '⚪ ' + duelName('w')) + ' resigned.';
-      if (o.reason === 'time') return '⏰ ' + (o.res === 'w' ? '⚫ ' + duelName('b') : '⚪ ' + duelName('w')) + ' ran out of time!';
+      if (o.reason === 'time') return bot ? (o.res === game.you ? '⏰ ' + bot.n + ' ran out of time!' : '⏰ You ran out of time!') : '⏰ ' + (o.res === 'w' ? '⚫ ' + duelName('b') : '⚪ ' + duelName('w')) + ' ran out of time!';
       if (o.reason === 'timedraw') return '⏰ Time ran out, but there aren’t enough pieces left to checkmate.';
       if (o.reason === 'botresign') return bot.n + ' resigned!';
       return { stalemate: 'Stalemate: no legal moves, but not in check.', material: 'Not enough pieces left to checkmate.', fifty: '50 moves in a row with no captures or pawn moves.', repetition: 'The same position happened 3 times.', agreed: 'Draw agreed.' }[o.reason] || '';
@@ -19939,11 +20146,12 @@
     function userMove(uci, dragged) { if (game.tour) planMove(uci, dragged); else if (game.pr && game.pr.state === 'fix') fixMove(uci, dragged); else if (game.mode === 'lesson') lessonMove(uci, dragged); else playMove(uci, false, dragged); }
     function playMove(uci, byBot, dragged) {
       var mover = G.turn(), left = clockOn() && !game.over && game.clock.at ? clockLeft(mover) : null;
+      if (left != null && left <= 0) { flagFall(mover); return true; }   // ⏰ too late: the time ran out before this move
       var capB = byBot && game.after ? pieceAt(uci.slice(2, 4)) : '';   // (🗺️ what the bot takes, if anything)
       var x = G.move(uci); if (!x) return false;
       if (byBot && game.after) game.after.bot = { san: x.san, to: x.to, cap: capB ? capB.charAt(1) : x.ep ? 'P' : '' };
       if (!byBot && game.practice) game.arrows = null;
-      if (clockOn() && !game.over) { if (left != null) game.clock[mover] = left; game.clock.at = Date.now(); }   // the other player's clock starts
+      if (clockOn() && !game.over) { if (left != null) game.clock[mover] = left + (game.clock.inc || 0); game.clock.at = Date.now(); }   // the other player's clock starts (🔥 + the increment)
       game.moves.push(x.uci); game.sans.push(x.san);
       last = { from: x.from, to: x.to }; sel = null; targets = []; hint = null; hintBusy = false;
       var st = G.status(), chk = G.inCheck(), watch = !!game.practice && !byBot && st !== 'checkmate';   // 🎯 Coach Hoot checks your move before the bot answers
@@ -19975,7 +20183,21 @@
     function fullMoves() { return +G.fen().split(' ')[5] || 1; }
     function botTurn() {
       if (!game || game.over || game.mode !== 'bot' || G.turn() === game.you || thinking || (game.pr && game.pr.state)) return;
-      var bot = BOT[game.bot], my = ++token, t0 = Date.now(), wait0 = bot.elo < 1800 ? 450 + Math.random() * 650 : 250;
+      var bot = BOT[game.bot], my = ++token, t0 = Date.now(), wait0 = bot.elo < 1800 ? 450 + Math.random() * 650 : bot.fast ? 150 : 250, bs = bot.s;
+      var bk0 = bookMove(bot), timed = clockOn();
+      if (timed) {   // ⏱️ think like a real player: a slice of the time left (fast on book moves, recaptures and forced moves; longer on hard ones)
+        var me = G.turn(), left = clockLeft(me), inc = game.clock.inc || 0, togo = Math.max(18, 42 - Math.floor(game.moves.length / 2));
+        var budget = left / togo + inc * 0.8, lm0 = G.moves(), lastTo = game.moves.length ? game.moves[game.moves.length - 1].slice(2, 4) : '';
+        if (bk0) budget *= 0.25 + Math.random() * 0.3;
+        else if (lm0.length === 1) budget = 250;
+        else if (lastTo && lm0.some(function (m) { return m.to === lastTo && m.capture; }) && Math.random() < 0.7) budget *= 0.35;   // a recapture: quick!
+        else budget *= 0.55 + Math.random() * 1.1;
+        if (bot.fast) budget *= 0.6;   // ⚡
+        if (left < 10000) budget = Math.min(budget, left / 14);   // low on time: hurry!
+        budget = Math.max(120, Math.min(budget, left * 0.25));
+        wait0 = budget;
+        bs = Object.assign({}, bot.s); if (bs.time || bot.elo >= 1800) bs.time = Math.max(80, Math.min(bs.time || 900, budget * 0.85));
+      }
       if (game.practice) wait0 = Math.min(wait0, 300);   // (Coach Hoot already took a moment to check your move)
       thinking = true; renderSides(); renderStatus(); renderTools();
       var done = function (uci, r) {
@@ -19988,9 +20210,9 @@
           if (!playMove(uci, true)) render();
         }, Math.max(0, wait0 - (Date.now() - t0)));
       };
-      var bk = bookMove(bot);
+      var bk = bk0;
       if (bk) { done(bk, null); return; }
-      ask(bot.s, function (r) {
+      ask(bs, function (r) {
         if (my !== token) return;
         if (!r || !r.uci || !G.sanOf(r.uci)) { var lm = G.moves(); if (lm.length) done(pick(lm).uci, null); return; }
         done(r.uci, r);
@@ -20041,6 +20263,7 @@
           if (game.firstWin) { var nb = nextBot(); c.appendChild(mk('p', null, '🎉 First win against ' + bot.n + '!' + (nb ? ' Next challenge: ' + nb.e + ' ' + nb.n + ' (' + nb.elo + ').' : ' You’ve beaten EVERY bot. You’re a chess legend!'))); }
         }
         if (game.practice) practiceSummary(c);   // 🎯 the mistakes you fixed, and what to practice next
+        reviewBtn(c);   // 🔍
         var again = mk('button', 'btn', game.mode === 'friend' ? '🔁 Rematch (switch colors)' : game.after ? '🔁 Same opening again' : game.practice ? '🔁 Practice again' : '🔁 Play again'); again.type = 'button'; again.id = 'chs-again'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
         var row = mk('div', 'chs-row');
         var pk = mk('button', 'btn ghost', game.mode === 'friend' ? '♟️ Menu' : game.practice ? '🎯 Practice' : '🤖 Bots'); pk.type = 'button'; pk.addEventListener('click', function () { closeCard(); showMenu(); });
@@ -20051,7 +20274,7 @@
     function rematch() {
       if (game && game.mode === 'friend') { var nm = game.names || ['Player 1', 'Player 2']; newDuel([nm[1], nm[0]], game.clock ? game.clock.base / 60000 : 0, !!game.flip); return; }   // 1v1: switch colors
       if (game && game.after && OPEN[game.after.id]) { startAfter(game.after.id, game.bot, game.after.r); return; }   // 🗺️ the same opening again
-      if (game) newGame(game.mode, game.bot, game.pick, game.practice);
+      if (game) newGame(game.mode, game.bot, game.pick, game.practice, null, null, game.tc);   // (⏱️ the same clock)
     }
 
     // ---- buttons under the board ----
@@ -20118,6 +20341,7 @@
       else if (e.target.closest('[data-tour]') && game && game.tour) planNext();
       else if (e.target.closest('[data-plan]') && game && game.planFor && OPEN[game.planFor]) planCard(OPEN[game.planFor]);
       else if (e.target.closest('[data-fix]')) fixGo();
+      else if (e.target.closest('[data-sbs]') && game && game.pr && game.pr.fix) { game.pr.fix.show = !game.pr.fix.show; save(); renderTip(); }   // ↔️
       else if (e.target.closest('[data-skip]') && game && game.mode === 'drill' && game.pr && game.pr.state === 'fix') drillNext();
     });
     $('rematch').addEventListener('click', rematch);
@@ -20925,6 +21149,9 @@
       var p = game.pr, who = botName();
       var why = kind === 'book' ? '📖 You were playing the ' + les.n + ', but that’s not the lesson move!' : (les ? '📖 You left the ' + les.n + '… ' : '') + whyText(r, kind, who);
       var fx = p.fix = { kind: kind, why: why, bad: r.san, badUci: r.uci, best: best, bestSan: bestSan, ok: ok, also: lm.length ? lm.slice() : null, les: les ? les.id : null, lt: lt || '', tries: 0, say: '' };
+      fx.sb = { before: game.moves.slice(0, -1), fen: game.fen || null, reply: (kind === 'blunder' || kind === 'mated') && r.reply ? r.reply : null, replySan: r.replySan || '',
+        good: kind === 'book' ? '📖 That’s the move from your ' + les.n + ' lesson.' + (lt ? ' ' + lt : '') : goodText(r, who) };   // ↔️
+      addImp(impOf(r, kind));   // 📈
       game.arrows = r.reply && (kind === 'blunder' || kind === 'mated') ? ['!' + r.reply] : null;
       p.state = 'oops'; sel = null; targets = []; hint = null;
       sound('wrong');
@@ -20996,7 +21223,10 @@
     function practiceTip() {   // 🦉 Coach Hoot's box under the board
       var p = game.pr, fx = p.fix;
       if (p.state === 'oops') return cbox(fx.why + (game.arrows ? '\n👀 The red arrow shows what ' + botName() + ' would do.' : '')) +
-        '<button type="button" class="btn slim chs-fixgo" id="chs-fixGo" data-fix="1">↩️ Take it back and try again</button>';
+        '<button type="button" class="btn slim chs-fixgo" id="chs-fixGo" data-fix="1">↩️ Take it back and try again</button>' +
+        (fx.sb && fx.best ? '<button type="button" class="btn slim ghost chs-sbsgo" id="chs-sbsGo" data-sbs="1">' + (fx.show ? '🙈 Hide the better move' : '🔍 Show me: my move vs the better move') + '</button>' +
+          (fx.show ? sbsHtml({ before: fx.sb.before, fen: fx.sb.fen, bad: fx.badUci, badSan: fx.bad, best: fx.best, bestSan: fx.bestSan, reply: fx.sb.reply, replySan: fx.sb.replySan, who: botName(), view: game.you }) +
+            '<p class="chs-why good"><b>Why ' + esc(fx.bestSan) + ' is better:</b> ' + esc(fx.sb.good) + '</p>' : '') : '');
       if (fx && p.state && p.state !== 'check') return cbox(p.state === 'try' ? '🦉 Hmm, let’s see…' : fx.say);
       var a = game.after;
       if (a) {   // 🗺️ After the Opening: the plan's next step, or what to do about a surprise
@@ -21032,6 +21262,206 @@
         lb.addEventListener('click', function () { closeCard(); startLesson('op', l.les); }); c.appendChild(lb);
       });
       if (game.after) { var ao = mk('button', 'btn ghost', '🗺️ Another opening'); ao.type = 'button'; ao.id = 'chs-afterOther'; ao.addEventListener('click', function () { closeCard(); openAfter(); }); c.appendChild(ao); }
+    }
+    // ---- 🔍 Game Review, side-by-side boards, 📈 what to improve, and 🦉 play Coach Hoot ----
+    var VIEW = null, revTok = 0;
+    function viewAt(moves, fen) { VIEW = VIEW || FVChessEngine(4); VIEW.play(moves, fen || null); return VIEW; }   // a spare engine, just to see positions
+    function miniBoard(pcs, arrows, view, hl) {   // a small board that only shows a position (and arrows)
+      var keep = orient, h = '';
+      orient = view;
+      for (var i = 0; i < 64; i++) {
+        var c = i & 7, r = i >> 3, n = nameAt(c, r), f = n.charCodeAt(0) - 97, rk = +n.charAt(1) - 1, pc = pcs[(7 - rk) * 8 + f];
+        h += '<div class="chs-sq ' + ((f + rk) % 2 ? 'l' : 'd') + (hl && hl.indexOf(n) >= 0 ? ' last' : '') + '">' + (pc ? '<div class="chs-p">' + pieceSvg(pc) + '</div>' : '') + '</div>';
+      }
+      h += arrows && arrows.length ? arrowsSvg(arrows, 0) : '';
+      orient = keep;
+      return '<div class="chs-board chs-sbsb t-' + S.theme + '">' + h + '</div>';
+    }
+    function sbsHtml(o) {   // ↔️ side by side: the move you played (and what they'd answer) vs the better move
+      var bad = o.bad, best = o.best, left = viewAt(o.before.concat([bad]), o.fen).pieces(), right = best ? viewAt(o.before.concat([best]), o.fen).pieces() : null;
+      var la = ['!' + bad]; if (o.reply) la.push('~' + o.reply);
+      return '<div class="chs-sbs">' +
+        '<div class="chs-sbc"><div class="chs-sbt bad">❌ You: ' + esc(o.badSan) + '</div>' + miniBoard(left, la, o.view, [bad.slice(0, 2), bad.slice(2, 4)]) + (o.reply ? '<div class="chs-sbn">🟧 then ' + esc(o.who) + ': ' + esc(o.replySan || '') + '</div>' : '') + '</div>' +
+        (right ? '<div class="chs-sbc"><div class="chs-sbt good">✅ Better: ' + esc(o.bestSan) + '</div>' + miniBoard(right, [best], o.view, [best.slice(0, 2), best.slice(2, 4)]) + '</div>' : '') +
+        '</div>';
+    }
+    function goodText(r, who) {   // ✅ WHY the better move is better
+      var s = r.bestSan || '', t, sc = cp(r.bestScore) / 100;
+      if (r.bestMate > 0) return r.bestMate === 1 ? 'It’s CHECKMATE! You win right away!' : 'It starts a checkmate in ' + r.bestMate + ' moves!';
+      if (r.bestCap && r.bestCap !== 'P' && r.bestCap !== 'K') t = 'It takes ' + who + '’s ' + PNAME[r.bestCap] + ' on ' + r.bestTo + '.';
+      else if (r.replyCap && r.replyCap !== 'P') t = 'It keeps your ' + PNAME[r.replyCap] + ' safe.';
+      else if (/^O-O/.test(s)) t = 'Castling gets your king to safety and brings a rook into the game.';
+      else if (/=/.test(s)) t = 'Your pawn turns into a new piece!';
+      else if (r.bestCap === 'P') t = 'It wins a pawn.';
+      else if (/\+/.test(s)) t = 'It’s a check, so ' + who + ' has to deal with it first.';
+      else t = 'It keeps all your pieces safe and makes your position stronger.';
+      return t + (sc >= 1.5 ? ' Then you’re ahead by about ' + Math.round(sc) + (Math.round(sc) === 1 ? ' pawn.' : ' pawns.') : sc > -1 ? ' Then the game stays about even.' : ' It’s still hard, but it’s much better.');
+    }
+    function badText(r, kind, who) {   // ❌ WHY your move was a mistake (for the review: no “can you find it?”)
+      if (kind === 'inacc') return 'That’s okay, but there was a better move.';
+      if (kind === 'missedmate') return 'You had a checkmate' + (r.bestMate > 1 ? ' in ' + r.bestMate : '') + ', but you missed it!';
+      var t = whyText(r, kind, who), loss = cp(r.bestScore) - cp(r.score);
+      if (kind === 'blunder' && loss >= 150 && loss < 1400) t += ' That’s like losing about ' + Math.round(loss / 100) + ' pawns.';
+      return t;
+    }
+    var IMP = {   // 📈 the kinds of mistakes, and a tip for each
+      hang: ['🛡️ Keep your pieces safe', 'Before every move, ask: “After I move, can they take something for free?”'],
+      miss: ['👀 Grab free pieces', 'Every turn, look at everything you can take. Is one of their pieces not protected?'],
+      mate: ['♚ Find checkmates', 'Look at every check first. A check might be checkmate!'],
+      mated: ['👑 Watch your king', 'Ask “Can they check me?” before you move, and castle early to keep your king safe.'],
+      draw: ['🤝 Don’t stalemate', 'When you’re winning, make sure their king can still move (or give check).'],
+      book: ['📖 Remember your openings', 'Play your opening lessons again until they feel easy.'],
+      think: ['🧠 Think about their best answer', 'Before you move, guess their best reply. Is your move still good after it?']
+    };
+    function impOf(r, kind) {
+      if (kind === 'mated' || kind === 'draw' || kind === 'book') return kind;
+      if (kind === 'missedmate') return 'mate';
+      if (r && r.replyCap && r.replyCap !== 'P') return 'hang';
+      if (r && r.bestCap && r.bestCap !== 'P') return 'miss';
+      return 'think';
+    }
+    function addImp(k) { S.imp = S.imp || {}; S.imp[k] = (S.imp[k] || 0) + 1; }
+    function reviewBtn(c) {   // on the end-of-game card
+      if (!game || !game.moves || game.moves.length < 2) return;
+      var b = mk('button', 'btn chs-revb', game.rev && game.rev.done ? '🔍 See the Game Review' : '🔍 Game Review: see my mistakes'); b.type = 'button'; b.id = 'chs-review';
+      b.addEventListener('click', openReview); c.appendChild(b);
+    }
+    function openReview() {   // 🔍 Coach Hoot looks at every move you played
+      var g = game; if (!g || !g.moves.length) return;
+      if (g.rev && g.rev.done) { reviewCard(g); return; }
+      var start = g.fen ? g.fen.split(' ')[1] : 'w', other = function (s) { return s === 'w' ? 'b' : 'w'; }, list = [];
+      g.moves.forEach(function (u, i) { var s = i % 2 ? other(start) : start; if (g.mode === 'friend' || s === g.you) list.push(i); });
+      var rev = g.rev = { items: [], n: list.length, done: false }, t = list.length > 30 ? 300 : 420, my = ++revTok;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🔍'));
+        c.appendChild(mk('h3', null, 'Game Review'));
+        var p = mk('p', null, '🦉 Coach Hoot is looking at your moves…'); p.id = 'chs-revMsg'; c.appendChild(p);
+        var bar = mk('div', 'chs-revbar'); bar.innerHTML = '<i id="chs-revFill"></i>'; c.appendChild(bar);
+        var no = mk('button', 'btn ghost', 'Cancel'); no.type = 'button'; no.addEventListener('click', function () { revTok++; g.rev = null; closeCard(); showOver(); }); c.appendChild(no);
+      });
+      (function step(k) {
+        if (my !== revTok || game !== g) return;
+        if (k >= list.length) { rev.done = true; countRev(g); save(); reviewCard(g); return; }
+        var i = list[k];
+        askAt(g.moves.slice(0, i), { review: [g.moves[i]], time: t }, function (r) {
+          if (my !== revTok || game !== g) return;
+          if (r && r.uci) {
+            var kind = judge(r, 0), loss = cp(r.bestScore) - cp(r.score);
+            if (!kind && r.uci !== r.best && loss >= 90 && r.bestScore > -600 && r.score < 400) kind = 'inacc';
+            rev.items.push({ i: i, s: i % 2 ? other(start) : start, r: r, kind: kind, loss: loss });
+          }
+          var f = $('card').querySelector('#chs-revFill'), m = $('card').querySelector('#chs-revMsg');
+          if (f) f.style.width = Math.round((k + 1) / list.length * 100) + '%';
+          if (m) m.textContent = '🦉 Coach Hoot is looking at move ' + (k + 1) + ' of ' + list.length + '…';
+          step(k + 1);
+        });
+      })(0);
+    }
+    function revWho(g, s) { return g.mode === 'bot' ? botName() : duelName(s === 'w' ? 'b' : 'w'); }
+    function countRev(g) {   // 📈 your mistakes count for “What to improve” (once per game; not for 1v1, that's two people!)
+      if (g.mode !== 'bot' || g.rev.counted) return;
+      g.rev.counted = true; S.impGames = (S.impGames || 0) + 1;
+      g.rev.items.forEach(function (x) { if (x.kind && x.kind !== 'inacc' && !(g.practice && x.kind === 'book')) addImp(impOf(x.r, x.kind)); });
+    }
+    function revRec(g, x) {   // a mistake from the review, ready for 🧩 My mistakes
+      var V = viewAt(g.moves.slice(0, x.i), g.fen), who = revWho(g, x.s);
+      return { id: Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36), fen: V.fen(), you: x.s, bot: g.bot || null, kind: x.kind, why: whyText(x.r, x.kind, who),
+        bad: x.r.san, bu: x.r.uci, best: x.r.bestSan, b: x.r.best, ok: null, also: null, les: null, lt: '', n: 0 };
+    }
+    function reviewCard(g) {
+      var rev = g.rev, it = rev.items, bad = it.filter(function (x) { return x.kind && x.kind !== 'inacc'; }), inn = it.filter(function (x) { return x.kind === 'inacc'; });
+      var good = it.length - bad.length - inn.length, acc = it.length ? Math.round(100 * (good + inn.length * 0.5) / it.length) : 100, duel = g.mode === 'friend';
+      openCard(function (c) {
+        c.classList.add('chs-wide');
+        c.appendChild(mk('div', 'chs-big', '🔍'));
+        c.appendChild(mk('h3', null, 'Game Review'));
+        var sm = mk('div', 'chs-revsum');
+        sm.innerHTML = '<span>👍 <b>' + good + '</b> good</span><span>🤔 <b>' + inn.length + '</b> could be better</span><span>❌ <b>' + bad.length + '</b> mistakes</span>' + (duel ? '' : '<span class="acc">🎯 Accuracy <b>' + acc + '%</b></span>');
+        c.appendChild(sm);
+        var cats = {}; bad.forEach(function (x) { var k = impOf(x.r, x.kind); cats[k] = (cats[k] || 0) + 1; });
+        var ks = Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; });
+        var imp = mk('div', 'chs-psum chs-imp');
+        imp.appendChild(mk('p', 'chs-imph', '📈 What to improve'));
+        if (!ks.length) imp.appendChild(mk('p', null, inn.length ? '🦉 No big mistakes. Hoo hoo! To get even better, look at the 🤔 moves below.' : '🦉 No mistakes at all. That was amazing!'));
+        ks.forEach(function (k) { var li = mk('p', 'chs-impi'); li.innerHTML = '<b>' + IMP[k][0] + (cats[k] > 1 ? ' ×' + cats[k] : '') + '</b><br>' + esc(IMP[k][1]); imp.appendChild(li); });
+        c.appendChild(imp);
+        var show = bad.length ? bad.slice().sort(function (a, b) { return b.loss - a.loss; }).slice(0, 8) : inn.slice().sort(function (a, b) { return b.loss - a.loss; }).slice(0, 3);
+        show.sort(function (a, b) { return a.i - b.i; });
+        if (show.length) c.appendChild(mk('h4', 'chs-skh', bad.length ? '❌ Your mistakes, side by side' : '🤔 Moves that could be better'));
+        show.forEach(function (x) {
+          var who = revWho(g, x.s), d = mk('div', 'chs-rvi'), r = x.r;
+          d.setAttribute('data-ply', x.i);
+          d.innerHTML = '<div class="chs-rvh">' + plyName(x.i) + ' ' + esc(r.san) + (x.kind === 'inacc' ? ' 🤔' : ' ❌') + (duel ? ' · ' + (x.s === 'w' ? '⚪ ' : '⚫ ') + esc(duelName(x.s)) : '') + '</div>' +
+            sbsHtml({ before: g.moves.slice(0, x.i), fen: g.fen, bad: r.uci, badSan: r.san, best: r.best, bestSan: r.bestSan, reply: x.kind === 'blunder' || x.kind === 'mated' ? r.reply : null, replySan: r.replySan, who: who, view: duel ? x.s : g.you }) +
+            '<p class="chs-why bad"><b>Why it’s a mistake:</b> ' + esc(badText(r, x.kind, who)) + '</p>' +
+            '<p class="chs-why good"><b>Why ' + esc(r.bestSan) + ' is better:</b> ' + esc(goodText(r, who)) + '</p>';
+          c.appendChild(d);
+        });
+        if (bad.length) {
+          var dr = mk('button', 'btn', '🧩 Practice these mistakes'); dr.type = 'button'; dr.id = 'chs-revDrill';
+          dr.addEventListener('click', function () {
+            var ids = [];
+            bad.slice(0, 10).forEach(function (x) {
+              var rec = rev.recs && rev.recs[x.i] && mistById(rev.recs[x.i]) ? mistById(rev.recs[x.i]) : revRec(g, x);
+              rev.recs = rev.recs || {}; rev.recs[x.i] = rec.id;
+              if (!mistById(rec.id)) { S.mist = S.mist.filter(function (m) { return !(m.fen === rec.fen && m.bu === rec.bu); }); S.mist.unshift(rec); }
+              ids.push(rec.id);
+            });
+            if (S.mist.length > 40) S.mist.length = 40;
+            save(); closeCard(); startDrill(ids);
+          });
+          c.appendChild(dr);
+        }
+        var row = mk('div', 'chs-row');
+        var ib = mk('button', 'btn ghost', '📈 All my games'); ib.type = 'button'; ib.id = 'chs-revImp'; ib.addEventListener('click', improveCard);
+        var bk = mk('button', 'btn ghost', '↩️ Back'); bk.type = 'button'; bk.id = 'chs-revBack'; bk.addEventListener('click', function () { closeCard(); showOver(); });
+        row.appendChild(ib); row.appendChild(bk); c.appendChild(row);
+      });
+    }
+    function improveCard() {   // 📈 What to improve: your mistakes from every reviewed game and every practice game
+      var im = S.imp || {}, ks = Object.keys(IMP).filter(function (k) { return im[k]; }).sort(function (a, b) { return im[b] - im[a]; }), tot = 0, top = ks.length ? im[ks[0]] : 1;
+      ks.forEach(function (k) { tot += im[k]; });
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '📈'));
+        c.appendChild(mk('h3', null, 'What to improve'));
+        c.appendChild(mk('p', null, tot ? 'From your 🎯 practice games and ' + (S.impGames || 0) + ' 🔍 reviewed ' + ((S.impGames || 0) === 1 ? 'game' : 'games') + '. Your biggest thing to work on is at the top!' : 'Play a game, then tap 🔍 Game Review at the end (or play a 🎯 practice game). Coach Hoot will show what to work on here!'));
+        ks.forEach(function (k, i) {
+          var d = mk('div', 'chs-impr' + (i === 0 ? ' top' : '')); d.setAttribute('data-imp', k);
+          d.innerHTML = '<div class="chs-imprh"><b>' + IMP[k][0] + '</b><span>' + im[k] + (im[k] === 1 ? ' time' : ' times') + '</span></div><div class="chs-imprb"><i style="width:' + Math.max(8, Math.round(im[k] / top * 100)) + '%"></i></div><small>' + esc(IMP[k][1]) + '</small>';
+          c.appendChild(d);
+        });
+        var cb = mk('button', 'btn', '🦉 Play Coach Hoot'); cb.type = 'button'; cb.addEventListener('click', function () { closeCard(); openCoach(); }); c.appendChild(cb);
+        if (S.mist.length) { var mb = mk('button', 'btn ghost', '🧩 Practice my mistakes (' + S.mist.length + ')'); mb.type = 'button'; mb.addEventListener('click', function () { closeCard(); startDrill(); }); c.appendChild(mb); }
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', function () { closeCard(); if (game && game.over && !$('game').hidden) showOver(); }); c.appendChild(no);
+      });
+    }
+    function coachBot() {   // 🦉 Coach Hoot as a bot: plays about as well as you do (and watches your moves)
+      var gm = goodMatch(), c = BOT.coach || (BOT.coach = {});
+      for (var k in gm) if (gm.hasOwnProperty(k)) c[k] = gm[k];
+      c.id = 'coach'; c.e = '🦉'; c.n = 'Coach Hoot'; c.hue = '#e4a64a'; c.coach = 1; c.resign = false;
+      c.d = 'Your chess coach! Plays about as well as you (like ' + gm.n + ', ' + gm.elo + '), and stops the game to help when you make a big mistake.';
+      c.hi = 'Hoo! Let’s play! If you make a big mistake, I’ll show you why, and what to play instead.';
+      c.win = 'Good game! Tap 🔍 Game Review to see what to practice.'; c.lose = 'Hoo hoo! You beat your coach! I’m so proud!';
+      return c;
+    }
+    function openCoach() {
+      var b = coachBot(), side = S.lastPick || 'w';
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🦉'));
+        c.appendChild(mk('h3', null, 'Play Coach Hoot'));
+        c.appendChild(mk('p', null, 'Coach Hoot plays about as well as you do (' + b.elo + '). When you make a big mistake, the game stops: Coach Hoot shows WHY it’s a mistake, and you can see your move and the better move side by side. Then you try again! (Coach games don’t change your rating.)'));
+        var seg = mk('div', 'chs-seg');
+        [['w', '⚪ White'], ['r', '🎲 Random'], ['b', '⚫ Black']].forEach(function (o) {
+          var bt = mk('button', side === o[0] ? 'on' : '', o[1]); bt.type = 'button'; bt.setAttribute('data-side', o[0]);
+          bt.addEventListener('click', function () { side = o[0]; [].forEach.call(seg.children, function (x) { x.className = x === bt ? 'on' : ''; }); });
+          seg.appendChild(bt);
+        });
+        c.appendChild(seg);
+        var go = mk('button', 'btn', '▶ Play Coach Hoot'); go.type = 'button'; go.id = 'chs-coachGo';
+        go.addEventListener('click', function () { S.lastPick = side; closeCard(); coachBot(); newGame('bot', 'coach', side, true); });
+        c.appendChild(go);
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
     }
     function openPractice() {   // 🎯 pick a bot to practice against
       var gm = goodMatch(), bot = BOT[S.pracBot] ? S.pracBot : gm.id, side = S.lastPick || 'w';
@@ -21272,7 +21702,7 @@
 
     // ---- pop-up cards ----
     function openCard(build) {
-      var c = $('card'); c.innerHTML = ''; build(c); $('ov').hidden = false;
+      var c = $('card'); c.innerHTML = ''; c.classList.remove('chs-wide'); build(c); $('ov').hidden = false;
       var f = c.querySelector('.btn, button'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
     }
     function closeCard() { $('ov').hidden = true; $('card').innerHTML = ''; }
@@ -21300,7 +21730,7 @@
       var sc = duelScore(a, b), wa = sc.w[a.toLowerCase()] || 0, wb = sc.w[b.toLowerCase()] || 0;
       return '🏆 Score: ' + a + ' ' + wa + ' – ' + wb + ' ' + b + (sc.d ? ' · ' + sc.d + (sc.d === 1 ? ' draw' : ' draws') : '');
     }
-    function clockOn() { return !!game && game.mode === 'friend' && !!game.clock && game.clock.base > 0; }
+    function clockOn() { return !!game && (game.mode === 'friend' || (game.mode === 'bot' && !game.practice)) && !!game.clock && game.clock.base > 0; }
     function clockLeft(c) { var k = game.clock, t = k[c]; if (k.at && !game.over && G.turn() === c) t -= Date.now() - k.at; return Math.max(0, t); }
     function fmtClock(ms) { if (ms < 10000) return (Math.floor(ms / 100) / 10).toFixed(1); var s = Math.ceil(ms / 1000); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
     function pauseClock() { if (clockOn() && game.clock.at && !game.over) { var c = G.turn(); game.clock[c] = clockLeft(c); game.clock.at = null; } }
@@ -21416,6 +21846,9 @@
       learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (!b) return; if (b.getAttribute('data-learn') === 'after') showAfterList(); else showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var prh = mk('div', 'chs-tier'); prh.innerHTML = '<h3>🎯 Practice</h3><small>Fix your mistakes 🦉</small>'; m.appendChild(prh);
+      var cbn = mk('button', 'chs-friend chs-coach'); cbn.type = 'button'; cbn.id = 'chs-coachBtn';
+      cbn.innerHTML = '<span class="chs-av" style="--hue:#e4a64a">🦉</span><span><b>Play Coach Hoot</b><small>Your coach plays about as well as you. Make a mistake and you see WHY, plus your move and the better move side by side!</small></span>';
+      cbn.addEventListener('click', openCoach); m.appendChild(cbn);
       var pb = mk('button', 'chs-friend chs-prac'); pb.type = 'button'; pb.id = 'chs-pracBtn';
       pb.innerHTML = '<span class="chs-av" style="--hue:#e4a64a">🎯</span><span><b>Practice game</b><small>Play any bot. If you blunder or mess up an opening, Coach Hoot stops the game and you practice a better move.</small></span>';
       pb.addEventListener('click', openPractice); m.appendChild(pb);
@@ -21425,6 +21858,10 @@
       var nmi = S.mist.length, mb = mk('button', 'chs-friend chs-mist'); mb.type = 'button'; mb.id = 'chs-mistBtn';
       mb.innerHTML = '<span class="chs-av" style="--hue:#f472b6">🧩</span><span><b>My mistakes' + (nmi ? ' (' + nmi + ')' : '') + '</b><small>' + (nmi ? 'Practice the mistakes from your practice games. Get one right twice and it’s learned!' : 'The mistakes from your practice games show up here, so you can practice them again.') + '</small></span>';
       mb.disabled = !nmi; mb.addEventListener('click', function () { if (S.mist.length) startDrill(); }); m.appendChild(mb);
+      var imn = 0; for (var ik in S.imp) imn += S.imp[ik];
+      var ib = mk('button', 'chs-friend chs-impb'); ib.type = 'button'; ib.id = 'chs-impBtn';
+      ib.innerHTML = '<span class="chs-av" style="--hue:#60a5fa">📈</span><span><b>What to improve</b><small>' + (imn ? 'See the kinds of mistakes you make most, with tips to fix them.' : 'After a game, tap 🔍 Game Review. Coach Hoot shows what you should work on!') + '</small></span>';
+      ib.addEventListener('click', improveCard); m.appendChild(ib);
       var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>1v1 a friend, or play a bot</small>'; m.appendChild(ph);
       var fr = mk('button', 'chs-friend'); fr.type = 'button'; fr.id = 'chs-friendBtn';
       fr.innerHTML = '<span class="chs-av" style="--hue:var(--c4)">⚔️</span><span><b>1v1 on one phone</b><small>Play a friend: take turns on the same phone. Pick your names and a clock!</small></span>';
@@ -21462,17 +21899,27 @@
           seg.appendChild(bt);
         });
         c.appendChild(seg);
+        var tc = S.tc || 'none', seg2 = mk('div', 'chs-seg chs-tcs');   // ⏱️ a clock?
+        TCS.forEach(function (o) {
+          var bt = mk('button', tc === o[0] ? 'on' : '', o[1]); bt.type = 'button'; bt.setAttribute('data-tc', o[0]);
+          bt.addEventListener('click', function () { tc = o[0]; [].forEach.call(seg2.children, function (x) { x.className = x === bt ? 'on' : ''; }); });
+          seg2.appendChild(bt);
+        });
+        c.appendChild(seg2);
+        if (b.fast) c.appendChild(mk('p', 'chs-lnote', '⚡ Tip: pick ⚡ Bullet to play him at his favorite speed!'));
         var go = mk('button', 'btn', '▶ Play ' + b.n); go.type = 'button'; go.id = 'chs-go';
-        go.addEventListener('click', function () { S.lastPick = side; closeCard(); newGame('bot', id, side); });
+        go.addEventListener('click', function () { S.lastPick = side; S.tc = tc; closeCard(); newGame('bot', id, side, false, null, null, tc); });
         c.appendChild(go);
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
       });
     }
-    function newGame(mode, botId, side, practice, fen, moves) {   // (🎯 practice: Coach Hoot checks your moves; fen/moves: start from a position)
+    function newGame(mode, botId, side, practice, fen, moves, tc) {   // (🎯 practice: Coach Hoot checks your moves; fen/moves: start from a position; ⏱️ tc: a clock)
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(fixTm);
       var you = side === 'r' ? (Math.random() < 0.5 ? 'w' : 'b') : side === 'b' ? 'b' : 'w';
       game = { mode: mode, bot: botId || null, pick: side || 'w', you: mode === 'bot' ? you : null, orient: mode === 'bot' ? you : 'w', moves: [], sans: [], hints: 0, undos: 0, over: null, rated: false };
       if (practice) { game.practice = true; game.pr = { state: null, fix: null, log: [], mist: [], note: '', open: '' }; }
+      var T = null; TCS.forEach(function (o) { if (o[0] === tc && o[2]) T = o; });
+      if (mode === 'bot' && T && !practice && !fen && !(moves && moves.length)) { game.tc = T[0]; game.clock = { base: T[2], inc: T[3], w: T[2], b: T[2], at: null }; }   // ⏱️
       if (fen) { game.fen = fen; G.load(fen); } else G.reset();
       (moves || []).forEach(function (u) { var x = G.move(u); if (x) { game.moves.push(x.uci); game.sans.push(x.san); } });
       orient = game.orient; relast(); sel = null; targets = []; hint = null; chat = { text: '', t: 0 };
@@ -21488,7 +21935,7 @@
       if (game.over) setTimeout(showOver, 300); else botTurn();
     }
 
-    function savedGame() { var c = S.cur; return c && c.moves && !c.over && (c.mode === 'friend' || BOT[c.bot]) ? c : null; }
+    function savedGame() { coachBot(); var c = S.cur; return c && c.moves && !c.over && (c.mode === 'friend' || BOT[c.bot]) ? c : null; }
     function useGame(g) {
       game = g; game.sans = game.sans || [];
       if (game.clock) game.clock.at = null;   // a saved 1v1 clock waits until the game is on the screen again
