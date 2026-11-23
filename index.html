@@ -1233,6 +1233,80 @@
   .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
   .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
   .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #4b2a7b; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -1422,6 +1496,38 @@
   .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
   .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
   .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
   .fv-load { display: none; }
   .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
   .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
@@ -19382,7 +19488,7 @@
       { t: 'Beginner', e: '🐣', hi: 650, d: 'Just learning' }, { t: 'Casual', e: '🙂', hi: 1150, d: 'Knows the basics' },
       { t: 'Club', e: '🏅', hi: 1700, d: 'Pretty good!' }, { t: 'Expert', e: '🔥', hi: 2300, d: 'Really tough' },
       { t: 'Master', e: '🏆', hi: 2900, d: 'Super strong' }, { t: 'Legend', e: '🌌', hi: 1e9, d: 'Good luck…' }];
-    var THEMES = [['wood', '🪵 Wood'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night']];
+    var THEMES = [['wood', '🪵 Wood'], ['green', '🟩 Tournament'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night'], ['marble', '🏛️ Marble'], ['space', '🌌 Space'], ['alien', '👽 Alien Planet'], ['lava', '🌋 Lava'], ['ice', '❄️ Ice'], ['neon', '🌈 Neon'], ['forest', '🌲 Forest']];
     var SAY = {
       cap: ['Yoink!', 'Mine now!', 'Thanks for that!', 'Snack time!', 'Got one!'],
       lost: ['Hey! I needed that!', 'Ouch!', 'Oops…', 'Nooo!', 'I meant to do that. Totally.'],
@@ -19397,7 +19503,7 @@
     function fix(s) {
       s = s && typeof s === 'object' ? s : {};
       s.rating = +s.rating || 400; s.games = +s.games || 0; s.rec = s.rec || {};
-      if (!s.theme) s.theme = 'wood'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.seen = s.seen || {}; s.duel = s.duel || {}; if (!Array.isArray(s.mist)) s.mist = [];
+      if (!s.theme) s.theme = 'wood'; if (!s.skin) s.skin = 'classic'; if (s.sound == null) s.sound = true; s.learn = s.learn || {}; s.seen = s.seen || {}; s.duel = s.duel || {}; if (!Array.isArray(s.mist)) s.mist = [];
       return s;
     }
     function load() { try { return fix(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return fix(null); } }
@@ -19424,13 +19530,90 @@
       Q: '<path d="M30 61h40" fill="none" stroke-width="2.2"/>',
       K: '<path d="M50 33v22" fill="none" stroke-width="2.6"/><path d="M36 60h28" fill="none" stroke-width="2.2"/>'
     };
+    // ---- 🎨 piece skins: shaded, shiny pieces in lots of styles (S.skin) ----
+    // each skin: [white side, black side], each { a: top color, b: bottom color, line: outline, det: details, glow: glowing edge (optional) }
+    var SKINS = {
+      classic: { n: '🏛️ Classic', c: [{ a: '#ffffff', b: '#d8cfbd', line: '#1d2026', det: '#1d2026' }, { a: '#5d6270', b: '#15171c', line: '#07080a', det: '#eef0f4', rim: 1 }] },
+      alien: { n: '👽 Aliens', c: [{ a: '#c8ff9e', b: '#3dbb3a', line: '#0d3b12', det: '#0d3b12', glow: '#7dff6a' }, { a: '#d3a8ff', b: '#5a2797', line: '#1a0833', det: '#f3e6ff', glow: '#b066ff' }], deco: 'alien' },
+      robot: { n: '🤖 Robots', c: [{ a: '#ffffff', b: '#9aa4ae', line: '#252a31', det: '#252a31' }, { a: '#727c88', b: '#1c2128', line: '#07090b', det: '#d6dde5', rim: 1 }], deco: 'robot' },
+      fire: { n: '🧊 Ice vs Fire 🔥', c: [{ a: '#f2ffff', b: '#7cc6ff', line: '#0d3a5c', det: '#0d3a5c', glow: '#9fe8ff' }, { a: '#ffd76b', b: '#d8331a', line: '#470d00', det: '#470d00', glow: '#ff7a2e' }], deco: 'fire' },
+      neon: { n: '🌈 Neon', c: [{ a: '#24304a', b: '#10141f', line: '#33f0ff', det: '#33f0ff', glow: '#33f0ff' }, { a: '#2d1c3d', b: '#130b1c', line: '#ff4df3', det: '#ff4df3', glow: '#ff4df3' }], neon: 1 },
+      gold: { n: '👑 Gold vs Obsidian', c: [{ a: '#fff4b8', b: '#c9921b', line: '#5a3a00', det: '#5a3a00', glow: '#ffe27a' }, { a: '#4c5260', b: '#111318', line: '#d8a22a', det: '#f0c14b' }] },
+      candy: { n: '🍬 Candy', c: [{ a: '#fff7fb', b: '#ffb6d6', line: '#a72e66', det: '#a72e66' }, { a: '#a8683f', b: '#4a2413', line: '#241006', det: '#ffd9ec' }], deco: 'candy' },
+      flat: { n: '♟️ Simple', c: [{ a: '#fdfcf8', b: '#fdfcf8', line: '#1d2026', det: '#1d2026' }, { a: '#2c2e35', b: '#2c2e35', line: '#0a0b0e', det: '#f2f3f6' }], flat: 1 }
+    };
+    var SKIN_ORDER = ['classic', 'alien', 'robot', 'fire', 'neon', 'gold', 'candy', 'flat'];
+    var HEAD = { P: [50, 36], R: [50, 49], N: [40, 31], B: [50, 39], Q: [50, 47], K: [50, 45] };   // where each piece's "face" is
+    function decoOf(kind, t, w, C) {   // extra bits for some skins: 👽 eyes and antennae, 🤖 visors and bolts, 🔥 flames, 🍬 sprinkles
+      var h = HEAD[t], x = h[0], y = h[1], s = '';
+      if (kind === 'alien') {
+        if (t === 'P' || t === 'B') s += '<g stroke="' + C.line + '" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M' + (x - 6) + ' ' + (y - 11) + 'q-4-7-9-9M' + (x + 6) + ' ' + (y - 11) + 'q4-7 9-9"/></g><circle cx="' + (x - 15) + '" cy="' + (y - 20) + '" r="3.4" fill="' + C.glow + '" stroke="' + C.line + '" stroke-width="1.6"/><circle cx="' + (x + 15) + '" cy="' + (y - 20) + '" r="3.4" fill="' + C.glow + '" stroke="' + C.line + '" stroke-width="1.6"/>';
+        if (t === 'N') return s + '<ellipse cx="' + x + '" cy="' + y + '" rx="6.5" ry="4.5" fill="#0b0b12" transform="rotate(-20 ' + x + ' ' + y + ')"/><circle cx="' + (x - 2) + '" cy="' + (y - 1.5) + '" r="1.4" fill="#fff"/>';
+        return s + '<ellipse cx="' + (x - 5.5) + '" cy="' + y + '" rx="4.4" ry="6" fill="#0b0b12" transform="rotate(25 ' + (x - 5.5) + ' ' + y + ')"/><ellipse cx="' + (x + 5.5) + '" cy="' + y + '" rx="4.4" ry="6" fill="#0b0b12" transform="rotate(-25 ' + (x + 5.5) + ' ' + y + ')"/><circle cx="' + (x - 6.5) + '" cy="' + (y - 2) + '" r="1.3" fill="#fff"/><circle cx="' + (x + 4.5) + '" cy="' + (y - 2) + '" r="1.3" fill="#fff"/>';
+      }
+      if (kind === 'robot') {
+        var v = '#38e6ff';
+        s += '<circle cx="30" cy="86" r="2.2" fill="' + C.det + '"/><circle cx="70" cy="86" r="2.2" fill="' + C.det + '"/><circle cx="50" cy="86" r="2.2" fill="' + C.det + '"/>';
+        if (t === 'N') return s + '<rect x="' + (x - 6) + '" y="' + (y - 3) + '" width="12" height="6" rx="3" fill="' + v + '" stroke="#04313a" stroke-width="1.4"/>';
+        return s + '<rect x="' + (x - 10) + '" y="' + (y - 3.5) + '" width="20" height="7" rx="3.5" fill="' + v + '" stroke="#04313a" stroke-width="1.4"/><rect x="' + (x - 7) + '" y="' + (y - 2) + '" width="5" height="2" rx="1" fill="#e9fdff"/>';
+      }
+      if (kind === 'fire') {
+        if (w) return '<g fill="#ffffff" opacity="0.85"><path d="M30 70l3-5 3 5-3 5z"/><path d="M64 66l2-4 2 4-2 4z"/></g>';   // ❄️ sparkles
+        return '<path d="M28 74c-3-8 2-12 4-18 3 6 6 9 4 18zM66 74c-2-7 2-11 3-16 3 5 6 9 3 16z" fill="#ffe14d" stroke="#9a1c00" stroke-width="1.4" opacity="0.95"/>';   // 🔥 little flames
+      }
+      if (kind === 'candy') {
+        var cs = ['#ff5c8a', '#4fc3ff', '#ffd23f', '#7ee081'];
+        return '<g stroke-linecap="round" stroke-width="2.6">' + [[34, 84, 38, 82], [46, 87, 50, 85], [58, 84, 62, 86], [66, 88, 70, 86]].map(function (q, i) { return '<path d="M' + q[0] + ' ' + q[1] + 'L' + q[2] + ' ' + q[3] + '" stroke="' + cs[i] + '"/>'; }).join('') + '</g>';
+      }
+      return '';
+    }
     var PIECE = {};
     function pieceSvg(code) {
-      if (PIECE[code]) return PIECE[code];
-      var w = code.charAt(0) === 'w', t = code.charAt(1);
-      var fill = w ? '#fdfcf8' : '#2c2e35', line = w ? '#1d2026' : '#0a0b0e', det = w ? '#1d2026' : '#f2f3f6';
-      return (PIECE[code] = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g fill="' + fill + '" stroke="' + line + '" stroke-width="4" stroke-linejoin="round">' + SHAPES[t] +
-        BASE + '</g>' + (DETAIL[t] ? '<g fill="' + det + '" stroke="' + det + '">' + DETAIL[t] + '</g>' : '') + '</svg>');
+      var k = SKINS[S.skin] ? S.skin : 'classic', key = k + code;
+      if (PIECE[key]) return PIECE[key];
+      var K = SKINS[k], w = code.charAt(0) === 'w', t = code.charAt(1), C = K.c[w ? 0 : 1], id = 'fvp-' + k + (w ? 'w' : 'b');
+      var fx = [C.glow ? 'drop-shadow(0 0 ' + (K.neon ? 3.5 : 2.5) + 'px ' + C.glow + ')' : '', C.rim ? 'drop-shadow(0 0 0.8px rgba(255,255,255,0.55))' : '', 'drop-shadow(0 2px 1.5px rgba(0,0,0,0.35))'].filter(Boolean).join(' ');
+      var defs = K.flat ? '' : '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="' + C.a + '"/><stop offset="1" stop-color="' + C.b + '"/></linearGradient>' +
+        '<linearGradient id="' + id + 's" x1="0" y1="0" x2="1" y2="0"><stop offset="0.08" stop-color="#fff" stop-opacity="' + (K.neon ? 0.12 : 0.55) + '"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
+      var body = SHAPES[t] + BASE;
+      return (PIECE[key] = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" style="filter:' + fx + '">' + defs +
+        (K.flat ? '' : '<ellipse cx="50" cy="93" rx="30" ry="4" fill="#000" opacity="0.18"/>') +
+        '<g fill="' + (K.flat ? C.a : 'url(#' + id + ')') + '" stroke="' + C.line + '" stroke-width="4" stroke-linejoin="round">' + body + '</g>' +
+        (K.flat ? '' : '<g fill="url(#' + id + 's)" stroke="none">' + body + '</g>') +   // ✨ the shine
+        (DETAIL[t] ? '<g fill="' + C.det + '" stroke="' + C.det + '">' + DETAIL[t] + '</g>' : '') +
+        (K.deco ? decoOf(K.deco, t, w, C) : '') + '</svg>');
+    }
+    function skinsCard() {   // 🎨 pick your pieces and your board
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🎨'));
+        c.appendChild(mk('h3', null, 'Skins & Boards'));
+        c.appendChild(mk('p', null, 'Make your chess set look however you want! It changes every game: bots, lessons, everything.'));
+        c.appendChild(mk('h4', 'chs-skh', '♟️ Pieces'));
+        var g1 = mk('div', 'chs-skins');
+        SKIN_ORDER.forEach(function (k) {
+          var b = mk('button', 'chs-skin' + (S.skin === k ? ' on' : '')); b.type = 'button'; b.setAttribute('data-skin', k);
+          var was = S.skin; S.skin = k;
+          b.innerHTML = '<span class="chs-skp">' + pieceSvg('wN') + pieceSvg('bQ') + pieceSvg('wP') + '</span><b>' + SKINS[k].n + '</b>';
+          S.skin = was;
+          b.addEventListener('click', function () { S.skin = k; save(); skinsCard(); if (game && !$('game').hidden) render(); });
+          g1.appendChild(b);
+        });
+        c.appendChild(g1);
+        c.appendChild(mk('h4', 'chs-skh', '🟫 Board'));
+        var g2 = mk('div', 'chs-skins');
+        THEMES.forEach(function (t) {
+          var b = mk('button', 'chs-skin' + (S.theme === t[0] ? ' on' : '')); b.type = 'button'; b.setAttribute('data-theme', t[0]);
+          var mini = '';
+          for (var i = 0; i < 16; i++) mini += '<span class="chs-sq ' + (((i >> 2) + i) % 2 ? 'd' : 'l') + '">' + (i === 5 ? '<span class="chs-p">' + pieceSvg('wK') + '</span>' : i === 10 ? '<span class="chs-p">' + pieceSvg('bN') + '</span>' : '') + '</span>';
+          b.innerHTML = '<span class="chs-board chs-mini t-' + t[0] + '">' + mini + '</span><b>' + t[1] + '</b>';
+          b.addEventListener('click', function () { S.theme = t[0]; save(); skinsCard(); if (game && !$('game').hidden) render(); });
+          g2.appendChild(b);
+        });
+        c.appendChild(g2);
+        var done = mk('button', 'btn', '✅ Done'); done.type = 'button'; done.id = 'chs-skinsDone';
+        done.addEventListener('click', function () { closeCard(); if ($('game').hidden) showMenu(); });
+        c.appendChild(done);
+      });
     }
     var NAMES = { P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
     var HOW = {
@@ -21211,11 +21394,8 @@
       var head = mk('div', 'panel chs-head');
       head.innerHTML = '<div class="bs-kicker">Your rating</div><div><div class="chs-rating">' + S.rating + '<small>Elo</small></div><p class="chs-sub">You’ve beaten ' + beaten() + ' of ' + CHESS_BOTS.length + ' bots · ' + S.games + (S.games === 1 ? ' game' : ' games') + ' played</p></div><div class="chs-big" aria-hidden="true">♟️</div>';
       var opts = mk('div', 'chs-opts');
-      THEMES.forEach(function (t) {
-        var p = mk('button', 'chs-pill' + (S.theme === t[0] ? ' on' : ''), t[1]); p.type = 'button'; p.setAttribute('data-theme', t[0]);
-        p.addEventListener('click', function () { S.theme = t[0]; save(); showMenu(); });
-        opts.appendChild(p);
-      });
+      var skb = mk('button', 'chs-pill on', '🎨 Skins & Boards'); skb.type = 'button'; skb.id = 'chs-skinsBtn';   // ♟️ piece skins and 🟫 boards
+      skb.addEventListener('click', skinsCard); opts.appendChild(skb);
       var snd = mk('button', 'chs-pill' + (S.sound ? ' on' : ''), S.sound ? '🔊 Sound on' : '🔇 Sound off'); snd.type = 'button';
       snd.addEventListener('click', function () { S.sound = !S.sound; save(); showMenu(); if (S.sound) sound('move'); });
       var gb = mk('button', 'chs-pill', '📖 How pieces move'); gb.type = 'button'; gb.setAttribute('data-guide', '1'); gb.addEventListener('click', guide);
