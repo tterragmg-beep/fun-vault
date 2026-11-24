@@ -499,6 +499,39 @@
   /* ---- Define It (word -> meaning) ---- */
   .dm [hidden] { display: none !important; }
   .dm-levels { display: grid; gap: 10px; margin-top: 16px; }
+  /* 🏷️ Steam Deals */
+  .sd-controls { display: grid; gap: 12px; }
+  .sd-row { display: grid; gap: 6px; }
+  .sd-lab { font-size: 0.92rem; color: var(--muted); display: grid; gap: 4px; }
+  .sd-lab b { color: var(--fg); }
+  .sd-dual { position: relative; height: 30px; }
+  .sd-track { position: absolute; left: 10px; right: 10px; top: 12px; height: 6px; border-radius: 99px; background: var(--line); }
+  .sd-track i { position: absolute; top: 0; bottom: 0; border-radius: 99px; background: var(--c9); }
+  .sd-dual input { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 30px; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; }
+  .sd-dual input::-webkit-slider-thumb { pointer-events: auto; -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--fg); border: 3px solid var(--c9); cursor: pointer; }
+  .sd-dual input::-moz-range-thumb { pointer-events: auto; width: 20px; height: 20px; border-radius: 50%; background: var(--fg); border: 3px solid var(--c9); cursor: pointer; }
+  .sd-dual input::-webkit-slider-runnable-track { background: none; }
+  .sd-dual input::-moz-range-track { background: none; }
+  .sd-row > input[type=range] { width: 100%; accent-color: var(--c9); }
+  .sd-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sd-chips button { font: inherit; font-size: 0.85rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 6px 11px; cursor: pointer; }
+  .sd-chips button.on { border-color: var(--c9); background: color-mix(in srgb, var(--c9) 22%, var(--panel-2)); font-weight: 700; }
+  .sd-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sd select, .sd-in { font: inherit; font-size: 0.95rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; width: 100%; box-sizing: border-box; }
+  .sd-note { font-size: 0.8rem; color: var(--muted); margin: 0; }
+  .sd-status { color: var(--muted); text-align: center; margin: 14px 0 8px; min-height: 1.2em; }
+  .sd-list { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .sd-card { display: grid; grid-template-columns: 116px 1fr; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px; color: var(--fg); text-decoration: none; }
+  .sd-card:hover { border-color: var(--c9); }
+  .sd-img { width: 116px; height: 54px; border-radius: 8px; object-fit: cover; background: var(--panel-2); }
+  .sd-t { font-weight: 700; font-size: 0.95rem; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .sd-p { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 4px; }
+  .sd-off { background: #4c6b22; color: #beee11; font-weight: 800; border-radius: 6px; padding: 1px 6px; font-size: 0.85rem; }
+  .sd-off.big { background: #a3e635; color: #1a2e05; }
+  .sd-off.zero { background: var(--panel-2); color: var(--muted); }
+  .sd-was { color: var(--muted); text-decoration: line-through; font-size: 0.85rem; }
+  .sd-now { font-weight: 800; }
+  .sd-r { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
   .dm-level { text-align: left; font: inherit; color: var(--fg); background: var(--panel-2); border: 2px solid var(--line); border-radius: 14px; padding: 14px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
   .dm-level:hover { border-color: var(--c8); }
   .dm-level:focus-visible, .dm-opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
@@ -3616,6 +3649,13 @@
         <span class="play">Play <span class="arrow">→</span></span>
       </button>
 
+      <button class="card" style="--hue: var(--c9);" data-goto="steam">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/><circle cx="8" cy="7" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/><circle cx="11" cy="17" r="2" fill="currentColor"/></svg></span>
+        <h2>Steam Deals</h2>
+        <p>Find games on sale on Steam. Slide to pick how big the discount is, from 0% to 100% (free!).</p>
+        <span class="play">Open <span class="arrow">→</span></span>
+      </button>
+
       <button class="card" style="--hue: var(--c8);" data-goto="define">
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20"/><path d="M9 8h7M9 12h5"/></svg></span>
         <h2>Define It</h2>
@@ -4151,6 +4191,42 @@
   </section>
 
   <!-- ================= DEFINE IT ================= -->
+  <section id="steam" class="screen sd">
+    <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Steam Deals</span></div>
+    <div class="panel sd-controls">
+      <div class="bs-kicker">Find games on sale</div>
+      <div class="sd-row">
+        <label class="sd-lab" for="sd-min">Discount: <b id="sd-dtxt">50% – 100%</b></label>
+        <div class="sd-dual">
+          <div class="sd-track"><i id="sd-fill"></i></div>
+          <input type="range" id="sd-min" min="0" max="100" step="5" value="50" aria-label="Smallest discount">
+          <input type="range" id="sd-max" min="0" max="100" step="5" value="100" aria-label="Biggest discount">
+        </div>
+        <div class="sd-chips" id="sd-chips">
+          <button type="button" data-r="0,100">Any</button><button type="button" data-r="25,100">25%+</button><button type="button" data-r="50,100">50%+</button><button type="button" data-r="75,100">75%+</button><button type="button" data-r="90,100">90%+</button><button type="button" data-r="100,100">🆓 Free</button><button type="button" data-r="0,30">Small (0–30%)</button>
+        </div>
+      </div>
+      <div class="sd-row">
+        <label class="sd-lab" for="sd-price">Price after discount: <b id="sd-ptxt">any price</b></label>
+        <input type="range" id="sd-price" min="1" max="60" step="1" value="60">
+      </div>
+      <div class="sd-grid2">
+        <label class="sd-lab">Sort by
+          <select id="sd-sort"><option value="Savings">Biggest discount</option><option value="Price">Lowest price</option><option value="Reviews">Best reviews</option><option value="Recent">Newest deals</option><option value="Title">A to Z</option></select>
+        </label>
+        <label class="sd-lab">Steam reviews
+          <select id="sd-rev"><option value="0">Any</option><option value="70">70%+ positive</option><option value="80">80%+ positive</option><option value="90">90%+ positive</option></select>
+        </label>
+      </div>
+      <input class="sd-in" id="sd-q" type="search" placeholder="Search a game (optional)" maxlength="60" autocomplete="off">
+      <button class="btn" type="button" id="sd-go">🔎 Find deals</button>
+      <p class="sd-note">Prices in US dollars, from CheapShark’s Steam price tracker. Always check the price on Steam before buying (and ask a grown-up!).</p>
+    </div>
+    <p class="sd-status" id="sd-status" aria-live="polite"></p>
+    <div class="sd-list" id="sd-list"></div>
+    <button class="btn ghost" type="button" id="sd-more" hidden>Load more deals</button>
+  </section>
+
   <section id="define" class="screen dm">
     <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Define It</span></div>
 
@@ -8346,7 +8422,7 @@
   // ============ router ============
   (function () {
     var screens = {};
-    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig','foul','chess'].forEach(function (id) { screens[id] = document.getElementById(id); });
+    ['home','quiz','honest','fact','calc','wpm','cheat','boss','trick','deals','race','states','whois','words','define','emoji','parry','confuse','life','rig','foul','chess','steam'].forEach(function (id) { screens[id] = document.getElementById(id); });
     var hooks = {}; // onEnter / onLeave
     var current = 'home';
 
@@ -11267,6 +11343,113 @@
 
     var nextAnswer = bag(ANSWERS);
     makeWordGame({ p: 'wg', screen: 'words', key: 'funvault-words-v1', title: 'Fun Vault · Five Letters', pick: function () { return [nextAnswer()]; } });
+  })();
+
+</script>
+<script>
+  // ============ Steam Deals: sort Steam sales by how big the discount is (prices from CheapShark) ============
+  (function () {
+    var KEY = 'funvault-steamdeals-v1', API = 'https://www.cheapshark.com/api/1.0/deals', GO = 'https://www.cheapshark.com/redirect?dealID=';
+    function $(id) { return document.getElementById('sd-' + id); }
+    if (!$('go')) return;
+    var st = { min: 50, max: 100, price: 60, sort: 'Savings', rev: '0', q: '' };
+    try { var sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv) for (var k in st) if (sv[k] != null) st[k] = sv[k]; } catch (e) {}
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
+    var run = null;   // the current search: { page, got: [], seen: {}, done, busy, token }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function money(v) { v = +v; return v === 0 ? 'FREE' : '$' + v.toFixed(2); }
+    function paint() {
+      var a = Math.min(st.min, st.max), b = Math.max(st.min, st.max);
+      $('min').value = st.min; $('max').value = st.max; $('price').value = st.price; $('sort').value = st.sort; $('rev').value = st.rev;
+      $('dtxt').textContent = a === b ? (a === 100 ? '100% (free!)' : 'exactly ' + a + '%') : a + '% – ' + b + '%';
+      $('fill').style.left = a + '%'; $('fill').style.width = (b - a) + '%';
+      $('ptxt').textContent = st.price >= 60 ? 'any price' : 'up to $' + st.price;
+      [].forEach.call($('chips').children, function (c) { var r = c.getAttribute('data-r').split(','); c.classList.toggle('on', +r[0] === a && +r[1] === b); });
+    }
+    function lo() { return Math.min(st.min, st.max); }
+    function hi() { return Math.max(st.min, st.max); }
+    function fits(d) {   // does this deal's discount fall in your range?
+      var s = Math.round(+d.savings || 0);
+      return s >= lo() && s <= hi();
+    }
+    function url(page) {
+      var p = ['storeID=1', 'pageSize=60', 'pageNumber=' + page, 'sortBy=' + encodeURIComponent(st.sort)];
+      if (st.sort === 'Price' || st.sort === 'Title') p.push('desc=0');
+      if (st.price < 60) p.push('upperPrice=' + st.price);
+      if (+st.rev) p.push('steamRating=' + (+st.rev));
+      if (lo() > 0) p.push('onSale=1');
+      if (st.q) p.push('title=' + encodeURIComponent(st.q));
+      return API + '?' + p.join('&');
+    }
+    function sortList(a) {
+      var f = { Savings: function (x, y) { return y.savings - x.savings; }, Price: function (x, y) { return x.salePrice - y.salePrice; }, Reviews: function (x, y) { return (+y.steamRatingPercent || 0) - (+x.steamRatingPercent || 0); },
+        Recent: function (x, y) { return (+y.lastChange || 0) - (+x.lastChange || 0); }, Title: function (x, y) { return String(x.title).localeCompare(String(y.title)); } }[st.sort];
+      return f ? a.slice().sort(f) : a;
+    }
+    function card(d) {
+      var s = Math.round(+d.savings || 0), a = document.createElement('a');
+      a.className = 'sd-card'; a.href = GO + encodeURIComponent(d.dealID); a.target = '_blank'; a.rel = 'noopener noreferrer';
+      var img = /^https:\/\//.test(d.thumb || '') ? '<img class="sd-img" loading="lazy" alt="" src="' + esc(d.thumb) + '">' : '<span class="sd-img"></span>';
+      a.innerHTML = img + '<span><span class="sd-t">' + esc(d.title) + '</span><span class="sd-p"><span class="sd-off' + (s >= 75 ? ' big' : s === 0 ? ' zero' : '') + '">' + (s ? '-' + s + '%' : '0%') + '</span>' +
+        (s ? '<span class="sd-was">' + esc(money(d.normalPrice)) + '</span>' : '') + '<span class="sd-now">' + esc(money(d.salePrice)) + '</span></span>' +
+        (d.steamRatingText ? '<span class="sd-r">👍 ' + esc(d.steamRatingText) + (d.steamRatingPercent && +d.steamRatingPercent ? ' (' + esc(d.steamRatingPercent) + '%)' : '') + '</span>' : '') + '</span>';
+      return a;
+    }
+    function show() {
+      var L = $('list'), list = sortList(run.got);
+      L.innerHTML = '';
+      list.forEach(function (d) { L.appendChild(card(d)); });
+      $('status').textContent = list.length ? list.length + (list.length === 1 ? ' deal' : ' deals') + ' with ' + $('dtxt').textContent + ' off' + (run.done ? '. That’s all of them!' : '') : (run.done ? '🤷 No Steam deals in that range right now. Try a wider discount or a higher price!' : '');
+      $('more').hidden = run.done || !list.length;
+    }
+    function fetchMore(goal) {   // get pages until we have enough deals in your discount range
+      if (!run || run.busy || run.done) return;
+      var r = run, tries = 0;
+      r.busy = true; $('more').disabled = true;
+      if (!r.got.length) $('status').textContent = '🔎 Looking for deals…';
+      (function next() {
+        if (r !== run) return;
+        fetch(url(r.page)).then(function (res) {
+          if (res.status === 429) throw new Error('busy');
+          if (!res.ok) throw new Error('http');
+          var total = +res.headers.get('X-Total-Page-Count');
+          return res.json().then(function (j) { return { j: j, total: total }; });
+        }).then(function (o) {
+          if (r !== run) return;
+          var j = Array.isArray(o.j) ? o.j : [];
+          j.forEach(function (d) { if (d && d.dealID && !r.seen[d.dealID] && fits(d)) { r.seen[d.dealID] = 1; r.got.push(d); } });
+          r.page++; tries++;
+          if (!j.length || j.length < 60 || (o.total && r.page > o.total)) r.done = true;
+          if (!r.done && r.got.length < goal && tries < 6) { show(); next(); return; }
+          r.busy = false; $('more').disabled = false; show();
+        }).catch(function (e) {
+          if (r !== run) return;
+          r.busy = false; $('more').disabled = false;
+          $('status').textContent = e && e.message === 'busy' ? '⏳ The price tracker is busy. Wait a minute and try again!' : '📡 Couldn’t get deals. Check your internet and try again!';
+          $('more').hidden = !r.got.length;
+        });
+      })();
+    }
+    function search() {
+      st.q = $('q').value.trim(); save();
+      run = { page: 0, got: [], seen: {}, done: false, busy: false };
+      $('list').innerHTML = ''; $('more').hidden = true;
+      fetchMore(24);
+    }
+    function setRange(a, b) { st.min = a; st.max = b; save(); paint(); }
+    $('min').addEventListener('input', function () { st.min = +this.value; if (st.min > st.max) st.max = st.min; save(); paint(); });
+    $('max').addEventListener('input', function () { st.max = +this.value; if (st.max < st.min) st.min = st.max; save(); paint(); });
+    $('price').addEventListener('input', function () { st.price = +this.value; save(); paint(); });
+    $('sort').addEventListener('change', function () { st.sort = this.value; save(); if (run && run.got.length) show(); });
+    $('rev').addEventListener('change', function () { st.rev = this.value; save(); });
+    $('chips').addEventListener('click', function (e) { var b = e.target.closest('[data-r]'); if (!b) return; var r = b.getAttribute('data-r').split(','); setRange(+r[0], +r[1]); search(); });
+    $('go').addEventListener('click', search);
+    $('q').addEventListener('keydown', function (e) { if (e.key === 'Enter') search(); });
+    $('more').addEventListener('click', function () { if (run) fetchMore(run.got.length + 24); });
+    $('q').value = st.q;
+    $('q').addEventListener('input', function () { st.q = this.value.trim(); save(); });
+    paint();
+    window.registerHook('steam', function () { paint(); if (!run) search(); });
   })();
 
 </script>
