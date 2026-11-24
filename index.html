@@ -2002,6 +2002,820 @@
   .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
   .chs-rvi.c-great { border-color: #5b8bd9; }
   .chs-one { width: 62%; margin: 8px auto 0; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -2289,6 +3103,30 @@
   .chs-sugb small { color: var(--muted); }
   .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
   .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
   .fv-load { display: none; }
   .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
   .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
@@ -17783,6 +18621,20 @@
         } else if (!back) shelter -= 20;
         mg += sgn * shelter;
       }
+      if (aggroW) {   // 🔥 attacking bots: they LOVE having pieces close to your king
+        var ek = kingSq[aggroCol ? 0 : 1], ekf = fileOf(ek), ekr = rankOf(ek), att = 0;
+        for (j = 0; j < np; j++) {
+          s = pieceList[j]; pc = board[s]; if ((pc & 8) !== aggroCol) continue;
+          var dd = Math.max(Math.abs(fileOf(s) - ekf), Math.abs(rankOf(s) - ekr));
+          if (dd <= 4) att += (5 - dd) * (5 - dd) * ((pc & 7) === Q ? 2 : 1);
+        }
+        for (f = ekf; f <= ekf + 2; f++) {   // …and pushing pawns at it (a pawn storm!)
+          if (f < 1 || f > 8) continue;
+          r = aggroCol ? bPawnMin[f] : wPawnMax[f];
+          if (r >= 0 && r <= 7) att += aggroCol ? Math.max(0, 5 - r) * 2 : Math.max(0, r - 2) * 2;
+        }
+        mg += (aggroCol ? -1 : 1) * ((att * aggroW) >> 2);
+      }
       if (phase > 24) phase = 24;
       var score = ((mg * phase + eg * (24 - phase)) / 24) | 0;
       // endgames: help the winning side corner the lone king; drawish material counts for less
@@ -17801,6 +18653,7 @@
     var killers = new Int32Array(MAXPLY * 2 + 4), hist = new Int32Array(16 * 120);
     var mvBuf = [], scBuf = [];
     for (i = 0; i <= MAXPLY + 2; i++) { mvBuf.push(new Int32Array(256)); scBuf.push(new Int32Array(256)); }
+    var aggroW = 0, aggroCol = 0, lastAggro = 0;   // 🔥 (only while an attacking bot thinks)
     var nodes = 0, stopAt = 0, nodeLimit = 0, stopped = false, rootBest = 0, useQS = true, selDepth = 0, farBlindPly = -1;
     var VAL = [0, 1, 3, 3, 5, 9, 20];
     function now() { return Date.now(); }
@@ -17948,6 +18801,8 @@
       for (var j = 0; j < killers.length; j++) killers[j] = 0;
       for (j = 0; j < hist.length; j++) hist[j] >>= 2;
       if (!lm.length) return null;
+      aggroW = o.attack || 0; aggroCol = side;
+      if (aggroW !== lastAggro) { ttFlag.fill(0); lastAggro = aggroW; }   // (old scores were judged differently)
       var res = { move: 0, score: 0, depth: 0 };
       if (lm.length === 1) { res.move = lm[0]; res.score = evaluate(); }
       else if (o.random && Math.random() < o.random) { res.move = lm[(Math.random() * lm.length) | 0]; res.score = 0; res.depth = 0; res.random = true; }
@@ -17965,6 +18820,7 @@
         for (j = 0; j < all.length; j++) {
           var m = all[j][0], s = all[j][1];
           if (o.greed && (board[(m >> 7) & 127] || ((m >>> 17) & 2))) s += o.greed;
+          if (o.attack) { make(m); if (inCheck()) s += o.attack * 6; unmake(); }   // 🔥 checks look exciting!
           if (o.noise && Math.abs(s) < MATE - 200) s += gauss() * o.noise;
           if (s > bs) { bs = s; bm = m; raw = all[j][1]; }
         }
@@ -17981,7 +18837,7 @@
         }
         res.move = best; res.score = bestScore;
       }
-      useQS = true; farBlindPly = -1;
+      useQS = true; farBlindPly = -1; aggroW = 0;
       res.nodes = nodes; res.ms = now() - t0; res.uci = moveUci(res.move); res.san = san(res.move, lm);
       return res;
     }
@@ -17992,6 +18848,7 @@
     function pieceOn(sq) { var pc = board[sq]; return pc && pc !== OFF ? 'PNBRQK'.charAt((pc & 7) - 1) : ''; }
     function review(list, o) {
       o = o || {};
+      if (lastAggro) { ttFlag.fill(0); lastAggro = 0; }   // (fair scores only: forget an attacking bot's)
       var lm = legalMoves(), t0 = now(), want = [], j;
       for (j = 0; j < list.length; j++) want.push(findUci(list[j]) || 0);
       if (!lm.length || (want.length && !want[0])) return null;   // (an empty list: just the best move, and o.threat)
@@ -18099,7 +18956,7 @@
         s: { random: 0.35, blind: 0.9, depth: 1, noise: 260 } },
       { id: 'biscuit', e: '🐶', n: 'Biscuit', elo: 300, hue: '#e4a64a', d: 'Chases every piece it sees. Can’t resist a capture. Woof!',
         hi: 'Woof! Throw me a piece!', win: 'Who’s a good boy? ME! I won!', lose: 'Woof… you’re a good player.',
-        s: { random: 0.3, blind: 0.8, depth: 1, noise: 220, greed: 160 } },
+        s: { random: 0.3, blind: 0.8, depth: 1, noise: 220, greed: 160, attack: 6 } },
       { id: 'beepbop', e: '🤖', n: 'Beep-Bop', elo: 400, hue: '#4db6ff', d: 'A little robot that’s still learning the rules. Beep!',
         hi: 'BEEP. CHESS MODE: ON.', win: 'VICTORY.EXE HAS STARTED.', lose: 'ERROR 404: WIN NOT FOUND. GOOD GAME.',
         s: { aimless: 0.15, blind: 0.3, slip: 0.5, depth: 1, noise: 150, greed: 50 } },
@@ -18111,13 +18968,13 @@
         s: { aimless: 0.08, blind: 0.08, slip: 0.45, depth: 2, noise: 120 } },
       { id: 'hopper', e: '🐸', n: 'Hopper', elo: 700, hue: '#39c98a', d: 'Jumps at every chance to attack. Ribbit!',
         hi: 'Ribbit! Let’s hop to it.', win: 'Ribbit-tastic!', lose: 'You out-hopped me!',
-        s: { aimless: 0.04, blind: 0.06, slip: 0.35, depth: 2, noise: 100, greed: 50 } },
+        s: { aimless: 0.04, blind: 0.06, slip: 0.35, depth: 2, noise: 100, greed: 50, attack: 10 } },
       { id: 'pebble', e: '🐧', n: 'Pebble', elo: 800, hue: '#7c6cff', d: 'Stays cool under pressure. Slides right into the endgame.',
         hi: 'Brrr. It’s chess time.', win: 'Cool, cool, cool. I win.', lose: 'Brr… that was ice cold. Nice!',
         s: { aimless: 0.03, blind: 0.05, slip: 0.28, depth: 2, noise: 85 } },
       { id: 'rusty', e: '🦊', n: 'Rusty', elo: 900, hue: '#ff7a59', d: 'A sneaky fox. Watch out for forks!',
         hi: 'Heh heh. Watch your knights.', win: 'Outfoxed you!', lose: 'Clever! Too clever for a fox.',
-        s: { blind: 0.03, slip: 0.2, depth: 2, noise: 65 } },
+        s: { blind: 0.03, slip: 0.2, depth: 2, noise: 65, attack: 8 } },
       { id: 'bamboo', e: '🐼', n: 'Bamboo', elo: 1000, hue: '#93a1b5', d: 'Calm and steady. Takes a snack break every few moves.', book: 0.4,
         hi: '*munch munch* Your move.', win: '*happy munching* Good game!', lose: 'Wow. I need more bamboo to think.',
         s: { blind: 0.015, slip: 0.12, depth: 2, noise: 50 } },
@@ -18127,39 +18984,60 @@
       { id: 'merlina', e: '🧙', n: 'Merlina', elo: 1200, hue: '#7c6cff', d: 'A wizard who knows a few tricks… and a few traps.', book: 0.6,
         hi: 'Abracadabra… your move.', win: 'Just as my crystal ball said!', lose: 'Your magic is stronger than mine!',
         s: { slip: 0.1, depth: 3, noise: 48 } },
+      { id: 'blaze', e: '🔥', n: 'Blaze', elo: 1250, hue: '#ff6b2c', d: 'Attacks from move ONE. Every piece runs at your king!', book: 0.6,
+        hi: 'Ready? Here I COME!', win: 'Burned you! Too hot to handle!', lose: 'Whoa… you put out my fire!',
+        s: { slip: 0.08, depth: 3, noise: 46, attack: 14 } },
       { id: 'hoot', e: '🦉', n: 'Professor Hoot', elo: 1300, hue: '#e4a64a', d: 'Read every chess book in the library. Twice.', book: 0.8,
         hi: 'Hoo! Let us begin, student.', win: 'Class dismissed. Hoo hoo!', lose: 'Hoo! The student has become the teacher!',
         s: { depth: 3, noise: 45 } },
       { id: 'grizzly', e: '🐻', n: 'Grizzly', elo: 1400, hue: '#b5761c', d: 'Big, strong, and always coming for your king.', book: 1, resign: true,
         hi: 'RAWR. I’m coming for your king.', win: 'RAWRRR! Bear hug for the winner: me!', lose: 'Grr… you’re one tough cub.',
-        s: { depth: 4, noise: 50 } },
+        s: { depth: 4, noise: 50, attack: 12 } },
       { id: 'luna', e: '🐺', n: 'Luna', elo: 1500, hue: '#4db6ff', d: 'Hunts at night. Very patient. Waits for you to slip.', book: 1, resign: true,
         hi: 'Awooo… the hunt begins.', win: 'The pack wins tonight.', lose: 'Awoo… you’re the alpha now.',
         s: { depth: 4, noise: 32 } },
       { id: 'ember', e: '🐉', n: 'Ember', elo: 1600, hue: '#ff5d73', d: 'A young dragon with fiery attacks.', book: 1, resign: true,
         hi: 'I’ll burn right through your defense!', win: 'ROOOAR! Fire wins!', lose: 'My flames… went out. Well played!',
-        s: { depth: 4, noise: 24 } },
+        s: { depth: 4, noise: 24, attack: 12 } },
+      { id: 'talon', e: '🦅', n: 'Talon', elo: 1700, hue: '#c98a3a', d: 'Circles high above… then SWOOPS down on your king.', book: 1, resign: true,
+        hi: 'I see your king from up here.', win: 'Swoop! Got you!', lose: 'You flew higher than me today.',
+        s: { depth: 4, noise: 16, attack: 10 } },
       { id: 'shadow', e: '🥷', n: 'Shadow', elo: 1800, hue: '#5d6676', d: 'Silent and quick. You won’t see the trap coming.', book: 1, resign: true,
         hi: '…', win: '…You never saw it coming.', lose: '…Respect.',
-        s: { time: 350, depth: 5 } },
+        s: { time: 350, depth: 5, attack: 8 } },
+      { id: 'plank', e: '🏴‍☠️', n: 'Captain Plank', elo: 1900, hue: '#8b5e3c', d: 'A pirate who raids your king and steals your pieces. Arrr!', book: 1, resign: true,
+        hi: 'Arrr! Prepare to be boarded!', win: 'Walk the plank, matey!', lose: 'Shiver me timbers… ye beat me!',
+        s: { time: 420, depth: 5, attack: 12 } },
       { id: 'rookula', e: '🧛', n: 'Count Rookula', elo: 2000, hue: '#d63f8c', d: 'Has been playing chess in his castle for 500 years.', book: 1, resign: true,
         hi: 'Good evening. Shall we play… a little game?', win: 'Mwah ha ha! The night is mine!', lose: 'Bah! Beaten before sunrise!',
         s: { time: 500, depth: 6 } },
+      { id: 'inky', e: '🐙', n: 'Inky', elo: 2100, hue: '#b06ad9', d: 'Eight arms, so it attacks everywhere at once.', book: 1, resign: true,
+        hi: 'Blub! I’ve got an arm for every piece.', win: 'Squished you with all eight arms!', lose: 'Blub… I’m all tied in knots.',
+        s: { time: 650, depth: 7, attack: 8 } },
       { id: 'vera', e: '👑', n: 'Queen Vera', elo: 2200, hue: '#ffd34d', d: 'Rules the board with an iron crown.', book: 1, resign: true,
         hi: 'Bow before your queen.', win: 'Long live the queen!', lose: 'I… surrender my crown. Impressive.',
         s: { time: 800, depth: 8 } },
+      { id: 'finn', e: '🦈', n: 'Finn', elo: 2300, hue: '#5b8bd9', d: 'Smells a weak king from a mile away. Then… CHOMP.', book: 1, resign: true,
+        hi: 'Dun dun… dun dun…', win: 'CHOMP! Your king was a snack.', lose: 'I’ll swim away now…',
+        s: { time: 1000, attack: 12 } },
       { id: 'cortex', e: '🧠', n: 'Cortex', elo: 2400, hue: '#f472b6', d: 'A giant brain that thinks 10 moves ahead.', book: 1, resign: true,
         hi: 'Calculating… calculating… ready.', win: 'As calculated.', lose: 'Error in my calculations. You are brilliant.',
         s: { time: 1200 } },
+      { id: 'oracle', e: '🔮', n: 'The Oracle', elo: 2500, hue: '#9b7bff', d: 'A calm defender. Sees your plans before you even think of them.', book: 1, resign: true,
+        hi: 'I already know your next move…', win: 'Just as I foresaw.', lose: 'I did not see THAT coming!',
+        s: { time: 1500 } },
       { id: 'xylo', e: '👽', n: 'Xylo', elo: 2600, hue: '#a3e635', d: 'Learned chess from a satellite. Plays out-of-this-world moves.', book: 1, resign: true,
         hi: 'Greetings, Earthling. Prepare for chess.', win: 'Earth chess: conquered.', lose: 'Earthling… you are worthy.',
-        s: { time: 1800 } },
+        s: { time: 1800, attack: 10 } },
+      { id: 'twister', e: '🌪️', n: 'Twister', elo: 2700, hue: '#7fd1c7', d: 'Turns every game into a wild storm of sacrifices and attacks.', book: 1, resign: true,
+        hi: 'Hold on tight! It’s getting windy!', win: 'Whoosh! Blown away!', lose: 'The storm is over… you win!',
+        s: { time: 2100, attack: 14 } },
       { id: 'magma', e: '🌋', n: 'Magma', elo: 2800, hue: '#ff7a59', d: 'Hot, unstoppable, and never cools down.', book: 1, resign: true,
         hi: 'Feel the heat.', win: 'Melted.', lose: 'You… cooled me down. Wow.',
-        s: { time: 2500 } },
+        s: { time: 2500, attack: 12 } },
       { id: 'bulletking', e: '⚡', n: 'The Bullet King', elo: 2850, hue: '#38bdf8', fast: 1, d: 'Inspired by the speed-chess streamers. Plays lightning fast, attacks like crazy, and LOVES ⚡ bullet. Try him with a clock!', book: 1, resign: true,
         hi: 'Bullet? LET’S GOOO!', win: 'Too fast! Gotta be quicker than that!', lose: 'Okay okay… you’re actually really good!',
-        s: { time: 1400 } },
+        s: { time: 1400, attack: 12 } },
       { id: 'champ', e: '🐐', n: 'The Champion', elo: 2900, hue: '#e0b84a', d: 'Inspired by the world champions. Calm, patient, and squeezes every tiny advantage until you crack. Amazing in the endgame.', book: 1, resign: true,
         hi: 'Let’s play a long, careful game.', win: 'A tiny edge was all I needed.', lose: 'That was world-champion chess. Respect!',
         s: { time: 3200 } },
@@ -18651,6 +19529,14 @@
           ['d1d2', 'Queen to d2.'],
           ['e8g8', 'Black castles.'],
           ['e1c1', 'Castle the long way! Next, push h4 and attack Black’s king.']] }] },
+      {"id":"catalan","e":"🌉","n":"Catalan Opening","side":"w","d":"Queen’s Gambit pawns plus a bishop on g2 that x-rays the whole board.","plan":[["Bring your queen to c2. She watches the center and the e4 square.","d1c2"],["Bring your other knight to d2.","b1d2"],["Push b3 and put your other bishop on b2. Now BOTH bishops aim at Black’s king side!","b2b3 c1b2"],["Put a rook on d1, behind your d-pawn.","f1d1"]],"line":[["d2d4","Push your queen’s pawn to d4. Take the center!"],["g8f6","Black brings out a knight."],["c2c4","Pawn to c4, grabbing even more space."],["e7e6","Black opens a path for its bishop."],["g2g3","Here’s the Catalan idea: g3, to make a home for your bishop on g2."],["d7d5","Black puts a pawn in the middle with d5."],["f1g2","Bishop to g2! It looks down the long diagonal, all the way to Black’s rook on a8."],["f8e7","Black gets ready to castle."],["g1f3","Knight to f3. Almost ready to castle!"],["e8g8","Black castles."],["e1g1","Castle too! Your king is safe and your bishop on g2 is super strong. That’s the Catalan!"]],"alts":[{"at":5,"line":[["f8b4","Black checks with the bishop instead of playing d5!"],["c1d2","Block the check with your bishop."],["b4e7","The bishop goes back to e7."],["f1g2","Bishop to g2, the Catalan bishop!"],["d7d5","Now Black plays d5."],["g1f3","Knight to f3, then castle. Same plan as always!"]]},{"at":3,"line":[["g7g6","Black plays g6 instead, getting ready for a bishop on g7."],["b1c3","Knight to c3. Control the center!"],["f8g7","Black puts the bishop on g7."],["g2g3","Pawn to g3, so your bishop can go to g2 too."],["e8g8","Black castles."],["f1g2","Bishop to g2. Both bishops on the long diagonals!"]]}]},
+      {"id":"fourknights","e":"🐎","n":"Four Knights Game","side":"w","d":"Bring all your knights out fast. Simple, solid, and great for learning.","plan":[["Bring your bishop to g5 to pin Black’s knight on f6.","c1g5"],["Jump your c3 knight to e2, then to g3, near Black’s king.","c3e2 e2g3"],["Push c3 to kick Black’s bishop away.","c2c3"],["Put a rook on e1.","f1e1"]],"line":[["e2e4","Pawn to e4. Take the center!"],["e7e5","Black answers with e5."],["g1f3","Knight to f3, attacking the pawn on e5."],["b8c6","Black protects it with a knight."],["b1c3","Your other knight comes out to c3."],["g8f6","Black brings out its other knight too. Four knights on the board!"],["f1b5","Bishop to b5. It pins down Black’s knight on c6, which guards e5."],["f8b4","Black copies you!"],["e1g1","Castle! Your king is safe."],["e8g8","Black castles too."],["d2d3","Pawn to d3. It protects e4 and opens a path for your bishop."],["d7d6","Black does the same. That’s the Four Knights Game!"]],"alts":[{"at":5,"line":[["f8c5","Black brings out the bishop instead of the knight."],["f1c4","Bishop to c4, aiming at f7!"],["g8f6","Now the knight comes out."],["d2d3","Protect e4 with d3."],["d7d6","Black protects e5."],["e1g1","Castle! Your king is safe."]]},{"at":7,"line":[["a7a6","Black kicks your bishop with a6."],["b5c6","Take the knight!"],["d7c6","Black takes back."],["d2d3","Protect e4. Now Black can’t take it."],["f8d6","Black protects e5 with its bishop."],["e1g1","Castle! Your pawns are healthier than Black’s."]]}]},
+      {"id":"bishops","e":"⛪","n":"Bishop’s Opening","side":"w","d":"Bishop to c4 on move 2, aiming straight at f7.","plan":[["Tuck your bishop back to b3, where it’s safe and still aims at f7.","c4b3"],["Put a rook on e1.","f1e1"],["Bring your other knight to d2.","b1d2"],["Play h3, so Black’s bishop can’t pin your knight from g4.","h2h3"]],"line":[["e2e4","Pawn to e4. Take the center!"],["e7e5","Black answers with e5."],["f1c4","Right away: bishop to c4! It aims at f7, the weak square next to Black’s king."],["g8f6","Black brings out a knight and hits your e4 pawn."],["d2d3","Protect it with d3. Rock solid."],["f8c5","Black’s bishop aims at your f2."],["g1f3","Knight to f3, attacking e5."],["d7d6","Black protects e5."],["e1g1","Castle! Safe king."],["e8g8","Black castles too."],["c2c3","Pawn to c3. Later you can push d4 and grab the center."],["a7a6","Black makes a little escape room for its bishop. That’s the Bishop’s Opening!"]],"alts":[{"at":3,"line":[["b8c6","Black brings out the other knight first."],["g1f3","Knight to f3, attacking e5."],["g8f6","Now Black brings out the other knight."],["d2d3","Protect e4 with d3."],["f8c5","Black’s bishop comes out."],["c2c3","Pawn to c3. Next you can castle and push d4!"]]},{"at":5,"line":[["c7c6","Black plays c6, getting ready to push d5."],["g1f3","Knight to f3, attacking e5."],["d7d5","Black pushes d5 and attacks your bishop!"],["c4b3","Bishop back to b3. Safe!"],["f8d6","Black protects e5 with the bishop."],["b1c3","Knight to c3. All your pieces are coming out!"]]}]},
+      {"id":"trompowsky","e":"🎺","n":"Trompowsky Attack","side":"w","d":"Hit Black’s knight with your bishop on move 2. Tricky and fun!","plan":[["Push f4 to grab even more space.","f2f4"],["Bring your knight out to f3.","g1f3"],["Bring your bishop to d3.","f1d3"],["Put your other rook on e1, behind your e-pawn.","h1e1"]],"line":[["d2d4","Pawn to d4. Take the center!"],["g8f6","Black brings out a knight."],["c1g5","Here’s the Trompowsky: bishop to g5 right away, eyeing Black’s knight!"],["e7e6","Black opens a path for its bishop and queen."],["e2e4","Grab the center with e4! It attacks nothing yet, but it’s HUGE."],["h7h6","Black kicks your bishop with h6."],["g5f6","Take the knight! Now Black has to take back with the queen."],["d8f6","Black’s queen takes back."],["b1c3","Knight to c3, protecting e4."],["d7d6","Black protects e5 for later."],["d1d2","Queen to d2. You’re getting ready to castle the long way!"],["b8c6","Black brings out its other knight."],["e1c1","Castle queen side! Your rook jumps to d1. Now you can push your king-side pawns and attack. That’s the Trompowsky!"]],"alts":[{"at":1,"line":[["d7d5","Black plays d5 instead of Nf6."],["c1f4","Then put the bishop on f4, like the London!"],["g8f6","Black brings out a knight."],["e2e3","Pawn to e3, protecting d4."],["e7e6","Black opens a path for its bishop."],["g1f3","Knight to f3. Solid and safe!"]]},{"at":3,"line":[["f6e4","Black’s knight jumps to e4 and attacks your bishop!"],["g5f4","Bishop back to f4. Safe."],["d7d5","Black puts a pawn on d5 to protect the knight."],["e2e3","Pawn to e3."],["c7c5","Black hits your d4 pawn."],["f1d3","Bishop to d3, attacking the knight on e4!"]]}]},
+      {"id":"rossolimo","e":"🎯","n":"Rossolimo (vs the Sicilian)","side":"w","pro":1,"d":"A calm, strong way to beat the Sicilian. Pros play it all the time!","plan":[["Bring your bishop to e3.","c1e3"],["Queen to d2, connecting your pieces.","d1d2"],["Castle! Your king is safe.","e1g1"],["Push a4 to grab space on the queen side.","a2a4"]],"line":[["e2e4","Pawn to e4. Take the center!"],["c7c5","Black plays the Sicilian with c5."],["g1f3","Knight to f3."],["b8c6","Black brings out a knight."],["f1b5","The Rossolimo: bishop to b5, pinning that knight!"],["g7g6","Black gets ready to put a bishop on g7."],["b5c6","Take the knight! Now Black has doubled pawns."],["d7c6","Black takes back with the d-pawn."],["d2d3","Pawn to d3. Simple and solid."],["f8g7","Black’s bishop goes to g7."],["h2h3","Pawn to h3, so Black’s bishop can’t come to g4."],["g8f6","Black brings out its other knight."],["b1c3","Knight to c3. Next: Be3, Qd2 and castle!"]],"alts":[{"at":5,"line":[["e7e6","Black plays e6 instead of g6."],["e1g1","Castle first. Safety!"],["g8e7","Black brings a knight to e7."],["f1e1","Rook to e1, behind your e-pawn."],["a7a6","Black kicks your bishop."],["b5c6","Take the knight!"]]},{"at":3,"line":[["d7d6","Black plays d6 instead of Nc6."],["f1b5","Check with the bishop! (This one is called the Moscow.)"],["c8d7","Black blocks the check."],["b5d7","Take it, with check!"],["d8d7","Black takes back with the queen."],["e1g1","Castle! Next: c4 and Nc3, a strong setup."]]}]},
+      {"id":"alapin","e":"🏗️","n":"Alapin (vs the Sicilian)","side":"w","pro":1,"d":"Push c3 to build a big pawn center against the Sicilian.","plan":[["Castle! Your king is safe.","e1g1"],["Bring your queen to e2, protecting e5.","d1e2"],["Bring your other knight out to c3.","b1c3"],["Put your rook on d1.","f1d1"]],"line":[["e2e4","Pawn to e4."],["c7c5","Black plays the Sicilian."],["c2c3","The Alapin: c3! Next you push d4 and build a BIG center."],["g8f6","Black attacks your e4 pawn."],["e4e5","Push e5 and kick the knight away!"],["f6d5","The knight jumps to d5."],["d2d4","Now d4! Your pawns take over the middle."],["c5d4","Black takes."],["g1f3","Knight to f3. You’ll take back soon."],["b8c6","Black brings out a knight."],["c3d4","Take back! Two strong pawns in the center."],["d7d6","Black attacks your e5 pawn."],["f1c4","Bishop to c4, attacking the knight on d5. That’s the Alapin!"]],"alts":[{"at":3,"line":[["d7d5","Black hits back in the center with d5."],["e4d5","Take that pawn!"],["d8d5","Black takes back with the queen."],["d2d4","Push d4. Now you have the center!"],["g8f6","Black brings out a knight."],["g1f3","Knight to f3. Your pieces come out fast!"]]},{"at":3,"line":[["e7e6","Black plays e6."],["d2d4","Push d4. Take the center!"],["d7d5","Black attacks e4."],["e4e5","Push past it with e5. Lots of space!"],["b8c6","Black brings out a knight."],["g1f3","Knight to f3, protecting d4."]]}]},
+      {"id":"advfrench","e":"🥖","n":"Advance French","side":"w","pro":1,"d":"Push e5 against the French and squeeze Black with space.","plan":[["Bring your bishop to b2, so it protects d4.","c1b2"],["Bishop to d3, aiming at Black’s king side.","f1d3"],["Castle! Your king is safe.","e1g1"],["Bring your other knight to d2.","b1d2"]],"line":[["e2e4","Pawn to e4."],["e7e6","Black plays the French Defense."],["d2d4","Pawn to d4. Two pawns in the center!"],["d7d5","Black attacks your e4 pawn."],["e4e5","The Advance: push e5! Your pawns grab lots of space."],["c7c5","Black hits your d4 pawn."],["c2c3","Protect d4 with c3. A strong pawn chain!"],["b8c6","Black attacks d4 again."],["g1f3","Knight to f3, protecting d4 once more."],["d8b6","Black’s queen ALSO attacks d4!"],["a2a3","Pawn to a3. Next you push b4 and grab space on the queen side."],["c8d7","Black brings out its bishop."],["b2b4","Push b4! Now your pawns press on the queen side. That’s the Advance French!"]],"alts":[{"at":9,"line":[["g8e7","Black sends a knight to e7, heading for f5."],["f1e2","Bishop to e2. Calm and solid."],["e7f5","The knight lands on f5 and hits d4."],["e1g1","Castle! Your king is safe now."],["c5d4","Black takes on d4."],["c3d4","Take back. Your center is still strong!"]]},{"at":5,"line":[["b7b6","Black gets ready to put a bishop on b7 or a6."],["c2c3","Protect d4 with c3."],["d8d7","Black’s queen comes to d7."],["g1f3","Knight to f3."],["c8a6","Black wants to swap off your good bishop."],["f1a6","Take the bishop first!"]]}]},
+      {"id":"advcaro","e":"🚀","n":"Advance Caro-Kann","side":"w","pro":1,"d":"Push e5 against the Caro-Kann and keep a space advantage.","plan":[["Push c3 to protect d4 again.","c2c3"],["Bring your other knight to d2.","b1d2"],["Push your knight from f3 to h4, chasing Black’s bishop!","f3h4"],["Put your rook on e1.","f1e1"]],"line":[["e2e4","Pawn to e4."],["c7c6","Black plays the Caro-Kann."],["d2d4","Pawn to d4. Two pawns in the middle!"],["d7d5","Black attacks your e4 pawn."],["e4e5","The Advance: push e5! Lots of space for your pieces."],["c8f5","Black brings its bishop out before playing e6."],["g1f3","Knight to f3."],["e7e6","Black opens a path for its other bishop."],["f1e2","Bishop to e2, getting ready to castle."],["c6c5","Black hits your d4 pawn."],["c1e3","Bishop to e3, protecting d4."],["b8d7","Black brings out a knight."],["e1g1","Castle! That’s the Advance Caro-Kann!"]],"alts":[{"at":5,"line":[["c6c5","Black hits d4 right away with c5."],["d4c5","Take the pawn!"],["e7e6","Black opens a path to get it back."],["c1e3","Bishop to e3 protects your extra pawn."],["b8d7","Black attacks c5 again."],["f1b5","Bishop to b5, pinning the knight!"]]},{"at":7,"line":[["b8d7","Black brings out a knight before e6."],["f1e2","Bishop to e2."],["e7e6","Black plays e6."],["e1g1","Castle! Your king is safe now."],["g8e7","Black brings its other knight to e7."],["b1d2","Bring your other knight out to d2."]]}]},
       { id: 'sicilian', e: '🌋', n: 'Sicilian Defense', side: 'b', d: 'Fight back against e4 from the side. The most popular defense in the world.', plan: [['Push e5 to fight for the center.', 'e7e5'], ['Bishop to e7, then castle.', 'f8e7 e8g8'], ['Queen to c7 and push b5. Your queenside pawns go on the attack!', 'd8c7 b7b5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['c7c5', 'The Sicilian: push your c-pawn to c5. It fights for the center from the side.'],
@@ -19205,6 +20091,15 @@
           ['c6e5', 'Trade knights: Nxe5!'],
           ['e1e5', 'White takes back with its rook.'],
           ['e8g8', 'Castle! Material is equal, and your position is super solid.']] }] },
+      {"id":"qid","e":"🤴","n":"Queen’s Indian Defense","side":"b","d":"Put your bishop on b7 and fight for the e4 square.","plan":[["Push f5 to make e4 super strong.","f7f5"],["Move your bishop to f6, on the long diagonal.","e7f6"],["Push d6 so your pieces have room.","d7d6"],["Bring your other knight to d7.","b8d7"]],"line":[["d2d4","White starts with d4."],["g8f6","Bring out your knight to f6. It watches e4."],["c2c4","White grabs space with c4."],["e7e6","Pawn to e6. It opens a path for your bishop."],["g1f3","White brings out a knight."],["b7b6","Here’s the Queen’s Indian: b6, so your bishop can go to b7!"],["g2g3","White plans to put a bishop on g2."],["c8b7","Bishop to b7! It looks down the long diagonal at e4."],["f1g2","White’s bishop faces yours."],["f8e7","Bishop to e7, getting ready to castle."],["e1g1","White castles."],["e8g8","Castle too!"],["b1c3","White brings out its other knight."],["f6e4","Jump into e4! Your bishop on b7 protects the knight. That’s the Queen’s Indian!"]],"alts":[{"at":6,"line":[["a2a3","White plays a3, so your bishop can’t go to b4."],["c8b7","Bishop to b7 anyway!"],["b1c3","White brings out a knight."],["d7d5","Pawn to d5. Take the center!"],["c4d5","White takes."],["f6d5","Take back with the knight. Good game for you!"]]},{"at":4,"line":[["b1c3","White brings out the knight to c3 instead."],["f8b4","Pin it with your bishop! That’s a Nimzo-Indian trick."],["d1c2","White protects the knight with the queen."],["e8g8","Castle! Your king is safe now."],["a2a3","White kicks your bishop."],["b4c3","Take the knight, with check!"],["c2c3","White takes back with the queen."],["d7d6","Pawn to d6. Solid! Next: Nbd7 and Bb7."]]}]},
+      {"id":"benoni","e":"🌶️","n":"Benoni Defense","side":"b","d":"A spicy fight: White gets the center, you get counter-attack on the queen side.","plan":[["Put your rook on e8. It hits White’s e4 pawn.","f8e8"],["Push a6…","a7a6"],["…bring your knight to d7…","b8d7"],["…then push b5 and attack on the queen side!","b7b5"]],"line":[["d2d4","White starts with d4."],["g8f6","Knight to f6."],["c2c4","White grabs space with c4."],["c7c5","Here’s the Benoni: c5! Attack White’s center right away."],["d4d5","White pushes past you to d5."],["e7e6","Pawn to e6, attacking that d5 pawn."],["b1c3","White protects d5 with a knight."],["e6d5","Take the pawn!"],["c4d5","White takes back."],["d7d6","Pawn to d6. It opens a path for your bishop."],["e2e4","White builds a big center."],["g7g6","Pawn to g6, for your bishop on g7."],["g1f3","White brings out a knight."],["f8g7","Bishop to g7! It looks down the long diagonal."],["f1e2","White gets ready to castle."],["e8g8","Castle! Your king is safe now."],["e1g1","White castles too. That’s the Benoni!"]],"alts":[{"at":4,"line":[["e2e3","White protects with e3 instead of pushing."],["g7g6","Pawn to g6, ready for your bishop."],["b1c3","White brings out a knight."],["f8g7","Bishop to g7."],["g1f3","White brings out its other knight."],["e8g8","Castle! Your bishop on g7 is strong."]]},{"at":10,"line":[["g1f3","White brings out the knight before e4."],["g7g6","Pawn to g6."],["g2g3","White wants its bishop on g2."],["f8g7","Bishop to g7."],["f1g2","White’s bishop comes out."],["e8g8","Castle! Your king is safe now."]]}]},
+      {"id":"accel","e":"🐲","n":"Accelerated Dragon","side":"b","d":"A Sicilian where your bishop goes to g7 super early.","plan":[["Push d6 so your bishop on c8 can come out.","d7d6"],["Move that bishop to d7.","c8d7"],["Put your rook on c8. It loves the open c-file!","a8c8"],["Jump your knight to a5 to hit White’s bishop.","c6a5"]],"line":[["e2e4","White starts with e4."],["c7c5","The Sicilian: c5!"],["g1f3","White brings out a knight."],["b8c6","Knight to c6."],["d2d4","White opens the center."],["c5d4","Take the pawn!"],["f3d4","White takes back with the knight."],["g7g6","Here’s the Accelerated Dragon: g6 right away, BEFORE d6!"],["b1c3","White brings out another knight."],["f8g7","Bishop to g7. Your dragon bishop breathes fire down the long diagonal!"],["c1e3","White brings out a bishop."],["g8f6","Knight to f6."],["f1c4","White aims at f7."],["e8g8","Castle! That’s the Accelerated Dragon!"]],"alts":[{"at":8,"line":[["c2c4","White plays c4 to stop your d5 push. That’s the Maroczy Bind!"],["g8f6","Knight to f6, hitting e4."],["b1c3","White protects e4."],["d7d6","Pawn to d6."],["f1e2","White gets ready to castle."],["c6d4","Swap knights!"]]},{"at":12,"line":[["f1e2","White plays Be2 instead of Bc4."],["e8g8","Castle! Your king is safe now."],["e1g1","White castles too."],["d7d5","Push d5! Hit back in the center."],["e4d5","White takes."],["c6b4","Jump your knight to b4. Your pieces are very active!"]]}]},
+      {"id":"twoknights","e":"♞","n":"Two Knights Defense","side":"b","d":"Answer the Italian bishop with a quick knight attack on e4.","plan":[["Play h6, so White’s bishop can’t come to g5.","h7h6"],["Put your rook on e8.","f8e8"],["Move your bishop to f8, where it protects your king.","e7f8"],["Bring your other bishop to e6, to swap off White’s strong bishop.","c8e6"]],"line":[["e2e4","White starts with e4."],["e7e5","Answer with e5."],["g1f3","White attacks your pawn."],["b8c6","Protect it with your knight."],["f1c4","White aims a bishop at f7."],["g8f6","Here’s the Two Knights: Nf6! Your second knight attacks e4."],["d2d3","White protects e4."],["f8e7","Bishop to e7. Safe and solid."],["e1g1","White castles."],["e8g8","Castle! Your king is safe now."],["f1e1","White puts a rook on e1."],["d7d6","Pawn to d6, protecting e5."],["c2c3","White gets ready for d4. That’s the Two Knights Defense!"]],"alts":[{"at":6,"line":[["d2d4","White opens the center with d4."],["e5d4","Take the pawn!"],["e4e5","White kicks your knight."],["d7d5","Hit back! d5 attacks the bishop."],["c4b5","White’s bishop moves."],["f6e4","Knight to e4. A great square!"]]},{"at":6,"line":[["b1c3","White brings out its other knight."],["f6e4","Take the pawn! It’s a fork trick."],["c3e4","White takes back."],["d7d5","Fork! Your pawn attacks the bishop AND the knight."],["c4d3","White moves the bishop."],["d5e4","Take the knight. You win the piece back!"]]}]},
+      {"id":"qga","e":"🎁","n":"Queen’s Gambit Accepted","side":"b","d":"Take the gambit pawn, then give it back and get easy, active pieces.","plan":[["Push b5 to kick White’s bishop.","b7b5"],["Bring your bishop to b7, on the long diagonal.","c8b7"],["Bring your knight to d7.","b8d7"],["Bishop to e7, then castle!","f8e7 e8g8"]],"line":[["d2d4","White starts with d4."],["d7d5","Answer with d5."],["c2c4","The Queen’s Gambit! White offers a pawn."],["d5c4","Accept it! Pawn takes c4."],["g1f3","White brings out a knight."],["g8f6","Knight to f6."],["e2e3","White gets ready to take back the pawn."],["e7e6","Pawn to e6, opening a path for your bishop."],["f1c4","White wins the pawn back."],["c7c5","Pawn to c5! Hit White’s center."],["e1g1","White castles."],["a7a6","Pawn to a6. Next you can push b5 and kick the bishop. That’s the Queen’s Gambit Accepted!"]],"alts":[{"at":4,"line":[["e2e4","White grabs the center with e4."],["e7e5","Hit back with e5!"],["g1f3","White attacks your pawn."],["e5d4","Take the pawn!"],["f1c4","White wins back the pawn."],["f8b4","Check! Bring your bishop out with tempo."]]},{"at":6,"line":[["b1c3","White brings out another knight."],["a7a6","Pawn to a6, so you can keep the pawn with b5."],["e2e4","White grabs the center."],["b7b5","Push b5. Keep that extra pawn!"],["e4e5","White kicks your knight."],["f6d5","Knight to d5. A great square!"]]}]},
+      {"id":"semislav","e":"🧱","n":"Semi-Slav Defense","side":"b","pro":1,"d":"A super solid wall of pawns against the Queen’s Gambit, with surprise attacks later.","plan":[["Push a6 to protect b5.","a7a6"],["Bishop to e7, getting ready to castle.","f8e7"],["Castle! Your king is safe.","e8g8"],["Push c5 to attack White’s center!","c6c5"]],"line":[["d2d4","White starts with d4."],["d7d5","Answer with d5."],["c2c4","The Queen’s Gambit."],["c7c6","Protect d5 with c6, like the Slav."],["g1f3","White brings out a knight."],["g8f6","Knight to f6."],["b1c3","White brings out another knight."],["e7e6","The Semi-Slav: e6 too! A rock-solid triangle of pawns."],["e2e3","White opens a path for its bishop."],["b8d7","Knight to d7."],["f1d3","White’s bishop comes out."],["d5c4","Take the pawn on c4!"],["d3c4","White takes back."],["b7b5","Push b5 with tempo! The bishop has to move again."],["c4d3","The bishop goes back."],["c8b7","Bishop to b7 on the long diagonal. That’s the Meran Semi-Slav!"]],"alts":[{"at":8,"line":[["c1g5","White pins your knight."],["h7h6","Ask the bishop to choose with h6!"],["g5f6","White takes your knight."],["d8f6","Take back with the queen."],["e2e3","White plays e3."],["b8d7","Knight to d7. Your bishops are strong!"]]},{"at":4,"line":[["b1c3","White brings out the c3 knight first."],["e7e6","Pawn to e6."],["e2e3","White opens a path for its bishop."],["g8f6","Knight to f6."],["g1f3","Now White brings out the other knight."],["b8d7","Knight to d7. Same setup as always!"]]}]},
+      {"id":"sveshnikov","e":"⚡","n":"Sveshnikov Sicilian","side":"b","pro":1,"d":"A fighting Sicilian with e5. World champions use it!","plan":[["Bishop to e7, getting ready to castle.","f8e7"],["Castle! Your king is safe.","e8g8"],["Bishop to b7 on the long diagonal.","c8b7"],["Put your rook on c8, on the open c-file.","a8c8"]],"line":[["e2e4","White starts with e4."],["c7c5","The Sicilian: c5!"],["g1f3","White brings out a knight."],["b8c6","Knight to c6."],["d2d4","White opens the center."],["c5d4","Take the pawn!"],["f3d4","White takes back."],["g8f6","Knight to f6, attacking e4."],["b1c3","White protects e4."],["e7e5","The Sveshnikov: e5! Kick the knight away and grab the center."],["d4b5","White’s knight jumps to b5, eyeing d6."],["d7d6","Pawn to d6. Now the knight can’t land there."],["c1g5","White pins your knight."],["a7a6","Kick the knight on b5!"],["b5a3","The knight goes to a3."],["b7b5","Push b5. Now that knight on a3 is stuck on the edge!"]],"alts":[{"at":10,"line":[["d4f3","White’s knight goes back to f3."],["f8b4","Bishop to b4, pinning the knight on c3!"],["f1d3","White protects e4."],["d7d6","Pawn to d6."],["e1g1","White castles."],["e8g8","Castle too!"]]},{"at":12,"line":[["c3d5","White jumps into d5."],["f6d5","Take the knight!"],["e4d5","White takes back."],["c6b8","Your knight goes back to b8, to come out again on d7."],["c2c4","White grabs space."],["f8e7","Bishop to e7. Get ready to castle!"]]}]},
+      {"id":"bogo","e":"🛡️","n":"Bogo-Indian Defense","side":"b","pro":1,"d":"An easy, solid answer to d4 and c4: check with the bishop and swap pieces.","plan":[["Push e5 to fight for the center!","e6e5"],["Castle! Your king is safe.","e8g8"],["Push a5 to grab space on the queen side.","a7a5"],["Put your rook on e8.","f8e8"]],"line":[["d2d4","White starts with d4."],["g8f6","Knight to f6."],["c2c4","White grabs space."],["e7e6","Pawn to e6, opening a path for your bishop."],["g1f3","White brings out a knight."],["f8b4","The Bogo-Indian: bishop to b4, CHECK!"],["c1d2","White blocks with its bishop."],["d8e7","Queen to e7, protecting your bishop."],["g2g3","White wants a bishop on g2."],["b8c6","Knight to c6."],["f1g2","White’s bishop comes out."],["b4d2","Swap the bishops, with check!"],["b1d2","White takes back with the knight."],["d7d6","Pawn to d6. Next: e5! That’s the Bogo-Indian."]],"alts":[{"at":6,"line":[["b1d2","White blocks with the knight instead."],["b7b6","Pawn to b6, ready for your bishop on b7."],["a2a3","White kicks your bishop."],["b4d2","Take the knight, with check!"],["d1d2","White takes back with the queen."],["c8b7","Bishop to b7. Nice and active!"]]},{"at":8,"line":[["e2e3","White plays e3 instead."],["e8g8","Castle! Your king is safe now."],["f1d3","White’s bishop comes out."],["d7d6","Pawn to d6."],["e1g1","White castles."],["e6e5","Push e5! Fight for the center."]]}]},
+      {"id":"taimanov","e":"🧭","n":"Taimanov Sicilian","side":"b","pro":1,"d":"A flexible Sicilian with e6, Nc6 and Qc7. Easy to play, hard to beat.","plan":[["Bishop to c5, aiming at White’s pieces.","f8c5"],["Push d6 to give your bishop on c8 room.","d7d6"],["Castle! Your king is safe.","e8g8"],["Push b5 to grab space.","b7b5"]],"line":[["e2e4","White starts with e4."],["c7c5","The Sicilian: c5!"],["g1f3","White brings out a knight."],["e7e6","Pawn to e6."],["d2d4","White opens the center."],["c5d4","Take the pawn!"],["f3d4","White takes back."],["b8c6","Knight to c6, attacking the knight on d4."],["b1c3","White brings out another knight."],["d8c7","The Taimanov: queen to c7! She watches e5 and the c-file."],["c1e3","White brings out a bishop."],["a7a6","Pawn to a6, so no knight can jump to b5."],["f1d3","White gets ready to castle."],["g8f6","Knight to f6."],["e1g1","White castles."],["c6e5","Knight to e5! It’s a great square."]],"alts":[{"at":8,"line":[["d4b5","White’s knight jumps to b5."],["d7d6","Pawn to d6. The knight can’t come to d6 now."],["c2c4","White grabs space."],["g8f6","Knight to f6."],["b1c3","White brings out the other knight."],["a7a6","Kick the knight on b5!"]]},{"at":8,"line":[["d4c6","White swaps knights."],["b7c6","Take back toward the center."],["f1d3","White’s bishop comes out."],["d7d5","Push d5! Your center pawns are strong."],["e1g1","White castles."],["g8f6","Knight to f6."]]}]},
       { id: 'friedliver', e: '🔥', n: 'Fried Liver Attack', side: 'w', deadly: 1, d: 'A wild attack where you sacrifice a knight to hunt the king.', plan: [['Black’s knight on d5 is pinned to the king and attacked three times. Black has to keep defending it!', ''], ['Push d4 to open the center. Black’s king has nowhere safe to hide!', 'd2d4'], ['Castle and bring your rook to e1. Every open line toward the king helps your attack.', 'e1g1 f1e1']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -19635,6 +20530,8 @@
           ['h2h3', 'Ask the bishop a question: h3!'],
           ['g4f3', 'Black trades its bishop for your knight.'],
           ['d1f3', 'Take back with your queen. You have two bishops, and your queen and bishop both aim at f7!']] }] },
+      {"id":"scotchgambit","e":"⚔️","n":"Scotch Gambit","side":"w","deadly":1,"d":"Give a pawn for super-fast attacking pieces.","plan":[["Push f3 to kick away Black’s knight on e4.","f2f3"],["Bring your bishop to e3.","c1e3"],["Bring your other knight to d2.","b1d2"],["Push f4, then f5, to attack!","f3f4 f4f5"]],"line":[["e2e4","Pawn to e4!"],["e7e5","Black answers with e5."],["g1f3","Knight to f3, attacking e5."],["b8c6","Black protects with a knight."],["d2d4","Push d4 and attack in the center!"],["e5d4","Black takes the pawn."],["f1c4","The GAMBIT: don’t take back! Bishop to c4, aiming at f7. Your pieces are racing ahead."],["g8f6","Black brings out a knight and attacks e4."],["e4e5","Push e5! Now you kick the knight."],["d7d5","Black hits your bishop back with d5."],["c4b5","Bishop to b5. It pins the knight on c6."],["f6e4","Black’s knight jumps to e4."],["f3d4","Win your pawn back! Knight takes d4."],["c8d7","Black protects the knight on c6."],["b5c6","Take the knight!"],["b7c6","Black takes back. Its pawns are a mess now."],["e1g1","Castle! You got your pawn back, and your pieces are much better. That’s the Scotch Gambit!"]],"alts":[{"at":7,"line":[["f8c5","Black brings out the bishop to protect d4."],["c2c3","Push c3! Another pawn for the attack."],["g8f6","Black attacks your e4 pawn."],["c3d4","Take back the pawn. Now you have TWO center pawns!"],["c5b4","Black checks you."],["c1d2","Block with the bishop. Your center is huge!"]]},{"at":9,"line":[["f6g4","Black’s knight jumps to g4."],["e1g1","Castle first!"],["d7d6","Black attacks your e5 pawn."],["e5d6","Take that pawn!"],["f8d6","Black takes back."],["f1e1","Rook to e1, CHECK! Your rook loves the open line."]]}]},
+      {"id":"bdg","e":"💣","n":"Blackmar-Diemer Gambit","side":"w","deadly":1,"d":"Give a pawn to blow open the f-file and attack the king!","plan":[["Bring your queen to e1…","d1e1"],["…and then to h4, right next to Black’s king!","e1h4"],["Jump your knight into e5.","f3e5"],["Lift your rook to f3, then to h3, for the big attack.","f1f3 f3h3"]],"line":[["d2d4","Pawn to d4."],["d7d5","Black answers with d5."],["e2e4","BOOM! Push e4 right away. That’s the gambit!"],["d5e4","Black takes it."],["b1c3","Knight to c3, attacking the pawn on e4."],["g8f6","Black protects it with a knight."],["f2f3","Push f3! You offer ANOTHER pawn to open lines."],["e4f3","Black takes again."],["g1f3","Take back with the knight. Your pieces are out and the f-file is OPEN."],["e7e6","Black opens a path for its bishop."],["c1g5","Bishop to g5, pinning the knight on f6."],["f8e7","Black gets ready to castle."],["f1d3","Bishop to d3, aiming at Black’s king side."],["e8g8","Black castles…"],["e1g1","You castle too, and your rook on f1 joins the attack! That’s the Blackmar-Diemer Gambit!"]],"alts":[{"at":9,"line":[["c8g4","Black pins your knight with the bishop."],["h2h3","Ask the bishop: what are you doing here?"],["g4f3","Black takes your knight."],["d1f3","Take back with the queen. Now she looks at b7!"],["c7c6","Black protects b7."],["c1e3","Bring your bishop out. Next: castle the long way and attack!"]]},{"at":7,"line":[["c8f5","Black doesn’t take! It brings out the bishop instead."],["f3e4","Take the pawn yourself."],["f6e4","Black’s knight takes back."],["d1f3","Queen to f3, attacking the knight and b7!"],["e4d6","The knight runs back to d6."],["c1f4","Bishop out. Your pieces are flying!"]]}]},
       { id: 'stafford', e: '🐍', n: 'Stafford Gambit', side: 'b', deadly: 1, mate: 1, d: 'Give up a pawn and set sneaky traps. If White falls for this one, it’s checkmate in 8 moves!', plan: [['If White doesn’t fall for it, keep attacking: push h5 and bring your knight to g4. White’s f2 square is weak!', ''], ['Your queen loves d4, and your bishop loves c5. Both aim at f2!', ''], ['Castle queenside when you can, and keep throwing pawns at White’s king.', '']], line: [
         ['e2e4', 'White starts with e4.'],
         ['e7e5', 'Pawn to e5.'],
@@ -19781,6 +20678,7 @@
           ['g4e5', 'Win your pawn back: Nxe5!'],
           ['f2f4', 'White kicks your knight with f4.'],
           ['e5c6', 'Step back to c6. Next: Bc5 and d6. White’s big center can become a target!']] }] },
+      {"id":"albin","e":"🪤","n":"Albin Countergambit","side":"b","deadly":1,"d":"Hit back at the Queen’s Gambit with e5. Watch for the Lasker Trap: a pawn turns into a KNIGHT!","plan":[["Bring your knight out to c6.","b8c6"],["Bring your other knight out to f6.","g8f6"],["Bring your queen to e7. She attacks White’s bishop on b4!","d8e7"]],"line":[["d2d4","White starts with d4."],["d7d5","Answer with d5."],["c2c4","The Queen’s Gambit."],["e7e5","The Albin! Push e5 and offer your own pawn."],["d4e5","White takes it."],["d5d4","Push d4! This pawn becomes a monster."],["e2e3","White attacks your pawn… but that’s a mistake!"],["f8b4","Check with the bishop!"],["c1d2","White blocks."],["d4e3","Take on e3! Now your pawn attacks the bishop and f2."],["d2b4","White takes your bishop."],["e3f2","Take f2 with CHECK!"],["e1e2","The king has to move."],["f2g1n","THE LASKER TRAP: your pawn becomes a KNIGHT, with check!"],["h1g1","White takes the new knight."],["c8g4","Bishop to g4, CHECK! It’s a skewer: the king is in front of the queen."],["e2e1","The king runs away…"],["g4d1","…and you take White’s QUEEN!"],["b1c3","White can’t even take your bishop back, because your queen guards d1! You’re a whole queen ahead. That’s the Lasker Trap!"]],"alts":[{"at":6,"line":[["g1f3","White plays the smart move, Nf3."],["b8c6","Protect your d4 pawn with the knight."],["g2g3","White wants its bishop on g2."],["c8e6","Bishop to e6, hitting c4."],["b1d2","White brings out its other knight."],["d8d7","Queen to d7. Next: castle the long way and attack!"]]},{"at":12,"line":[["e1f2","The king takes the pawn instead…"],["d8d1","And you take the QUEEN! The d-file was wide open!"]]}]},
       { id: 'vsalien', e: '👽', n: 'Beat the Alien Gambit', side: 'b', counter: 1, d: 'When White sacrifices a knight on f7 to drag your king out, take it, dodge the trap, and hide your king. You stay a whole knight ahead!', plan: [['Your king isn’t safe on f7. Walk it to g8, then h7. That’s castling by hand!', 'f7g8 g8h7'], ['Bring your rook from h8 into the game, to f8 or e8.', 'h8f8'], ['Knight to d7, then trade pieces when you can. The more you trade, the more your extra knight matters!', 'b8d7']], line: [
         ['e2e4', 'White pushes e4.'],
         ['c7c6', 'Play c6: the Caro-Kann. Next you push d5.'],
@@ -20159,6 +21057,40 @@
     // 😮🗺️ What to do after each surprise, when the normal plan doesn’t fit there (made by gen-altplans.js: the normal
     // plan’s steps that still fit, plus the engine’s best quiet moves). A surprise with no plan here uses the normal plan.
     var CHESS_ALT_PLANS = {
+      "rossolimo:1": [["Push your pawn to d3 to fight for the center.","d2d3"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Push a4 to grab space on the queen side.","a2a4"]],
+      "rossolimo:2": [["Push your pawn to d3 to fight for the center.","d2d3"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Push a4 to grab space on the queen side.","a2a4"]],
+      "alapin:1": [["Push your pawn to b4 to grab some space.","b2b4"],["Bring your bishop out to d3, so it joins the game.","f1d3"],["Bring your queen to e2, protecting e5.","d1e2"]],
+      "alapin:2": [["Bring your bishop out to b5, so it joins the game.","f1b5"],["Bring your knight out to d2. Knights love the middle!","b1d2"],["Bring your queen to e2, protecting e5.","d1e2"]],
+      "advfrench:1": [["Move your bishop to d3, where it aims at more squares.","e2d3"],["Bring your bishop out to e3, so it joins the game.","c1e3"],["Bring your other knight to d2.","b1d2"]],
+      "advfrench:2": [["Bring your bishop out to f4, so it joins the game.","c1f4"],["Castle! Your king is safe.","e1g1"],["Bring your other knight to d2.","b1d2"]],
+      "advcaro:1": [["Push your pawn to b4 to grab some space.","b2b4"],["Push c3 to protect d4 again.","c2c3"],["Bring your other knight to d2.","b1d2"]],
+      "advcaro:2": [["Push your pawn to h3 to grab some space.","h2h3"],["Push c3 to protect d4 again.","c2c3"],["Push your knight from f3 to h4, chasing Black’s bishop!","f3h4"],["Put your rook on e1.","f1e1"]],
+      "sveshnikov:1": [["Move your bishop to c5, where it aims at more squares.","b4c5"],["Bring your bishop out to e6, so it joins the game.","c8e6"],["Jump your knight to b4, closer to the action.","c6b4"]],
+      "sveshnikov:2": [["Bring your knight out to d7. Knights love the middle!","b8d7"],["Push your pawn to a6 to grab some space.","a7a6"],["Castle! Your king is safe.","e8g8"]],
+      "bogo:2": [["Push your pawn to e4 to fight for the center.","e5e4"],["Push a5 to grab space on the queen side.","a7a5"],["Put your rook on e8.","f8e8"]],
+      "taimanov:1": [["Push your pawn to e5 to fight for the center.","e6e5"],["Bring your bishop out to e6, so it joins the game.","c8e6"],["Put your rook on c8. Rooks love open lines!","a8c8"]],
+      "taimanov:2": [["Jump your knight to e4, closer to the action.","f6e4"],["Bishop to c5, aiming at White’s pieces.","f8c5"],["Castle! Your king is safe.","e8g8"]],
+      "catalan:1": [["Push your pawn to c5 to attack the center from the side.","c4c5"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Bring your queen to c2. She watches the center and the e4 square.","d1c2"]],
+      "catalan:2": [["Bring your knight out to f3. Knights love the middle!","g1f3"],["Bring your queen to c2. She watches the center and the e4 square.","d1c2"],["Push b3 and put your other bishop on b2. Now BOTH bishops aim at Black’s king side!","b2b3 c1b2"]],
+      "bishops:1": [["Bring your bishop out to g5, so it joins the game.","c1g5"],["Tuck your bishop back to b3, where it’s safe and still aims at f7.","c4b3"],["Bring your other knight to d2.","b1d2"],["Play h3, so Black’s bishop can’t pin your knight from g4.","h2h3"]],
+      "bishops:2": [["Jump your knight to e2, closer to the action.","c3e2"],["Castle! Your king hides safely behind its pawns.","e1g1"],["Play h3, so Black’s bishop can’t pin your knight from g4.","h2h3"]],
+      "trompowsky:1": [["Bring your knight out to c3. Knights love the middle!","b1c3"],["Put your rook on b1. Rooks love open lines!","a1b1"],["Bring your bishop to d3.","f1d3"]],
+      "trompowsky:2": [["Bring your knight out to d2. Knights love the middle!","b1d2"],["Move your bishop to e5, where it aims at more squares.","f4e5"],["Bring your knight out to f3.","g1f3"]],
+      "qid:1": [["Bring your bishop out to e7, so it joins the game.","f8e7"],["Push f5 to make e4 super strong.","f7f5"],["Bring your other knight to d7.","b8d7"]],
+      "qid:2": [["Push your pawn to h6 to grab some space.","h7h6"],["Jump your knight to e4, closer to the action.","f6e4"],["Bring your other knight to d7.","b8d7"]],
+      "benoni:1": [["Bring your knight out to a6. From there it can jump to better squares later.","b8a6"],["Put your rook on e8. It hits White’s e4 pawn.","f8e8"],["Push your pawn to d6 to fight for the center.","d7d6"]],
+      "accel:1": [["Push your pawn to e5 to fight for the center.","e7e5"],["Move that bishop to d7.","c8d7"],["Put your rook on c8. It loves the open c-file!","a8c8"]],
+      "accel:2": [["Bring your queen to b6. Now your rooks can see each other!","d8b6"],["Move that bishop to d7.","c8d7"],["Put your rook on c8. It loves the open c-file!","a8c8"]],
+      "twoknights:1": [["Bring your bishop out to e7, so it joins the game.","f8e7"],["Play h6, so White’s bishop can’t come to g5.","h7h6"],["Bring your other bishop to e6, to swap off White’s strong bishop.","c8e6"]],
+      "twoknights:2": [["Bring your bishop out to c5, so it joins the game.","f8c5"],["Play h6, so White’s bishop can’t come to g5.","h7h6"],["Bring your other bishop to e6, to swap off White’s strong bishop.","c8e6"]],
+      "qga:1": [["Move your bishop to c5, where it aims at more squares.","b4c5"],["Bring your knight out to f6. Knights love the middle!","g8f6"],["Bring your knight out to c6. Knights love the middle!","b8c6"]],
+      "qga:2": [["Push your pawn to e6 to fight for the center.","e7e6"],["Bring your bishop to b7, on the long diagonal.","c8b7"],["Bring your knight to d7.","b8d7"]],
+      "scotchgambit:1": [["Castle! Your king hides safely behind its pawns.","e1g1"],["Bring your queen to a4. Now your rooks can see each other!","d1a4"],["Move your bishop to b5, where it aims at more squares.","c4b5"]],
+      "scotchgambit:2": [["Move your bishop to e2, where it aims at more squares.","c4e2"],["Bring your bishop to e3.","c1e3"],["Bring your other knight to d2.","b1d2"]],
+      "bdg:1": [["Move your queen to g3, where she does more.","f3g3"],["Castle the long way! Your king hides, and your rook jumps to the middle.","e1c1"],["Push your pawn to a3 to grab some space.","a2a3"]],
+      "bdg:2": [["Jump your knight to d5, closer to the action.","c3d5"],["Castle the long way! Your king hides, and your rook jumps to the middle.","e1c1"],["Bring your bishop out to d3, so it joins the game.","f1d3"]],
+      "albin:1": [["Castle the long way! Your king hides, and your rook jumps to the middle.","e8c8"],["Push your pawn to f6 to attack the center from the side.","f7f6"],["Push your pawn to d3 to fight for the center.","d4d3"]],
+      "albin:2": [["Bring your bishop out to f5, so it joins the game.","c8f5"],["Bring your knight out to c6.","b8c6"],["Bring your other knight out to f6.","g8f6"]],
       "italian:1": [["Push your pawn to c3 to attack the center from the side.","c2c3"], ["Send your other knight on a trip: d2, then f1, then g3. From g3 it helps attack Black’s king.","b1d2 d2f1 f1g3"], ["Play h3, so Black’s bishop can’t come to g4 and pin your knight.","h2h3"], ["When everything is ready, push d4 to take over the center!","d3d4"]],
       "italian:2": [["Jump your knight to b3, closer to the action.","d4b3"], ["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Play h3, so Black’s bishop can’t come to g4 and pin your knight.","h2h3"]],
       "ruy:1": [["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Push your pawn to d4 to fight for the center.","d3d4"], ["Play h3, so Black’s bishop can’t pin your knight from g4.","h2h3"]],
@@ -20242,6 +21174,8 @@
       "vsalbin:2": [["Bring your queen to a4. Now your rooks can see each other!","d1a4"], ["Bring your bishop out to f4, so it joins the game.","c1f4"], ["Push a3, then b4. Your pawns march at Black’s king!","a2a3 b2b4"]]
     };
     CHESS_OPENINGS.forEach(function (L) { (L.alts || []).forEach(function (a, i) { var p = CHESS_ALT_PLANS[L.id + ':' + (i + 1)]; if (p) a.plan = p; }); });
+    var CHESS_PRO = ['italian', 'ruy', 'scotch', 'qgambit', 'london', 'english', 'catalan', 'sicilian', 'french', 'caro', 'kid', 'grunfeld', 'qgd', 'slav', 'nimzo', 'petrov', 'berlin', 'qid'];   // 🏆 pros play these all the time
+    CHESS_OPENINGS.forEach(function (L) { if (CHESS_PRO.indexOf(L.id) >= 0) L.pro = 1; });
 
     // ---- ♟️ the game screen ----
     var KEY = 'funvault-chess-v1';
@@ -20281,22 +21215,22 @@
     var chat = { text: '', t: 0 };
 
     // ---- the pieces (drawn with SVG, so they look the same on every phone) ----
-    var BASE = '<rect x="24" y="73" width="52" height="9" rx="4"/><rect x="18" y="80" width="64" height="11" rx="5"/>';
-    var SHAPES = {
-      P: '<path d="M38 74c0-9 4-16 8-20h8c4 4 8 11 8 20z"/><rect x="36" y="48" width="28" height="8" rx="4"/><circle cx="50" cy="36" r="12.5"/>',
-      R: '<path d="M34 37h32l3 30H31z"/><path d="M26 13h11v8h7v-8h12v8h7v-8h11v18H26z"/><rect x="24" y="29" width="52" height="9" rx="3"/><rect x="27" y="64" width="46" height="9" rx="3"/>',
-      N: '<path d="M70 74c2-10 4-20 2-28-2-10-6-18-12-25l-4-4-5-11-5 9c-8 2-14 9-19 18-3 6-7 11-10 16-2 4-1 9 4 11 3 1 7 0 10-2 4-2 8-3 11-3-4 6-8 12-10 19z"/>',
-      B: '<path d="M42 58c-1 6-5 12-9 16h34c-4-4-8-10-9-16z"/><rect x="36" y="51" width="28" height="8" rx="4"/><path d="M50 17c11 8 16 17 14 25-2 7-7 10-14 10s-12-3-14-10c-2-8 3-17 14-25z"/><circle cx="50" cy="12" r="5.5"/>',
-      Q: '<path d="M33 64h34l3 10H30z"/><path d="M19 27l13 26 4-30 8 27 6-32 6 32 8-27 4 30 13-26-9 33H28z"/><rect x="28" y="57" width="44" height="8" rx="4"/><circle cx="19" cy="25" r="5"/><circle cx="36" cy="19" r="5"/><circle cx="50" cy="13" r="5"/><circle cx="64" cy="19" r="5"/><circle cx="81" cy="25" r="5"/>',
-      K: '<path d="M37 63h26l5 11H32z"/><path d="M28 44c-4-10 4-18 14-16 3 0 6 2 8 4 2-2 5-4 8-4 10-2 18 6 14 16-2 6-6 10-8 14H36c-2-4-6-8-8-14z"/><rect x="33" y="56" width="34" height="8" rx="4"/><path d="M46 3h8v8h8v8h-8v9h-8v-9h-8v-8h8z"/>'
+    var BASE = '<path d="M21 92c0-6 4-10 10-10h38c6 0 10 4 10 10z"/><path d="M28 83c0-4 3-7 7-7h30c4 0 7 3 7 7z"/>';
+    var SHAPES = {   // ♟️ smooth Staunton-style shapes on a pedestal
+      P: '<path d="M36 77c0-11 5-19 9-24h10c4 5 9 13 9 24z"/><ellipse cx="50" cy="50" rx="13" ry="4.5"/><circle cx="50" cy="33" r="12"/>',
+      R: '<path d="M31 77l4-9V42l-5-5V21h9v6h6v-6h10v6h6v-6h9v16l-5 5v26l4 9z"/>',
+      N: '<path d="M34 77c-1-11 4-19 12-25-6-1-13 2-17 6-4 3-10 1-10-5 0-5 4-9 8-13 4-5 7-10 9-15 2-4 6-7 10-8l2-7 5 6c12 3 20 13 22 27 2 12-1 24-4 34z"/>',
+      B: '<path d="M37 77c3-6 6-13 7-21h12c1 8 4 15 7 21z"/><ellipse cx="50" cy="55" rx="13" ry="4.5"/><path d="M50 15c11 8 16 17 14 25-2 8-7 12-14 12s-12-4-14-12c-2-8 3-17 14-25z"/><circle cx="50" cy="11" r="4.5"/>',
+      Q: '<path d="M33 77c2-5 3-10 3-16h28c0 6 1 11 3 16z"/><ellipse cx="50" cy="60" rx="16" ry="4.5"/><path d="M30 57l-8-29 13 14 5-22 10 20 10-20 5 22 13-14-8 29z"/><circle cx="21" cy="25" r="4.5"/><circle cx="36" cy="17" r="4.5"/><circle cx="50" cy="14" r="4.5"/><circle cx="64" cy="17" r="4.5"/><circle cx="79" cy="25" r="4.5"/>',
+      K: '<path d="M34 77c2-5 3-11 3-17h26c0 6 1 12 3 17z"/><ellipse cx="50" cy="59" rx="15" ry="4.5"/><path d="M36 56c-6-6-10-11-10-17 0-9 8-14 16-11 3 1 6 3 8 6 2-3 5-5 8-6 8-3 16 2 16 11 0 6-4 11-10 17z"/><path d="M46 4h8v7h7v7h-7v10h-8V18h-7v-7h7z"/>'
     };
     var DETAIL = {   // drawn on top in a contrasting color, so the shapes read clearly
       P: '',
-      R: '<path d="M33 46h34M32 56h36" fill="none" stroke-width="2.4"/>',
-      N: '<circle cx="39" cy="30" r="3.6"/><circle cx="22" cy="52" r="2"/><path d="M57 22c6 6 10 14 11 24" fill="none" stroke-width="2.6" stroke-linecap="round"/>',
-      B: '<path d="M58 26L46 39" fill="none" stroke-width="4.5" stroke-linecap="round"/>',
-      Q: '<path d="M30 61h40" fill="none" stroke-width="2.2"/>',
-      K: '<path d="M50 33v22" fill="none" stroke-width="2.6"/><path d="M36 60h28" fill="none" stroke-width="2.2"/>'
+      R: '<path d="M35 42h30M35 68h30" fill="none" stroke-width="2.4"/>',
+      N: '<circle cx="40" cy="27" r="3.4"/><circle cx="23" cy="49" r="1.9"/><path d="M58 20c7 6 11 15 12 27" fill="none" stroke-width="2.6" stroke-linecap="round"/>',
+      B: '<path d="M57 27L47 38" fill="none" stroke-width="4" stroke-linecap="round"/>',
+      Q: '<path d="M34 61h32" fill="none" stroke-width="2"/>',
+      K: '<path d="M50 34v20" fill="none" stroke-width="2.4"/><path d="M35 60h30" fill="none" stroke-width="2"/>'
     };
     // ---- 🎨 piece skins: shaded, shiny pieces in lots of styles (S.skin) ----
     // each skin: [white side, black side], each { a: top color, b: bottom color, line: outline, det: details, glow: glowing edge (optional) }
@@ -20311,7 +21245,7 @@
       flat: { n: '♟️ Simple', c: [{ a: '#fdfcf8', b: '#fdfcf8', line: '#1d2026', det: '#1d2026' }, { a: '#2c2e35', b: '#2c2e35', line: '#0a0b0e', det: '#f2f3f6' }], flat: 1 }
     };
     var SKIN_ORDER = ['classic', 'alien', 'robot', 'fire', 'neon', 'gold', 'candy', 'flat'];
-    var HEAD = { P: [50, 36], R: [50, 49], N: [40, 31], B: [50, 39], Q: [50, 47], K: [50, 45] };   // where each piece's "face" is
+    var HEAD = { P: [50, 33], R: [50, 52], N: [40, 28], B: [50, 37], Q: [50, 47], K: [50, 43] };   // where each piece's "face" is
     function decoOf(kind, t, w, C) {   // extra bits for some skins: 👽 eyes and antennae, 🤖 visors and bolts, 🔥 flames, 🍬 sprinkles
       var h = HEAD[t], x = h[0], y = h[1], s = '';
       if (kind === 'alien') {
@@ -20341,13 +21275,14 @@
       if (PIECE[key]) return PIECE[key];
       var K = SKINS[k], w = code.charAt(0) === 'w', t = code.charAt(1), C = K.c[w ? 0 : 1], id = 'fvp-' + k + (w ? 'w' : 'b');
       var fx = [C.glow ? 'drop-shadow(0 0 ' + (K.neon ? 3.5 : 2.5) + 'px ' + C.glow + ')' : '', C.rim ? 'drop-shadow(0 0 0.8px rgba(255,255,255,0.55))' : '', 'drop-shadow(0 2px 1.5px rgba(0,0,0,0.35))'].filter(Boolean).join(' ');
-      var defs = K.flat ? '' : '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="' + C.a + '"/><stop offset="1" stop-color="' + C.b + '"/></linearGradient>' +
-        '<linearGradient id="' + id + 's" x1="0" y1="0" x2="1" y2="0"><stop offset="0.08" stop-color="#fff" stop-opacity="' + (K.neon ? 0.12 : 0.55) + '"/><stop offset="0.42" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>';
+      var defs = K.flat ? '' : '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="' + C.a + '"/><stop offset="0.45" stop-color="' + C.a + '"/><stop offset="1" stop-color="' + C.b + '"/></linearGradient>' +
+        '<linearGradient id="' + id + 's" x1="0" y1="0" x2="1" y2="0"><stop offset="0.1" stop-color="#fff" stop-opacity="' + (K.neon ? 0.12 : 0.6) + '"/><stop offset="0.35" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+        '<linearGradient id="' + id + 'd" x1="0" y1="0" x2="1" y2="0"><stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="' + (K.neon ? 0.15 : 0.3) + '"/></linearGradient></defs>';   // ✨ light on the left, shadow on the right
       var body = SHAPES[t] + BASE;
       return (PIECE[key] = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false" style="filter:' + fx + '">' + defs +
         (K.flat ? '' : '<ellipse cx="50" cy="93" rx="30" ry="4" fill="#000" opacity="0.18"/>') +
-        '<g fill="' + (K.flat ? C.a : 'url(#' + id + ')') + '" stroke="' + C.line + '" stroke-width="4" stroke-linejoin="round">' + body + '</g>' +
-        (K.flat ? '' : '<g fill="url(#' + id + 's)" stroke="none">' + body + '</g>') +   // ✨ the shine
+        '<g fill="' + (K.flat ? C.a : 'url(#' + id + ')') + '" stroke="' + C.line + '" stroke-width="3.4" stroke-linejoin="round">' + body + '</g>' +
+        (K.flat ? '' : '<g fill="url(#' + id + 'd)" stroke="none">' + body + '</g><g fill="url(#' + id + 's)" stroke="none">' + body + '</g>') +   // ✨ the shine
         (DETAIL[t] ? '<g fill="' + C.det + '" stroke="' + C.det + '">' + DETAIL[t] + '</g>' : '') +
         (K.deco ? decoOf(K.deco, t, w, C) : '') + '</svg>');
     }
@@ -20439,7 +21374,7 @@
     }
     function ask(opts, cb) { askAt(game.moves.slice(), opts, cb); }   // think about the position on the board
     function askAt(moves, opts, cb) {   // …or about the position after these moves (🎯 practice: the position before your move)
-      var j = { moves: moves, fen: game.fen || null, opts: opts, cb: cb };
+      var j = { moves: moves, fen: opts && opts.fen !== undefined ? opts.fen : (game && game.fen) || null, opts: opts, cb: cb };
       startWorker();
       if (worker) { var id = ++jobN; jobs[id] = j; worker.postMessage({ id: id, moves: j.moves, fen: j.fen, opts: opts }); } else runHere(j);
     }
@@ -20836,6 +21771,7 @@
           if (game.firstWin) { var nb = nextBot(); c.appendChild(mk('p', null, '🎉 First win against ' + bot.n + '!' + (nb ? ' Next challenge: ' + nb.e + ' ' + nb.n + ' (' + nb.elo + ').' : ' You’ve beaten EVERY bot. You’re a chess legend!'))); }
         }
         if (game.practice) practiceSummary(c);   // 🎯 the mistakes you fixed, and what to practice next
+        if (game.copen && OPEN[game.copen]) { var cl = mk('button', 'btn ghost', '📖 Learn the ' + OPEN[game.copen].n + ' (Coach’s tip)'); cl.type = 'button'; cl.id = 'chs-coachLearn'; cl.addEventListener('click', function () { var id = game.copen; closeCard(); startLesson('op', id); }); c.appendChild(cl); }
         reviewBtn(c);   // 🔍
         var again = mk('button', 'btn', game.mode === 'friend' ? '🔁 Rematch (switch colors)' : game.after ? '🔁 Same opening again' : game.practice ? '🔁 Practice again' : '🔁 Play again'); again.type = 'button'; again.id = 'chs-again'; again.addEventListener('click', function () { closeCard(); rematch(); }); c.appendChild(again);
         var row = mk('div', 'chs-row');
@@ -21208,7 +22144,7 @@
           if (L.sys) m.appendChild(mk('p', 'chs-lnote chs-sysnote', '🔁 These work against almost anything your opponent plays, so you can use the same opening game after game!'));
         }
         var lv = S.learn[kind + ':' + L.id] || 0, b = mk('button', 'chs-lesson' + (lv >= 2 ? ' done' : lv ? ' half' : '')); b.type = 'button'; b.setAttribute('data-lesson', L.id);
-        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.sys && kind === 'op' ? ' · 🔁 Every game' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') + (lv && !S.seen['op:' + L.id] ? ' to play' : '') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
+        var sub = kind === 'op' ? (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.any ? ' · 🔀 Any order' : '') + (L.sys && kind === 'op' ? ' · 🔁 Every game' : '') + (L.mate ? ' · 💀 Ends in checkmate' : '') + (L.pro ? ' · 🏆 Pro favorite' : '') + (L.alts ? ' · 😮 ' + L.alts.length + (L.alts.length === 1 ? ' surprise' : ' surprises') + (lv && !S.seen['op:' + L.id] ? ' to play' : '') : '') : L.parts[0].drill ? '🤖 Practice vs the computer' : '🎯 Checkmate in ' + L.parts[0].n + (L.parts.length > 1 ? ' · ' + L.parts.length + ' puzzles' : '');
         b.innerHTML = '<span class="chs-le">' + L.e + '</span><span class="chs-lt"><b>' + L.n + '</b><small>' + L.d + '</small><i>' + sub + '</i>' + (lv === 1 ? '<i class="chs-ltodo">🧪 Test left!</i>' : '') + '</span>' +
           (lv >= 2 ? '<span class="chs-ldone" title="Learned!">⭐</span>' : lv ? '<span class="chs-ldone" title="Test left">🧪</span>' : '');
         b.addEventListener('click', function () { if (lv) lessonChoice(kind, L); else startLesson(kind, L.id); });
@@ -21461,7 +22397,7 @@
     function startRound() {   // 🧪 a round: Test Bot plays one line (the main line or a surprise) from the start
       var L = OPEN[game.lesson], k = game.score.length, n = game.rounds.length;
       clearTimeout(lessonTm); dropGhost(); down = null;
-      game.route = game.rounds[k]; game.step = 0; game.done = false; game.busy = false; game.failed = ''; game.flash = ''; game.live = true;
+      game.route = game.rounds[k]; game.step = 0; game.planQ = null; game.done = false; game.busy = false; game.failed = ''; game.flash = ''; game.live = true;
       G.reset(); game.moves = []; game.sans = []; sel = null; targets = []; hint = null; last = null;
       game.todo = L.any ? yourMoves(L).map(function (x) { return x[0]; }) : null;   // a setup like the Hippo: any order works
       game.say = k ? '🧪 Round ' + (k + 1) + ' of ' + n + '!' + (k + 1 === n ? ' Last one!' : '') : game.intro;
@@ -21470,14 +22406,14 @@
     }
     function testNext(first) {   // openings: Test Bot plays the other side's moves from the line
       var ln = lineNow(), st = ln[game.step], a = altNow();
-      if (!st) { roundEnd(true); return; }
+      if (!st) { lineDone(); return; }
       if (G.turn() === game.you) { render(); return; }
       game.busy = true; render();
       var my = token, surprise = !!a && game.step === a.at;
       lessonTm = setTimeout(function () {
         if (my !== token || !isTest()) return;
         var x = applyMove(st[0]); game.step++; game.busy = false;
-        if (!ln[game.step]) { roundEnd(true); return; }
+        if (!ln[game.step]) { lineDone(); return; }
         coachSays((game.step === 1 ? game.say + '\n' : '') + (surprise ? '😏 Surprise! ' : '') + 'I play ' + (x ? x.san : '…') + '. Your move!');
         render();
       }, first ? 1500 : 800);
@@ -21514,6 +22450,7 @@
     function mateIn1() { var ms = G.moves(); for (var i = 0; i < ms.length; i++) { G.move(ms[i].uci); var ok = G.status() === 'checkmate'; G.undo(); if (ok) return ms[i].uci; } return null; }
     function testMove(uci, dragged) {
       if (game.kind === 'op') {
+        if (game.planQ) { planTestMove(uci, dragged); return; }   // 🗺️
         var L = OPEN[game.lesson], st = lineNow()[game.step], a = altNow();
         if (!st) return;
         if (L.any ? game.todo.indexOf(uci) < 0 : uci !== st[0]) {
@@ -21818,7 +22755,7 @@
         return (t ? cbox(t) : '') + '<span class="chs-watch">🗺️ After the ' + esc(OPEN[a.id].n) + (a.moves.length ? ' · plan ' + afterDid() + '/' + a.moves.length : '') + '</span>';
       }
       var hi = !game.moves.length || (game.moves.length === 1 && game.you === 'b') ? 'Hoo! I’m Coach Hoot. I’ll watch your moves. If you make a big mistake, we’ll stop and practice a better move!' : '';
-      return (p.note || hi ? cbox(p.note || hi) : '') + '<span class="chs-watch">🦉 Coach Hoot is watching' + (p.open ? ' · ' + esc(p.open) : '') + '</span> · <button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
+      return coachOpenTip() + (p.note || hi ? cbox(p.note || hi) : '') + '<span class="chs-watch">🦉 Coach Hoot is watching' + (p.open ? ' · ' + esc(p.open) : '') + '</span> · <button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
     }
     function practiceResume() {   // back to a practice game: pick up where Coach Hoot was
       var p = game.pr;
@@ -21976,47 +22913,256 @@
     function reviewBtn(c) {   // on the end-of-game card
       if (!game || !game.moves || game.moves.length < 2) return;
       var b = mk('button', 'btn chs-revb', game.rev && game.rev.done ? '🔍 See the Game Review' : '🔍 Game Review: see my mistakes'); b.type = 'button'; b.id = 'chs-review';
-      b.addEventListener('click', openReview); c.appendChild(b);
+      b.addEventListener('click', function () { openReview(); }); c.appendChild(b);
     }
-    function openReview() {   // 🔍 Coach Hoot looks at every move you played
-      var g = game; if (!g || !g.moves.length) return;
+    // ---- 🔍 the review itself (any game: yours here, or one from your chess account) ----
+    function openReview(gArg) {   // 🔍 Coach Hoot looks at every move you played
+      var g = gArg && gArg.imp ? gArg : game; if (!g || !g.moves.length) return;
       if (g.rev && g.rev.done) { reviewCard(g); return; }
-      var start = g.fen ? g.fen.split(' ')[1] : 'w', other = function (s) { return s === 'w' ? 'b' : 'w'; }, list = [];
-      g.moves.forEach(function (u, i) { var s = i % 2 ? other(start) : start; if (g.mode === 'friend' || s === g.you) list.push(i); });
-      var rev = g.rev = { items: [], n: list.length, done: false }, t = list.length > 30 ? 300 : 420, my = ++revTok;
       openCard(function (c) {
         c.appendChild(mk('div', 'chs-big', '🔍'));
         c.appendChild(mk('h3', null, 'Game Review'));
         var p = mk('p', null, '🦉 Coach Hoot is looking at your moves…'); p.id = 'chs-revMsg'; c.appendChild(p);
         var bar = mk('div', 'chs-revbar'); bar.innerHTML = '<i id="chs-revFill"></i>'; c.appendChild(bar);
-        var no = mk('button', 'btn ghost', 'Cancel'); no.type = 'button'; no.addEventListener('click', function () { revTok++; g.rev = null; closeCard(); showOver(); }); c.appendChild(no);
+        var no = mk('button', 'btn ghost', 'Cancel'); no.type = 'button'; no.addEventListener('click', function () { revTok++; g.rev = null; if (g.imp) acctCard(); else { closeCard(); showOver(); } }); c.appendChild(no);
       });
+      runReview(g, null, function (k, n) {
+        var f = $('card').querySelector('#chs-revFill'), m = $('card').querySelector('#chs-revMsg');
+        if (f) f.style.width = Math.round(k / n * 100) + '%';
+        if (m) m.textContent = '🦉 Coach Hoot is looking at move ' + k + ' of ' + n + '…';
+      }, function () { reviewCard(g); });
+    }
+    function runReview(g, t0, prog, done) {   // checks each of your moves with the engine, one after another
+      var start = g.fen ? g.fen.split(' ')[1] : 'w', other = function (s) { return s === 'w' ? 'b' : 'w'; }, list = [];
+      g.moves.forEach(function (u, i) { var s = i % 2 ? other(start) : start; if (g.mode === 'friend' || s === g.you) list.push(i); });
+      var rev = g.rev = { items: [], n: list.length, done: false }, t = t0 || (list.length > 30 ? 300 : 420), my = ++revTok;
+      var alive = function () { return my === revTok && (g.imp || game === g); };
       (function step(k) {
-        if (my !== revTok || game !== g) return;
-        if (k >= list.length) { rev.done = true; countRev(g); save(); reviewCard(g); return; }
+        if (!alive()) return;
+        if (k >= list.length) { rev.done = true; countRev(g); save(); done(); return; }
         var i = list[k];
-        askAt(g.moves.slice(0, i), { review: [g.moves[i]], time: t }, function (r) {
-          if (my !== revTok || game !== g) return;
+        askAt(g.moves.slice(0, i), { review: [g.moves[i]], time: t, fen: g.fen || null }, function (r) {
+          if (!alive()) return;
           if (r && r.uci) {
             var kind = judge(r, 0), loss = cp(r.bestScore) - cp(r.score);
             if (!kind && r.uci !== r.best && loss >= 90 && r.bestScore > -600 && r.score < 400) kind = 'inacc';
             rev.items.push({ i: i, s: i % 2 ? other(start) : start, r: r, kind: kind, loss: loss });
           }
-          var f = $('card').querySelector('#chs-revFill'), m = $('card').querySelector('#chs-revMsg');
-          if (f) f.style.width = Math.round((k + 1) / list.length * 100) + '%';
-          if (m) m.textContent = '🦉 Coach Hoot is looking at move ' + (k + 1) + ' of ' + list.length + '…';
+          prog(k + 1, list.length);
           step(k + 1);
         });
       })(0);
     }
-    function revWho(g, s) { return g.mode === 'bot' ? botName() : duelName(s === 'w' ? 'b' : 'w'); }
+    function revWho(g, s) { return g.imp ? g.imp.opp : g.mode === 'bot' ? botName() : duelName(s === 'w' ? 'b' : 'w'); }
     function countRev(g) {   // 📈 your mistakes count for “What to improve” (once per game; not for 1v1, that's two people!)
-      if (g.mode !== 'bot' || g.rev.counted) return;
+      if ((g.mode !== 'bot' && !g.imp) || g.rev.counted) return;
       g.rev.counted = true; S.impGames = (S.impGames || 0) + 1;
+      g.rev.items.forEach(function (x) { if (!x.cls) x.cls = classify(g, x); });
+      var sy = styleOf(g.rev.items); S.style = S.style || { att: 0, def: 0 }; S.style.att += sy.att; S.style.def += sy.def;   // ⚖️
       g.rev.items.forEach(function (x) {
-        if (!x.cls) x.cls = classify(g, x);
         if (x.cls === 'mist' || x.cls === 'miss' || x.cls === 'blund') addImp(impOf(x.r, x.kind || (x.cls === 'miss' ? 'blunder' : '')));
       });
+    }
+
+    // ---- 🔗 My online games: chess.com or Lichess (username only, never a password) ----
+    var ACCT = { site: '', user: '', games: [] };
+    function parsePgn(pgn) {   // a PGN → { tags, moves (uci), sans, fen } (null if a move doesn't work)
+      var tags = {}, body = String(pgn || '').replace(/\r/g, '');
+      body = body.replace(/^\s*\[(\w+)\s+"((?:[^"\\]|\\.)*)"\]\s*$/gm, function (x, k, v) { tags[k] = v; return ''; });
+      body = body.replace(/\{[^}]*\}/g, ' ').replace(/;[^\n]*/g, ' ');
+      var d; do { d = body; body = body.replace(/\([^()]*\)/g, ' '); } while (d !== body);   // (variations, even inside each other)
+      var toks = body.replace(/\$\d+/g, ' ').replace(/\d+\.(\.\.)?/g, ' ').split(/\s+/).filter(function (x) { return x && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(x); });
+      var fen = tags.SetUp === '1' && tags.FEN ? tags.FEN : null, V = viewAt([], fen), moves = [], sans = [];
+      for (var i = 0; i < toks.length; i++) {
+        var want = toks[i].replace(/[+#!?]/g, '').replace(/^0-0-0$/, 'O-O-O').replace(/^0-0$/, 'O-O'), hit = null;
+        V.moves().some(function (m) { if (V.sanOf(m.uci).replace(/[+#]/g, '') === want) { hit = m.uci; return true; } return false; });
+        if (!hit) return moves.length >= 2 ? { tags: tags, moves: moves, sans: sans, fen: fen, cut: true } : null;
+        sans.push(V.sanOf(hit)); V.move(hit); moves.push(hit);
+      }
+      return moves.length ? { tags: tags, moves: moves, sans: sans, fen: fen } : null;
+    }
+    function acctGame(pgn, user, extra) {   // build a game you can review from a PGN
+      var P = parsePgn(pgn); if (!P) return null;
+      var T = P.tags, u = (user || '').toLowerCase(), w = (T.White || '').toLowerCase() === u, b = (T.Black || '').toLowerCase() === u;
+      var you = extra && extra.you ? extra.you : b && !w ? 'b' : 'w', res = T.Result || '*';
+      var won = res === '1-0' ? 'w' : res === '0-1' ? 'b' : res === '1/2-1/2' ? 'd' : '';
+      return { mode: 'import', moves: P.moves, sans: P.sans, fen: P.fen, you: you, cut: !!P.cut,
+        imp: { opp: (you === 'w' ? T.Black : T.White) || (you === 'w' ? 'Black' : 'White'), oppR: you === 'w' ? T.BlackElo : T.WhiteElo, myR: you === 'w' ? T.WhiteElo : T.BlackElo,
+          res: won ? (won === 'd' ? 'd' : won === you ? 'win' : 'loss') : '', date: (T.UTCDate || T.Date || '').replace(/\./g, '-'), tc: (extra && extra.tc) || T.TimeControl || '',
+          opening: T.Opening || (T.ECOUrl ? decodeURIComponent(T.ECOUrl.split('/').pop()).replace(/-/g, ' ') : ''), url: T.Link || (/^https:\/\//.test(T.Site || '') ? T.Site : '') } };
+    }
+    function getJson(url, hdr) {
+      return fetch(url, { headers: hdr || {} }).then(function (r) { if (r.status === 404) throw new Error('nouser'); if (!r.ok) throw new Error('http' + r.status); return r; });
+    }
+    function fetchGames(site, user) {   // 📥 your last 10 games
+      var u = encodeURIComponent(user.trim());
+      if (site === 'lichess') return getJson('https://lichess.org/api/games/user/' + u + '?max=10&pgnInJson=true&clocks=false&evals=false&opening=true', { Accept: 'application/x-ndjson' })
+        .then(function (r) { return r.text(); })
+        .then(function (t) { return t.split('\n').filter(Boolean).map(function (l) { try { var j = JSON.parse(l); return j.variant === 'standard' && j.pgn ? acctGame(j.pgn, user, { tc: j.speed }) : null; } catch (e) { return null; } }).filter(Boolean); });
+      return getJson('https://api.chess.com/pub/player/' + u.toLowerCase() + '/games/archives').then(function (r) { return r.json(); }).then(function (j) {
+        var a = (j.archives || []).slice(-2).reverse(), got = [];
+        var next = function (k) {
+          if (k >= a.length || got.length >= 10) return got.slice(0, 10);
+          return getJson(a[k]).then(function (r) { return r.json(); }).then(function (m) {
+            (m.games || []).slice().reverse().forEach(function (x) { if (got.length < 10 && (!x.rules || x.rules === 'chess') && x.pgn) { var g = acctGame(x.pgn, user, { tc: x.time_class }); if (g) got.push(g); } });
+            return next(k + 1);
+          });
+        };
+        return next(0);
+      });
+    }
+    function acctLine(g) {
+      var I = g.imp, r = I.res === 'win' ? '🏆 Win' : I.res === 'loss' ? '❌ Loss' : I.res === 'd' ? '🤝 Draw' : '';
+      return (g.you === 'w' ? '⚪' : '⚫') + ' vs ' + I.opp + (I.oppR ? ' (' + I.oppR + ')' : '') + (r ? ' · ' + r : '') + (I.tc ? ' · ' + I.tc : '');
+    }
+    function acctCard(msg) {
+      var acc = S.acct || {}, site = ACCT.site || acc.site || 'chesscom';
+      openCard(function (c) {
+        c.classList.add('chs-wide');
+        c.appendChild(mk('div', 'chs-big', '🔗'));
+        c.appendChild(mk('h3', null, 'My Online Games'));
+        c.appendChild(mk('p', null, 'Type your chess.com or Lichess username. Coach Hoot checks your real games and shows what you did wrong, and what to do instead!'));
+        c.appendChild(mk('p', 'chs-acctsafe', '🔒 Only your username. Never type a password here!'));
+        var seg = mk('div', 'chs-seg');
+        [['chesscom', '♟️ chess.com'], ['lichess', '🐴 Lichess']].forEach(function (o) {
+          var bt = mk('button', site === o[0] ? 'on' : '', o[1]); bt.type = 'button'; bt.setAttribute('data-site', o[0]);
+          bt.addEventListener('click', function () { site = o[0]; ACCT.site = site; [].forEach.call(seg.children, function (x) { x.className = x === bt ? 'on' : ''; }); });
+          seg.appendChild(bt);
+        });
+        c.appendChild(seg);
+        var inp = mk('input', 'chs-in'); inp.id = 'chs-acctUser'; inp.placeholder = 'Your username'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.maxLength = 40; inp.value = ACCT.user || acc.user || '';
+        c.appendChild(inp);
+        var go = mk('button', 'btn', '📥 Get my games'); go.type = 'button'; go.id = 'chs-acctGo'; c.appendChild(go);
+        var st = mk('p', 'chs-acctmsg', msg || ''); st.id = 'chs-acctMsg'; c.appendChild(st);
+        go.addEventListener('click', function () {
+          var user = inp.value.trim();
+          if (!/^[A-Za-z0-9_-]{2,40}$/.test(user)) { st.textContent = '🤔 That doesn’t look like a username. Use letters, numbers, - and _ only.'; return; }
+          S.acct = { site: site, user: user }; save();
+          st.textContent = '📥 Getting your games…'; go.disabled = true;
+          fetchGames(site, user).then(function (gs) {
+            ACCT = { site: site, user: user, games: gs };
+            acctCard(gs.length ? '✅ Got your last ' + gs.length + (gs.length === 1 ? ' game!' : ' games!') : '🤷 No games found yet. Play a game on ' + (site === 'lichess' ? 'Lichess' : 'chess.com') + ' first!');
+          }).catch(function (e) {
+            go.disabled = false;
+            st.textContent = e && e.message === 'nouser' ? '🤔 Can’t find “' + user + '” on ' + (site === 'lichess' ? 'Lichess' : 'chess.com') + '. Check the spelling!' : '📡 Couldn’t reach ' + (site === 'lichess' ? 'Lichess' : 'chess.com') + '. Check your internet, or paste a game below!';
+          });
+        });
+        if (ACCT.games.length) {
+          var all = mk('button', 'btn', '🔍 Check my last ' + Math.min(5, ACCT.games.length) + ' games: what should I work on?'); all.type = 'button'; all.id = 'chs-acctAll';
+          all.addEventListener('click', function () { acctBatch(ACCT.games.slice(0, 5)); });
+          c.appendChild(all);
+          var list = mk('div', 'chs-acctlist');
+          ACCT.games.forEach(function (g, k) {
+            var b = mk('button', 'chs-acctg'); b.type = 'button'; b.setAttribute('data-ag', k);
+            b.innerHTML = '<b>' + esc(acctLine(g)) + '</b><small>' + esc((g.imp.date ? g.imp.date + ' · ' : '') + g.moves.length + ' moves' + (g.imp.opening ? ' · ' + g.imp.opening : '')) + '</small>' + (g.rev && g.rev.done ? '<span class="chs-acctok">🔍 Reviewed</span>' : '<span class="chs-acctok">🔍 Review ▶</span>');
+            b.addEventListener('click', function () { openReview(g); });
+            list.appendChild(b);
+          });
+          c.appendChild(list);
+        }
+        var det = mk('details', 'chs-pgnbox'), sm = mk('summary', null, '📋 Or paste a game (PGN)'); det.appendChild(sm);
+        var ta = mk('textarea', 'chs-in chs-pgn'); ta.id = 'chs-pgnIn'; ta.rows = 4; ta.placeholder = '1. e4 e5 2. Nf3 Nc6 …'; det.appendChild(ta);
+        var sd = mk('div', 'chs-seg'), you = 'w';
+        [['w', '⚪ I was White'], ['b', '⚫ I was Black']].forEach(function (o) {
+          var bt = mk('button', o[0] === 'w' ? 'on' : '', o[1]); bt.type = 'button'; bt.setAttribute('data-pside', o[0]);
+          bt.addEventListener('click', function () { you = o[0]; [].forEach.call(sd.children, function (x) { x.className = x === bt ? 'on' : ''; }); });
+          sd.appendChild(bt);
+        });
+        det.appendChild(sd);
+        var pg = mk('button', 'btn', '🔍 Review this game'); pg.type = 'button'; pg.id = 'chs-pgnGo'; det.appendChild(pg);
+        pg.addEventListener('click', function () {
+          var g = acctGame(ta.value, '', { you: you });
+          if (!g || g.moves.length < 2) { st.textContent = '🤔 I couldn’t read that game. Copy the whole PGN (or the moves, like 1. e4 e5 2. Nf3).'; st.scrollIntoView({ block: 'nearest' }); return; }
+          g.imp.opp = g.imp.opp || 'them'; ACCT.games.unshift(g); openReview(g);
+        });
+        c.appendChild(det);
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+    function acctBatch(gs) {   // 🔍 several games at once → what to work on
+      var k = 0;
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🔍'));
+        c.appendChild(mk('h3', null, 'Checking your games'));
+        var p = mk('p', null, '🦉 Coach Hoot is looking at your games…'); p.id = 'chs-revMsg'; c.appendChild(p);
+        var bar = mk('div', 'chs-revbar'); bar.innerHTML = '<i id="chs-revFill"></i>'; c.appendChild(bar);
+        var no = mk('button', 'btn ghost', 'Cancel'); no.type = 'button'; no.addEventListener('click', function () { revTok++; gs.forEach(function (g) { if (g.rev && !g.rev.done) g.rev = null; }); acctCard(); }); c.appendChild(no);
+      });
+      (function next() {
+        if (k >= gs.length) { acctSummary(gs); return; }
+        var g = gs[k];
+        if (g.rev && g.rev.done) { k++; next(); return; }
+        runReview(g, 220, function (a, n) {
+          var f = $('card').querySelector('#chs-revFill'), m = $('card').querySelector('#chs-revMsg');
+          if (f) f.style.width = Math.round((k + a / n) / gs.length * 100) + '%';
+          if (m) m.textContent = '🦉 Game ' + (k + 1) + ' of ' + gs.length + ' (vs ' + g.imp.opp + '): move ' + a + ' of ' + n + '…';
+        }, function () { k++; next(); });
+      })();
+    }
+    function lessonFor(g) {   // 📖 which of our opening lessons did you play? (the longest one that matches your game)
+      var best = null, bn = 0;
+      CHESS_OPENINGS.forEach(function (L) {
+        if (L.side !== g.you || L.mate || g.fen) return;
+        var n = 0; while (n < L.line.length && n < g.moves.length && L.line[n][0] === g.moves[n]) n++;
+        if (n >= 4 && n > bn) { bn = n; best = L; }
+      });
+      return best ? { L: best, n: bn } : null;
+    }
+    function acctSummary(gs) {
+      var items = [], cats = {}, acc = 0, accN = 0, ops = {};
+      gs.forEach(function (g) {
+        g.rev.items.forEach(function (x) { if (!x.cls) x.cls = classify(g, x); x.g = g; items.push(x); acc += x.cls === 'book' ? 100 : moveAcc(x.r); accN++; });
+        var lf = lessonFor(g); if (lf) ops[lf.L.id] = (ops[lf.L.id] || 0) + 1;
+      });
+      var bad = items.filter(function (x) { return x.cls === 'mist' || x.cls === 'miss' || x.cls === 'blund'; });
+      bad.forEach(function (x) { var k2 = impOf(x.r, x.kind || (x.cls === 'miss' ? 'blunder' : '')); cats[k2] = (cats[k2] || 0) + 1; });
+      var ks = Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; });
+      var cnt = function (c) { return items.filter(function (x) { return x.cls === c; }).length; };
+      openCard(function (c) {
+        c.classList.add('chs-wide');
+        c.appendChild(mk('div', 'chs-big', '📋'));
+        c.appendChild(mk('h3', null, 'Your last ' + gs.length + (gs.length === 1 ? ' game' : ' games')));
+        var w = gs.filter(function (g) { return g.imp.res === 'win'; }).length, l = gs.filter(function (g) { return g.imp.res === 'loss'; }).length;
+        var sm = mk('div', 'chs-revsum');
+        sm.innerHTML = '<span>🏆 <b>' + w + '</b> won</span><span>❌ <b>' + l + '</b> lost</span><span class="acc">🎯 Accuracy <b>' + (accN ? Math.round(acc / accN) : 100) + '%</b></span><span>💎 <b>' + cnt('brill') + '</b> brilliant</span><span>⁉️ <b>' + cnt('blund') + '</b> blunders</span>';
+        c.appendChild(sm);
+        c.appendChild(styleBox(styleOf(items)));   // ⚖️
+        var imp = mk('div', 'chs-psum chs-imp');
+        imp.appendChild(mk('p', 'chs-imph', '📈 What to work on'));
+        if (!ks.length) imp.appendChild(mk('p', null, '🦉 No big mistakes in these games. Amazing! Keep playing and learning openings.'));
+        ks.slice(0, 3).forEach(function (k2, i) { var li = mk('p', 'chs-impi'); li.innerHTML = '<b>' + (i + 1) + '. ' + IMP[k2][0] + ' ×' + cats[k2] + '</b><br>' + esc(IMP[k2][1]); imp.appendChild(li); });
+        c.appendChild(imp);
+        var oids = Object.keys(ops);
+        if (oids.length) {
+          var ob = mk('div', 'chs-psum');
+          ob.appendChild(mk('p', 'chs-imph', '📖 Openings you played (we have lessons!)'));
+          oids.forEach(function (id) { var L = OPEN[id], b = mk('button', 'chs-sugb'); b.type = 'button'; b.setAttribute('data-sugop', id); b.innerHTML = '<span class="chs-sugn">' + L.e + ' <b>' + esc(L.n) + '</b> ×' + ops[id] + '</span><span class="chs-suggo">📖 Practice it ▶</span>'; b.addEventListener('click', function () { closeCard(); startLesson('op', id); }); ob.appendChild(b); });
+          c.appendChild(ob);
+        }
+        var top = bad.slice().sort(function (a, b) { return b.loss - a.loss; }).slice(0, 5);
+        if (top.length) c.appendChild(mk('h4', 'chs-skh', '❌ Your biggest mistakes, side by side'));
+        top.forEach(function (x) { var d = moveBox(x.g, x, false); d.insertBefore(mk('div', 'chs-rvvs', 'vs ' + x.g.imp.opp), d.firstChild); c.appendChild(d); });
+        if (top.length) {
+          var dr = mk('button', 'btn', '🧩 Practice these mistakes'); dr.type = 'button'; dr.id = 'chs-acctDrill';
+          dr.addEventListener('click', function () {
+            var ids = [];
+            top.forEach(function (x) { var rec = revRec(x.g, x); S.mist = S.mist.filter(function (m) { return !(m.fen === rec.fen && m.bu === rec.bu); }); S.mist.unshift(rec); ids.push(rec.id); });
+            if (S.mist.length > 40) S.mist.length = 40;
+            save(); closeCard(); startDrill(ids);
+          });
+          c.appendChild(dr);
+        }
+        var bk = mk('button', 'btn ghost', '↩️ Back to my games'); bk.type = 'button'; bk.id = 'chs-acctBack'; bk.addEventListener('click', function () { acctCard(); }); c.appendChild(bk);
+      });
+      acctHist(gs);
+    }
+    function acctHist(gs) {   // 🧭 your online games help “Openings for You” too
+      gs.forEach(function (g) {
+        if (g.noted || g.fen || g.moves.length < 4) return; g.noted = true;
+        var a = 0; g.sans.slice(0, 40).forEach(function (s, i) { if ((i % 2 === 0) === (g.you === 'w') && /[x+#]/.test(s)) a++; });
+        S.hist = (S.hist || []).slice(-29); S.hist.push({ y: g.you, m: g.moves.slice(0, 8), a: a });
+      });
+      save();
     }
     function revRec(g, x) {   // a mistake from the review, ready for 🧩 My mistakes
       var V = viewAt(g.moves.slice(0, x.i), g.fen), who = revWho(g, x.s);
@@ -22034,6 +23180,7 @@
         c.classList.add('chs-wide');
         c.appendChild(mk('div', 'chs-big', '🔍'));
         c.appendChild(mk('h3', null, 'Game Review'));
+        if (g.imp) c.appendChild(mk('p', 'chs-acctvs', acctLine(g) + (g.imp.date ? ' · ' + g.imp.date : '')));   // 🔗
         // 🎯 accuracy + how many of each kind of move
         var tb = mk('div', 'chs-clstab' + (duel ? ' two' : ''));
         var h = '<div class="chs-clsrow head"><span></span>' + sides.map(function (s) { return '<b>' + (duel ? (s === 'w' ? '⚪ ' : '⚫ ') + esc(duelName(s)) : 'You') + '</b>'; }).join('') + '</div>';
@@ -22043,6 +23190,7 @@
           h += '<div class="chs-clsrow' + (n.some(function (v) { return v; }) ? '' : ' zero') + '" data-cls="' + k + '"><span>' + clsChip(k) + ' ' + CLS[k][1] + '</span>' + n.map(function (v) { return '<b>' + v + '</b>'; }).join('') + '</div>';
         });
         tb.innerHTML = h; c.appendChild(tb);
+        if (!duel) c.appendChild(styleBox(styleOf(it)));   // ⚖️
         // 📈 what to improve (from this game)
         var cats = {}; bad.forEach(function (x) { var k = impOf(x.r, x.kind || (x.cls === 'miss' ? 'blunder' : '')); cats[k] = (cats[k] || 0) + 1; });
         var ks = Object.keys(cats).sort(function (a, b) { return cats[b] - cats[a]; });
@@ -22088,7 +23236,7 @@
         }
         var row = mk('div', 'chs-row');
         var ib = mk('button', 'btn ghost', '📈 All my games'); ib.type = 'button'; ib.id = 'chs-revImp'; ib.addEventListener('click', improveCard);
-        var bk = mk('button', 'btn ghost', '↩️ Back'); bk.type = 'button'; bk.id = 'chs-revBack'; bk.addEventListener('click', function () { closeCard(); showOver(); });
+        var bk = mk('button', 'btn ghost', '↩️ Back'); bk.type = 'button'; bk.id = 'chs-revBack'; bk.addEventListener('click', function () { if (g.imp) acctCard(); else { closeCard(); showOver(); } });
         row.appendChild(ib); row.appendChild(bk); c.appendChild(row);
       });
     }
@@ -22116,6 +23264,7 @@
         c.appendChild(mk('div', 'chs-big', '📈'));
         c.appendChild(mk('h3', null, 'What to improve'));
         c.appendChild(mk('p', null, tot ? 'From your 🎯 practice games and ' + (S.impGames || 0) + ' 🔍 reviewed ' + ((S.impGames || 0) === 1 ? 'game' : 'games') + '. Your biggest thing to work on is at the top!' : 'Play a game, then tap 🔍 Game Review at the end (or play a 🎯 practice game). Coach Hoot will show what to work on here!'));
+        if (S.style && S.style.att + S.style.def) c.appendChild(styleBox(S.style));   // ⚖️
         ks.forEach(function (k, i) {
           var d = mk('div', 'chs-impr' + (i === 0 ? ' top' : '')); d.setAttribute('data-imp', k);
           d.innerHTML = '<div class="chs-imprh"><b>' + IMP[k][0] + '</b><span>' + im[k] + (im[k] === 1 ? ' time' : ' times') + '</span></div><div class="chs-imprb"><i style="width:' + Math.max(8, Math.round(im[k] / top * 100)) + '%"></i></div><small>' + esc(IMP[k][1]) + '</small>';
@@ -22244,6 +23393,107 @@
         });
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
       });
+    }
+    // ---- 🗺️ in the opening TEST: after the opening (and after surprises), play the plan too ----
+    function planPool(L, r) {   // each plan step's moves, in order (only real arrows, not ~ ideas)
+      return (planFor(L, r) || []).map(function (st) { return { t: st[0], u: st[1].split(' ').filter(function (a) { return a && a[0] !== '~'; }), k: 0 }; })
+        .filter(function (p) { return p.u.length; });
+    }
+    function planNow() {   // the plan moves you could play right now
+      return (game.planQ || []).filter(function (p) { return p.k < p.u.length && G.moves().some(function (m) { return m.uci.slice(0, 4) === p.u[p.k]; }); });
+    }
+    function lineDone() {   // the opening is done… now: what's the PLAN?
+      var L = OPEN[game.lesson];
+      if (L.mate || G.status() || game.kind !== 'op') { roundEnd(true); return; }
+      game.planQ = planPool(L, game.route); game.planN = 0;
+      var ask0 = function (x) {
+        if (!planNow().length) { game.planQ = null; roundEnd(true); return; }
+        sound('right');
+        coachSays('✅ You know the opening!' + (x ? ' I play ' + x.san + '.' : '') + ' 🗺️ Now the hard part: what’s the PLAN? Play your next move from the plan (no hints this time)!');
+        game.busy = false; render();
+      };
+      if (G.turn() === game.you) { ask0(null); return; }
+      game.busy = true; render();   // (the opening ended with YOUR move: Test Bot answers first)
+      var my = token;
+      ask({ depth: 3, time: 350 }, function (r) {
+        if (my !== token || !isTest()) return;
+        lessonTm = setTimeout(function () {
+          if (my !== token || !isTest()) return;
+          var x = r && r.uci ? applyMove(r.uci) : null;
+          if (!x || G.status()) { game.planQ = null; game.busy = false; roundEnd(true); return; }
+          ask0(x);
+        }, 700);
+      });
+    }
+    function planTestMove(uci, dragged) {
+      var nx = planNow(), hit = null;
+      nx.forEach(function (p) { if (!hit && p.u[p.k] === uci) hit = p; });
+      if (!hit) {
+        var p0 = nx[0], L = OPEN[game.lesson];
+        sel = null; targets = []; game.planQ = null;
+        roundEnd(false, '❌ That’s not the plan! 🗺️ ' + (p0 ? p0.t : ''), p0 ? p0.u[p0.k] : null);
+        if (p0) openingWhy(uci, p0.u[p0.k], { n: L.n + ' plan' }, function (w) { if (isTest() && game.coach) coachSays(game.coach + '\n' + w.text); });
+        return;
+      }
+      applyMove(uci, dragged); hit.k++; game.planN++;
+      flash('✅ ' + pick(['That’s the plan!', 'Great plan move!', 'You remembered!']));
+      if (game.planN >= 2 || G.status()) { game.planQ = null; roundEnd(true); return; }
+      game.busy = true; render();
+      var my = token;
+      ask({ depth: 3, time: 350 }, function (r) {   // Test Bot answers like a real player would
+        if (my !== token || !isTest()) return;
+        lessonTm = setTimeout(function () {
+          if (my !== token || !isTest()) return;
+          var x = r && r.uci ? applyMove(r.uci) : null; game.busy = false;
+          if (!x || G.status() || !planNow().length) { game.planQ = null; roundEnd(true); return; }
+          sound('right');
+          coachSays('I play ' + x.san + '. 🗺️ What’s the next move in your plan?');
+          render();
+        }, 700);
+      });
+    }
+    // ---- ⚖️ attack or defense? From your mistakes: did you miss attacks, or forget to defend? ----
+    function styleOf(items) {
+      var att = 0, def = 0;
+      items.forEach(function (x) {
+        if (['inacc', 'mist', 'miss', 'blund'].indexOf(x.cls) < 0) return;
+        var r = x.r, mine = r.san || '', best = r.bestSan || '', bestHot = /[x+#]/.test(best) || r.bestMate > 0, mineHot = /[x+#]/.test(mine);
+        if ((r.replyCap && r.replyCap !== 'P') || x.kind === 'mated' || (mineHot && !bestHot)) def++;   // you left something open, or attacked when you had to defend
+        else if (bestHot && !mineHot) att++;   // you had an attack and played something slower
+      });
+      return { att: att, def: def };
+    }
+    function styleText(s) {
+      if (s.att >= 2 && s.att > s.def) return { k: 'attack', t: '🗡️ Be MORE AGGRESSIVE! ' + s.att + ' times you had a strong attack (a capture or a check) but played something slower. Every turn, look for checks and captures FIRST!' };
+      if (s.def >= 2 && s.def > s.att) return { k: 'defend', t: '🛡️ Play MORE DEFENSE! ' + s.def + ' times you left a piece open or let them attack. Before you move, ask: “What is my opponent threatening?”' };
+      if (s.att + s.def === 0) return { k: 'ok', t: '⚖️ Great balance between attack and defense!' };
+      return { k: 'ok', t: '⚖️ Pretty good balance! You missed ' + s.att + (s.att === 1 ? ' attack' : ' attacks') + ' and forgot to defend ' + s.def + (s.def === 1 ? ' time.' : ' times.') };
+    }
+    function styleBox(s) { var v = styleText(s), d = mk('div', 'chs-style s-' + v.k); d.setAttribute('data-style', v.k); d.textContent = v.t; return d; }
+
+    // ---- 🦉 Coach games: if you haven't learned an answer to their opening, Coach Hoot teaches a reliable one ----
+    function coachPick() {
+      var mv = game.moves, n = mv.length;
+      var fits = CHESS_OPENINGS.filter(function (L) {
+        if (L.side !== game.you || L.mate || L.deadly || L.line.length <= n) return false;
+        for (var i = 0; i < n; i++) if (L.line[i][0] !== mv[i]) return false;
+        return true;
+      });
+      if (!fits.length) return null;
+      if (fits.some(function (L) { return (S.learn['op:' + L.id] || 0) >= 2; })) return null;   // you already know one! 👍
+      fits.sort(function (a, b) { return ((b.counter ? 4 : 0) + (b.pro ? 2 : 0) + (b.sys ? 1 : 0)) - ((a.counter ? 4 : 0) + (a.pro ? 2 : 0) + (a.sys ? 1 : 0)); });
+      return fits[0].id;
+    }
+    function coachOpenTip() {
+      if (!game || game.bot !== 'coach' || game.fen || game.after || G.turn() !== game.you || game.moves.length > 16) return '';
+      var n = game.moves.length;
+      if (game.copen === undefined) { if (n < (game.you === 'w' ? 2 : 1)) return ''; game.copen = coachPick(); game.copenAt = n; save(); }
+      if (!game.copen) return '';
+      var L = OPEN[game.copen], i;
+      for (i = 0; i < n; i++) if (L.line[i][0] !== game.moves[i]) return n - game.copenAt < 6 ? cbox('We left the ' + L.n + ' line. That’s okay! Keep your pieces safe and bring them out. (Learn it after this game!)') : '';
+      var st = L.line[n]; if (!st) return '';
+      var their = n === game.copenAt ? 'They’re playing ' + (game.you === 'b' ? '1. ' + game.sans[0] : '1. ' + game.sans[0] + ' ' + game.sans[1]) + ', and you haven’t learned an answer yet. A great, reliable one is the ' + L.e + ' ' + L.n + (L.pro ? ' (pros play it!)' : '') + '.\n' : '';
+      return cbox(their + '📖 ' + L.n + ' move: ' + G.sanOf(st[0]) + '. ' + st[1]) ;
     }
     function openPractice() {   // 🎯 pick a bot to practice against
       var gm = goodMatch(), bot = BOT[S.pracBot] ? S.pracBot : gm.id, side = S.lastPick || 'w';
@@ -22627,7 +23877,7 @@
         '<button type="button" class="chs-lbtn chs-ldead" data-learn="dead"><span class="chs-lic">💀</span><b>Deadly Openings</b><small>Gambits and traps that win fast · ' + learnedText('dead') + '</small></button>' +
         '<button type="button" class="chs-lbtn chs-lctr" data-learn="counter"><span class="chs-lic">🛡️</span><b>Counters</b><small>Beat tricky gambits and traps · ' + learnedText('counter') + '</small></button>' +
         '<button type="button" class="chs-lbtn chs-lsug" data-learn="sug" id="chs-sugBtn"><span class="chs-lic">🧭</span><b>Openings for You</b><small>Coach Hoot suggests openings that match how you play</small></button>' +
-        '<button type="button" class="chs-lbtn chs-lafter" data-learn="after"><span class="chs-lic">🗺️</span><b>What to Do After the Opening</b><small>The opening is already played: learn the plan · ' + afterText() + '</small></button>';
+        '';   // (🗺️ What to Do After the Opening is now part of each opening's test)
       learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (!b) return; if (b.getAttribute('data-learn') === 'after') showAfterList(); else if (b.getAttribute('data-learn') === 'sug') suggestCard(); else showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var prh = mk('div', 'chs-tier'); prh.innerHTML = '<h3>🎯 Practice</h3><small>Fix your mistakes 🦉</small>'; m.appendChild(prh);
@@ -22639,7 +23889,7 @@
       pb.addEventListener('click', openPractice); m.appendChild(pb);
       var ab = mk('button', 'chs-friend chs-aft'); ab.type = 'button'; ab.id = 'chs-afterBtn';
       ab.innerHTML = '<span class="chs-av" style="--hue:#39c98a">🗺️</span><span><b>After the Opening</b><small>Pick an opening and play on against a bot. Coach Hoot shows you what to do next, and what to do when the bot surprises you!</small></span>';
-      ab.addEventListener('click', function () { openAfter(); }); m.appendChild(ab);
+      ab.addEventListener('click', function () { openAfter(); });   // (🗺️ not on the menu anymore: it's part of each opening's test, and each opening's card)
       var nmi = S.mist.length, mb = mk('button', 'chs-friend chs-mist'); mb.type = 'button'; mb.id = 'chs-mistBtn';
       mb.innerHTML = '<span class="chs-av" style="--hue:#f472b6">🧩</span><span><b>My mistakes' + (nmi ? ' (' + nmi + ')' : '') + '</b><small>' + (nmi ? 'Practice the mistakes from your practice games. Get one right twice and it’s learned!' : 'The mistakes from your practice games show up here, so you can practice them again.') + '</small></span>';
       mb.disabled = !nmi; mb.addEventListener('click', function () { if (S.mist.length) startDrill(); }); m.appendChild(mb);
@@ -22647,6 +23897,9 @@
       var ib = mk('button', 'chs-friend chs-impb'); ib.type = 'button'; ib.id = 'chs-impBtn';
       ib.innerHTML = '<span class="chs-av" style="--hue:#60a5fa">📈</span><span><b>What to improve</b><small>' + (imn ? 'See the kinds of mistakes you make most, with tips to fix them.' : 'After a game, tap 🔍 Game Review. Coach Hoot shows what you should work on!') + '</small></span>';
       ib.addEventListener('click', improveCard); m.appendChild(ib);
+      var ac = mk('button', 'chs-friend chs-acctb'); ac.type = 'button'; ac.id = 'chs-acctBtn';
+      ac.innerHTML = '<span class="chs-av" style="--hue:#81b64c">🔗</span><span><b>My Online Games</b><small>Check your chess.com or Lichess games: what you did wrong, and what to do instead</small></span>';
+      ac.addEventListener('click', function () { acctCard(); }); m.appendChild(ac);
       var ph = mk('div', 'chs-tier'); ph.innerHTML = '<h3>♟️ Play</h3><small>1v1 a friend, or play a bot</small>'; m.appendChild(ph);
       var fr = mk('button', 'chs-friend'); fr.type = 'button'; fr.id = 'chs-friendBtn';
       fr.innerHTML = '<span class="chs-av" style="--hue:var(--c4)">⚔️</span><span><b>1v1 on one phone</b><small>Play a friend: take turns on the same phone. Pick your names and a clock!</small></span>';
@@ -22660,7 +23913,7 @@
         var grid = mk('div', 'chs-bots');
         list.forEach(function (b) {
           var r = S.rec[b.id], bt = mk('button', 'chs-botc' + (gm === b ? ' match' : '')); bt.type = 'button'; bt.setAttribute('data-bot', b.id); bt.style.setProperty('--hue', b.hue);
-          bt.innerHTML = '<span class="chs-av">' + b.e + '</span><b>' + b.n + '</b><small>' + b.elo + '</small>' + (r && r.w ? '<span class="chs-tag" title="Beaten!">✅</span>' : '') + (gm === b ? '<span class="chs-tagm">Good match</span>' : '');
+          bt.innerHTML = '<span class="chs-av">' + b.e + '</span><b>' + b.n + '</b><small>' + b.elo + '</small>' + (b.s && b.s.attack ? '<span class="chs-fire" title="Attacker">🔥</span>' : '') + (r && r.w ? '<span class="chs-tag" title="Beaten!">✅</span>' : '') + (gm === b ? '<span class="chs-tagm">Good match</span>' : '');
           bt.addEventListener('click', function () { openBot(b.id); });
           grid.appendChild(bt);
         });
@@ -22675,6 +23928,7 @@
         c.appendChild(mk('h3', null, b.n));
         var elo = mk('span', 'chs-elo', 'Elo ' + b.elo); elo.style.setProperty('--hue', b.hue); c.appendChild(elo);
         c.appendChild(mk('p', null, b.d));
+        if (b.s && b.s.attack) c.appendChild(mk('p', 'chs-firep', '🔥 Attacker! This bot loves to go after your king. Keep your king safe!'));
         c.appendChild(mk('p', 'chs-quote', '“' + b.hi + '”'));
         if (r) { var rc = mk('div', 'chs-rec'); rc.innerHTML = '<span>Wins <b>' + r.w + '</b></span><span>Losses <b>' + r.l + '</b></span><span>Draws <b>' + r.d + '</b></span>'; c.appendChild(rc); }
         var seg = mk('div', 'chs-seg');
@@ -22749,7 +24003,7 @@
       test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); }, planWant: function () { return planWant(); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); },
-      after: function (id, botId, r) { startAfter(id, botId, r); }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
+      after: function (id, botId, r) { startAfter(id, botId, r); }, afterList: function () { showAfterList(); }, openAfter: function () { openAfter(); }, planMoves: function () { return game && game.planQ ? planNow().map(function (p) { return p.u[p.k]; }) : null; }, want: function () { var st = game && game.mode === 'lesson' ? lineNow()[game.step] : null; return st ? st[0] : null; }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
       review: function (list) { return new Promise(function (res) { askAt(game.moves.slice(), { review: list, time: 700 }, res); }); }
     };
   })();
