@@ -2816,6 +2816,318 @@
   .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
   .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
   .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+
+  /* 🟫 more boards */
+  .chs-board.t-cherry { --chs-l: #f2c9a0; --chs-d: #8c3b26; }
+  .chs-board.t-cherry .chs-sq.d { background: repeating-linear-gradient(100deg, rgba(0,0,0,0.07) 0 2px, transparent 2px 7px), var(--chs-d); }
+  .chs-board.t-cherry .chs-sq.l { background: repeating-linear-gradient(100deg, rgba(120,60,20,0.08) 0 2px, transparent 2px 8px), var(--chs-l); }
+  .chs-board.t-jungle { --chs-l: #c8e6a0; --chs-d: #3f7d2c; }
+  .chs-board.t-jungle .chs-sq.d { background: radial-gradient(ellipse at 30% 70%, rgba(20,60,10,0.45) 0 4px, transparent 5px), radial-gradient(ellipse at 75% 25%, rgba(150,220,90,0.35) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-coral { --chs-l: #ffd9c7; --chs-d: #1c8c9a; }
+  .chs-board.t-coral .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(255,255,255,0.45) 0 1.5px, transparent 2.5px), radial-gradient(circle at 25% 75%, rgba(255,127,102,0.6) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-desert { --chs-l: #f7e1b5; --chs-d: #c98d4c; }
+  .chs-board.t-desert .chs-sq.d { background: linear-gradient(170deg, transparent 55%, rgba(120,70,20,0.18) 56% 64%, transparent 65%), var(--chs-d); }
+  .chs-board.t-sky { --chs-l: #ffffff; --chs-d: #7cc4f5; }
+  .chs-board.t-sky .chs-sq.d { background: radial-gradient(ellipse at 40% 60%, rgba(255,255,255,0.55) 0 5px, transparent 6px), var(--chs-d); }
+  .chs-board.t-galaxy { --chs-l: #8b7fd9; --chs-d: #241a4f; }
+  .chs-board.t-galaxy .chs-sq.d { background: radial-gradient(circle at 30% 30%, #fff 0 0.9px, transparent 1.5px), radial-gradient(circle at 70% 65%, #f0abfc 0 1px, transparent 1.7px), radial-gradient(circle at 50% 50%, rgba(168,85,247,0.35), transparent 70%), var(--chs-d); }
+  .chs-board.t-galaxy .chs-sq.l { background: radial-gradient(circle at 65% 35%, rgba(255,255,255,0.6) 0 0.8px, transparent 1.4px), linear-gradient(150deg, #9d92e8, #7466c8); }
+  .chs-board.t-spooky { --chs-l: #fdba74; --chs-d: #3b1f4f; }
+  .chs-board.t-spooky .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(253,230,138,0.5) 0 1.5px, transparent 2.5px), var(--chs-d); }
+  .chs-board.t-choco { --chs-l: #e8c39e; --chs-d: #5a3220; }
+  .chs-board.t-choco .chs-sq.d { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0 30%, transparent 30% 70%, rgba(0,0,0,0.15) 70%), var(--chs-d); }
+  .chs-board.t-rainbow { --chs-l: #fff7fb; --chs-d: #c084fc; }
+  .chs-board.t-rainbow .chs-sq.d { background: linear-gradient(135deg, #f9a8d4, #c4b5fd 35%, #93c5fd 65%, #86efac); }
+  .chs-board.t-royal { --chs-l: #fde9a8; --chs-d: #7f1d1d; }
+  .chs-board.t-royal .chs-sq.d { background: radial-gradient(circle at 50% 50%, rgba(253,224,71,0.25) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-royal .chs-sq.l { background: linear-gradient(145deg, #fff3c4, #f2cc5c); }
+  .chs-skins { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -3127,6 +3439,39 @@
   .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
   .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
   .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+
+  /* 🟫 more boards */
+  .chs-board.t-cherry { --chs-l: #f2c9a0; --chs-d: #8c3b26; }
+  .chs-board.t-cherry .chs-sq.d { background: repeating-linear-gradient(100deg, rgba(0,0,0,0.07) 0 2px, transparent 2px 7px), var(--chs-d); }
+  .chs-board.t-cherry .chs-sq.l { background: repeating-linear-gradient(100deg, rgba(120,60,20,0.08) 0 2px, transparent 2px 8px), var(--chs-l); }
+  .chs-board.t-jungle { --chs-l: #c8e6a0; --chs-d: #3f7d2c; }
+  .chs-board.t-jungle .chs-sq.d { background: radial-gradient(ellipse at 30% 70%, rgba(20,60,10,0.45) 0 4px, transparent 5px), radial-gradient(ellipse at 75% 25%, rgba(150,220,90,0.35) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-coral { --chs-l: #ffd9c7; --chs-d: #1c8c9a; }
+  .chs-board.t-coral .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(255,255,255,0.45) 0 1.5px, transparent 2.5px), radial-gradient(circle at 25% 75%, rgba(255,127,102,0.6) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-desert { --chs-l: #f7e1b5; --chs-d: #c98d4c; }
+  .chs-board.t-desert .chs-sq.d { background: linear-gradient(170deg, transparent 55%, rgba(120,70,20,0.18) 56% 64%, transparent 65%), var(--chs-d); }
+  .chs-board.t-sky { --chs-l: #ffffff; --chs-d: #7cc4f5; }
+  .chs-board.t-sky .chs-sq.d { background: radial-gradient(ellipse at 40% 60%, rgba(255,255,255,0.55) 0 5px, transparent 6px), var(--chs-d); }
+  .chs-board.t-galaxy { --chs-l: #8b7fd9; --chs-d: #241a4f; }
+  .chs-board.t-galaxy .chs-sq.d { background: radial-gradient(circle at 30% 30%, #fff 0 0.9px, transparent 1.5px), radial-gradient(circle at 70% 65%, #f0abfc 0 1px, transparent 1.7px), radial-gradient(circle at 50% 50%, rgba(168,85,247,0.35), transparent 70%), var(--chs-d); }
+  .chs-board.t-galaxy .chs-sq.l { background: radial-gradient(circle at 65% 35%, rgba(255,255,255,0.6) 0 0.8px, transparent 1.4px), linear-gradient(150deg, #9d92e8, #7466c8); }
+  .chs-board.t-spooky { --chs-l: #fdba74; --chs-d: #3b1f4f; }
+  .chs-board.t-spooky .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(253,230,138,0.5) 0 1.5px, transparent 2.5px), var(--chs-d); }
+  .chs-board.t-choco { --chs-l: #e8c39e; --chs-d: #5a3220; }
+  .chs-board.t-choco .chs-sq.d { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0 30%, transparent 30% 70%, rgba(0,0,0,0.15) 70%), var(--chs-d); }
+  .chs-board.t-rainbow { --chs-l: #fff7fb; --chs-d: #c084fc; }
+  .chs-board.t-rainbow .chs-sq.d { background: linear-gradient(135deg, #f9a8d4, #c4b5fd 35%, #93c5fd 65%, #86efac); }
+  .chs-board.t-royal { --chs-l: #fde9a8; --chs-d: #7f1d1d; }
+  .chs-board.t-royal .chs-sq.d { background: radial-gradient(circle at 50% 50%, rgba(253,224,71,0.25) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-royal .chs-sq.l { background: linear-gradient(145deg, #fff3c4, #f2cc5c); }
+  .chs-skins { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+  /* 🧙 dream opening + 🧭 */
+  .chs-dream { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .chs-dchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 6px 10px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+  .chs-dchip.on { background: color-mix(in srgb, var(--accent) 22%, var(--panel)); border-color: var(--accent); font-weight: 700; }
+  .chs-dvs { flex-wrap: wrap; }
+  .chs-sugb small.chs-sugrs { color: #22a35a; font-weight: 700; }
   .fv-load { display: none; }
   .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
   .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
@@ -19537,6 +19882,10 @@
       {"id":"alapin","e":"🏗️","n":"Alapin (vs the Sicilian)","side":"w","pro":1,"d":"Push c3 to build a big pawn center against the Sicilian.","plan":[["Castle! Your king is safe.","e1g1"],["Bring your queen to e2, protecting e5.","d1e2"],["Bring your other knight out to c3.","b1c3"],["Put your rook on d1.","f1d1"]],"line":[["e2e4","Pawn to e4."],["c7c5","Black plays the Sicilian."],["c2c3","The Alapin: c3! Next you push d4 and build a BIG center."],["g8f6","Black attacks your e4 pawn."],["e4e5","Push e5 and kick the knight away!"],["f6d5","The knight jumps to d5."],["d2d4","Now d4! Your pawns take over the middle."],["c5d4","Black takes."],["g1f3","Knight to f3. You’ll take back soon."],["b8c6","Black brings out a knight."],["c3d4","Take back! Two strong pawns in the center."],["d7d6","Black attacks your e5 pawn."],["f1c4","Bishop to c4, attacking the knight on d5. That’s the Alapin!"]],"alts":[{"at":3,"line":[["d7d5","Black hits back in the center with d5."],["e4d5","Take that pawn!"],["d8d5","Black takes back with the queen."],["d2d4","Push d4. Now you have the center!"],["g8f6","Black brings out a knight."],["g1f3","Knight to f3. Your pieces come out fast!"]]},{"at":3,"line":[["e7e6","Black plays e6."],["d2d4","Push d4. Take the center!"],["d7d5","Black attacks e4."],["e4e5","Push past it with e5. Lots of space!"],["b8c6","Black brings out a knight."],["g1f3","Knight to f3, protecting d4."]]}]},
       {"id":"advfrench","e":"🥖","n":"Advance French","side":"w","pro":1,"d":"Push e5 against the French and squeeze Black with space.","plan":[["Bring your bishop to b2, so it protects d4.","c1b2"],["Bishop to d3, aiming at Black’s king side.","f1d3"],["Castle! Your king is safe.","e1g1"],["Bring your other knight to d2.","b1d2"]],"line":[["e2e4","Pawn to e4."],["e7e6","Black plays the French Defense."],["d2d4","Pawn to d4. Two pawns in the center!"],["d7d5","Black attacks your e4 pawn."],["e4e5","The Advance: push e5! Your pawns grab lots of space."],["c7c5","Black hits your d4 pawn."],["c2c3","Protect d4 with c3. A strong pawn chain!"],["b8c6","Black attacks d4 again."],["g1f3","Knight to f3, protecting d4 once more."],["d8b6","Black’s queen ALSO attacks d4!"],["a2a3","Pawn to a3. Next you push b4 and grab space on the queen side."],["c8d7","Black brings out its bishop."],["b2b4","Push b4! Now your pawns press on the queen side. That’s the Advance French!"]],"alts":[{"at":9,"line":[["g8e7","Black sends a knight to e7, heading for f5."],["f1e2","Bishop to e2. Calm and solid."],["e7f5","The knight lands on f5 and hits d4."],["e1g1","Castle! Your king is safe now."],["c5d4","Black takes on d4."],["c3d4","Take back. Your center is still strong!"]]},{"at":5,"line":[["b7b6","Black gets ready to put a bishop on b7 or a6."],["c2c3","Protect d4 with c3."],["d8d7","Black’s queen comes to d7."],["g1f3","Knight to f3."],["c8a6","Black wants to swap off your good bishop."],["f1a6","Take the bishop first!"]]}]},
       {"id":"advcaro","e":"🚀","n":"Advance Caro-Kann","side":"w","pro":1,"d":"Push e5 against the Caro-Kann and keep a space advantage.","plan":[["Push c3 to protect d4 again.","c2c3"],["Bring your other knight to d2.","b1d2"],["Push your knight from f3 to h4, chasing Black’s bishop!","f3h4"],["Put your rook on e1.","f1e1"]],"line":[["e2e4","Pawn to e4."],["c7c6","Black plays the Caro-Kann."],["d2d4","Pawn to d4. Two pawns in the middle!"],["d7d5","Black attacks your e4 pawn."],["e4e5","The Advance: push e5! Lots of space for your pieces."],["c8f5","Black brings its bishop out before playing e6."],["g1f3","Knight to f3."],["e7e6","Black opens a path for its other bishop."],["f1e2","Bishop to e2, getting ready to castle."],["c6c5","Black hits your d4 pawn."],["c1e3","Bishop to e3, protecting d4."],["b8d7","Black brings out a knight."],["e1g1","Castle! That’s the Advance Caro-Kann!"]],"alts":[{"at":5,"line":[["c6c5","Black hits d4 right away with c5."],["d4c5","Take the pawn!"],["e7e6","Black opens a path to get it back."],["c1e3","Bishop to e3 protects your extra pawn."],["b8d7","Black attacks c5 again."],["f1b5","Bishop to b5, pinning the knight!"]]},{"at":7,"line":[["b8d7","Black brings out a knight before e6."],["f1e2","Bishop to e2."],["e7e6","Black plays e6."],["e1g1","Castle! Your king is safe now."],["g8e7","Black brings its other knight to e7."],["b1d2","Bring your other knight out to d2."]]}]},
+      {"id":"ponziani","e":"🏹","n":"Ponziani Opening","side":"w","d":"Push c3 early, then d4 for a big center. Sneaky and old-school!","plan":[["Take the knight on e4 if it stays there!","d4e4"],["Bring your bishop to d3.","f1d3"],["Castle! Your king is safe.","e1g1"]],"line":[["e2e4","Pawn to e4. Take the center!"],["e7e5","Black answers with e5."],["g1f3","Knight to f3, attacking e5."],["b8c6","Black protects with a knight."],["c2c3","The Ponziani: c3! Next you push d4."],["g8f6","Black attacks your e4 pawn."],["d2d4","Push d4 anyway! Hit the center."],["f6e4","Black takes the pawn on e4."],["d4d5","Kick the knight on c6 away with d5!"],["c6e7","The knight goes to e7."],["f3e5","Take the pawn on e5. Now you’re even again!"],["e7g6","Black attacks your knight."],["d1d4","Queen to d4! She protects the knight and attacks Black’s knight on e4."]],"alts":[{"at":5,"line":[["d7d5","Black hits back in the center."],["d1a4","Queen to a4, pinning the knight on c6!"],["f7f6","Black protects e5 with f6."],["f1b5","Bishop to b5. Pressure on the pinned knight!"],["g8e7","Black brings out its other knight."],["e4d5","Take the pawn on d5!"]]},{"at":7,"line":[["e5d4","Black takes on d4 instead."],["e4e5","Kick the knight with e5!"],["f6d5","The knight jumps to d5."],["c3d4","Take back. A big pawn center!"],["d7d6","Black attacks e5."],["f1c4","Bishop to c4, hitting the knight on d5."]]}]},
+      {"id":"reti","e":"🎩","n":"Réti Opening","side":"w","d":"Start with Nf3 and c4, then a bishop on g2. Calm, clever, and pros love it.","plan":[["Push e3 to make your center solid.","e2e3"],["Bring your queen to e2.","d1e2"],["Knight to c3, then rook to d1.","b1c3 f1d1"]],"line":[["g1f3","Knight to f3 first! It watches the center."],["d7d5","Black takes the center with d5."],["c2c4","The Réti: c4! Attack that d5 pawn from the side."],["e7e6","Black protects d5."],["g2g3","Pawn to g3, for a bishop on g2."],["g8f6","Black brings out a knight."],["f1g2","Bishop to g2, on the long diagonal."],["f8e7","Black gets ready to castle."],["e1g1","Castle! Your king is safe."],["e8g8","Black castles too."],["b2b3","Pawn to b3. Your other bishop goes to b2 next."],["c7c5","Black grabs space."],["c1b2","Bishop to b2! Two bishops aiming at Black’s king side. That’s the Réti!"]],"alts":[{"at":3,"line":[["d5d4","Black pushes past with d4!"],["g2g3","Pawn to g3, for your bishop."],["c7c5","Black protects d4."],["f1g2","Bishop to g2."],["b8c6","Black brings out a knight."],["e1g1","Castle! Next: d3 and e3 to attack that pawn."]]},{"at":3,"line":[["c7c6","Black protects d5 with c6, like a Slav."],["g2g3","Pawn to g3."],["g8f6","Black brings out a knight."],["f1g2","Bishop to g2."],["c8f5","Black’s bishop comes out to f5."],["e1g1","Castle! Your king is safe."]]}]},
+      {"id":"bird","e":"🐦","n":"Bird’s Opening","side":"w","d":"Start with f4 and take the e5 square. A fun, unusual opening!","plan":[["Queen to e1…","d1e1"],["…and then to h4, near Black’s king!","e1h4"],["Bring your knight to c3.","b1c3"]],"line":[["f2f4","The Bird: f4! It grabs the e5 square."],["d7d5","Black takes the center."],["g1f3","Knight to f3."],["g8f6","Black brings out a knight."],["e2e3","Pawn to e3. It opens a path for your bishop."],["g7g6","Black wants a bishop on g7."],["f1e2","Bishop to e2."],["f8g7","Black’s bishop goes to g7."],["e1g1","Castle! Your king is safe."],["e8g8","Black castles too."],["d2d3","Pawn to d3. Next, your queen goes to e1 and h4!"]],"alts":[{"at":1,"line":[["e7e5","From’s Gambit! Black gives a pawn."],["f4e5","Take that pawn!"],["d7d6","Black attacks your pawn back."],["e5d6","Take again!"],["f8d6","Black takes back."],["g1f3","Knight to f3! It stops Qh4+ and protects your king."]]},{"at":5,"line":[["c8g4","Black pins your knight."],["f1e2","Bishop to e2, breaking the pin."],["e7e6","Black opens a path for its other bishop."],["e1g1","Castle! Your king is safe now."],["f8d6","Black aims at your king side."],["b2b3","Pawn to b3, for a bishop on b2."]]}]},
+      {"id":"ruyexch","e":"🔁","n":"Ruy Lopez Exchange","side":"w","d":"Swap your bishop for the knight, give Black doubled pawns, and play a simple endgame.","plan":[["Bring your bishop to e3.","c1e3"],["Knight to d2, then to c4.","b1d2 d2c4"],["Put your rook on e1, on the open e-file.","f1e1"]],"line":[["e2e4","Pawn to e4!"],["e7e5","Black answers with e5."],["g1f3","Knight to f3, attacking e5."],["b8c6","Black protects with a knight."],["f1b5","Bishop to b5: the Ruy Lopez!"],["a7a6","Black asks your bishop to choose."],["b5c6","The Exchange: take the knight!"],["d7c6","Black takes back. Now Black has two pawns on the c-file."],["e1g1","Castle! Your king is safe."],["f7f6","Black protects e5 with a pawn."],["d2d4","Push d4! Open the center."],["e5d4","Black takes."],["f3d4","Take back with the knight. Your king-side pawns are stronger. That’s the Exchange Ruy!"]],"alts":[{"at":9,"line":[["c8g4","Black pins your knight."],["h2h3","Ask the bishop!"],["h7h5","Black offers its bishop. Don’t take it: g-file danger!"],["d2d3","Stay calm with d3."],["d8f6","Black brings out the queen."],["b1d2","Knight to d2. Solid!"]]},{"at":7,"line":[["b7c6","Black takes back toward the center."],["f3e5","Take the free pawn on e5!"],["d8e7","Black hits your knight."],["d2d4","Protect it with d4."],["d7d6","Black kicks the knight."],["e5f3","Knight goes back. You won a pawn!"]]}]},
       { id: 'sicilian', e: '🌋', n: 'Sicilian Defense', side: 'b', d: 'Fight back against e4 from the side. The most popular defense in the world.', plan: [['Push e5 to fight for the center.', 'e7e5'], ['Bishop to e7, then castle.', 'f8e7 e8g8'], ['Queen to c7 and push b5. Your queenside pawns go on the attack!', 'd8c7 b7b5']], line: [
         ['e2e4', 'White starts with e4.'],
         ['c7c5', 'The Sicilian: push your c-pawn to c5. It fights for the center from the side.'],
@@ -20100,6 +20449,11 @@
       {"id":"sveshnikov","e":"⚡","n":"Sveshnikov Sicilian","side":"b","pro":1,"d":"A fighting Sicilian with e5. World champions use it!","plan":[["Bishop to e7, getting ready to castle.","f8e7"],["Castle! Your king is safe.","e8g8"],["Bishop to b7 on the long diagonal.","c8b7"],["Put your rook on c8, on the open c-file.","a8c8"]],"line":[["e2e4","White starts with e4."],["c7c5","The Sicilian: c5!"],["g1f3","White brings out a knight."],["b8c6","Knight to c6."],["d2d4","White opens the center."],["c5d4","Take the pawn!"],["f3d4","White takes back."],["g8f6","Knight to f6, attacking e4."],["b1c3","White protects e4."],["e7e5","The Sveshnikov: e5! Kick the knight away and grab the center."],["d4b5","White’s knight jumps to b5, eyeing d6."],["d7d6","Pawn to d6. Now the knight can’t land there."],["c1g5","White pins your knight."],["a7a6","Kick the knight on b5!"],["b5a3","The knight goes to a3."],["b7b5","Push b5. Now that knight on a3 is stuck on the edge!"]],"alts":[{"at":10,"line":[["d4f3","White’s knight goes back to f3."],["f8b4","Bishop to b4, pinning the knight on c3!"],["f1d3","White protects e4."],["d7d6","Pawn to d6."],["e1g1","White castles."],["e8g8","Castle too!"]]},{"at":12,"line":[["c3d5","White jumps into d5."],["f6d5","Take the knight!"],["e4d5","White takes back."],["c6b8","Your knight goes back to b8, to come out again on d7."],["c2c4","White grabs space."],["f8e7","Bishop to e7. Get ready to castle!"]]}]},
       {"id":"bogo","e":"🛡️","n":"Bogo-Indian Defense","side":"b","pro":1,"d":"An easy, solid answer to d4 and c4: check with the bishop and swap pieces.","plan":[["Push e5 to fight for the center!","e6e5"],["Castle! Your king is safe.","e8g8"],["Push a5 to grab space on the queen side.","a7a5"],["Put your rook on e8.","f8e8"]],"line":[["d2d4","White starts with d4."],["g8f6","Knight to f6."],["c2c4","White grabs space."],["e7e6","Pawn to e6, opening a path for your bishop."],["g1f3","White brings out a knight."],["f8b4","The Bogo-Indian: bishop to b4, CHECK!"],["c1d2","White blocks with its bishop."],["d8e7","Queen to e7, protecting your bishop."],["g2g3","White wants a bishop on g2."],["b8c6","Knight to c6."],["f1g2","White’s bishop comes out."],["b4d2","Swap the bishops, with check!"],["b1d2","White takes back with the knight."],["d7d6","Pawn to d6. Next: e5! That’s the Bogo-Indian."]],"alts":[{"at":6,"line":[["b1d2","White blocks with the knight instead."],["b7b6","Pawn to b6, ready for your bishop on b7."],["a2a3","White kicks your bishop."],["b4d2","Take the knight, with check!"],["d1d2","White takes back with the queen."],["c8b7","Bishop to b7. Nice and active!"]]},{"at":8,"line":[["e2e3","White plays e3 instead."],["e8g8","Castle! Your king is safe now."],["f1d3","White’s bishop comes out."],["d7d6","Pawn to d6."],["e1g1","White castles."],["e6e5","Push e5! Fight for the center."]]}]},
       {"id":"taimanov","e":"🧭","n":"Taimanov Sicilian","side":"b","pro":1,"d":"A flexible Sicilian with e6, Nc6 and Qc7. Easy to play, hard to beat.","plan":[["Bishop to c5, aiming at White’s pieces.","f8c5"],["Push d6 to give your bishop on c8 room.","d7d6"],["Castle! Your king is safe.","e8g8"],["Push b5 to grab space.","b7b5"]],"line":[["e2e4","White starts with e4."],["c7c5","The Sicilian: c5!"],["g1f3","White brings out a knight."],["e7e6","Pawn to e6."],["d2d4","White opens the center."],["c5d4","Take the pawn!"],["f3d4","White takes back."],["b8c6","Knight to c6, attacking the knight on d4."],["b1c3","White brings out another knight."],["d8c7","The Taimanov: queen to c7! She watches e5 and the c-file."],["c1e3","White brings out a bishop."],["a7a6","Pawn to a6, so no knight can jump to b5."],["f1d3","White gets ready to castle."],["g8f6","Knight to f6."],["e1g1","White castles."],["c6e5","Knight to e5! It’s a great square."]],"alts":[{"at":8,"line":[["d4b5","White’s knight jumps to b5."],["d7d6","Pawn to d6. The knight can’t come to d6 now."],["c2c4","White grabs space."],["g8f6","Knight to f6."],["b1c3","White brings out the other knight."],["a7a6","Kick the knight on b5!"]]},{"at":8,"line":[["d4c6","White swaps knights."],["b7c6","Take back toward the center."],["f1d3","White’s bishop comes out."],["d7d5","Push d5! Your center pawns are strong."],["e1g1","White castles."],["g8f6","Knight to f6."]]}]},
+      {"id":"philidor","e":"🎼","n":"Philidor Defense","side":"b","d":"Protect e5 with d6 and build a solid, safe position.","plan":[["Push c6 to give your queen room.","c7c6"],["Push a5, b5 is next!","a7a5"],["Queen to c7.","d8c7"]],"line":[["e2e4","White starts with e4."],["e7e5","Answer with e5."],["g1f3","White attacks your pawn."],["d7d6","The Philidor: protect it with d6!"],["d2d4","White attacks e5 again."],["g8f6","Knight to f6, attacking e4."],["b1c3","White protects e4."],["b8d7","Knight to d7, protecting e5 once more."],["f1c4","White aims at f7."],["f8e7","Bishop to e7, getting ready to castle."],["e1g1","White castles."],["e8g8","Castle too! That’s the Philidor."]],"alts":[{"at":4,"line":[["f1c4","White aims at f7 right away."],["f8e7","Bishop to e7, keeping f7 safe."],["d2d4","White attacks e5."],["e5d4","Take the pawn!"],["f3d4","White takes back."],["g8f6","Knight to f6. Get ready to castle!"]]},{"at":6,"line":[["d4e5","White takes on e5."],["f6e4","Take the pawn on e4!"],["d1d5","White attacks your knight and f7!"],["e4c5","Knight to c5. Safe!"],["c1g5","White attacks your queen."],["f8e7","Block with the bishop."]]}]},
+      {"id":"tarrasch","e":"⚔️","n":"Tarrasch Defense","side":"b","d":"Fight back right away with c5. Your pieces get lots of room!","plan":[["Bishop to e6, protecting d5.","c8e6"],["Put your rook on e8.","f8e8"],["Push h6 so nothing comes to g5.","h7h6"]],"line":[["d2d4","White starts with d4."],["d7d5","Answer with d5."],["c2c4","The Queen’s Gambit."],["e7e6","Protect d5 with e6."],["b1c3","White brings out a knight."],["c7c5","The Tarrasch: c5! Hit back in the center."],["c4d5","White takes."],["e6d5","Take back with the e-pawn."],["g1f3","White brings out another knight."],["b8c6","Knight to c6."],["g2g3","White wants a bishop on g2."],["g8f6","Knight to f6."],["f1g2","White’s bishop aims at your d5 pawn."],["f8e7","Bishop to e7."],["e1g1","White castles."],["e8g8","Castle! Your pieces have lots of room. That’s the Tarrasch!"]],"alts":[{"at":8,"line":[["e2e3","White plays calmly with e3."],["g8f6","Knight to f6."],["g1f3","White brings out a knight."],["b8c6","Knight to c6."],["f1e2","White gets ready to castle."],["f8d6","Bishop to d6, aiming at White’s king side."]]},{"at":6,"line":[["e2e3","White doesn’t take."],["g8f6","Knight to f6."],["g1f3","White brings out a knight."],["b8c6","Knight to c6."],["a2a3","White plays a3."],["a7a6","You can do the same!"]]}]},
+      {"id":"vsenglish","e":"🔄","n":"Reversed Sicilian (vs 1.c4)","side":"b","d":"White plays the English with c4? Play e5: it’s a Sicilian with an extra move for you!","plan":[["Castle! Your king is safe.","e8g8"],["Bishop to e6.","c8e6"],["Push f6 to protect e5.","f7f6"]],"line":[["c2c4","White starts with c4, the English Opening."],["e7e5","Answer with e5! Take the center."],["b1c3","White brings out a knight."],["g8f6","Knight to f6."],["g1f3","White attacks your e5 pawn."],["b8c6","Protect it with your knight."],["g2g3","White wants a bishop on g2."],["d7d5","Push d5! Grab the center."],["c4d5","White takes."],["f6d5","Take back with the knight."],["f1g2","White’s bishop comes out."],["d5b6","Knight back to b6, away from the bishop’s attack."],["e1g1","White castles."],["f8e7","Bishop to e7. Castle next!"]],"alts":[{"at":2,"line":[["g2g3","White plays g3 first."],["g8f6","Knight to f6."],["f1g2","White’s bishop comes out."],["c7c6","Pawn to c6. Next: d5!"],["g1f3","White attacks e5."],["e5e4","Push e4! Kick the knight away."]]},{"at":6,"line":[["e2e3","White plays e3 instead."],["f8b4","Pin the knight!"],["d1c2","White protects the knight."],["e8g8","Castle! Your king is safe now."],["c3d5","White jumps into d5."],["f8e8","Rook to e8, protecting e5."]]}]},
+      {"id":"vsreti","e":"🛡️","n":"Slav Setup (vs 1.Nf3)","side":"b","d":"White starts with Nf3? Play d5, Nf6, c6 and Bg4: a solid, easy setup.","plan":[["Bishop to d6.","f8d6"],["Castle! Your king is safe.","e8g8"],["Put your rook on e8.","f8e8"]],"line":[["g1f3","White starts with Nf3."],["d7d5","Take the center with d5!"],["g2g3","White wants a bishop on g2."],["g8f6","Knight to f6."],["f1g2","White’s bishop comes out."],["c7c6","Pawn to c6. Rock-solid!"],["e1g1","White castles."],["c8g4","Bishop to g4, pinning the knight."],["d2d3","White plays d3."],["b8d7","Knight to d7."],["b1d2","White brings out its other knight."],["e7e5","Push e5! Now you have a BIG center."]],"alts":[{"at":2,"line":[["c2c4","White plays c4, attacking d5."],["c7c6","Protect it with c6."],["b2b3","White wants a bishop on b2."],["c8f5","Bishop to f5. Out before e6!"],["g2g3","White plays g3."],["e7e6","Pawn to e6. A strong wall."]]},{"at":2,"line":[["d2d4","White plays d4."],["g8f6","Knight to f6."],["c2c4","White plays c4: the Queen’s Gambit."],["c7c6","Protect d5 with c6: the Slav!"],["b1c3","White brings out a knight."],["d5c4","Take the pawn! Next: Bf5."]]}]},
+      {"id":"vslondon","e":"🗡️","n":"Beat the London","side":"b","d":"White plays the London with Bf4? Hit back with c5 and Qb6 at the b2 pawn!","plan":[["Bishop to g4, pinning or hitting the knight.","c8g4"],["Push e6, then Bd6 to swap off the London bishop.","e7e6 f8d6"],["Castle! Your king is safe now.","e8g8"]],"line":[["d2d4","White starts with d4."],["d7d5","Answer with d5."],["c1f4","The London! White’s bishop comes to f4."],["c7c5","Hit back with c5!"],["e2e3","White protects d4."],["b8c6","Knight to c6. More pressure on d4."],["c2c3","White protects d4 again."],["d8b6","Queen to b6! She attacks the b2 pawn. The London’s weak spot!"],["d1b3","White protects b2 with the queen."],["c5c4","Push c4! Kick the queen away."],["b3c2","White’s queen moves back."],["g8f6","Knight to f6. Your pieces have lots of space!"]],"alts":[{"at":8,"line":[["d1c2","White protects b2 differently."],["c8g4","Bishop to g4."],["b1d2","White brings out a knight."],["e7e6","Pawn to e6."],["g1f3","White’s other knight comes out."],["g8f6","Knight to f6. Get ready to castle!"]]},{"at":4,"line":[["d4c5","White takes on c5."],["e7e6","Pawn to e6, so your bishop can take back."],["e2e4","White hits d5."],["f8c5","Take back on c5!"],["e4d5","White takes."],["e6d5","Take back. Your pieces are very active!"]]}]},
       { id: 'friedliver', e: '🔥', n: 'Fried Liver Attack', side: 'w', deadly: 1, d: 'A wild attack where you sacrifice a knight to hunt the king.', plan: [['Black’s knight on d5 is pinned to the king and attacked three times. Black has to keep defending it!', ''], ['Push d4 to open the center. Black’s king has nowhere safe to hide!', 'd2d4'], ['Castle and bring your rook to e1. Every open line toward the king helps your attack.', 'e1g1 f1e1']], line: [
         ['e2e4', 'Pawn to e4.'],
         ['e7e5', 'Black plays e5.'],
@@ -21057,6 +21411,19 @@
     // 😮🗺️ What to do after each surprise, when the normal plan doesn’t fit there (made by gen-altplans.js: the normal
     // plan’s steps that still fit, plus the engine’s best quiet moves). A surprise with no plan here uses the normal plan.
     var CHESS_ALT_PLANS = {
+      "ponziani:1": [["Push your pawn to c4 to attack the center from the side.","c3c4"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Castle! Your king is safe.","e1g1"]],
+      "ponziani:2": [["Bring your queen to b3. Now your rooks can see each other!","d1b3"],["Bring your bishop out to d2, so it joins the game.","c1d2"],["Castle! Your king is safe.","e1g1"]],
+      "bird:1": [["Push your pawn to d4 to fight for the center.","d2d4"],["Push your pawn to e3 to fight for the center.","e2e3"],["Bring your knight to c3.","b1c3"]],
+      "ruyexch:1": [["Jump your knight to c4, closer to the action.","d2c4"],["Jump your knight to g5, closer to the action.","f3g5"],["Bring your bishop out to e3, so it joins the game.","c1e3"]],
+      "ruyexch:2": [["Push your pawn to c4 to attack the center from the side.","c2c4"],["Bring your bishop to e3.","c1e3"],["Bring your knight out to c3. Knights love the middle!","b1c3"]],
+      "tarrasch:1": [["Castle! Your king hides safely behind its pawns.","e8g8"],["Bishop to e6, protecting d5.","c8e6"],["Push h6 so nothing comes to g5.","h7h6"]],
+      "tarrasch:2": [["Bring your bishop out to d6, so it joins the game.","f8d6"],["Push your pawn to b5 to grab some space.","b7b5"],["Push h6 so nothing comes to g5.","h7h6"]],
+      "vsenglish:1": [["Push your pawn to d5 to fight for the center.","d7d5"],["Push your pawn to h6 to grab some space.","h7h6"],["Bring your bishop out to b4, so it joins the game.","f8b4"]],
+      "vsenglish:2": [["Push your pawn to g6 to grab some space.","g7g6"],["Push your pawn to d6 to fight for the center.","d7d6"],["Move your bishop to c5, where it aims at more squares.","b4c5"]],
+      "vsreti:1": [["Bring your knight out to f6. Knights love the middle!","g8f6"],["Move your bishop to g4, where it aims at more squares.","f5g4"],["Bishop to d6.","f8d6"]],
+      "vsreti:2": [["Push your pawn to b5 to grab some space.","b7b5"],["Bring your bishop out to f5, so it joins the game.","c8f5"],["Push your pawn to e6 to fight for the center.","e7e6"]],
+      "vslondon:1": [["Push your pawn to c4 to attack the center from the side.","c5c4"],["Bring your bishop out to e7, so it joins the game.","f8e7"],["Move your bishop to h5, where it aims at more squares.","g4h5"]],
+      "vslondon:2": [["Bring your knight out to f6. Knights love the middle!","g8f6"],["Bring your knight out to d7. Knights love the middle!","b8d7"],["Push your pawn to d4 to fight for the center.","d5d4"]],
       "rossolimo:1": [["Push your pawn to d3 to fight for the center.","d2d3"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Push a4 to grab space on the queen side.","a2a4"]],
       "rossolimo:2": [["Push your pawn to d3 to fight for the center.","d2d3"],["Bring your knight out to c3. Knights love the middle!","b1c3"],["Push a4 to grab space on the queen side.","a2a4"]],
       "alapin:1": [["Push your pawn to b4 to grab some space.","b2b4"],["Bring your bishop out to d3, so it joins the game.","f1d3"],["Bring your queen to e2, protecting e5.","d1e2"]],
@@ -21176,6 +21543,18 @@
     CHESS_OPENINGS.forEach(function (L) { (L.alts || []).forEach(function (a, i) { var p = CHESS_ALT_PLANS[L.id + ':' + (i + 1)]; if (p) a.plan = p; }); });
     var CHESS_PRO = ['italian', 'ruy', 'scotch', 'qgambit', 'london', 'english', 'catalan', 'sicilian', 'french', 'caro', 'kid', 'grunfeld', 'qgd', 'slav', 'nimzo', 'petrov', 'berlin', 'qid'];   // 🏆 pros play these all the time
     CHESS_OPENINGS.forEach(function (L) { if (CHESS_PRO.indexOf(L.id) >= 0) L.pro = 1; });
+    var CHESS_POS = [   // 🧩 positions: what to do in common situations (puzzles checked by gen-positions.js)
+      {"id": "ahead", "e": "🏰", "n": "You’re Ahead? Trade Pieces!", "d": "When you have more pieces, swap pieces off. A small army can’t stop your extra piece!", "todo": ["Trade pieces (not pawns) whenever it’s an even swap.", "Trade QUEENS first: then their tricks are gone.", "Keep your king safe, then push pawns to make a new queen."], "puzzles": [{"fen": "3qr1k1/5ppp/8/8/8/5N2/5PPP/3QR1K1 w - - 0 1", "ok": ["d1d8", "e1e8"], "best": "d1d8", "bestSan": "Qxd8", "say": "You have an extra knight. What should you do with the queens and rooks?", "why": "Trade! With fewer pieces on the board, your extra knight wins easily."}, {"fen": "r7/1k3ppp/8/8/8/2B5/5PPP/R5K1 w - - 0 1", "ok": ["a1a8"], "best": "a1a8", "bestSan": "Rxa8", "say": "You have an extra bishop. Can you swap a pair of rooks?", "why": "Rxa8 Kxa8 is an even trade, and now your extra bishop counts even more!"}]},
+      {"id": "hanging", "e": "👀", "n": "Is Anything Hanging?", "d": "Before every move, look for pieces nobody protects: theirs AND yours.", "todo": ["Every turn: can I take something for free?", "Then: is one of MY pieces attacked and not protected?", "A free piece is worth more than almost any plan!"], "puzzles": [{"fen": "r3k2r/ppp2ppp/8/3n4/8/8/PPP2PPP/R2QK2R w KQkq - 0 1", "ok": ["d1d5"], "best": "d1d5", "bestSan": "Qxd5", "say": "Look carefully at Black’s pieces. Is one of them free?", "why": "The knight on d5 had no protection. Free piece!"}, {"fen": "r3k2r/ppp2ppp/8/7Q/3qN3/8/PPP2PPP/R3K2R w KQkq - 0 1", "ok": null, "best": "e4c3", "bestSan": "Nc3", "say": "Black’s queen attacks your knight on e4… and nothing protects it! Save it!", "why": "Move it (or protect it), and nothing is free anymore!"}]},
+      {"id": "fork", "e": "🍴", "n": "Knight Forks", "d": "A knight can attack two things at once. If one of them is the king, you win the other!", "todo": ["Look for a knight jump that checks the king AND hits another piece.", "Kings and rooks and queens on the same color are fork targets.", "Watch out for THEIR knight forks too!"], "puzzles": [{"fen": "r3k3/8/8/1N6/8/8/7P/4K3 w - - 0 1", "ok": ["b5c7"], "best": "b5c7", "bestSan": "Nc7+", "say": "Find the knight jump that attacks the king AND the rook!", "why": "Nc7+ forks the king and the rook. When the king moves, you take the rook!"}, {"fen": "4k3/7p/8/8/1n6/8/8/R3K3 b - - 0 1", "ok": ["b4c2"], "best": "b4c2", "bestSan": "Nc2+", "say": "You’re Black. Find the fork!", "why": "Nc2+ checks the king and attacks the rook on a1. Rook for free!"}]},
+      {"id": "pin", "e": "📌", "n": "Pins: Attack the Stuck Piece", "d": "A pinned piece can’t move, or the king behind it would be in check. So attack it again!", "todo": ["Pin a piece to the king with a bishop, rook or queen.", "Then attack the pinned piece, even with a pawn!", "A pinned piece can’t run away."], "puzzles": [{"fen": "4k3/7p/2n5/8/8/8/7P/4KB2 w - - 0 1", "ok": ["f1b5"], "best": "f1b5", "bestSan": "Bb5", "say": "Pin Black’s knight to its king!", "why": "Bb5 pins the knight: if it moves, the king is in check. Now it’s stuck!"}, {"fen": "4k3/8/2n5/1B6/3P4/8/8/4K3 w - - 0 1", "ok": ["d4d5"], "best": "d4d5", "bestSan": "d5", "say": "The knight is pinned. How can you win it?", "why": "d5 attacks the pinned knight with a pawn. It can’t run, so you win it!"}]},
+      {"id": "skewer", "e": "🍢", "n": "Skewers", "d": "Check the king, and when it moves out of the way, take the piece behind it!", "todo": ["Look for the king and a big piece on the same line.", "Check the king from the far side.", "When the king steps away, grab what was behind it!"], "puzzles": [{"fen": "8/8/1q6/8/3k3B/8/6P1/6K1 w - - 0 1", "ok": ["h4f2"], "best": "h4f2", "bestSan": "Bf2+", "say": "Black’s king and queen are on the same diagonal. Skewer them!", "why": "Bf2+! When the king moves away, you take the queen on b6."}, {"fen": "q7/8/8/k7/8/8/8/2R3K1 w - - 0 1", "ok": ["c1a1"], "best": "c1a1", "bestSan": "Ra1+", "say": "King and queen on the same file! Find the skewer.", "why": "Ra1+! The king has to move, and then Rxa8 wins the queen."}]},
+      {"id": "backrank", "e": "🧱", "n": "Danger on the Back Rank", "d": "If your king is stuck behind its own pawns, a rook or queen on your back row is checkmate!", "todo": ["Give your king an escape square: push a pawn like h3 or g3.", "Keep a rook or queen guarding your back row.", "Do it BEFORE they attack!"], "puzzles": [{"fen": "3r2k1/5ppp/8/8/8/8/5PPP/2R3K1 w - - 0 1", "ok": null, "best": "h2h3", "bestSan": "h3", "say": "Black threatens Rd1+ and checkmate! Stop it.", "why": "Making “luft” (an escape square) with h3 means Rd1+ is no longer checkmate. Your king can breathe!"}, {"fen": "6k1/5ppp/8/8/8/8/5PPP/1q2R1K1 b - - 0 1", "ok": ["b1e1"], "best": "b1e1", "bestSan": "Qxe1#", "say": "You’re Black. White forgot about the back rank! Can you take advantage?", "why": "Qxe1# is checkmate! White’s king is stuck behind its pawns."}]},
+      {"id": "mateThreat", "e": "🚨", "n": "Stop Their Checkmate First", "d": "If they threaten checkmate, stop it, even before your own attack.", "todo": ["Always ask: what does my opponent want to do next?", "A checkmate threat beats everything else.", "Block, guard the square, or move your king."], "puzzles": [{"fen": "6k1/5ppp/3b4/8/7q/8/5PPP/3Q1RK1 w - - 0 1", "ok": null, "best": "g2g3", "bestSan": "g3", "say": "Black threatens Qxh2+ and checkmate soon! Stop it.", "why": "Stopping the attack on h2 comes first. Now your king is safe."}, {"fen": "r5k1/5ppp/8/8/8/8/5PPP/1R4K1 w - - 0 1", "ok": null, "best": "g2g3", "bestSan": "g3", "say": "Black wants Ra1+ and checkmate! What do you do?", "why": "Give your king room (or guard the back row). Ra1+ won’t be checkmate now."}]},
+      {"id": "passed", "e": "🏃", "n": "Passed Pawns Must Be Pushed", "d": "A pawn with no enemy pawns in front of it can become a queen. Push it!", "todo": ["If no pawn can stop it, push it!", "Count: can their king catch it? (the square rule)", "Put your rooks BEHIND your passed pawn."], "puzzles": [{"fen": "8/8/8/1P6/8/k7/8/6K1 w - - 0 1", "ok": ["b5b6"], "best": "b5b6", "bestSan": "b6", "say": "Can Black’s king catch your pawn? Push it and see!", "why": "b6! The king is too far away. Your pawn becomes a queen!"}, {"fen": "8/P7/8/8/8/6k1/8/6K1 w - - 0 1", "ok": ["a7a8q"], "best": "a7a8q", "bestSan": "a8=Q", "say": "Your pawn is one step from the end!", "why": "a8=Q! A brand-new queen. Now checkmate is easy!"}]},
+      {"id": "openfile", "e": "🛣️", "n": "Rooks Love Open Files", "d": "A file with no pawns on it is a highway. Put your rooks there!", "todo": ["Find a file with no pawns: it’s “open”.", "Move a rook (or two!) onto it.", "Later, your rook can go deep into their side."], "puzzles": [{"fen": "r4rk1/pp3ppp/8/8/8/8/PP3PPP/R4RK1 w - - 0 1", "ok": ["a1d1", "f1d1", "a1c1", "f1c1", "a1e1", "f1e1"], "best": "a1d1", "bestSan": "Rad1", "say": "The c, d and e files are open. Put a rook on one!", "why": "Your rook now owns a highway into Black’s side!"}, {"fen": "3r2k1/pp3ppp/8/8/8/8/PP3PPP/3R2K1 w - - 0 1", "ok": null, "best": "d1d8", "bestSan": "Rxd8#", "say": "Black put its rook on the open d-file too… is that a problem for Black?", "why": "Rxd8# is checkmate! Black forgot about the back rank."}]},
+      {"id": "develop", "e": "🚀", "n": "In the Opening: Develop!", "d": "Bring your knights and bishops out, get a pawn in the center, and castle. Don’t move one piece many times.", "todo": ["Knights and bishops out, toward the center.", "Castle early to keep your king safe.", "Don’t bring your queen out too early."], "puzzles": [{"fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2", "ok": ["b8c6", "d7d6", "g8f6"], "best": "b8c6", "bestSan": "Nc6", "say": "White attacks your e5 pawn. What’s a good developing move?", "why": "Protect the pawn AND develop. Nc6 is the most common move of all!"}, {"fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4", "ok": ["e1g1", "b1c3", "d2d3", "c2c3"], "best": "e1g1", "bestSan": "O-O", "say": "Your knight and bishop are out. What now?", "why": "Castle or bring out another piece. Simple, strong chess!"}]}
+    ];
 
     // ---- ♟️ the game screen ----
     var KEY = 'funvault-chess-v1';
@@ -21190,7 +21569,7 @@
       { t: 'Club', e: '🏅', hi: 1700, d: 'Pretty good!' }, { t: 'Expert', e: '🔥', hi: 2300, d: 'Really tough' },
       { t: 'Master', e: '🏆', hi: 2900, d: 'Super strong' }, { t: 'Legend', e: '🌌', hi: 1e9, d: 'Good luck…' }];
     var TCS = [['none', '∞ No clock', 0, 0], ['bullet', '⚡ Bullet 1 min', 60000, 0], ['blitz', '🔥 Blitz 3+2', 180000, 2000], ['rapid', '⏱️ Rapid 10 min', 600000, 0]];   // id, name, start time, + seconds after each move
-    var THEMES = [['wood', '🪵 Wood'], ['green', '🟩 Tournament'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night'], ['marble', '🏛️ Marble'], ['space', '🌌 Space'], ['alien', '👽 Alien Planet'], ['lava', '🌋 Lava'], ['ice', '❄️ Ice'], ['neon', '🌈 Neon'], ['forest', '🌲 Forest']];
+    var THEMES = [['wood', '🪵 Wood'], ['green', '🟩 Tournament'], ['ocean', '🌊 Ocean'], ['mint', '🌿 Mint'], ['candy', '🍬 Candy'], ['night', '🌙 Night'], ['marble', '🏛️ Marble'], ['space', '🌌 Space'], ['alien', '👽 Alien Planet'], ['lava', '🌋 Lava'], ['ice', '❄️ Ice'], ['neon', '🌈 Neon'], ['forest', '🌲 Forest'], ['cherry', '🍒 Cherry Wood'], ['jungle', '🦖 Jungle'], ['coral', '🪸 Coral Reef'], ['desert', '🏜️ Desert'], ['sky', '☁️ Sky'], ['galaxy', '🪐 Galaxy'], ['spooky', '🎃 Spooky'], ['choco', '🍫 Chocolate'], ['rainbow', '🦄 Rainbow'], ['royal', '👑 Royal Gold']];
     var SAY = {
       cap: ['Yoink!', 'Mine now!', 'Thanks for that!', 'Snack time!', 'Got one!'],
       lost: ['Hey! I needed that!', 'Ouch!', 'Oops…', 'Nooo!', 'I meant to do that. Totally.'],
@@ -21242,9 +21621,15 @@
       neon: { n: '🌈 Neon', c: [{ a: '#24304a', b: '#10141f', line: '#33f0ff', det: '#33f0ff', glow: '#33f0ff' }, { a: '#2d1c3d', b: '#130b1c', line: '#ff4df3', det: '#ff4df3', glow: '#ff4df3' }], neon: 1 },
       gold: { n: '👑 Gold vs Obsidian', c: [{ a: '#fff4b8', b: '#c9921b', line: '#5a3a00', det: '#5a3a00', glow: '#ffe27a' }, { a: '#4c5260', b: '#111318', line: '#d8a22a', det: '#f0c14b' }] },
       candy: { n: '🍬 Candy', c: [{ a: '#fff7fb', b: '#ffb6d6', line: '#a72e66', det: '#a72e66' }, { a: '#a8683f', b: '#4a2413', line: '#241006', det: '#ffd9ec' }], deco: 'candy' },
+      dino: { n: '🦖 Dinosaurs', c: [{ a: '#d9f99d', b: '#65a30d', line: '#1a2e05', det: '#1a2e05' }, { a: '#e0a36a', b: '#7c3f12', line: '#2a1204', det: '#ffe7c7' }], deco: 'dino' },
+      ocean: { n: '🐠 Ocean', c: [{ a: '#e0fbff', b: '#22b8cf', line: '#073b4c', det: '#073b4c', glow: '#8be9ff' }, { a: '#ff9f8a', b: '#c2410c', line: '#3b0d02', det: '#fff1ea' }], deco: 'ocean' },
+      spooky: { n: '🎃 Spooky', c: [{ a: '#ffd08a', b: '#f97316', line: '#431407', det: '#431407' }, { a: '#a78bfa', b: '#3b0764', line: '#12001f', det: '#fde68a', glow: '#a855f7' }], deco: 'spooky' },
+      galaxy: { n: '🌌 Galaxy', c: [{ a: '#f5f3ff', b: '#a5b4fc', line: '#1e1b4b', det: '#1e1b4b', glow: '#c4b5fd' }, { a: '#4338ca', b: '#0b0a26', line: '#020113', det: '#e0e7ff', glow: '#6366f1' }], deco: 'galaxy' },
+      woody: { n: '🪵 Wooden', c: [{ a: '#f8e3b5', b: '#c9965a', line: '#3d2412', det: '#5b3a1e' }, { a: '#9a5630', b: '#3a1808', line: '#170803', det: '#f3d2b0' }], deco: 'wood' },
+      gem: { n: '💎 Ruby vs Sapphire', c: [{ a: '#ffc2cb', b: '#c0122f', line: '#3d0410', det: '#3d0410', glow: '#ff6b81' }, { a: '#9cc2ff', b: '#1534a8', line: '#04103a', det: '#e8f0ff', glow: '#5b8cff' }], deco: 'gem' },
       flat: { n: '♟️ Simple', c: [{ a: '#fdfcf8', b: '#fdfcf8', line: '#1d2026', det: '#1d2026' }, { a: '#2c2e35', b: '#2c2e35', line: '#0a0b0e', det: '#f2f3f6' }], flat: 1 }
     };
-    var SKIN_ORDER = ['classic', 'alien', 'robot', 'fire', 'neon', 'gold', 'candy', 'flat'];
+    var SKIN_ORDER = ['classic', 'woody', 'alien', 'robot', 'dino', 'ocean', 'fire', 'spooky', 'galaxy', 'neon', 'gold', 'gem', 'candy', 'flat'];
     var HEAD = { P: [50, 33], R: [50, 52], N: [40, 28], B: [50, 37], Q: [50, 47], K: [50, 43] };   // where each piece's "face" is
     function decoOf(kind, t, w, C) {   // extra bits for some skins: 👽 eyes and antennae, 🤖 visors and bolts, 🔥 flames, 🍬 sprinkles
       var h = HEAD[t], x = h[0], y = h[1], s = '';
@@ -21262,6 +21647,28 @@
       if (kind === 'fire') {
         if (w) return '<g fill="#ffffff" opacity="0.85"><path d="M30 70l3-5 3 5-3 5z"/><path d="M64 66l2-4 2 4-2 4z"/></g>';   // ❄️ sparkles
         return '<path d="M28 74c-3-8 2-12 4-18 3 6 6 9 4 18zM66 74c-2-7 2-11 3-16 3 5 6 9 3 16z" fill="#ffe14d" stroke="#9a1c00" stroke-width="1.4" opacity="0.95"/>';   // 🔥 little flames
+      }
+      if (kind === 'dino') {   // 🦖 spikes down the back, and a little eye
+        return '<path d="M' + (x + 9) + ' ' + (y - 9) + 'l6-8 1 10zM' + (x + 13) + ' ' + (y + 1) + 'l8-5-1 10zM' + (x + 11) + ' ' + (y + 13) + 'l8-2-3 9z" fill="' + C.det + '" opacity="0.85"/>' +
+          (t === 'N' ? '' : '<circle cx="' + (x - 4) + '" cy="' + (y - 2) + '" r="2.4" fill="' + C.det + '"/>');
+      }
+      if (kind === 'ocean') {   // 🫧 bubbles
+        return '<g fill="none" stroke="#ffffff" stroke-width="1.8" opacity="0.9"><circle cx="74" cy="34" r="3.6"/><circle cx="80" cy="23" r="2.5"/><circle cx="74" cy="14" r="1.7"/></g>';
+      }
+      if (kind === 'spooky') {   // 🎃 a jack-o’-lantern face
+        var f = w ? '#3a1203' : '#fde68a';
+        if (t === 'N') return '<path d="M' + (x - 3) + ' ' + (y - 3) + 'l5 4-6 2z" fill="' + f + '"/>';
+        return '<g fill="' + f + '"><path d="M' + (x - 8) + ' ' + (y - 1) + 'l3-5 3 5zM' + (x + 2) + ' ' + (y - 1) + 'l3-5 3 5z"/><path d="M' + (x - 8) + ' ' + (y + 3) + 'l3 3 2-2 3 3 2-3 2 2 3-3c-2 5-13 5-15 0z"/></g>';
+      }
+      if (kind === 'galaxy') {   // ✨ stars
+        var st = function (a, b, r) { return 'M' + a + ' ' + (b - r) + 'q1 ' + (r - 1) + ' ' + r + ' ' + r + 'q-' + (r - 1) + ' 1-' + r + ' ' + r + 'q-1-' + (r - 1) + '-' + r + '-' + r + 'q' + (r - 1) + '-1 ' + r + '-' + r + 'z'; };
+        return '<path d="' + st(42, 70, 3) + st(59, 63, 2.4) + st(48, 84, 2) + '" fill="#ffffff" opacity="0.9"/>';
+      }
+      if (kind === 'wood') {   // 🪵 wood grain
+        return '<path d="M40 74c3-6 3-12 1-18M58 74c-2-6-2-12 1-17M49 88c-6-1-12 0-16 2" fill="none" stroke="' + C.det + '" stroke-width="1.4" opacity="0.35" stroke-linecap="round"/>';
+      }
+      if (kind === 'gem') {   // 💎 shiny facets
+        return '<path d="M50 ' + (y - 9) + 'L42 ' + (y + 3) + 'M50 ' + (y - 9) + 'L58 ' + (y + 3) + 'M38 74l12-12 12 12" fill="none" stroke="#ffffff" stroke-width="1.6" opacity="0.55" stroke-linecap="round"/>';
       }
       if (kind === 'candy') {
         var cs = ['#ff5c8a', '#4fc3ff', '#ffd23f', '#7ee081'];
@@ -21495,7 +21902,7 @@
       if (game.mode === 'drill' || (game.pr && game.pr.state && !game.over)) {   // 🎯 fixing a mistake (in a practice game, or 🧩 one you saved)
         var fl2 = game.flash && Date.now() < game.flashT ? game.flash : '', ps = game.pr && game.pr.state, fx = game.pr && game.pr.fix;
         t = !game.pr ? '🧩 All done!' : fl2 || (ps === 'check' ? '🦉 Coach Hoot is checking your move…' : ps === 'advise' ? '🦉 Coach Hoot is thinking…' : ps === 'oops' ? OOPS[fx.kind] : ps === 'try' ? '🦉 Let’s see…' : ps === 'wrong' ? '❌ Not that one…' :
-          ps === 'solved' ? '✅ Solved!' : game.mode === 'drill' ? '🧩 Find a better move!' : fx && fx.kind === 'book' ? '📖 Play the lesson move!' : fx && fx.kind === 'missedmate' ? '🎯 Find the checkmate!' : '🎯 Find a better move!');
+          ps === 'solved' ? '✅ Solved!' : game.mode === 'drill' ? (game.pos ? '🧩 Find the move!' : '🧩 Find a better move!') : fx && fx.kind === 'book' ? '📖 Play the lesson move!' : fx && fx.kind === 'missedmate' ? '🎯 Find the checkmate!' : '🎯 Find a better move!');
         el.textContent = t; el.className = cls + (/^✅/.test(t) ? ' win' : /^(❌|😬|😱|😮|📖 Oops)/.test(t) ? ' lose' : '');
         $('after').hidden = true; return;
       }
@@ -21543,7 +21950,7 @@
       }
       else if (game && game.mode === 'lesson' && game.why && !game.done && game.phase !== 'test') el.innerHTML = lessonWhyHtml();   // 🔍
       else if (game && game.mode === 'lesson') { if (game.done && game.phase !== 'test') el.innerHTML = '<button type="button" class="chs-link" data-test="1">🧪 Start the test against Test Bot</button>'; else el.textContent = lessonProgress(); }
-      else if (game && game.mode === 'drill') el.innerHTML = '<span class="chs-tour">🧩 Mistake ' + Math.min(game.i + 1, game.list.length) + ' of ' + game.list.length + '</span>' + (ps === 'fix' ? '<button type="button" class="chs-link" data-skip="1">Skip ⏭️</button>' : '');
+      else if (game && game.mode === 'drill') el.innerHTML = '<span class="chs-tour">🧩 ' + (game.pos ? 'Puzzle ' : 'Mistake ') + Math.min(game.i + 1, game.list.length) + ' of ' + game.list.length + '</span>' + (ps === 'fix' ? '<button type="button" class="chs-link" data-skip="1">Skip ⏭️</button>' : '');
       else if (game && game.practice && !game.over) el.innerHTML = practiceTip();
       else el.innerHTML = (game && game.planFor && OPEN[game.planFor] ? '<button type="button" class="chs-link" data-plan="1">' + (OPEN[game.planFor].counter ? '🗺️ Your plan: ' : '🗺️ Your plan for the ') + esc(OPEN[game.planFor].n) + '</button> · ' : '') + '<button type="button" class="chs-link" data-guide="1">📖 How do the pieces move?</button>';
     }
@@ -22719,7 +23126,7 @@
     function fixWrong(r) {   // ❌ not that one: say why, then take it back
       var p = game.pr, fx = p.fix, who = game.mode === 'drill' ? 'the bot' : botName(), k = r ? judge(r) : '';
       fx.tries++; sound('wrong');
-      fx.say = '❌ ' + (fx.ok ? 'That’s not the lesson move.' : !r ? 'Not that one.' : k ? whyText(r, k, who) : 'Better… but there’s an even better move!');
+      fx.say = '❌ ' + (fx.kind === 'pos' && fx.ok ? 'Not quite! Think about the idea: ' + (POSREC[fx.id] ? POSREC[fx.id].say : '') : fx.ok ? 'That’s not the lesson move.' : !r ? 'Not that one.' : k ? whyText(r, k, who) : 'Better… but there’s an even better move!');
       game.arrows = r && r.reply && (k === 'blunder' || k === 'mated') ? ['!' + r.reply] : null;
       p.state = 'wrong'; save(); render();
       var my = token;
@@ -23160,7 +23567,7 @@
       gs.forEach(function (g) {
         if (g.noted || g.fen || g.moves.length < 4) return; g.noted = true;
         var a = 0; g.sans.slice(0, 40).forEach(function (s, i) { if ((i % 2 === 0) === (g.you === 'w') && /[x+#]/.test(s)) a++; });
-        S.hist = (S.hist || []).slice(-29); S.hist.push({ y: g.you, m: g.moves.slice(0, 8), a: a });
+        S.hist = (S.hist || []).slice(-39); S.hist.push({ y: g.you, m: g.moves.slice(0, 10), a: a, r: g.imp.res === 'd' ? 'draw' : g.imp.res || '' });
       });
       save();
     }
@@ -23338,60 +23745,285 @@
       render(); setTimeout(botTurn, 400);
     }
 
-    // ---- 🧭 openings for you: suggestions from how you play ----
-    function noteGame(g) {   // remember how you started (and how wild you played) for 🧭 suggestions
+    // ---- 🧭 openings for you: from your rating, your games, your results and your style ----
+    function noteGame(g) {   // remember how you started (how wild you played, and how it ended) for 🧭 suggestions
       if (!g || g.mode !== 'bot' || g.fen || g.after || g.moves.length < 4) return;
-      var a = 0;
+      var a = 0, o = g.over;
       g.sans.slice(0, 40).forEach(function (s, i) { if ((i % 2 === 0) === (g.you === 'w') && /[x+#]/.test(s)) a++; });
-      S.hist = (S.hist || []).slice(-29); S.hist.push({ y: g.you, m: g.moves.slice(0, 8), a: a });
+      S.hist = (S.hist || []).slice(-39); S.hist.push({ y: g.you, m: g.moves.slice(0, 10), a: a, r: !o ? '' : o.res === 'd' ? 'draw' : o.res === g.you ? 'win' : 'loss' });
     }
     function sugStyle() {
       var H = S.hist || []; if (H.length < 2) return '';
       var t = 0; H.forEach(function (h) { t += h.a; });
       return t / H.length >= 6 ? 'attack' : t / H.length <= 3 ? 'calm' : 'mix';
     }
+    var LVL = {   // 🟢 1 = easy to learn · 🟡 2 = club level · 🔴 3 = advanced (lots to remember)
+      italian: 1, scotch: 1, london: 1, vienna: 1, fourknights: 1, bishops: 1, ponziani: 1, colle: 1, stonewall: 1, kia: 1, hippoatk: 1, caro: 1, scandi: 1, philidor: 1, twoknights: 1, qgd: 1,
+      slav: 1, hippo: 1, modern: 1, lion: 1, vsenglish: 1, vsreti: 1, vslondon: 1, petrov: 1, qga: 1, stopscholar: 1, scholar: 1, legal: 1, fishing: 1, bird: 1, ruyexch: 1, advcaro: 1, alapin: 1,
+      catalan: 3, grunfeld: 3, sveshnikov: 3, semislav: 3, dragon: 3, accel: 3, benoni: 3, nimzo: 3, qid: 3, kid: 3, alekhine: 3, taimanov: 3, sicilian: 3, berlin: 3, rossolimo: 3, reti: 3,
+      tarrasch: 3, bogo: 3, ruy: 3, jobava: 3, kingsgambit: 3, morra: 3, albin: 3, budapest: 3
+    };
+    function levelOf(L) { return LVL[L.id] || (L.counter ? 1 : 2); }
+    function lvlFit(L) {   // how well the opening fits your rating
+      var r = S.rating || 400, v = levelOf(L);
+      return r < 900 ? [0, 3, 1, -3][v] : r < 1500 ? [0, 1, 3, 0][v] : [0, -1, 1, 3][v];
+    }
+    function lvlName(v) { return ['', '🟢 Easy', '🟡 Club level', '🔴 Advanced'][v]; }
+    function needStyle() {   // ⚖️ from your reviews: practice attacking, or practice solid play?
+      var s = S.style || { att: 0, def: 0 };
+      return s.att >= s.def + 3 ? 'attack' : s.def >= s.att + 3 ? 'solid' : '';
+    }
+    var SOLID = { caro: 1, slav: 1, qgd: 1, london: 1, colle: 1, stonewall: 1, petrov: 1, berlin: 1, philidor: 1, semislav: 1, bogo: 1, vsreti: 1, french: 1, qga: 1, catalan: 1, reti: 1, ruyexch: 1, advcaro: 1, fourknights: 1, qid: 1, tarrasch: 1, vslondon: 1 };
+    var SHARP = { dragon: 1, accel: 1, sveshnikov: 1, kid: 1, benoni: 1, grunfeld: 1, vienna: 1, trompowsky: 1, jobava: 1, scotch: 1, sicilian: 1, alekhine: 1, dutch: 1, alapin: 1, ponziani: 1, bird: 1 };
     function suggestOpenings() {
-      var H = S.hist || [], style = sugStyle(), out = [];
-      var top = function (list, f) { var c = {}, best = null; list.forEach(function (h) { var k = f(h); if (!k) return; c[k] = (c[k] || 0) + 1; if (!best || c[k] > c[best]) best = k; }); return best ? { k: best, n: c[best] } : null; };
-      var rank = function (L) { var lv = S.learn['op:' + L.id] || 0; return (lv >= 2 ? -20 : lv ? -1 : 0) + (style === 'attack' ? (L.deadly ? 4 : 0) : style === 'calm' ? (L.deadly ? -4 : 2) : (L.deadly ? -1 : 1)) - (L.alts ? 0 : 0.5); };
-      var pickL = function (f) { return CHESS_OPENINGS.filter(function (L) { return !L.counter && f(L); }).sort(function (a, b) { return rank(b) - rank(a); }).slice(0, 2); };
+      var H = S.hist || [], style = sugStyle(), need = needStyle(), out = [], used = {};
       var mv = function (L, i) { return L.line[i] ? L.line[i][0] : ''; };
       var san0 = function (u, pre) { return viewAt(pre || [], null).sanOf(u) || u; };
-      var styleTxt = style === 'attack' ? ' You love to attack, so try a fun gambit!' : style === 'calm' ? ' You play calm and careful, so a solid opening fits you!' : '';
+      var top = function (list, f) { var c = {}, best = null; list.forEach(function (h) { var k = f(h); if (!k) return; c[k] = (c[k] || 0) + 1; if (!best || c[k] > c[best]) best = k; }); return best ? { k: best, n: c[best] } : null; };
+      var lostWith = function (list) { var n = list.filter(function (h) { return h.r; }).length, l = list.filter(function (h) { return h.r === 'loss'; }).length; return n >= 3 && l / n >= 0.6; };
+      var score = function (L, why) {
+        var lv = S.learn['op:' + L.id] || 0, s = lvlFit(L) + (L.pro ? 1 : 0);
+        if (lv >= 2) s -= 20; else if (lv) s -= 1;
+        var st = need || (style === 'attack' ? 'attack' : style === 'calm' ? 'solid' : '');
+        if (st === 'attack') s += L.deadly ? 3 : SHARP[L.id] ? 2 : SOLID[L.id] ? -1 : 0;
+        if (st === 'solid') s += SOLID[L.id] ? 3 : L.deadly ? -3 : SHARP[L.id] ? -1 : 0;
+        return s;
+      };
+      var reason = function (L) {
+        var r = [lvlName(levelOf(L)) + ' for ' + (S.rating || 400)];
+        var st = need || (style === 'attack' ? 'attack' : style === 'calm' ? 'solid' : '');
+        if (st === 'attack' && (L.deadly || SHARP[L.id])) r.push(need ? '🗡️ practice attacking' : '🗡️ fits your attacking style');
+        if (st === 'solid' && SOLID[L.id]) r.push(need ? '🛡️ practice solid play' : '🛡️ fits your careful style');
+        if (L.pro) r.push('🏆 pros play it');
+        return r.join(' · ');
+      };
+      var pick = function (f, n) {
+        return CHESS_OPENINGS.filter(function (L) { return !L.counter && !used[L.id] && f(L); }).sort(function (a, b) { return score(b) - score(a); }).slice(0, n || 3)
+          .map(function (L) { used[L.id] = 1; return L; });
+      };
+      // ⭐ the best ones for your rating, any color
+      out.push({ id: 'best', h: '⭐ Best picks for your rating (' + (S.rating || 400) + ')', why: (S.rating || 400) < 900 ? 'Easy openings with simple ideas: perfect while you’re learning!' : (S.rating || 400) < 1500 ? 'Solid club-level openings. Great for climbing higher!' : 'You’re strong! Try deeper openings the pros use.', list: pick(function (L) { return !L.deadly; }, 3) });
       // ⚪ as White
-      var W = H.filter(function (h) { return h.y === 'w'; }), w1 = top(W, function (h) { return h.m[0]; });
-      var wl = w1 ? pickL(function (L) { return L.side === 'w' && mv(L, 0) === w1.k; }) : [];
-      if (!wl.length) wl = pickL(function (L) { return L.side === 'w' && mv(L, 0) === 'e2e4'; });
-      out.push({ id: 'w', h: '⚪ When you’re White', why: (w1 ? 'You start with 1. ' + san0(w1.k) + ' in ' + w1.n + ' of your ' + W.length + ' games as White.' + (wl.length && mv(wl[0], 0) !== w1.k ? ' Here are great openings that start with 1. e4 instead:' : ' These openings start that way:') : 'Play some games as White and I’ll match openings to your moves! Here are good ones to start:') + styleTxt, list: wl });
-      // ⚫ as Black, against 1. e4 and 1. d4
-      [['e2e4', 'e4'], ['d2d4', 'd4']].forEach(function (f) {
-        var B = H.filter(function (h) { return h.y === 'b' && h.m[0] === f[0]; }), b1 = top(B, function (h) { return h.m[1]; });
-        var bl = b1 ? pickL(function (L) { return L.side === 'b' && mv(L, 0) === f[0] && mv(L, 1) === b1.k; }) : [];
-        var same = !!bl.length;
-        if (!bl.length) bl = pickL(function (L) { return L.side === 'b' && mv(L, 0) === f[0]; });
-        out.push({ id: f[1], h: '⚫ When you’re Black against 1. ' + f[1], why: (b1 ? 'You answer 1. ' + f[1] + ' with 1… ' + san0(b1.k, [f[0]]) + ' in ' + b1.n + ' of ' + B.length + (B.length === 1 ? ' game.' : ' games.') + (same ? ' These openings start that way:' : ' Try one of these:') : 'No games like this yet. Here are good ones to try:') + styleTxt, list: bl });
+      var W = H.filter(function (h) { return h.y === 'w'; }), w1 = top(W, function (h) { return h.m[0]; }), wBad = w1 && lostWith(W.filter(function (h) { return h.m[0] === w1.k; }));
+      var wl = w1 && !wBad ? pick(function (L) { return L.side === 'w' && mv(L, 0) === w1.k; }) : [];
+      if (wl.length < 3) wl = wl.concat(pick(function (L) { return L.side === 'w'; }, 3 - wl.length));
+      out.push({ id: 'w', h: '⚪ When you’re White', why: w1 ? (wBad ? 'You start with 1. ' + san0(w1.k) + ' but lose a lot of those games. Try something new!' : 'You start with 1. ' + san0(w1.k) + ' in ' + w1.n + ' of your ' + W.length + ' games as White.') : 'Play some games as White and I’ll match openings to your moves!', list: wl });
+      // ⚫ as Black, against each first move
+      [['e2e4', 'e4'], ['d2d4', 'd4'], ['c2c4', 'c4'], ['g1f3', 'Nf3']].forEach(function (f) {
+        var B = H.filter(function (h) { return h.y === 'b' && h.m[0] === f[0]; }), b1 = top(B, function (h) { return h.m[1]; }), bBad = b1 && lostWith(B.filter(function (h) { return h.m[1] === b1.k; }));
+        var bl = b1 && !bBad ? pick(function (L) { return L.side === 'b' && mv(L, 0) === f[0] && mv(L, 1) === b1.k; }) : [];
+        var n = f[0] === 'e2e4' || f[0] === 'd2d4' ? 3 : 1;
+        if (bl.length < n) bl = bl.concat(pick(function (L) { return L.side === 'b' && (mv(L, 0) === f[0] || (L.any && f[0] === 'e2e4')); }, n - bl.length));
+        if (!bl.length) return;
+        out.push({ id: f[1], h: '⚫ When you’re Black against 1. ' + f[1], why: b1 ? (bBad ? 'You answer with 1… ' + san0(b1.k, [f[0]]) + ' but lose a lot. Try one of these!' : 'You answer 1. ' + f[1] + ' with 1… ' + san0(b1.k, [f[0]]) + ' in ' + b1.n + ' of ' + B.length + (B.length === 1 ? ' game.' : ' games.')) : (B.length ? 'Good answers to 1. ' + f[1] + ':' : 'No games like this yet. Good ones to try:'), list: bl });
       });
-      return { style: style, games: H.length, groups: out };
+      // 🛡️ traps that got you: counters that match games you LOST
+      var ctr = {};
+      H.filter(function (h) { return h.r === 'loss'; }).forEach(function (h) {
+        CHESS_OPENINGS.forEach(function (L) {
+          if (!L.counter || L.side !== h.y) return;
+          var k = 0; while (k < L.line.length && k < h.m.length && L.line[k][0] === h.m[k]) k++;
+          if (k >= 4 && (S.learn['op:' + L.id] || 0) < 2) ctr[L.id] = (ctr[L.id] || 0) + 1;
+        });
+      });
+      var cl = Object.keys(ctr).sort(function (a, b) { return ctr[b] - ctr[a]; }).slice(0, 3).map(function (id) { return OPEN[id]; });
+      if (cl.length) out.push({ id: 'ctr', h: '🛡️ Beat the openings that beat you', why: 'You lost games to these tricks. Learn how to stop them!', list: cl });
+      // 💀 something fun
+      out.push({ id: 'fun', h: '💀 Something fun to surprise people', why: 'Gambits and traps that win fast against players who don’t know them!', list: pick(function (L) { return L.deadly; }, 2) });
+      return { style: style, need: need, games: H.length, groups: out, reason: reason };
+    }
+    function sugButton(L, why) {
+      var lv = S.learn['op:' + L.id] || 0, b = mk('button', 'chs-sugb'); b.type = 'button'; b.setAttribute('data-sugop', L.id);
+      b.innerHTML = '<span class="chs-sugn">' + L.e + ' <b>' + esc(L.n) + '</b>' + (L.deadly ? ' <small>💀</small>' : '') + (lv >= 2 ? ' ⭐' : '') + '</span><small>' + esc(L.d) + '</small>' + (why ? '<small class="chs-sugrs">' + esc(why) + '</small>' : '') + '<span class="chs-suggo">📖 Learn it ▶</span>';
+      b.addEventListener('click', function () { closeCard(); if (lv) lessonChoice('op', L); else startLesson('op', L.id); });
+      return b;
     }
     function suggestCard() {
       var sg = suggestOpenings();
       openCard(function (c) {
         c.appendChild(mk('div', 'chs-big', '🧭'));
         c.appendChild(mk('h3', null, 'Openings for you'));
-        c.appendChild(mk('p', null, sg.games ? 'Coach Hoot looked at how you played your last ' + sg.games + (sg.games === 1 ? ' game' : ' games') + ' against bots.' + (sg.style === 'attack' ? ' 🗡️ You like to attack!' : sg.style === 'calm' ? ' 🛡️ You play calm and careful!' : '') : 'Play some games against bots, and Coach Hoot will suggest openings that match how YOU play!'));
+        c.appendChild(mk('p', null, (sg.games ? 'Coach Hoot looked at your rating (' + (S.rating || 400) + ') and your last ' + sg.games + (sg.games === 1 ? ' game.' : ' games.') : 'Coach Hoot looked at your rating (' + (S.rating || 400) + '). Play some games against bots (or check your 🔗 online games) and these get even better!') +
+          (sg.need === 'attack' ? ' ⚖️ Your reviews say: be more aggressive!' : sg.need === 'solid' ? ' ⚖️ Your reviews say: play more defense!' : sg.style === 'attack' ? ' 🗡️ You like to attack!' : sg.style === 'calm' ? ' 🛡️ You play calm and careful!' : '')));
         sg.groups.forEach(function (gr) {
+          if (!gr.list.length) return;
           var box = mk('div', 'chs-sug'); box.setAttribute('data-sug', gr.id);
           box.appendChild(mk('h4', 'chs-skh', gr.h));
           box.appendChild(mk('p', 'chs-sugwhy', gr.why));
-          gr.list.forEach(function (L) {
-            var lv = S.learn['op:' + L.id] || 0, b = mk('button', 'chs-sugb'); b.type = 'button'; b.setAttribute('data-sugop', L.id);
-            b.innerHTML = '<span class="chs-sugn">' + L.e + ' <b>' + esc(L.n) + '</b>' + (L.deadly ? ' <small>💀</small>' : '') + (lv >= 2 ? ' ⭐' : '') + '</span><small>' + esc(L.d) + '</small><span class="chs-suggo">📖 Learn it ▶</span>';
-            b.addEventListener('click', function () { closeCard(); startLesson('op', L.id); });
-            box.appendChild(b);
-          });
+          gr.list.forEach(function (L) { box.appendChild(sugButton(L, sg.reason(L))); });
           c.appendChild(box);
         });
+        var fb = mk('button', 'btn', '🧙 Describe your dream opening'); fb.type = 'button'; fb.addEventListener('click', function () { dreamCard(); }); c.appendChild(fb);
         var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+
+    // ---- 🧙 describe your dream opening, and Coach Hoot finds it ----
+    var DREAM = [   // [tag, button, words that mean it]
+      ['white', '⚪ White', ['white', 'as white', 'for white']],
+      ['black', '⚫ Black', ['black', 'as black', 'for black']],
+      ['attack', '🗡️ Attacking', ['attack', 'aggressive', 'agressive', 'agresive', 'attacking', 'sharp', 'wild', 'fast', 'crush', 'fight', 'fighting', 'fire', 'kill', 'dangerous', 'go for the king']],
+      ['solid', '🛡️ Solid & safe', ['solid', 'safe', 'defense', 'defence', 'defensive', 'calm', 'careful', 'slow', 'quiet', 'positional', 'boring', 'not risky', 'safe king']],
+      ['gambit', '💰 Gambits', ['gambit', 'sacrifice', 'sac ', 'give a pawn', 'give pawns', 'pawn sacrifice']],
+      ['trap', '💀 Traps', ['trap', 'traps', 'trick', 'quick win', 'win fast', 'fast checkmate', 'checkmate fast', 'mate fast', 'quick mate']],
+      ['system', '🔁 Same setup every game', ['same', 'every game', 'system', 'setup', 'set up', 'always', 'less to remember', 'memorize less', 'not much to remember', 'against anything', 'against everything']],
+      ['easy', '🟢 Easy to learn', ['easy', 'simple', 'beginner', 'new to chess', 'not hard', 'learn fast', 'basic']],
+      ['hard', '🔴 Advanced', ['hard', 'advanced', 'deep', 'theory', 'master', 'complicated', 'complex', 'challenge']],
+      ['pro', '🏆 Pro favorite', ['pro', 'pros', 'grandmaster', ' gm', 'world champion', 'champion', 'top players', 'famous', 'magnus', 'hikaru', 'professional']],
+      ['tricky', '🤪 Tricky & unusual', ['tricky', 'weird', 'unusual', 'surprise', 'funny', 'strange', 'rare', 'crazy', 'silly', 'fun']],
+      ['fianchetto', '🐉 Bishop on the long diagonal', ['fianchetto', 'g3', 'g6', 'long diagonal', 'bishop on g2', 'bishop on g7', 'dragon']],
+      ['center', '🏰 Big pawn center', ['center', 'centre', 'space', 'big center', 'pawns in the middle']],
+      ['counter', '🛡️ Beat a trap', ['counter', 'beat', 'stop', 'against traps', 'defend against', 'punish']]
+    ];
+    var TRICKY = { alekhine: 1, englund: 1, hippo: 1, hippoatk: 1, bird: 1, trompowsky: 1, jobava: 1, modern: 1, lion: 1, halloween: 1, fishing: 1, budapest: 1, albin: 1, ponziani: 1, stafford: 1, shilling: 1 };
+    var CENTER = { italian: 1, scotch: 1, alapin: 1, advfrench: 1, advcaro: 1, ponziani: 1, qgambit: 1, stonewall: 1, colle: 1, london: 1, vienna: 1, kingsgambit: 1, danish: 1, morra: 1, grunfeld: 0, catalan: 1 };
+    function dreamTags(L) {
+      var t = {}, u = L.line.map(function (x) { return x[0]; }), mine = u.filter(function (x, i) { return (i % 2 === 0) === (L.side === 'w'); });
+      t[L.side === 'w' ? 'white' : 'black'] = 1;
+      if (L.deadly || SHARP[L.id]) t.attack = 1;
+      if (SOLID[L.id] || (L.sys && !L.deadly)) t.solid = 1;
+      if (/gambit/i.test(L.n) || /pawn/i.test(L.d) && L.deadly) t.gambit = 1;
+      if (L.mate || /trap/i.test(L.n + ' ' + L.d) || (L.deadly && /checkmate|mate/i.test(L.d))) t.trap = 1;
+      if (L.sys || L.any) t.system = 1;
+      if (levelOf(L) === 1) t.easy = 1;
+      if (levelOf(L) === 3) t.hard = 1;
+      if (L.pro) t.pro = 1;
+      if (TRICKY[L.id] || /^(alien|martian)/.test(L.id)) t.tricky = 1;
+      if (mine.some(function (m) { return /^(f1g2|f8g7|c1b2|c8b7)$/.test(m); })) t.fianchetto = 1;
+      if (CENTER[L.id] || (mine.indexOf('e2e4') >= 0 && mine.indexOf('d2d4') >= 0)) t.center = 1;
+      if (L.counter) t.counter = 1;
+      return t;
+    }
+    function dreamRead(text) {   // the words you typed → what you want
+      var q = ' ' + String(text || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9.\- ]/g, ' ') + ' ', want = {}, vs = '', first = '';
+      DREAM.forEach(function (d) { d[2].forEach(function (w) { if (q.indexOf(w.length < 4 ? ' ' + w.trim() + ' ' : w) >= 0) want[d[0]] = 1; }); });
+      var m = q.match(/(against|vs|versus|answer to|if they play)\s+(1\.\s*)?(e4|d4|c4|nf3)/);
+      if (m) { vs = { e4: 'e2e4', d4: 'd2d4', c4: 'c2c4', nf3: 'g1f3' }[m[3]]; want.black = 1; delete want.white; }
+      m = q.match(/(start with|starting with|open with|play)\s+(1\.\s*)?(e4|d4|c4|nf3|f4)/);
+      if (m && !vs) { first = { e4: 'e2e4', d4: 'd2d4', c4: 'c2c4', nf3: 'g1f3', f4: 'f2f4' }[m[3]]; if (!want.black) want.white = 1; }
+      var STOP = ' opening openings with that want like play good really something some your against black white games game should which have would please make find thing best '.split(' ');
+      return { want: want, vs: vs, first: first, words: q.trim().split(/\s+/).filter(function (w) { return w.length >= 4 && STOP.indexOf(w) < 0; }) };
+    }
+    function dreamFind(want, vs, first, words) {
+      var labels = {}; DREAM.forEach(function (d) { labels[d[0]] = d[1]; });
+      return CHESS_OPENINGS.map(function (L) {
+        var t = dreamTags(L), s = 0, hit = [];
+        if (want.white && !want.black && L.side !== 'w') return null;
+        if (want.black && !want.white && L.side !== 'b') return null;
+        if (vs && L.line[0][0] !== vs && !(L.any && vs === 'e2e4')) return null;
+        if (first && L.line[0][0] !== first) return null;
+        if (L.counter && !want.counter) s -= 4;
+        Object.keys(want).forEach(function (k) {
+          if (k === 'white' || k === 'black') return;
+          if (t[k]) { s += 3; hit.push(labels[k]); }
+          else if ((k === 'attack' && t.solid) || (k === 'solid' && (t.attack || L.deadly)) || (k === 'easy' && t.hard) || (k === 'hard' && t.easy)) s -= 3;
+          else s -= 1;
+        });
+        (words || []).forEach(function (w) { if ((L.n + ' ' + L.d).toLowerCase().replace(/[’']/g, '').indexOf(w) >= 0 && !DREAM.some(function (d) { return d[2].indexOf(w) >= 0; })) { s += 2; hit.push('📝 “' + w + '”'); } });
+        if (want.white || want.black) hit.unshift(L.side === 'w' ? '⚪ White' : '⚫ Black');
+        if (vs) hit.push('vs 1. ' + viewAt([], null).sanOf(vs));
+        s += lvlFit(L) * 0.5 + (L.pro ? 0.5 : 0);
+        return { L: L, s: s, hit: hit };
+      }).filter(Boolean).sort(function (a, b) { return b.s - a.s; }).slice(0, 6);
+    }
+    function dreamCard() {
+      var want = {}, vs = '';
+      openCard(function (c) {
+        c.classList.add('chs-wide');
+        c.appendChild(mk('div', 'chs-big', '🧙'));
+        c.appendChild(mk('h3', null, 'Describe Your Dream Opening'));
+        c.appendChild(mk('p', null, 'Tap what you want (or type it), and Coach Hoot finds the openings that match best!'));
+        var chips = mk('div', 'chs-dream');
+        DREAM.forEach(function (d) {
+          var b = mk('button', 'chs-dchip', d[1]); b.type = 'button'; b.setAttribute('data-dream', d[0]);
+          b.addEventListener('click', function () { if (want[d[0]]) delete want[d[0]]; else { want[d[0]] = 1; if (d[0] === 'white') delete want.black; if (d[0] === 'black') delete want.white; } paint(); });
+          chips.appendChild(b);
+        });
+        c.appendChild(chips);
+        var vsr = mk('div', 'chs-seg chs-dvs'); vsr.id = 'chs-dreamVs';
+        [['', 'Any first move'], ['e2e4', 'vs 1. e4'], ['d2d4', 'vs 1. d4'], ['c2c4', 'vs 1. c4'], ['g1f3', 'vs 1. Nf3']].forEach(function (o) {
+          var b = mk('button', '', o[1]); b.type = 'button'; b.setAttribute('data-dvs', o[0]);
+          b.addEventListener('click', function () { vs = o[0]; paint(); }); vsr.appendChild(b);
+        });
+        c.appendChild(vsr);
+        var ta = mk('textarea', 'chs-in'); ta.id = 'chs-dreamTxt'; ta.rows = 2; ta.placeholder = 'Or type it: “an aggressive opening for black against e4 with traps”'; c.appendChild(ta);
+        var go = mk('button', 'btn', '🔎 Find my openings'); go.type = 'button'; go.id = 'chs-dreamGo'; c.appendChild(go);
+        var res = mk('div', 'chs-dreamres'); res.id = 'chs-dreamRes'; c.appendChild(res);
+        var paint = function () {
+          [].forEach.call(chips.children, function (b) { b.classList.toggle('on', !!want[b.getAttribute('data-dream')]); });
+          vsr.style.display = want.black ? '' : 'none';
+          [].forEach.call(vsr.children, function (b) { b.className = b.getAttribute('data-dvs') === vs ? 'on' : ''; });
+        };
+        go.addEventListener('click', function () {
+          var rd = dreamRead(ta.value), w = Object.assign({}, rd.want, want);
+          if (want.white) delete w.black; if (want.black) delete w.white;
+          var v = want.black && vs ? vs : rd.vs, list = dreamFind(w, v, rd.first, rd.words);
+          res.innerHTML = '';
+          if (!Object.keys(w).length && !v && !rd.first && !rd.words.length) { res.appendChild(mk('p', 'chs-sugwhy', '🦉 Tap a few things you want first (or type them)!')); return; }
+          if (!list.length) { res.appendChild(mk('p', 'chs-sugwhy', '🤷 Nothing matches all of that. Try fewer wishes!')); return; }
+          res.appendChild(mk('h4', 'chs-skh', '✨ Your best matches'));
+          list.forEach(function (x) { res.appendChild(sugButton(x.L, x.hit.length ? '✅ ' + x.hit.join(' · ') : '')); });
+          res.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        paint();
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+
+    // ---- 🧩 Positions: what to do in common situations (explained, then puzzles) ----
+    var POSREC = {};
+    function posList() {
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🧩'));
+        c.appendChild(mk('h3', null, 'Positions: What Do I Do Now?'));
+        c.appendChild(mk('p', null, 'Learn what to do in situations that happen in real games. Each one explains the idea, then you solve puzzles!'));
+        CHESS_POS.forEach(function (L) {
+          var lv = S.learn['pos:' + L.id] || 0, b = mk('button', 'chs-sugb'); b.type = 'button'; b.setAttribute('data-pos', L.id);
+          b.innerHTML = '<span class="chs-sugn">' + L.e + ' <b>' + esc(L.n) + '</b>' + (lv >= 2 ? ' ⭐' : lv ? ' ✅' : '') + '</span><small>' + esc(L.d) + '</small>';
+          b.addEventListener('click', function () { posCard(L); });
+          c.appendChild(b);
+        });
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+      });
+    }
+    function posCard(L) {
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', L.e));
+        c.appendChild(mk('h3', null, L.n));
+        c.appendChild(mk('p', null, L.d));
+        var box = mk('div', 'chs-psum chs-imp');
+        box.appendChild(mk('p', 'chs-imph', '✅ What to do'));
+        L.todo.forEach(function (t, i) { box.appendChild(mk('p', 'chs-impi', (i + 1) + '. ' + t)); });
+        c.appendChild(box);
+        var go = mk('button', 'btn', '▶ Try it: ' + L.puzzles.length + ' puzzles'); go.type = 'button'; go.id = 'chs-posGo';
+        go.addEventListener('click', function () { startPos(L); }); c.appendChild(go);
+        var bk = mk('button', 'btn ghost', '↩️ All positions'); bk.type = 'button'; bk.addEventListener('click', posList); c.appendChild(bk);
+      });
+    }
+    function startPos(L) {
+      POSREC = {};
+      var ids = L.puzzles.map(function (q, i) {
+        var turn = q.fen.split(' ')[1], id = 'pos-' + L.id + '-' + i;
+        POSREC[id] = { id: id, fen: q.fen, you: turn, kind: 'pos', why: q.why, say: q.say, bad: '', bu: '', best: q.bestSan, b: q.best, ok: q.ok, n: 0 };
+        return id;
+      });
+      cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); clearTimeout(fixTm); closeCard(); dropGhost(); down = null;
+      game = { mode: 'drill', pos: L.id, list: ids, i: 0, learned: 0, nDone: 0, clean: 0, you: 'w', orient: 'w', moves: [], sans: [], fen: null, over: null, hints: 0, pr: null, arrows: null, flash: '' };
+      drillSetup();
+    }
+    function posEnd(g) {
+      var L = null; CHESS_POS.forEach(function (x) { if (x.id === g.pos) L = x; });
+      var all = g.clean === g.list.length, k = 'pos:' + g.pos;
+      S.learn[k] = Math.max(S.learn[k] || 0, all ? 2 : 1); save();
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', all ? '⭐' : '✅'));
+        c.appendChild(mk('h3', null, all ? 'Position learned!' : 'Nice work!'));
+        c.appendChild(mk('p', null, all ? 'You solved every puzzle with no mistakes. You know what to do in ' + L.n.replace(/[!?]+$/, '') + '!' : 'You solved ' + g.nDone + ' of ' + g.list.length + '. Solve them all with no mistakes to get the ⭐!'));
+        var box = mk('div', 'chs-psum chs-imp'); box.appendChild(mk('p', 'chs-imph', '✅ Remember'));
+        L.todo.forEach(function (t, i) { box.appendChild(mk('p', 'chs-impi', (i + 1) + '. ' + t)); }); c.appendChild(box);
+        var ag = mk('button', all ? 'btn ghost' : 'btn', '🔁 Try again'); ag.type = 'button'; ag.addEventListener('click', function () { startPos(L); }); c.appendChild(ag);
+        var nx = mk('button', all ? 'btn' : 'btn ghost', '🧩 More positions'); nx.type = 'button'; nx.id = 'chs-posMore'; nx.addEventListener('click', posList); c.appendChild(nx);
+        var mn = mk('button', 'btn ghost', '♟️ Menu'); mn.type = 'button'; mn.addEventListener('click', function () { closeCard(); showMenu(); }); c.appendChild(mn);
       });
     }
     // ---- 🗺️ in the opening TEST: after the opening (and after surprises), play the plan too ----
@@ -23494,6 +24126,31 @@
       var st = L.line[n]; if (!st) return '';
       var their = n === game.copenAt ? 'They’re playing ' + (game.you === 'b' ? '1. ' + game.sans[0] : '1. ' + game.sans[0] + ' ' + game.sans[1]) + ', and you haven’t learned an answer yet. A great, reliable one is the ' + L.e + ' ' + L.n + (L.pro ? ' (pros play it!)' : '') + '.\n' : '';
       return cbox(their + '📖 ' + L.n + ' move: ' + G.sanOf(st[0]) + '. ' + st[1]) ;
+    }
+    function findCard() {   // 🔎 search every opening by name (like “danish” or “sicilian”)
+      openCard(function (c) {
+        c.appendChild(mk('div', 'chs-big', '🔎'));
+        c.appendChild(mk('h3', null, 'Find an Opening'));
+        var inp = mk('input', 'chs-in'); inp.id = 'chs-findIn'; inp.type = 'search'; inp.placeholder = 'Type a name, like “Danish” or “Sicilian”'; inp.autocomplete = 'off'; inp.spellcheck = false;
+        c.appendChild(inp);
+        var res = mk('div', 'chs-findres'); res.id = 'chs-findRes'; c.appendChild(res);
+        var draw = function () {
+          var q = inp.value.trim().toLowerCase().replace(/[’']/g, ''), hits = CHESS_OPENINGS.filter(function (L) { return !q || (L.n + ' ' + L.d).toLowerCase().replace(/[’']/g, '').indexOf(q) >= 0; });
+          res.innerHTML = '';
+          if (!hits.length) { res.appendChild(mk('p', null, '🤷 No opening called that yet. Ask for it to be added!')); return; }
+          hits.sort(function (a, b) { var an = a.n.toLowerCase().indexOf(q), bn = b.n.toLowerCase().indexOf(q); return (an < 0 ? 99 : an) - (bn < 0 ? 99 : bn); });
+          hits.slice(0, q ? 30 : 12).forEach(function (L) {
+            var lv = S.learn['op:' + L.id] || 0, b = mk('button', 'chs-sugb'); b.type = 'button'; b.setAttribute('data-find', L.id);
+            b.innerHTML = '<span class="chs-sugn">' + L.e + ' <b>' + esc(L.n) + '</b>' + (lv >= 2 ? ' ⭐' : '') + '</span><small>' + (L.counter ? '🛡️ Counter' : L.deadly ? '💀 Deadly' : '📖 Opening') + ' · ' + (L.side === 'w' ? '⚪ You play White' : '⚫ You play Black') + (L.pro ? ' · 🏆 Pro favorite' : '') + '</small>';
+            b.addEventListener('click', function () { closeCard(); if (lv) lessonChoice('op', L); else startLesson('op', L.id); });
+            res.appendChild(b);
+          });
+          if (!q) res.appendChild(mk('p', 'chs-lnote', '…type to search all ' + CHESS_OPENINGS.length + '!'));
+        };
+        inp.addEventListener('input', draw); draw();
+        var no = mk('button', 'btn ghost', 'Back'); no.type = 'button'; no.addEventListener('click', closeCard); c.appendChild(no);
+        setTimeout(function () { try { inp.focus(); } catch (e) {} }, 50);
+      });
     }
     function openPractice() {   // 🎯 pick a bot to practice against
       var gm = goodMatch(), bot = BOT[S.pracBot] ? S.pracBot : gm.id, side = S.lastPick || 'w';
@@ -23682,7 +24339,7 @@
     }
 
     // ---- 🧩 My mistakes: practice the positions where you went wrong, one at a time ----
-    function mistById(id) { for (var i = 0; i < S.mist.length; i++) if (S.mist[i].id === id) return S.mist[i]; return null; }
+    function mistById(id) { for (var i = 0; i < S.mist.length; i++) if (S.mist[i].id === id) return S.mist[i]; return POSREC[id] || null; }
     function startDrill(ids) {   // (10 at most in one go)
       var list = (ids || S.mist.map(function (m) { return m.id; })).filter(mistById).slice(0, 10);
       cancelThinking(); clearTimeout(finish.tm); clearTimeout(lessonTm); clearTimeout(fixTm); closeCard(); dropGhost(); down = null;
@@ -23694,16 +24351,23 @@
       var m = mistById(game.list[game.i]);
       if (!m) { drillNext(); return; }
       game.fen = m.fen; game.moves = []; game.sans = []; game.you = game.orient = orient = m.you; G.load(m.fen);
-      last = null; sel = null; targets = []; hint = null; game.arrows = ['!' + m.bu]; game.flash = '';   // the red arrow: the move you played last time
+      last = null; sel = null; targets = []; hint = null; game.arrows = m.bu ? ['!' + m.bu] : null; game.flash = '';   // the red arrow: the move you played last time
       game.pr = { state: 'fix', fix: { kind: m.kind, why: m.why, bad: m.bad, badUci: m.bu, best: m.b, bestSan: m.best, ok: m.ok || null, also: m.also || null, les: m.les, lt: m.lt || '', tries: 0, id: m.id, say: '' } };
-      game.pr.fix.say = fixAsk(game.pr.fix);
+      game.pr.fix.say = m.kind === 'pos' ? '👉 ' + m.say : fixAsk(game.pr.fix);
       showGame();
     }
     function drillSays() {   // Coach Hoot (at the top): what happened last time, and what to do now
       var fx = game.pr && game.pr.fix; if (!fx) return '🧩 All done!';
+      if (game.pos) return '🧩 Puzzle ' + (game.i + 1) + ' of ' + game.list.length + '\n' + (game.pr.state === 'try' ? '🦉 Hmm, let’s see…' : fx.say);
       return '🧩 Last time you played ' + fx.bad + ' here' + (game.arrows && game.arrows[0] === '!' + fx.badUci ? ' (the red arrow)' : '') + '. ' + fx.why + '\n' + (game.pr.state === 'try' ? '🦉 Hmm, let’s see…' : fx.say);
     }
     function drillSolved(fx, lt) {   // ✅ one more right: twice in a row (no wrong tries, no hint) and it's learned
+      if (game.pos) {   // 🧩 a position puzzle
+        game.nDone++; if (!fx.tries && !fx.hinted) game.clean++;
+        game.pr.state = 'solved'; fx.say = '✅ ' + (POSREC[fx.id] ? POSREC[fx.id].why : 'That’s it!'); render();
+        var my0 = token; clearTimeout(fixTm); fixTm = setTimeout(function () { if (my0 === token && game && game.mode === 'drill') drillNext(); }, 4200);
+        return;
+      }
       var m = mistById(fx.id), learned = false;
       if (m) {
         m.n = fx.tries || fx.hinted ? 0 : (m.n || 0) + 1;
@@ -23718,6 +24382,7 @@
     function drillNext() { clearTimeout(fixTm); game.i++; if (game.i < game.list.length) drillSetup(); else drillEnd(); }
     function drillEnd() {   // 🧩 all done: how did it go?
       var g = game, left = S.mist.length;
+      if (g.pos) { g.pr = null; g.arrows = null; hint = null; sel = null; targets = []; render(); posEnd(g); return; }
       g.pr = null; g.arrows = null; hint = null; sel = null; targets = [];
       render();
       openCard(function (c) {
@@ -23877,8 +24542,10 @@
         '<button type="button" class="chs-lbtn chs-ldead" data-learn="dead"><span class="chs-lic">💀</span><b>Deadly Openings</b><small>Gambits and traps that win fast · ' + learnedText('dead') + '</small></button>' +
         '<button type="button" class="chs-lbtn chs-lctr" data-learn="counter"><span class="chs-lic">🛡️</span><b>Counters</b><small>Beat tricky gambits and traps · ' + learnedText('counter') + '</small></button>' +
         '<button type="button" class="chs-lbtn chs-lsug" data-learn="sug" id="chs-sugBtn"><span class="chs-lic">🧭</span><b>Openings for You</b><small>Coach Hoot suggests openings that match how you play</small></button>' +
-        '';   // (🗺️ What to Do After the Opening is now part of each opening's test)
-      learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (!b) return; if (b.getAttribute('data-learn') === 'after') showAfterList(); else if (b.getAttribute('data-learn') === 'sug') suggestCard(); else showLessons(b.getAttribute('data-learn')); });
+        '<button type="button" class="chs-lbtn chs-lpos" data-learn="pos" id="chs-posBtn"><span class="chs-lic">🧩</span><b>Positions</b><small>What do I do now? ' + CHESS_POS.filter(function (L) { return (S.learn['pos:' + L.id] || 0) >= 2; }).length + ' of ' + CHESS_POS.length + ' learned</small></button>' +
+        '<button type="button" class="chs-lbtn chs-ldream" data-learn="dream" id="chs-dreamBtn"><span class="chs-lic">🧙</span><b>Dream Opening</b><small>Describe what you want, and find openings that match</small></button>' +
+        '<button type="button" class="chs-lbtn chs-lfind" data-learn="find" id="chs-findBtn"><span class="chs-lic">🔎</span><b>Find an Opening</b><small>Search all ' + CHESS_OPENINGS.length + ' openings by name</small></button>';
+      learn.addEventListener('click', function (e) { var b = e.target.closest('[data-learn]'); if (!b) return; if (b.getAttribute('data-learn') === 'after') showAfterList(); else if (b.getAttribute('data-learn') === 'sug') suggestCard(); else if (b.getAttribute('data-learn') === 'find') findCard(); else if (b.getAttribute('data-learn') === 'pos') posList(); else if (b.getAttribute('data-learn') === 'dream') dreamCard(); else showLessons(b.getAttribute('data-learn')); });
       m.appendChild(learn);
       var prh = mk('div', 'chs-tier'); prh.innerHTML = '<h3>🎯 Practice</h3><small>Fix your mistakes 🦉</small>'; m.appendChild(prh);
       var cbn = mk('button', 'chs-friend chs-coach'); cbn.type = 'button'; cbn.id = 'chs-coachBtn';
@@ -24003,7 +24670,7 @@
       test: function (kind, id, attempt, ver, rounds) { startTest(kind, id, attempt || 1, ver, rounds); }, rounds: function (id, ver) { return pickRounds(OPEN[id], ver); }, alts: function (id) { practiceAlts(id); }, route: function (id, r) { return routeOf(OPEN[id], r); }, flipFEN: flipFEN, pin: function (v) { testPin = v; }, plan: function (id) { viewPlan(id); }, planWant: function () { return planWant(); },
       duel: function (names, mins, flip) { newDuel(names, mins || 0, flip !== false); }, clock: function () { return game && game.clock; },
       think: function (opts) { return new Promise(function (res) { ask(opts, res); }); },
-      after: function (id, botId, r) { startAfter(id, botId, r); }, afterList: function () { showAfterList(); }, openAfter: function () { openAfter(); }, planMoves: function () { return game && game.planQ ? planNow().map(function (p) { return p.u[p.k]; }) : null; }, want: function () { var st = game && game.mode === 'lesson' ? lineNow()[game.step] : null; return st ? st[0] : null; }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
+      after: function (id, botId, r) { startAfter(id, botId, r); }, afterList: function () { showAfterList(); }, pos: CHESS_POS, posStart: function (id) { CHESS_POS.forEach(function (L) { if (L.id === id) startPos(L); }); }, suggest: function () { return suggestOpenings(); }, dream: function (t) { var r = dreamRead(t); return dreamFind(r.want, r.vs, r.first, r.words).map(function (x) { return x.L.id; }); }, openAfter: function () { openAfter(); }, planMoves: function () { return game && game.planQ ? planNow().map(function (p) { return p.u[p.k]; }) : null; }, want: function () { var st = game && game.mode === 'lesson' ? lineNow()[game.step] : null; return st ? st[0] : null; }, botPlays: function (u) { cancelThinking(); playMove(u, true); }, practice: function (botId, you, moves, fen) { newGame('bot', botId, you || 'w', true, fen || null, moves || []); }, drill: function (ids) { startDrill(ids); },
       review: function (list) { return new Promise(function (res) { askAt(game.moves.slice(), { review: list, time: 700 }, res); }); }
     };
   })();
