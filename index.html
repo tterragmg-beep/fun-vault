@@ -4994,7 +4994,7 @@
   <section id="steam" class="screen sd">
     <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Steam Deals</span></div>
     <div class="sd-search">
-      <input class="sd-in" id="sd-q" type="search" placeholder="🔎 Search a game, like “Minecraft” or “racing”" maxlength="60" autocomplete="off" aria-label="Search a game">
+      <input class="sd-in" id="sd-q" type="search" placeholder="🔎 Search: “gta 5”, “minecraft”, “racing”…" maxlength="60" autocomplete="off" aria-label="Search a game">
       <button class="btn" type="button" id="sd-qgo">Search</button>
     </div>
     <div class="panel sd-controls">
@@ -5016,7 +5016,7 @@
       </div>
       <div class="sd-grid2">
         <label class="sd-lab">Sort by
-          <select id="sd-sort"><option value="Savings">Biggest discount</option><option value="Price">Lowest price</option><option value="Reviews">Best reviews</option><option value="Recent">Newest deals</option><option value="Title">A to Z</option></select>
+          <select id="sd-sort"><option value="Popular">🔥 Most popular</option><option value="Match">🎯 Best match (for searches)</option><option value="Savings">Biggest discount</option><option value="Price">Lowest price</option><option value="Reviews">Best reviews</option><option value="Recent">Newest deals</option><option value="Release">Newest games</option><option value="Meta">Metacritic score</option><option value="Title">A to Z</option></select>
         </label>
         <label class="sd-lab">Steam reviews
           <select id="sd-rev"><option value="0">Any</option><option value="70">70%+ positive</option><option value="80">80%+ positive</option><option value="90">90%+ positive</option></select>
@@ -12179,8 +12179,8 @@
     var KEY = 'funvault-steamdeals-v1', API = 'https://www.cheapshark.com/api/1.0/deals', GO = 'https://www.cheapshark.com/redirect?dealID=';
     function $(id) { return document.getElementById('sd-' + id); }
     if (!$('go')) return;
-    var st = { min: 50, max: 100, price: 60, sort: 'Savings', rev: '0', q: '' };
-    try { var sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv) for (var k in st) if (sv[k] != null) st[k] = sv[k]; } catch (e) {}
+    var st = { min: 50, max: 100, price: 60, sort: 'Popular', rev: '0', q: '', v: 2 };
+    try { var sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv) { for (var k in st) if (sv[k] != null) st[k] = sv[k]; if (!sv.v) { st.sort = 'Popular'; st.v = 2; } } } catch (e) {}
     function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} }
     var run = null;   // the current search: { page, got: [], seen: {}, done, busy, token }
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -12200,18 +12200,66 @@
       return s >= lo() && s <= hi();
     }
     function url(page) {
-      var p = ['storeID=1', 'pageSize=60', 'pageNumber=' + page, 'sortBy=' + encodeURIComponent(st.sort)];
-      if (st.sort === 'Price' || st.sort === 'Title') p.push('desc=0');
+      var p = ['storeID=1', 'pageSize=60', 'pageNumber=' + page, 'sortBy=Savings'];
       if (st.price < 60) p.push('upperPrice=' + st.price);
       if (+st.rev) p.push('steamRating=' + (+st.rev));
       if (lo() > 0) p.push('onSale=1');
-      if (st.q) p.push('title=' + encodeURIComponent(st.q));
+      if (run && run.apiWord) p.push('title=' + encodeURIComponent(run.apiWord));
       return API + '?' + p.join('&');
     }
+    // 🔎 smart search: nicknames (gta, cod, fnaf…), 2 = II, small typos are OK
+    var ALIAS = { gta: 'grand theft auto', cod: 'call of duty', rdr: 'red dead redemption', rdr2: 'red dead redemption 2', csgo: 'counter strike', cs2: 'counter strike 2', tf2: 'team fortress 2', ac: 'assassins creed',
+      fnaf: 'five nights at freddys', nms: 'no mans sky', bg3: 'baldurs gate 3', re: 'resident evil', ff: 'final fantasy', gow: 'god of war', ds: 'dark souls', tlou: 'the last of us', hk: 'hollow knight', mk: 'mortal kombat',
+      sw: 'star wars', nfs: 'need for speed', ets2: 'euro truck simulator 2', pvz: 'plants vs zombies', l4d: 'left 4 dead', l4d2: 'left 4 dead 2', hl: 'half life', ksp: 'kerbal space program', sdv: 'stardew valley', tw: 'total war' };
+    var ROMAN = { 1: 'i', 2: 'ii', 3: 'iii', 4: 'iv', 5: 'v', 6: 'vi', 7: 'vii', 8: 'viii', 9: 'ix', 10: 'x' }, UNROMAN = {};
+    for (var rn in ROMAN) UNROMAN[ROMAN[rn]] = rn;
+    var SKIP = { the: 1, of: 1, a: 1, an: 1, and: 1, game: 1, games: 1 };
+    function nrm(t) { return String(t || '').toLowerCase().replace(/[™®©]/g, '').replace(/&/g, ' and ').replace(/[’'`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+    function qWords(q) {
+      var out = [];
+      nrm(q).split(' ').forEach(function (w) { if (!w) return; (ALIAS[w] || w).split(' ').forEach(function (x) { if (!SKIP[x] || nrm(q).split(' ').length === 1) out.push(x); }); });
+      return out;
+    }
+    function lev(a, b) {   // how many letters are different (for typos)
+      if (Math.abs(a.length - b.length) > 1) return 9;
+      var d = [], i, j;
+      for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+      for (j = 1; j <= b.length; j++) d[0][j] = j;
+      for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      return d[a.length][b.length];
+    }
+    function wordHit(w, tws) {
+      return tws.some(function (tw) {
+        if (tw.indexOf(w) === 0 || tw === ROMAN[w] || UNROMAN[tw] === w) return true;
+        if (w.length >= 5 && (lev(w, tw) <= 1 || lev(w, tw.slice(0, w.length)) <= 1)) return true;
+        return false;
+      });
+    }
+    function matchScore(d, words, q) {   // 0 = not a match; bigger = better match
+      if (!words.length) return 1;
+      var t = nrm(d.title), tws = t.split(' ');
+      for (var i = 0; i < words.length; i++) if (!wordHit(words[i], tws)) return 0;
+      var nq = words.join(' '), sc = 10;
+      if (t === nq) sc += 60; else if (t.indexOf(nq) === 0) sc += 35; else if (t.indexOf(nq) >= 0) sc += 20;
+      sc -= Math.max(0, tws.length - words.length) * 1.5;   // (shorter titles first: “Minecraft” before “Minecraft Dungeons DLC”)
+      return Math.max(1, sc) + Math.log10(1 + pop(d)) * 3;
+    }
+    function pop(d) { return +d.steamRatingCount || 0; }   // 🔥 how many Steam reviews = how popular
+    function bigNum(n) { return n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : n >= 1000 ? (n / 1000).toFixed(n >= 1e4 ? 0 : 1) + 'k' : String(n); }
+    function apiWord(q) {   // ask the price tracker for one wide word (then the smart search narrows it down here)
+      var ws = qWords(q).filter(function (w) { return w.length >= 3 && !ROMAN[w] && !UNROMAN[w] && !/^\d+$/.test(w); });
+      ws.sort(function (a, b) { return (/s$/.test(a) ? 1 : 0) - (/s$/.test(b) ? 1 : 0) || b.length - a.length; });   // (words ending in s might really be “Freddy’s”)
+      return ws[0] || '';
+    }
     function sortList(a) {
-      var f = { Savings: function (x, y) { return y.savings - x.savings; }, Price: function (x, y) { return x.salePrice - y.salePrice; }, Reviews: function (x, y) { return (+y.steamRatingPercent || 0) - (+x.steamRatingPercent || 0); },
+      var f = { Popular: function (x, y) { return pop(y) - pop(x); }, Match: function (x, y) { return (y._m || 0) - (x._m || 0) || pop(y) - pop(x); },
+        Release: function (x, y) { return (+y.releaseDate || 0) - (+x.releaseDate || 0); }, Meta: function (x, y) { return (+y.metacriticScore || 0) - (+x.metacriticScore || 0); },
+        Savings: function (x, y) { return y.savings - x.savings; }, Price: function (x, y) { return x.salePrice - y.salePrice; }, Reviews: function (x, y) { return (+y.steamRatingPercent || 0) - (+x.steamRatingPercent || 0); },
         Recent: function (x, y) { return (+y.lastChange || 0) - (+x.lastChange || 0); }, Title: function (x, y) { return String(x.title).localeCompare(String(y.title)); } }[st.sort];
-      return f ? a.slice().sort(f) : a;
+      var words = qWords(st.q);
+      var b = a.filter(function (d) { d._m = matchScore(d, words, st.q); return d._m > 0; });
+      if (words.length && st.sort === 'Popular') f = function (x, y) { return (y._m || 0) - (x._m || 0) || pop(y) - pop(x); };   // (searching: best match, then popular)
+      return f ? b.sort(f) : b;
     }
     function card(d) {
       var s = Math.round(+d.savings || 0), a = document.createElement('a');
@@ -12219,17 +12267,17 @@
       var img = /^https:\/\//.test(d.thumb || '') ? '<img class="sd-img" loading="lazy" alt="" src="' + esc(d.thumb) + '">' : '<span class="sd-img"></span>';
       a.innerHTML = img + '<span><span class="sd-t">' + esc(d.title) + '</span><span class="sd-p"><span class="sd-off' + (s >= 75 ? ' big' : s === 0 ? ' zero' : '') + '">' + (s ? '-' + s + '%' : '0%') + '</span>' +
         (s ? '<span class="sd-was">' + esc(money(d.normalPrice)) + '</span>' : '') + '<span class="sd-now">' + esc(money(d.salePrice)) + '</span></span>' +
-        (d.steamRatingText ? '<span class="sd-r">👍 ' + esc(d.steamRatingText) + (d.steamRatingPercent && +d.steamRatingPercent ? ' (' + esc(d.steamRatingPercent) + '%)' : '') + '</span>' : '') + '</span>';
+        (d.steamRatingText ? '<span class="sd-r">👍 ' + esc(d.steamRatingText) + (d.steamRatingPercent && +d.steamRatingPercent ? ' (' + esc(d.steamRatingPercent) + '%)' : '') + (pop(d) ? ' · 🔥 ' + bigNum(pop(d)) + ' reviews' : '') + '</span>' : '') + '</span>';
       return a;
     }
     function show() {   // draw the list (only the first `run.shown`, so phones stay fast; ⬇️ shows more)
       var L = $('list'), list = sortList(run.got), n = Math.min(list.length, run.shown);
       L.innerHTML = '';
       list.slice(0, n).forEach(function (d) { L.appendChild(card(d)); });
-      var range = $('dtxt').textContent;
-      if (!list.length) $('status').textContent = run.done ? '🤷 No Steam deals in that range right now. Try a wider discount or a higher price!' : '🔎 Looking for every deal with ' + range + ' off…';
+      var range = $('dtxt').textContent, what = st.q ? 'games matching “' + st.q + '”' : (list.length === 1 ? 'game' : 'games') + ' on Steam';
+      if (!list.length) $('status').textContent = run.done ? (st.q ? '🤷 No ' + what + ' with ' + range + ' off right now. Try other words, or a wider discount!' : '🤷 No Steam deals in that range right now. Try a wider discount or a higher price!') : '🔎 Looking for every deal with ' + range + ' off…';
       else if (!run.done) $('status').textContent = '🔎 Finding EVERY deal with ' + range + ' off… ' + list.length + ' so far' + (run.total ? ' (checked page ' + run.page + ' of ' + run.total + ')' : '');
-      else $('status').textContent = '✅ All ' + list.length + (list.length === 1 ? ' game' : ' games') + ' on Steam with ' + range + ' off' + (run.stopped ? ' that I found before you stopped' : '') + '!';
+      else $('status').textContent = '✅ All ' + list.length + ' ' + what + ' with ' + range + ' off' + (run.stopped ? ' that I found before you stopped' : '') + '!';
       $('more').hidden = n >= list.length;
       $('more').textContent = 'Show ' + Math.min(100, list.length - n) + ' more (' + (list.length - n) + ' not shown yet)';
       $('stop').hidden = run.done;
@@ -12255,7 +12303,12 @@
           r.page++; waitN = 0;
           if (o.total >= 0 && !isNaN(o.total)) r.total = o.total + 1;
           if (!j.length || j.length < 60 || (r.total && r.page >= r.total)) r.done = true;
-          if (st.sort === 'Savings' && down && j.length && +j[j.length - 1].savings < lo() - 0.5 && r.page > 1) r.done = true;   // (sorted by discount: nothing bigger is coming)
+          if (down && j.length && +j[j.length - 1].savings < lo() - 0.5 && r.page > 1) r.done = true;   // (sorted by discount: nothing bigger is coming)
+          if (r.done && r.apiWord && !sortList(r.got).length) {   // nothing? maybe a typo: look through everything (typo-proof)
+            r.apiWord = ''; r.done = false; r.page = 0; r.total = 0; r.wide = true;
+            $('status').textContent = '🔎 No exact match… looking more carefully (typos are OK)…';
+            setTimeout(next, 350); return;
+          }
           show();
           if (r.done) { r.busy = false; return; }
           setTimeout(next, 350);   // (be gentle with the free price tracker)
@@ -12269,7 +12322,7 @@
     }
     function search() {
       st.q = $('q').value.trim(); save();
-      run = { page: 0, got: [], seen: {}, done: false, busy: false, shown: 100, total: 0 };
+      run = { page: 0, got: [], seen: {}, done: false, busy: false, shown: 100, total: 0, apiWord: apiWord(st.q) };
       $('list').innerHTML = ''; $('more').hidden = true;
       fetchAll();
     }
@@ -12286,7 +12339,12 @@
     $('more').addEventListener('click', function () { if (run) { run.shown += 100; show(); } });
     $('stop').addEventListener('click', function () { if (run && !run.done) { run.done = true; run.stopped = true; run.busy = false; show(); } });
     $('q').value = st.q;
-    $('q').addEventListener('input', function () { st.q = this.value.trim(); save(); });
+    var qT = null;
+    $('q').addEventListener('input', function () {
+      st.q = this.value.trim(); save();
+      clearTimeout(qT);
+      if (run && !run.apiWord && run.got.length) qT = setTimeout(function () { run.shown = 100; show(); }, 150);   // ⚡ instant
+    });
     paint();
     window.registerHook('steam', function () { paint(); if (!run) search(); });
   })();
