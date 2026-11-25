@@ -115,6 +115,12 @@
   .apk-link:hover { color: var(--fg); }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .vs-bar { position: relative; margin: 0 0 18px; }
+  .vs-bar input { width: 100%; box-sizing: border-box; font: inherit; font-size: 1.05rem; color: var(--fg); background: var(--panel); border: 2px solid var(--line); border-radius: 16px; padding: 13px 14px 13px 44px; }
+  .vs-bar input:focus { outline: none; border-color: var(--c9); }
+  .vs-ic { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; }
+  .vs-none { text-align: center; color: var(--muted); margin: 6px 0 18px; }
+  .card.vs-hide { display: none; }
   .card {
     position: relative; display: flex; flex-direction: column; gap: 10px;
     text-align: left; width: 100%;
@@ -501,6 +507,9 @@
   .dm-levels { display: grid; gap: 10px; margin-top: 16px; }
   /* 🏷️ Steam Deals */
   .sd-controls { display: grid; gap: 12px; }
+  .sd-search { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin: 0 0 14px; }
+  .sd-search .sd-in { font-size: 1.05rem; padding: 12px 13px; border-width: 2px; border-radius: 14px; }
+  .sd-search .btn { width: auto; padding: 0 18px; margin: 0; }
   .sd-row { display: grid; gap: 6px; }
   .sd-lab { font-size: 0.92rem; color: var(--muted); display: grid; gap: 4px; }
   .sd-lab b { color: var(--fg); }
@@ -4341,7 +4350,19 @@
       <button class="install-btn" id="installBtn" type="button" hidden>📲 Install the app</button>
       <a class="apk-link" id="apkLink" href="FunVault.apk" download hidden>🤖 Or download the Android app file (APK)</a>
     </header>
-    <div class="grid">
+    <div class="vs-bar">
+      <span class="vs-ic" aria-hidden="true">🔎</span>
+      <input id="vault-search" type="search" placeholder="Search the Vault: chess, deals, quiz…" autocomplete="off" aria-label="Search the Vault">
+    </div>
+    <p class="vs-none" id="vault-none" hidden>🤷 Nothing in the Vault matches that. Try another word!</p>
+    <div class="grid" id="vault-grid">
+      <button class="card" style="--hue: var(--c9);" data-goto="steam" data-k="steam sale sales deals discount discounts cheap games price prices buy shop">
+        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/><circle cx="8" cy="7" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/><circle cx="11" cy="17" r="2" fill="currentColor"/></svg></span>
+        <h2>Steam Deals</h2>
+        <p>Find games on sale on Steam. Slide to pick how big the discount is, from 0% to 100% (free!).</p>
+        <span class="play">Open <span class="arrow">→</span></span>
+      </button>
+
       <button class="card" style="--hue: var(--c1);" data-goto="quiz">
         <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 1 1 4.4 2.6c-.9.5-1.5 1.2-1.5 2.4"/><line x1="12" y1="18" x2="12" y2="18"/></svg></span>
         <h2>Ultimate Fun Facts Quiz</h2>
@@ -4431,13 +4452,6 @@
         <h2>Five Letters</h2>
         <p>Guess the secret 5-letter word in 6 tries. Any real English word counts as a guess, and there are almost 1,500 possible answers.</p>
         <span class="play">Play <span class="arrow">→</span></span>
-      </button>
-
-      <button class="card" style="--hue: var(--c9);" data-goto="steam">
-        <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"/><circle cx="8" cy="7" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/><circle cx="11" cy="17" r="2" fill="currentColor"/></svg></span>
-        <h2>Steam Deals</h2>
-        <p>Find games on sale on Steam. Slide to pick how big the discount is, from 0% to 100% (free!).</p>
-        <span class="play">Open <span class="arrow">→</span></span>
       </button>
 
       <button class="card" style="--hue: var(--c8);" data-goto="define">
@@ -4977,6 +4991,10 @@
   <!-- ================= DEFINE IT ================= -->
   <section id="steam" class="screen sd">
     <div class="topbar"><button class="back" data-goto="home" type="button">← Vault</button><span class="screen-title">Steam Deals</span></div>
+    <div class="sd-search">
+      <input class="sd-in" id="sd-q" type="search" placeholder="🔎 Search a game, like “Minecraft” or “racing”" maxlength="60" autocomplete="off" aria-label="Search a game">
+      <button class="btn" type="button" id="sd-qgo">Search</button>
+    </div>
     <div class="panel sd-controls">
       <div class="bs-kicker">Find games on sale</div>
       <div class="sd-row">
@@ -5002,7 +5020,6 @@
           <select id="sd-rev"><option value="0">Any</option><option value="70">70%+ positive</option><option value="80">80%+ positive</option><option value="90">90%+ positive</option></select>
         </label>
       </div>
-      <input class="sd-in" id="sd-q" type="search" placeholder="Search a game (optional)" maxlength="60" autocomplete="off">
       <button class="btn" type="button" id="sd-go">🔎 Find deals</button>
       <p class="sd-note">Prices in US dollars, from CheapShark’s Steam price tracker. Always check the price on Steam before buying (and ask a grown-up!).</p>
     </div>
@@ -12131,6 +12148,29 @@
 
 </script>
 <script>
+  // ============ Vault search: type to find an app ============
+  (function () {
+    var box = document.getElementById('vault-search'), grid = document.getElementById('vault-grid'), none = document.getElementById('vault-none');
+    if (!box || !grid) return;
+    function norm(t) { return String(t || '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9 ]+/g, ' '); }
+    function filter() {
+      var q = norm(box.value).trim(), words = q ? q.split(/\s+/) : [], shown = 0;
+      [].forEach.call(grid.querySelectorAll('.card'), function (c) {
+        var t = norm(c.textContent + ' ' + (c.getAttribute('data-goto') || '') + ' ' + (c.getAttribute('data-k') || ''));
+        var ok = words.every(function (w) { return t.indexOf(w) >= 0; });
+        c.classList.toggle('vs-hide', !ok); if (ok) shown++;
+      });
+      none.hidden = shown > 0;
+    }
+    box.addEventListener('input', filter);
+    box.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { var first = grid.querySelector('.card:not(.vs-hide)'); if (first && box.value.trim()) first.click(); }
+      if (e.key === 'Escape') { box.value = ''; filter(); }
+    });
+  })();
+
+</script>
+<script>
   // ============ Steam Deals: sort Steam sales by how big the discount is (prices from CheapShark) ============
   (function () {
     var KEY = 'funvault-steamdeals-v1', API = 'https://www.cheapshark.com/api/1.0/deals', GO = 'https://www.cheapshark.com/redirect?dealID=';
@@ -12228,6 +12268,7 @@
     $('rev').addEventListener('change', function () { st.rev = this.value; save(); });
     $('chips').addEventListener('click', function (e) { var b = e.target.closest('[data-r]'); if (!b) return; var r = b.getAttribute('data-r').split(','); setRange(+r[0], +r[1]); search(); });
     $('go').addEventListener('click', search);
+    $('qgo').addEventListener('click', search);
     $('q').addEventListener('keydown', function (e) { if (e.key === 'Enter') search(); });
     $('more').addEventListener('click', function () { if (run) fetchMore(run.got.length + 24); });
     $('q').value = st.q;
