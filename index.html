@@ -528,6 +528,8 @@
   .sd-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .sd select, .sd-in { font: inherit; font-size: 0.95rem; color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; width: 100%; box-sizing: border-box; }
   .sd-note { font-size: 0.8rem; color: var(--muted); margin: 0; }
+  .sd-stop { display: block; width: auto; margin: 0 auto 10px; padding: 6px 14px; }
+  .sd-stop[hidden], #sd-more[hidden] { display: none; }
   .sd-status { color: var(--muted); text-align: center; margin: 14px 0 8px; min-height: 1.2em; }
   .sd-list { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
   .sd-card { display: grid; grid-template-columns: 116px 1fr; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px; color: var(--fg); text-decoration: none; }
@@ -5021,11 +5023,12 @@
         </label>
       </div>
       <button class="btn" type="button" id="sd-go">🔎 Find deals</button>
-      <p class="sd-note">Prices in US dollars, from CheapShark’s Steam price tracker. Always check the price on Steam before buying (and ask a grown-up!).</p>
+      <p class="sd-note">Shows every Steam deal CheapShark tracks in your range. Prices in US dollars, from CheapShark’s Steam price tracker. Always check the price on Steam before buying (and ask a grown-up!).</p>
     </div>
     <p class="sd-status" id="sd-status" aria-live="polite"></p>
+    <button class="btn ghost sd-stop" type="button" id="sd-stop" hidden>⏹ Stop looking</button>
     <div class="sd-list" id="sd-list"></div>
-    <button class="btn ghost" type="button" id="sd-more" hidden>Load more deals</button>
+    <button class="btn ghost" type="button" id="sd-more" hidden>Show more</button>
   </section>
 
   <section id="define" class="screen dm">
@@ -12219,46 +12222,56 @@
         (d.steamRatingText ? '<span class="sd-r">👍 ' + esc(d.steamRatingText) + (d.steamRatingPercent && +d.steamRatingPercent ? ' (' + esc(d.steamRatingPercent) + '%)' : '') + '</span>' : '') + '</span>';
       return a;
     }
-    function show() {
-      var L = $('list'), list = sortList(run.got);
+    function show() {   // draw the list (only the first `run.shown`, so phones stay fast; ⬇️ shows more)
+      var L = $('list'), list = sortList(run.got), n = Math.min(list.length, run.shown);
       L.innerHTML = '';
-      list.forEach(function (d) { L.appendChild(card(d)); });
-      $('status').textContent = list.length ? list.length + (list.length === 1 ? ' deal' : ' deals') + ' with ' + $('dtxt').textContent + ' off' + (run.done ? '. That’s all of them!' : '') : (run.done ? '🤷 No Steam deals in that range right now. Try a wider discount or a higher price!' : '');
-      $('more').hidden = run.done || !list.length;
+      list.slice(0, n).forEach(function (d) { L.appendChild(card(d)); });
+      var range = $('dtxt').textContent;
+      if (!list.length) $('status').textContent = run.done ? '🤷 No Steam deals in that range right now. Try a wider discount or a higher price!' : '🔎 Looking for every deal with ' + range + ' off…';
+      else if (!run.done) $('status').textContent = '🔎 Finding EVERY deal with ' + range + ' off… ' + list.length + ' so far' + (run.total ? ' (checked page ' + run.page + ' of ' + run.total + ')' : '');
+      else $('status').textContent = '✅ All ' + list.length + (list.length === 1 ? ' game' : ' games') + ' on Steam with ' + range + ' off' + (run.stopped ? ' that I found before you stopped' : '') + '!';
+      $('more').hidden = n >= list.length;
+      $('more').textContent = 'Show ' + Math.min(100, list.length - n) + ' more (' + (list.length - n) + ' not shown yet)';
+      $('stop').hidden = run.done;
     }
-    function fetchMore(goal) {   // get pages until we have enough deals in your discount range
+    function fetchAll() {   // keep getting pages until there are none left: EVERY deal in your range
       if (!run || run.busy || run.done) return;
-      var r = run, tries = 0;
-      r.busy = true; $('more').disabled = true;
-      if (!r.got.length) $('status').textContent = '🔎 Looking for deals…';
+      var r = run, waitN = 0;
+      r.busy = true; show();
       (function next() {
-        if (r !== run) return;
+        if (r !== run || r.done) return;
         fetch(url(r.page)).then(function (res) {
           if (res.status === 429) throw new Error('busy');
           if (!res.ok) throw new Error('http');
-          var total = +res.headers.get('X-Total-Page-Count');
+          var th = res.headers.get('X-Total-Page-Count'), total = th == null || th === '' ? NaN : +th;   // (not every answer says how many pages)
           return res.json().then(function (j) { return { j: j, total: total }; });
         }).then(function (o) {
-          if (r !== run) return;
-          var j = Array.isArray(o.j) ? o.j : [];
-          j.forEach(function (d) { if (d && d.dealID && !r.seen[d.dealID] && fits(d)) { r.seen[d.dealID] = 1; r.got.push(d); } });
-          r.page++; tries++;
-          if (!j.length || j.length < 60 || (o.total && r.page > o.total)) r.done = true;
-          if (!r.done && r.got.length < goal && tries < 6) { show(); next(); return; }
-          r.busy = false; $('more').disabled = false; show();
+          if (r !== run || r.done) return;
+          var j = Array.isArray(o.j) ? o.j : [], down = true;
+          j.forEach(function (d, i) {
+            if (i && +d.savings > +j[i - 1].savings + 0.01) down = false;
+            if (d && d.dealID && !r.seen[d.dealID] && fits(d)) { r.seen[d.dealID] = 1; r.got.push(d); }
+          });
+          r.page++; waitN = 0;
+          if (o.total >= 0 && !isNaN(o.total)) r.total = o.total + 1;
+          if (!j.length || j.length < 60 || (r.total && r.page >= r.total)) r.done = true;
+          if (st.sort === 'Savings' && down && j.length && +j[j.length - 1].savings < lo() - 0.5 && r.page > 1) r.done = true;   // (sorted by discount: nothing bigger is coming)
+          show();
+          if (r.done) { r.busy = false; return; }
+          setTimeout(next, 350);   // (be gentle with the free price tracker)
         }).catch(function (e) {
-          if (r !== run) return;
-          r.busy = false; $('more').disabled = false;
-          $('status').textContent = e && e.message === 'busy' ? '⏳ The price tracker is busy. Wait a minute and try again!' : '📡 Couldn’t get deals. Check your internet and try again!';
-          $('more').hidden = !r.got.length;
+          if (r !== run || r.done) return;
+          if (e && e.message === 'busy' && waitN < 4) { waitN++; $('status').textContent = '⏳ The price tracker needs a little break… trying again in ' + (waitN * 4) + ' seconds (' + r.got.length + ' found so far)'; setTimeout(next, waitN * 4000); return; }
+          r.busy = false; r.done = true; r.stopped = true; show();
+          $('status').textContent = (e && e.message === 'busy' ? '⏳ The price tracker is busy. ' : '📡 Couldn’t get the rest of the deals. ') + (r.got.length ? 'Here are the ' + r.got.length + ' I found. Tap 🔎 Find deals to try again.' : 'Check your internet and try again!');
         });
       })();
     }
     function search() {
       st.q = $('q').value.trim(); save();
-      run = { page: 0, got: [], seen: {}, done: false, busy: false };
+      run = { page: 0, got: [], seen: {}, done: false, busy: false, shown: 100, total: 0 };
       $('list').innerHTML = ''; $('more').hidden = true;
-      fetchMore(24);
+      fetchAll();
     }
     function setRange(a, b) { st.min = a; st.max = b; save(); paint(); }
     $('min').addEventListener('input', function () { st.min = +this.value; if (st.min > st.max) st.max = st.min; save(); paint(); });
@@ -12270,7 +12283,8 @@
     $('go').addEventListener('click', search);
     $('qgo').addEventListener('click', search);
     $('q').addEventListener('keydown', function (e) { if (e.key === 'Enter') search(); });
-    $('more').addEventListener('click', function () { if (run) fetchMore(run.got.length + 24); });
+    $('more').addEventListener('click', function () { if (run) { run.shown += 100; show(); } });
+    $('stop').addEventListener('click', function () { if (run && !run.done) { run.done = true; run.stopped = true; run.busy = false; show(); } });
     $('q').value = st.q;
     $('q').addEventListener('input', function () { st.q = this.value.trim(); save(); });
     paint();
