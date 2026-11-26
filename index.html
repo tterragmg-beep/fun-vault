@@ -6011,6 +6011,236 @@
   .chs-ahbd { max-width: 300px; margin: 8px auto; }
   .chs-ahbd .chs-board { width: 100%; }
   .chs-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 6px 0; }
+  .chs-rounds { font-size: .85rem; line-height: 1.5; margin: -4px 0 12px; opacity: .85; }
+
+  /* 🎯 practice: Coach Hoot's box under the board, the red arrow, the end-of-game summary, the bot picker */
+  .chs-cbox { display: flex; gap: 8px; align-items: flex-start; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 4px 0; color: var(--fg); font-size: 0.88rem; line-height: 1.38; }
+  .chs-cbox .chs-av { width: 32px; height: 32px; font-size: 18px; --hue: #e4a64a; }
+  .chs-cbox .chs-ct { flex: 1; min-width: 0; white-space: pre-line; padding-top: 5px; }
+  .chs-tip .chs-fixgo { margin: 4px auto 6px; }
+  .chs-tip .chs-watch { white-space: nowrap; }
+  .chs-arrows .bad { color: rgba(220, 38, 38, 0.88); }
+  .chs-psum { text-align: left; background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin: 12px 0 4px; }
+  .chs-card .chs-psum p { margin: 0; color: var(--fg); }
+  .chs-card .chs-psum p.chs-sub { color: var(--muted); margin-top: 6px; }
+  .chs-plog { margin: 6px 0 0; padding-left: 22px; line-height: 1.6; font-size: 0.92rem; }
+  .chs-dname select { width: 100%; min-width: 0; font: 600 0.98rem var(--font-body); color: var(--fg); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 8px; }
+  .chs-pick { margin-top: 14px; text-align: left; }
+  .chs-friend:disabled { opacity: 0.6; cursor: default; }
+  .chs-dname.chs-pick { grid-template-columns: 100px 1fr; }
+  .chs-card .chs-psum p.chs-astat { margin-bottom: 6px; font-weight: 700; }
+  .chs-lbtn.chs-lafter { grid-column: 1 / -1; border-color: color-mix(in srgb, #39c98a 50%, var(--line)); background: color-mix(in srgb, #39c98a 10%, var(--panel)); }   /* 🗺️ What to Do After the Opening */
+  .chs-lbtn.chs-lafter:hover, .chs-lbtn.chs-lafter:focus-visible { border-color: #39c98a; }
+  .chs-lnote.chs-sysnote { margin: -4px 2px 10px; font-size: 0.86rem; }   /* 🔁 the openings for every game */
+
+  /* 🎨 more boards */
+  .chs-board.t-green { --chs-l: #eeeed2; --chs-d: #769656; }
+  .chs-board.t-marble { --chs-l: #f2f0eb; --chs-d: #8e939b; }
+  .chs-board.t-marble .chs-sq.l { background: linear-gradient(135deg, #f7f5f0 0%, #e7e3da 45%, #f5f2ec 55%, #e9e5dd 100%); }
+  .chs-board.t-marble .chs-sq.d { background: linear-gradient(135deg, #9aa0a8 0%, #7d828a 40%, #a3a8b0 52%, #80858d 100%); }
+  .chs-board.t-space { --chs-l: #6a5a9e; --chs-d: #1f1840; }
+  .chs-board.t-space .chs-sq.d { background: radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 70% 72%, #cfe8ff 0 1px, transparent 1.6px), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.7) 0 0.8px, transparent 1.3px), var(--chs-d); }
+  .chs-board.t-space .chs-sq.l { background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.55) 0 0.8px, transparent 1.4px), linear-gradient(160deg, #7a69b0, #5d4e8e); }
+  .chs-board.t-alien { --chs-l: #b6f09c; --chs-d: #1f5560; }
+  .chs-board.t-alien .chs-sq.d { background: radial-gradient(circle at 70% 30%, rgba(125, 255, 106, 0.35) 0 2px, transparent 3px), var(--chs-d); }
+  .chs-board.t-lava { --chs-l: #f4c27c; --chs-d: #7a1d0c; }
+  .chs-board.t-lava .chs-sq.d { background: radial-gradient(circle at 50% 55%, #c2410c 0%, #7a1d0c 70%); }
+  .chs-board.t-ice { --chs-l: #f3fbff; --chs-d: #8cc4e8; }
+  .chs-board.t-ice .chs-sq.l { background: linear-gradient(135deg, #ffffff, #e3f4ff); }
+  .chs-board.t-ice .chs-sq.d { background: linear-gradient(135deg, #a8d6f2, #74b2dd); }
+  .chs-board.t-neon { --chs-l: #2b2552; --chs-d: #120e27; }
+  .chs-board.t-neon .chs-sq.l { box-shadow: inset 0 0 0 1px rgba(51, 240, 255, 0.35); }
+  .chs-board.t-neon .chs-sq.d { box-shadow: inset 0 0 0 1px rgba(255, 77, 243, 0.25); }
+  .chs-board.t-forest { --chs-l: #dbe9bb; --chs-d: #4b7a39; }
+  /* 🎨 the Skins & Boards picker */
+  .chs-skh { margin: 14px 0 6px; font: 700 0.95rem var(--font-display); }
+  .chs-skins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .chs-skin { display: grid; gap: 6px; justify-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid var(--line); background: var(--panel-2); color: var(--fg); font: 600 0.82rem var(--font-body); cursor: pointer; }
+  .chs-skin.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--panel-2)); }
+  .chs-skin b { font-weight: 700; }
+  .chs-skp { display: flex; gap: 2px; padding: 4px 6px; border-radius: 10px; background: linear-gradient(135deg, #e9dcc4, #b58863); }
+  .chs-skp svg { width: 34px; height: 34px; }
+  .chs-mini.chs-board { display: grid; grid-template-columns: repeat(4, 1fr); width: 88px; max-width: none; margin: 0; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.3); cursor: pointer; }
+  .chs-mini .chs-sq { position: relative; aspect-ratio: 1; display: block; }
+  .chs-mini .chs-p { position: absolute; inset: 0; }
+  .chs-mini .chs-p svg { width: 100%; height: 100%; }
+
+  .chs-tcs { flex-wrap: wrap; }   /* ⏱️ clock choices */
+  .chs-tcs button { flex: 1 1 45%; }
+
+  /* ↔️ side by side + 🔍 Game Review + 📈 What to improve */
+  .chs-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .chs-sbc { min-width: 0; }
+  .chs-sbs .chs-board.chs-sbsb { max-width: none; width: 100%; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
+  .chs-sbt { font-weight: 800; font-size: 0.82rem; margin-bottom: 4px; text-align: center; }
+  .chs-sbt.bad { color: #e5484d; }
+  .chs-sbt.good { color: #22a35a; }
+  .chs-sbn { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+  .chs-why { text-align: left; font-size: 0.86rem; line-height: 1.38; margin: 6px 0 0; padding: 6px 9px; border-radius: 10px; }
+  .chs-why.bad { background: rgba(229, 72, 77, 0.12); }
+  .chs-why.good { background: rgba(34, 163, 90, 0.13); }
+  .chs-sbsgo { margin-top: 6px; }
+  .chs-card.chs-wide { max-width: 520px; }
+  .chs-revbar { height: 12px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin: 10px 0 14px; border: 1px solid var(--line); }
+  .chs-revbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4a64a, #39c98a); transition: width 0.25s; }
+  .chs-revsum { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 4px 0 6px; }
+  .chs-revsum span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px 10px; font-size: 0.85rem; }
+  .chs-revsum .acc { border-color: #39c98a; }
+  .chs-card .chs-imp p.chs-imph { font-weight: 800; margin-bottom: 6px; }
+  .chs-card .chs-imp p.chs-impi { margin: 6px 0 0; font-size: 0.88rem; }
+  .chs-rvi { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 10px; margin: 10px 0; background: var(--panel); }
+  .chs-rvh { font-weight: 800; }
+  .chs-impr { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 8px 0; background: var(--panel); }
+  .chs-impr.top { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.25); }
+  .chs-imprh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-imprh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-imprb { height: 8px; border-radius: 99px; background: var(--panel-2); margin: 6px 0; overflow: hidden; }
+  .chs-imprb i { display: block; height: 100%; background: #60a5fa; border-radius: 99px; }
+  .chs-impr small { color: var(--muted); }
+  .chs-card p.chs-why { color: var(--fg); }
+
+  /* 🏷️ move ratings */
+  .chs-cls { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; font-size: 0.85em; line-height: 1; vertical-align: -0.2em; background: var(--panel-2); }
+  .chs-cls.c-brill { background: #1bb5b0; } .chs-cls.c-great { background: #5b8bd9; } .chs-cls.c-best { background: #7ab547; } .chs-cls.c-exc { background: #92c25e; }
+  .chs-cls.c-good { background: #9bbf8a; } .chs-cls.c-book { background: #b08a63; } .chs-cls.c-inacc { background: #f0c14b; } .chs-cls.c-mist { background: #f09a3e; }
+  .chs-cls.c-miss { background: #ee6b5e; } .chs-cls.c-blund { background: #d93b3b; }
+  .chs-clsn { font-weight: 800; font-size: 0.85rem; }
+  .chs-clsn.c-brill { color: #13a39e; } .chs-clsn.c-great { color: #3f74c9; } .chs-clsn.c-best, .chs-clsn.c-exc, .chs-clsn.c-good { color: #4f9a2c; } .chs-clsn.c-book { color: #9a7148; }
+  .chs-clsn.c-inacc { color: #c69410; } .chs-clsn.c-mist { color: #d97a17; } .chs-clsn.c-miss { color: #dd4f42; } .chs-clsn.c-blund { color: #d12f2f; }
+  .chs-clstab { border: 1px solid var(--line); border-radius: 14px; padding: 6px 10px; margin: 8px 0; background: var(--panel-2); text-align: left; }
+  .chs-clsrow { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.9rem; }
+  .chs-clstab.two .chs-clsrow { grid-template-columns: 1fr 64px 64px; }
+  .chs-clsrow b { text-align: center; }
+  .chs-clsrow.head b { font-size: 0.8rem; color: var(--muted); }
+  .chs-clsrow.acc { border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 3px; }
+  .chs-accn { font-size: 1.15rem; color: #22a35a; }
+  .chs-clsrow.zero { opacity: 0.45; }
+  .chs-mlist { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
+  .chs-mchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 4px 8px 4px 9px; font: inherit; font-size: 0.82rem; cursor: pointer; }
+  .chs-mchip small { color: var(--muted); }
+  .chs-mchip.on { border-color: #e4a64a; box-shadow: 0 0 0 2px rgba(228, 166, 74, 0.35); }
+  .chs-rvi.c-brill { border-color: #1bb5b0; box-shadow: 0 0 0 2px rgba(27, 181, 176, 0.25); }
+  .chs-rvi.c-great { border-color: #5b8bd9; }
+  .chs-one { width: 62%; margin: 8px auto 0; }
+
+  /* 🧭 openings for you */
+  .chs-sug { text-align: left; margin: 10px 0; }
+  .chs-card p.chs-sugwhy { color: var(--fg); font-size: 0.9rem; margin: 2px 0 6px; }
+  .chs-sugb { display: grid; gap: 2px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; margin: 6px 0; font: inherit; cursor: pointer; }
+  .chs-sugb small { color: var(--muted); }
+  .chs-suggo { color: #22a35a; font-weight: 800; font-size: 0.85rem; }
+  .chs-keepgo { margin-top: 6px; }
+
+  .chs-botc { position: relative; }
+  .chs-fire { position: absolute; top: 4px; left: 6px; font-size: 0.85rem; }
+  .chs-card p.chs-firep { color: #e8590c; font-weight: 700; }
+
+  /* 🔗 My Online Games */
+  .chs-card p.chs-acctsafe { color: var(--fg); font-weight: 700; font-size: 0.85rem; }
+  .chs-in { width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); margin: 8px 0; }
+  .chs-card p.chs-acctmsg { color: var(--fg); min-height: 1.2em; }
+  .chs-acctlist { display: grid; gap: 6px; margin: 8px 0; }
+  .chs-acctg { display: grid; gap: 2px; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 12px; padding: 8px 10px; font: inherit; cursor: pointer; }
+  .chs-acctg small { color: var(--muted); }
+  .chs-acctok { color: #22a35a; font-weight: 800; font-size: 0.82rem; }
+  .chs-pgnbox { text-align: left; margin: 10px 0; }
+  .chs-pgnbox summary { cursor: pointer; font-weight: 700; }
+  .chs-pgn { min-height: 80px; font-family: ui-monospace, monospace; font-size: 0.85rem; }
+  .chs-card p.chs-acctvs { color: var(--fg); font-weight: 700; }
+  .chs-rvvs { font-size: 0.78rem; color: var(--muted); }
+
+  /* ⚖️ attack or defense? */
+  .chs-style { text-align: left; font-weight: 700; font-size: 0.9rem; line-height: 1.4; border-radius: 12px; padding: 8px 11px; margin: 8px 0; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  .chs-style.s-attack { background: rgba(232, 89, 12, 0.13); border-color: rgba(232, 89, 12, 0.45); }
+  .chs-style.s-defend { background: rgba(59, 130, 246, 0.13); border-color: rgba(59, 130, 246, 0.45); }
+  .chs-style.s-ok { background: rgba(34, 163, 90, 0.12); border-color: rgba(34, 163, 90, 0.4); }
+
+  /* 🟫 more boards */
+  .chs-board.t-cherry { --chs-l: #f2c9a0; --chs-d: #8c3b26; }
+  .chs-board.t-cherry .chs-sq.d { background: repeating-linear-gradient(100deg, rgba(0,0,0,0.07) 0 2px, transparent 2px 7px), var(--chs-d); }
+  .chs-board.t-cherry .chs-sq.l { background: repeating-linear-gradient(100deg, rgba(120,60,20,0.08) 0 2px, transparent 2px 8px), var(--chs-l); }
+  .chs-board.t-jungle { --chs-l: #c8e6a0; --chs-d: #3f7d2c; }
+  .chs-board.t-jungle .chs-sq.d { background: radial-gradient(ellipse at 30% 70%, rgba(20,60,10,0.45) 0 4px, transparent 5px), radial-gradient(ellipse at 75% 25%, rgba(150,220,90,0.35) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-coral { --chs-l: #ffd9c7; --chs-d: #1c8c9a; }
+  .chs-board.t-coral .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(255,255,255,0.45) 0 1.5px, transparent 2.5px), radial-gradient(circle at 25% 75%, rgba(255,127,102,0.6) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-desert { --chs-l: #f7e1b5; --chs-d: #c98d4c; }
+  .chs-board.t-desert .chs-sq.d { background: linear-gradient(170deg, transparent 55%, rgba(120,70,20,0.18) 56% 64%, transparent 65%), var(--chs-d); }
+  .chs-board.t-sky { --chs-l: #ffffff; --chs-d: #7cc4f5; }
+  .chs-board.t-sky .chs-sq.d { background: radial-gradient(ellipse at 40% 60%, rgba(255,255,255,0.55) 0 5px, transparent 6px), var(--chs-d); }
+  .chs-board.t-galaxy { --chs-l: #8b7fd9; --chs-d: #241a4f; }
+  .chs-board.t-galaxy .chs-sq.d { background: radial-gradient(circle at 30% 30%, #fff 0 0.9px, transparent 1.5px), radial-gradient(circle at 70% 65%, #f0abfc 0 1px, transparent 1.7px), radial-gradient(circle at 50% 50%, rgba(168,85,247,0.35), transparent 70%), var(--chs-d); }
+  .chs-board.t-galaxy .chs-sq.l { background: radial-gradient(circle at 65% 35%, rgba(255,255,255,0.6) 0 0.8px, transparent 1.4px), linear-gradient(150deg, #9d92e8, #7466c8); }
+  .chs-board.t-spooky { --chs-l: #fdba74; --chs-d: #3b1f4f; }
+  .chs-board.t-spooky .chs-sq.d { background: radial-gradient(circle at 75% 25%, rgba(253,230,138,0.5) 0 1.5px, transparent 2.5px), var(--chs-d); }
+  .chs-board.t-choco { --chs-l: #e8c39e; --chs-d: #5a3220; }
+  .chs-board.t-choco .chs-sq.d { background: linear-gradient(135deg, rgba(255,255,255,0.08) 0 30%, transparent 30% 70%, rgba(0,0,0,0.15) 70%), var(--chs-d); }
+  .chs-board.t-rainbow { --chs-l: #fff7fb; --chs-d: #c084fc; }
+  .chs-board.t-rainbow .chs-sq.d { background: linear-gradient(135deg, #f9a8d4, #c4b5fd 35%, #93c5fd 65%, #86efac); }
+  .chs-board.t-royal { --chs-l: #fde9a8; --chs-d: #7f1d1d; }
+  .chs-board.t-royal .chs-sq.d { background: radial-gradient(circle at 50% 50%, rgba(253,224,71,0.25) 0 3px, transparent 4px), var(--chs-d); }
+  .chs-board.t-royal .chs-sq.l { background: linear-gradient(145deg, #fff3c4, #f2cc5c); }
+  .chs-skins { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+
+  /* 🧙 dream opening + 🧭 */
+  .chs-dream { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .chs-dchip { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 99px; padding: 6px 10px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+  .chs-dchip.on { background: color-mix(in srgb, var(--accent) 22%, var(--panel)); border-color: var(--accent); font-weight: 700; }
+  .chs-dvs { flex-wrap: wrap; }
+  .chs-sugb small.chs-sugrs { color: #22a35a; font-weight: 700; }
+
+  /* 🧠 memory tricks · 🧑‍🏫 Professor Pawn · 🧠 My Chess Rules */
+  .chs-card p.chs-why.mem, .chs-why.mem { background: rgba(192, 132, 252, 0.14); color: var(--fg); }
+  .chs-demogo { margin-top: 6px; }
+  .chs-prof { text-align: left; border: 1px solid rgba(234, 179, 8, 0.45); background: rgba(234, 179, 8, 0.1); border-radius: 14px; padding: 9px 11px; margin: 8px 0; }
+  .chs-card p.chs-profh { font-weight: 800; color: var(--fg); margin: 0 0 4px; }
+  .chs-profi { font-size: 0.88rem; line-height: 1.4; color: var(--fg); margin: 7px 0 0; }
+  .chs-card p.chs-profi { color: var(--fg); }
+  .chs-proft { color: #b45309; font-weight: 700; }
+  .chs-profm { color: #9333ea; font-weight: 700; }
+  .chs-rule { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 11px; margin: 9px 0; background: var(--panel); }
+  .chs-ruleh { display: flex; justify-content: space-between; gap: 8px; }
+  .chs-ruleh span { color: var(--muted); font-size: 0.85rem; }
+  .chs-card p.chs-rulem { color: #9333ea; font-weight: 700; margin: 6px 0; }
+  .chs-rulex { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: center; }
+  .chs-rulex .chs-board { max-width: none; width: 120px; border-radius: 6px; }
+  .chs-card .chs-rulex p { margin: 0; color: var(--fg); font-size: 0.88rem; }
+  .chs-rulex b.g { color: #22a35a; }
+
+  /* 💡 tips · 📐 position reasons */
+  .chs-card p.chs-why.pos, .chs-why.pos { background: rgba(14, 165, 233, 0.13); color: var(--fg); }
+  .chs-tipsec { text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 9px 11px; margin: 9px 0; background: var(--panel); }
+  .chs-tipsec summary { cursor: pointer; font-weight: 800; font-size: 1rem; }
+  .chs-tipi { font-size: 0.9rem; line-height: 1.4; margin: 9px 0 0; }
+  .chs-tiptry { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chs-tiptry .btn { width: auto; flex: 1 1 auto; }
+  /* 🚫 why can't I move there? */
+  .chs-sq.nope::after { content: ''; position: absolute; inset: 6%; border: 3px solid #ff3b3b; border-radius: 10%; box-shadow: 0 0 10px rgba(255, 59, 59, 0.7); pointer-events: none; animation: chsNope 0.9s ease-in-out 3; }
+  @keyframes chsNope { 50% { transform: scale(0.88); } }
+  .chs-cbox.chs-nope { border-color: #ff5c5c; background: rgba(255, 70, 70, 0.1); }
+  /* 🧩 puzzles */
+  .chs-pzpath { margin: 10px 0; }
+  .chs-pzstages { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .chs-pzst { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 2px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; }
+  .chs-pzst b { font-size: 1.05rem; }
+  .chs-pzst small { font-size: 0.64rem; opacity: 0.8; text-align: center; line-height: 1.15; }
+  .chs-pzst.done { border-color: #e4a64a; background: rgba(228, 166, 74, 0.14); }
+  .chs-pzst.locked { opacity: 0.45; cursor: default; }
+  .chs-pzth { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+  .chs-pzth .chs-imph { width: 100%; }
+  .chs-pzclock { display: inline-block; font-variant-numeric: tabular-nums; font-size: 0.8rem; padding: 2px 8px; border-radius: 99px; background: var(--panel); border: 1px solid var(--line); margin-left: 4px; }
+  .chs-pzclock.over { border-color: #e4a64a; color: #e4a64a; }
+  .chs-pztags { font-size: 0.78rem; opacity: 0.8; margin: 4px 0; }
+  .chs-pzwhy { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 12px; margin: 6px 0; font-size: 0.86rem; line-height: 1.42; }
+  .chs-pzwhy p { margin: 4px 0; }
+  .chs-pzwh, .chs-pzwh2 { font-weight: 700; }
+  .chs-pzwh2 { margin-top: 8px !important; }
+  .chs-pzstep { padding-left: 10px; border-left: 3px solid rgba(34, 163, 90, 0.6); }
+  .chs-pzstep.alt { border-left-color: rgba(124, 156, 255, 0.7); }
+  .chs-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 6px 0; }
+  /* 🔭 think ahead */
+  .chs-ahbd { max-width: 300px; margin: 8px auto; }
+  .chs-ahbd .chs-board { width: 100%; }
+  .chs-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 6px 0; }
   /* ---- Chess ---- */
   .chs [hidden] { display: none !important; }   /* the offline file has no global [hidden] rule */
   .chs-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 18px; }
@@ -6409,6 +6639,8 @@
   .chs-ahbd { max-width: 300px; margin: 8px auto; }
   .chs-ahbd .chs-board { width: 100%; }
   .chs-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 6px 0; }
+  .chs-skip { margin: 6px auto 0; display: block; }
+  .chs-rpl { display: block; width: 100%; margin: 8px 0; }
   .fv-load { display: none; }
   .fv-loading .fv-load { display: block; position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px); padding: 10px 16px; border-radius: 999px; background: rgba(20, 24, 34, 0.96); border: 1px solid rgba(255, 255, 255, 0.14); color: #fff; font-weight: 600; font-size: 0.95rem; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }   /* ⏳ */
   .fv-err { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 9999; padding: 12px 14px; border-radius: 14px; background: #8b1d1d; color: #fff; font-size: 0.9rem; line-height: 1.35; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45); cursor: pointer; }   /* 🐛 */
@@ -25811,7 +26043,7 @@
     }
     function renderTip() {
       var el = $('tip');
-      if (game && game.show) { el.innerHTML = cbox(game.show.t); return; }   // 🤖🆚🤖
+      if (game && game.show) { el.innerHTML = cbox(game.show.t) + '<button type="button" class="btn slim ghost chs-skip" id="chs-skipShow" data-skipshow="1">⏭️ Skip</button>'; return; }   // 🤖🆚🤖 (⏭️ skippable)
       renderTip0();
       if (nope && Date.now() < nope.until && game && !game.over) el.insertAdjacentHTML('afterbegin', '<span class="chs-cbox chs-nope" id="chs-nope"><span class="chs-av" aria-hidden="true">🚫</span><span class="chs-ct"><b>Why not?</b> ' + esc(nope.t) + (nope.arrows.length ? ' (See the red arrow.)' : nope.sq ? ' (See the red square.)' : '') + '</span></span>');
     }
@@ -26143,6 +26375,7 @@
       else if (e.target.closest('[data-demo]')) demoGo();   // 🎬
       else if (e.target.closest('[data-demogood]')) demoGo(true);   // 🤖🆚🤖 the better move, played out
       else if (e.target.closest('[data-tipsgo]')) tipsCard();   // 💡
+      else if (e.target.closest('[data-skipshow]')) skipShow();   // ⏭️
       else if (e.target.closest('[data-pznext]') && game && game.mode === 'pz') pzNext();   // 🧩
       else if (e.target.closest('[data-pzagain]') && game && game.mode === 'pz') { var q0 = game.pz.q; q0.res.pop(); q0.forced = game.pz.id; q0.again = true; pzStart(q0); }
       else if (e.target.closest('[data-pzshow]') && game && game.mode === 'pz') pzShow();
@@ -27045,7 +27278,7 @@
     function cbox(t) { return '<span class="chs-cbox"><span class="chs-av" aria-hidden="true">🦉</span><span class="chs-ct">' + esc(t) + '</span></span>'; }
     function practiceTip() {   // 🦉 Coach Hoot's box under the board
       var p = game.pr, fx = p.fix;
-      if (p.state === 'oops' && fx.demo) return cbox(fx.demo.text);   // 🎬
+      if (p.state === 'oops' && fx.demo) return cbox(fx.demo.text) + '<button type="button" class="btn slim ghost chs-skip" id="chs-skipShow" data-skipshow="1">⏭️ Skip</button>';   // 🎬
       if (p.state === 'oops') return cbox(fx.why + (game.arrows ? '\n👀 The red arrow shows what ' + botName() + ' would do.' : '') + (fx.pw ? '\n📐 ' + fx.pw : '') + (fx.cat && MEM[fx.cat] ? '\n' + memFor(fx.cat) : '')) +
         (fx.sb && fx.sb.reply ? '<button type="button" class="btn slim chs-demogo" id="chs-demoGo" data-demo="1">' + (fx.watched ? '🔁 Watch it again' : '▶ Watch what happens') + '</button>' : '') +
         (fx.best ? '<button type="button" class="btn slim ghost chs-demogo" id="chs-demoGood" data-demogood="1">' + (fx.watchedGood ? '🔁 Watch the bots again' : '🤖🆚🤖 Watch bots play the better move') + '</button>' : '') +
@@ -28088,22 +28321,22 @@
     function demoGo(good) {   // ▶ play it out (🤖🆚🤖 two bots: one plays for you, one for them), then put everything back
       var p = game && game.pr, fx = p && p.fix; if (!fx || p.state !== 'oops' || fx.demo) return;
       var who = botName(), my = token, first = !good && fx.sb && fx.sb.reply;
-      fx.demo = { text: good ? '🤖🆚🤖 Watch the bots play the better move…' : '🎬 Watch what happens…', n: 0, good: !!good }; game.arrows = null; renderTip();
+      var D = fx.demo = { text: good ? '🤖🆚🤖 Watch the bots play the better move…' : '🎬 Watch what happens…', n: 0, good: !!good }; game.arrows = null; renderTip();
       var start = game.moves.slice();
       if (good) { start.pop(); start.push(fx.best); }
       demoLine(start, good ? 7 : 6, function (line) {
-        if (my !== token || !fx.demo) return;
+        if (my !== token || fx.demo !== D) return;
         if (first && line[0] !== first) line = [first];   // (show the move the red arrow showed)
         if (good) { G.undo(); fx.demo.undone = true; line.unshift(fx.best); }
         var k = 0;
         (function play() {
-          if (my !== token || !fx.demo) return;
+          if (my !== token || fx.demo !== D) return;
           if (k >= line.length) {
             var mated = G.status() === 'checkmate', mb = G.material(), diff = (game.you === 'w' ? mb.w - mb.b : mb.b - mb.w);
             fx.demo.text = good ? (mated ? '🎉 Checkmate! ' : '') + '✅ See? With ' + fx.bestSan + ' you stay safe' + (diff > 0 ? ' and you’re ahead (+' + diff + ')' : '') + '. Now YOU try it! Putting the pieces back…' :
               (mated ? '💀 Checkmate! ' : '') + '😬 THAT’s why ' + fx.bad + ' was a mistake! Putting the pieces back…';
             renderTip();
-            setTimeout(demoStop, 2200);
+            setTimeout(function () { if (fx.demo === D) demoStop(); }, 2200);
             return;
           }
           var tg = line[k].slice(2, 4), pc0 = G.pieces()[(7 - (+tg[1] - 1)) * 8 + tg.charCodeAt(0) - 97];
@@ -28205,10 +28438,19 @@
     }
 
     // ---- 🤖🆚🤖 Bots play it out: one bot plays for you, one for them, so you can SEE what happens (then the pieces go back) ----
+    function skipShow() {   // ⏭️ stop any bot replay and put the pieces back now
+      if (game && game.show && game.show.skip) game.show.skip();
+      else if (game && game.pr && game.pr.fix && game.pr.fix.demo) demoStop();
+    }
     function playout(first, n, endText, done) {   // first: a move to try first (or null) · n: how many bot moves after it
       if (!game || game.show) return;
-      var my = token, extra = [], played = 0;
-      game.busy = true; game.show = { t: '🤖🆚🤖 The bots are playing it out…' }; game.arrows = null; sel = null; targets = []; hint = null; render();
+      var my = token, extra = [], played = 0, sh;
+      game.busy = true; sh = game.show = { t: '🤖🆚🤖 The bots are playing it out…' };
+      sh.skip = function () {   // ⏭️ put the pieces back right now
+        if (game.show !== sh) return;
+        while (played > 0) { G.undo(); played--; }
+        game.show = null; game.busy = false; relast(); render(); if (done) done();
+      }; game.arrows = null; sel = null; targets = []; hint = null; render();
       var put = function (u, lead) {
         var mover = G.turn(), tg = u.slice(2, 4), pc0 = pcAt(G.pieces(), tg), x = G.move(u); if (!x) return null;
         extra.push(u); played++; last = { from: x.from, to: x.to };
@@ -28218,21 +28460,20 @@
         render(x); return x;
       };
       var stop = function () {
-        if (my !== token || !game || !game.show) return;
+        if (my !== token || !game || game.show !== sh) return;
         var mated = G.status() === 'checkmate', mb = G.material(), diff = game.you === 'w' ? mb.w - mb.b : mb.b - mb.w;
         game.show.t = (mated ? '💀 Checkmate! ' : '') + (typeof endText === 'function' ? endText(mated, diff) : endText || '') + ' Putting the pieces back…'; render();
         setTimeout(function () {
-          if (my !== token || !game || !game.show) return;
-          while (played > 0) { G.undo(); played--; }
-          game.show = null; game.busy = false; relast(); render(); if (done) done();
+          if (my !== token || !game || game.show !== sh) return;
+          sh.skip();
         }, 2600);
       };
       if (first) { if (!put(first, '👉 You try ' + (function () { var V = viewAt(game.moves, game.fen); var r = V.move(first); return r ? r.san : first; })())) { stop(); return; } }
       (function step() {
-        if (my !== token || !game || !game.show) return;
+        if (my !== token || !game || game.show !== sh) return;
         if (played >= n + (first ? 1 : 0) || G.status()) { setTimeout(stop, 900); return; }
         askAt(game.moves.concat(extra), { time: 260 }, function (r) {
-          if (my !== token || !game || !game.show) return;
+          if (my !== token || !game || game.show !== sh) return;
           if (!r || !r.uci || !put(r.uci)) { stop(); return; }
           setTimeout(step, 1250);
         });
@@ -28246,7 +28487,7 @@
     };
     var PZ_PH = { open: ['🚀', 'Opening'], mid: ['⚔️', 'Middlegame'], end: ['🏁', 'Endgame'] };
     var PZ_STAGES = 15, pzTick = null;
-    function pzData() { S.pz = S.pz || { r: 600, n: 0, won: 0, streak: 0, best: 0, done: {}, stage: 1, stages: {}, train: { days: 0, last: '', best: 0 } }; return S.pz; }
+    function pzData() { S.pz = S.pz || { r: 600, n: 0, won: 0, streak: 0, best: 0, done: {}, stage: 1, stages: {}, train: { days: 0, last: '', best: 0 } }; if (S.pz.replays == null) S.pz.replays = true; return S.pz; }
     function pzById(id) { return CHESS_PUZ[id]; }
     function pzLen(p) { return p.m.length / 2; }   // how many moves YOU make
     function pzGoal(p, stage) { return Math.round(15 + 18 * pzLen(p) + (stage ? stage * 6 : (p.r - 400) / 25)); }   // ⏱️ a think-time goal (seconds): short early, longer for hard ones
@@ -28303,6 +28544,8 @@
         c.appendChild(sm);
         var b1 = mk('button', 'btn', '⭐ Rated puzzles (' + CHESS_PUZ.length + ')'); b1.type = 'button'; b1.id = 'chs-pzRated';
         b1.addEventListener('click', function () { pzStart({ kind: 'rated' }); }); c.appendChild(b1);
+        var rp = mk('button', 'chs-dchip chs-rpl' + (d.replays ? ' on' : ''), d.replays ? '🎬 Bot replays: ON (optional buttons, skippable)' : '🎬 Bot replays: OFF (wrong move? just try again)'); rp.type = 'button'; rp.id = 'chs-pzReplays';
+        rp.addEventListener('click', function () { d.replays = !d.replays; save(); pzHub(); }); c.appendChild(rp);
         // 🪜 the path
         var path = mk('div', 'chs-pzpath'); path.appendChild(mk('p', 'chs-imph', '🪜 Puzzle Path: like chess.com, start with mate in 1, then free pieces, mate in 2, forks… up to long combinations'));
         var row = mk('div', 'chs-pzstages');
@@ -28355,7 +28598,7 @@
         if (my !== token || !game || game.mode !== 'pz') return;
         var x = applyMove(p.m[0]); game.pz.step = 1; game.busy = false; game.pz.t0 = Date.now(); render(x);
         clearInterval(pzTick); pzTick = setInterval(pzClock, 1000);
-      }, 650);
+      }, game.pz.retry ? 250 : 650);
     }
     function pzClock() {
       var el = document.getElementById('chs-pzclock');
@@ -28372,14 +28615,15 @@
         var t = G.move(uci); if (t) { var mate = G.status() === 'checkmate'; G.undo(); ok = mate; }
       }
       if (!ok) {   // ❌ show what THEY would do after your move (the red arrow), so you can see the problem
-        z.failed = true; sel = null; targets = []; sound('wrong'); game.busy = true;
+        z.failed = true; sel = null; targets = []; sound('wrong');   // (you can try again RIGHT away: nothing to wait for)
         var V = viewAt(game.moves, game.fen), wm = V.move(uci), wsan = wm ? wm.san : uci;
-        z.wrong = { uci: uci, san: wsan }; z.msg = '❌ Not ' + wsan + '! 🤔 Let’s see how they’d answer…';
-        game.flash = '❌ Try again!'; game.flashT = Date.now() + 1500; game.arrows = ['~' + uci]; render();
+        var W = z.wrong = { uci: uci, san: wsan };
+        game.flash = '❌ Try again!'; game.flashT = Date.now() + 1500;
+        if (!pzData().replays) { z.msg = '❌ Not ' + wsan + '. Try again!'; game.arrows = null; render(); return; }   // 🎬 replays off: just try again
+        z.msg = '❌ Not ' + wsan + '! Try again… (the red arrow will show how they’d answer)'; game.arrows = ['~' + uci]; render();
         var my = token;
         askAt(game.moves.concat([uci]), { time: 220 }, function (r) {
-          if (my !== token || !game || game.mode !== 'pz') return;
-          game.busy = false;
+          if (my !== token || !game || game.mode !== 'pz' || game.pz.wrong !== W || game.show) return;   // (you already moved on)
           if (r && r.uci) {
             var V2 = viewAt(game.moves.concat([uci]), game.fen), tg = r.uci.slice(2, 4), cp = pcAt(V2.pieces(), tg), rm = V2.move(r.uci), mate = V2.status() === 'checkmate';
             z.wrong.reply = r.uci; z.wrong.replySan = rm ? rm.san : r.uci;
@@ -28447,14 +28691,14 @@
       var head = '<span class="chs-tour">' + (q.kind === 'path' ? '🪜 Stage ' + q.stage + ': ' + PZ_PLAN[q.stage - 1].e + ' ' + PZ_PLAN[q.stage - 1].n + ' · ' + (q.i + 1) + ' of ' + q.list.length : q.kind === 'train' ? '🏋️ Training ' + (q.i + 1) + ' of ' + q.list.length + ' · ' + PZ_PH[p.ph][0] + ' ' + PZ_PH[p.ph][1] : '⭐ Rated · ' + pzData().r) + '</span>';
       if (!z.done) {
         return head + ' <span class="chs-pzclock" id="chs-pzclock">⏱️ 0:00</span>' + cbox(z.msg || (game.busy ? '👀 Watch their move…' : '♟️ ' + (game.you === 'w' ? 'White' : 'Black') + ' to move. ' + (pzLen(p) > 1 ? 'This one takes ' + pzLen(p) + ' moves. ' : '') + 'Find the best move!')) +
-          (game.busy ? '' : (z.wrong && z.wrong.reply ? '<button type="button" class="btn slim chs-demogo" id="chs-pzDemo" data-pzdemo="1">🤖🆚🤖 Watch the bots play my move out</button>' : '') + '<button type="button" class="btn slim ghost" id="chs-pzShow" data-pzshow="1">👀 Show me the answer</button>');
+          (game.busy ? '' : (z.wrong && z.wrong.reply && pzData().replays ? '<button type="button" class="btn slim ghost chs-demogo" id="chs-pzDemo" data-pzdemo="1">🤖🆚🤖 Watch the bots play my move out (optional)</button>' : '') + '<button type="button" class="btn slim ghost" id="chs-pzShow" data-pzshow="1">👀 Show me the answer</button>');
       }
       var ok = !z.failed && !z.hints && !z.shown, goal = pzGoal(p, q.stage);
       return head + cbox((ok ? '✅ Solved' + (z.secs <= goal ? ' in ' + z.secs + 's, under the ⏱️ goal! ⭐' : ' in ' + z.secs + 's!') : z.shown ? '👀 Here’s the answer.' : '✅ You got there (with help)!') +
         (z.dr != null ? ' Puzzle rating ' + (z.dr >= 0 ? '+' : '') + z.dr + ' → ' + pzData().r + '.' : '') + (ok && pzData().streak > 1 ? ' 🔥 ' + pzData().streak + ' in a row!' : '')) +
         '<p class="chs-pztags">🏷️ ' + esc(tags) + ' · ' + PZ_PH[p.ph][0] + ' ' + PZ_PH[p.ph][1] + ' · rated ' + p.r + '</p>' + pzWhyHtml(p) +
         '<div class="chs-row"><button type="button" class="btn" id="chs-pzNext" data-pznext="1">▶ Next puzzle</button><button type="button" class="btn ghost" id="chs-pzAgain" data-pzagain="1">🔁 Try again</button></div>' +
-        (G.status() ? '' : '<button type="button" class="btn slim ghost chs-demogo" id="chs-pzPlay" data-pzplay="1">🤖🆚🤖 Watch the bots play on from here</button>');
+        (G.status() || !pzData().replays ? '' : '<button type="button" class="btn slim ghost chs-demogo" id="chs-pzPlay" data-pzplay="1">🤖🆚🤖 Watch the bots play on from here (optional)</button>');
     }
     function pzNext() { var q = game.pz.q; q.i++; q.retry = null; pzStart(q); }
     function pzDemo() {   // 🤖🆚🤖 your wrong move, played out by two bots: SEE why it doesn't work
